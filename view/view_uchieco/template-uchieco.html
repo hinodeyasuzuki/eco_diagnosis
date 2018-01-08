@@ -1,0 +1,207 @@
+﻿<?php
+// Home-Eco Diagnosis for JavaScript
+//
+// view/template.html
+//		main html for smartphone
+//
+// require php, and inluded by index.php
+//
+?><!DOCTYPE html>
+<html lang="<?php echo $languageMode; ?>">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="target-densitydpi=device-dpi, width=320, initial-scale=1.0, user-scalable=yes">
+	<link href="view/common.css" rel="stylesheet" type="text/css" />
+	<link href="view/view_uchieco/layout-uchieco.css" rel="stylesheet" type="text/css" />
+	<script src="view/jstools/jquery-<?php echo $jqueryVersion; ?>.min.js" type="text/javascript"></script>
+<?php
+	if ( !$oneAreaRelease ) {
+?>
+	<link rel="alternate" hreflang="ja" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=ja&v=8" />
+	<link rel="alternate" hreflang="en" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=en&v=8" />
+	<link rel="alternate" hreflang="zh" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=zh&v=8" />
+	<link rel="alternate" hreflang="fr" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=fr&v=8" />
+<?php
+	}
+	echo $jsgoogle_analytics;
+?>
+
+	<title><?php echo $lang["home_uchieco_title"];?></title>
+
+  </head>
+
+  <body>
+	<div class="contents">
+
+		<div id="header">
+			<h1><?php echo $lang["home_uchieco_title"];?></h1>
+
+			<div align="center" id="step">
+				<span id="s4" onclick="modeChange('m4');">1質問</span>>
+				<span id="s5" onclick="modeChange('m5');">2比較</span>>
+				<span id="s6" onclick="modeChange('m6');">3目標</span>>
+				<span id="s7" onclick="modeChange('m7');">4内訳</span>
+				<span id="s8" onclick="modeChange('m8');">5対策</span>
+			</div>
+<!--
+		　　<div style="text-align:right;position:relative;top:-30px;legt:20px;line-height:5px;">
+				<span class="menubutton" onclick="menuopen();"><?php echo $lang["button_menu"];?></span>
+		　　</div>
+
+		　　<div class="menu" style="display:none;position:relative;top:-20px;">
+				<span class="selected" id="m1" onclick="modeChange('m1');">トップ</span>
+				<span id="m3" onclick="modeChange('m3');">質問</span>
+				<span id="m5" onclick="modeChange('m5');">平均比較</span>
+				<span id="m6" onclick="modeChange('m6');">目標設定</span>
+				<span id="m7" onclick="modeChange('m7');">内訳</span>
+				<span id="m8" onclick="modeChange('m8');">対策と効果</span>
+				<span id="m10" onclick="modeChange('m10');"><?php echo $lang["button_about"];?></span>
+		　　</div>
+		</div>
+-->
+		<div id="leanModalDialog" style="float:left;">
+			<input type="button" class="modal_close" value="<?php echo $lang['button_back'];?>">
+			<div id="modal-contents"></div>
+		</div>
+		
+		<div class="preloader">
+			<p>now loading diagnosis system</p>
+		</div>
+	
+		<div class="contents" style="display:none;">
+		<div class="page" id="p1" >						
+		<p>うちエコ診断WEB版</p>
+		<p>家の「どこから」「どれだけ」CO2が出ているかを調べることで効果的な削減プランを明らかにします。</p>
+			<span class="next" onclick="modeChange('m2');">はじめる</span>
+			<span class="next" onclick="modeChange('m10');">診断の流れをみる</span>
+		</div>
+
+		<div class="page" id="p2" >						
+		<p>これから家族の人数・光熱費・家電の使用状況・ライフスタイルなど、24項目の質問を行います。</p>
+		<p>ご回答後、診断結果が表示されます。</p>
+			<span class="next" onclick="modeChange('m3');">質問に進む</span>
+		</div>
+
+		<div class="page" id="p3">
+			<!--質問-->
+			<h2 class="constitle"></h2>
+			<div id="quescontents" ></div>
+			<hr>
+			<span class="next" onclick="quesone_prev();"><?php echo $lang["button_prev"];?></span>
+			<span class="next" onclick="quesone_next();"><?php echo $lang["button_next"];?></span>
+			<span class="next" onclick="modeChange('m4');"><?php echo $lang["button_queslist"];?></span>
+		</div>
+
+		<div class="page" id="p4">
+			<!--質問一覧-->
+			<h2 class="constitle"></h2>
+			<p>これらの質問に回答することで、家庭の詳しい分析ができます。</p>
+			<span class="next" onclick="modeChange('m3');">前へ（個別質問）</span>
+			<span class="next" onclick="modeChange('m5');">次へ（平均比較）</span>
+			<ul id='tabcontents'></ul>
+			<span class="next" onclick="modeChange('m5');">次へ（平均比較）</span>
+		</div>
+			
+		<div class="page" id="p5">
+			<p>平均比較</p>
+			<p>光熱費とCO2排出量の平均値と比較してみましょう。何が多い/少ないでしょうか。</p>
+			<div style="width:65%;float:left;"><div id="graphEnergy"></div></div>
+			<div style="width:30%;float:left;"><div id="graphCO2average"></div></div>
+			<span class="next" onclick="modeChange('m4');">戻る（質問一覧）</span>
+			<span class="next" onclick="modeChange('m6');">CO2削減目標</span>
+		</div>
+		
+		<div class="page" id="p6">
+			<p>CO2削減目標</p>
+			<p>将来的に大幅にCO2を削減する必要があります。どこまで減らすことにチャレンジしますか？</p>
+			<div style="width:30%;float:left;"><div id="graphCO2average2"></div></div>
+			<div style="width:65%;float:left;">
+			<p>下のボタンを選んで進んでください。</p>
+			<table style="border:none;">
+			<tr>
+			<td>平均（2015年）比較</td><td colspan="3" style="text-align:right">あなたの現状　<span id="co2younow" class="bold"></span>kg</td>
+			</tr>
+			<tr>
+			<td></td><td></td><td>CO2排出量</td><td>現状からの削減</td>
+			</tr>
+			<tr>
+				<td><span class="next" onclick="modeChange('m7');">2015年レベル</span></td>
+				<td>2015年レベルでは地球温暖化を止めることはできません</td>
+				<td><span class="bold" id="co2-0"></span>kg</td>
+				<td><span class="red" id="co2-0rate"></span></td>
+			</tr>
+			<tr>
+				<td><span class="next" onclick="modeChange('m7');">26%減</span></td>
+				<td>日本の2020年の削減目標です</td>
+				<td><span class="bold" id="co2-26"></span>kg</td>
+				<td><span class="red" id="co2-26rate"></span></td>
+			</tr>
+			<tr>
+				<td><span class="next" onclick="modeChange('m7');">40%減</span></td>
+				<td>日本の2030年の削減目標です</td>
+				<td><span class="bold" id="co2-40"></span>kg</td>
+				<td><span class="red" id="co2-40rate"></span></td>
+			</tr>
+			<tr>
+				<td><span class="next" onclick="modeChange('m7');">80%減</span></td>
+				<td>日本の2050年の削減目標です</td>
+				<td><span class="bold" id="co2-80"></span>kg</td>
+				<td><span class="red" id="co2-80rate"></span></td>
+			</tr>
+			</table>
+			</div>
+			<div style="clear:both;">
+				<span class="next" onclick="modeChange('m5');">戻る（比較）</span>
+			</div>
+		</div>
+
+		<div class="page" id="p7">
+			<p>CO2排出の内訳　～どこからCO2が出ている？～</p>
+			<div style="width:25%;float:left;">
+				<p>右のグラフは自宅のどの分野からどの程度CO2が排出されているかという内訳を示したものです。</p>
+				<p>CO2がより多く排出される分野を集中的に改善することで、大きな削減効果が得られます。</p>
+			</div>
+			<div id="cons" style="width:30%;float:left;"></div>
+			<div  style="width:40%;float:left;"><div id="graph2"></div><div id="graph2comment"></div></div>
+			<span class="next" onclick="modeChange('m6');" style="clear:both;">戻る（目標）</span>
+			<span class="next" onclick="modeChange('m8');">CO2削減対策と効果</span>
+		</div>
+
+		<div class="page" id="p8">
+			<p>CO2削減対策と効果</p>
+			<p>あなたの家庭においてCO2削減効果が大きい対策を示してます。年間の数値です。</p>
+			<p>いくつでも対策を「選択」をすることができ、その組み合わせでの削減量を検討できます。</p>
+			<div  style="width:40%;float:left;"><div id="graph"></div><div id="totalReduceComment"></div></div>
+			<div id="measure" style="width:55%;float:left;"></div>
+			<span class="next" onclick="modeChange('m7');" style="both:clear;">戻る（内訳）</span>
+			<span class="next" onclick="modeChange('m9');">診断を終了</span>
+		</div>
+		
+		<div class="page" id="p10">
+			<p>診断の流れ</p>
+			<p>STEP1　質問項目に答える</p>
+			<p>設問には選択項目をクリックすることで答えていきます。わからない設問はとばし、結果をみることもできます。</p>
+			<p>STEP2　平均値との比較</p>
+			<p>自宅と平均のCO2排出量を比較して見ることで、自分の立ち位置を把握します。</p>
+			<p>STEP3　CO2削減目標の決定</p>
+			<p>将来達成すべきCO2削減量を把握し、自宅での削減目標を決定します。</p>
+			<p>STEP4　CO2排出の内訳</p>
+			<p>CO2が「どこから」「どれだけ」出ているのかが分かる内訳グラフが示されます。</p>
+			<p>STEP5　CO2削減対策と効果</p>
+			<p>CO2削減対策が示され、削減効果・対策支援情報を確認できます。</p>
+			<span class="next" onclick="modeChange('m1'); return false;"><?php echo $lang["button_back"];?></span>
+		</div>
+				
+		</div>
+	</div>
+	
+	<?php
+		echo $jssets;
+		echo $scripts;
+		echo $jsgoogle;
+	?>
+
+	<script src="view/view_uchieco/onclick-uchieco.js" type="text/javascript"></script>
+
+  </body>
+</html>

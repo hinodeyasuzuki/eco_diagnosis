@@ -1,0 +1,98 @@
+﻿<h2> À propos de l'utilisation du diagnostic d'économie d'énergie </h2>
+<p> Toute personne peut utiliser gratuitement ce diagnostic économisant l'énergie, mais elle ne garantit pas l'exactitude des résultats. Utilisez-le comme un indice pour promouvoir la conservation de l'énergie. </p>
+<p> Vous ne pouvez pas utiliser le bouton arrière du navigateur. </p>
+
+<h3> Écran de diagnostic recommandé </h3>
+<div>
+<p> Bien qu'il s'agisse du même contenu de diagnostic, il existe trois types de modèles. </p>
+<p style = "line-height: 1.8 em;"> <a class="button" href="./?lang=fr&v=3"> version simplifiée </a> peut facilement s'attaquer. </p>
+<p style = "line-height: 1.8 em;"> <a class="button" href="./?lang=fr&v=2"> Liste de la version de l'écran </a> Recommandé si vous voulez voir le schéma du diagnostic C'est. </p>
+<p style = "line-height: 1.8 em;"> <a class="button" href="./?lang=fr&v=2"> version détaillée </a> Ceci est recommandé lorsque vous souhaitez effectuer un diagnostic détaillé et détaillé . </p>
+<p> En tout cas, vous pouvez procéder à un diagnostic plus détaillé tout en reprenant les données que vous avez remplies. </p>
+</div>
+<p> & nbsp; </p>
+
+<h3> Contenu du résultat du diagnostic </h3>
+<ul>
+<li> Mesures: environ 70 éléments Calculer les contre-mesures préparées et sélectionner des mesures efficaces de réduction de CO2 pour votre maison. Nous montrerons non seulement le montant de la réduction du CO2, mais aussi le montant de la réduction des frais d'utilisation, alors, veuillez vous référer à la réflexion sur nos efforts. Dans la version d'écran de la liste et la version détaillée, vous pouvez choisir une combinaison de contre-mesures et simuler la réduction possible à la maison. Vous pouvez afficher <a class="button" href="./?lang=fr"> Liste des contre-mesures </a>. </li>
+<li> Comparaison: vous pouvez comparer si la consommation d'énergie est élevée ou faible, par rapport au même nombre de famille, la famille locale. S'il y a 100 ménages dans un environnement similaire, il montre aussi combien. </li>
+<li> Répartition: Nous estimons quelle est la principale cause des émissions de CO2 dans notre ménage. Pour de nombreuses applications, il est efficace de prendre des mesures. </li>
+</ul>
+
+<h2> Paramètres de démarrage </h2>
+<p> En ajoutant des paramètres, il est possible de diagnostiquer différentes conceptions et utilisations. Les éléments actuellement configurés sont décrits ci-dessous. </p>
+<form action = "./" method = "get">
+<ul>
+<li> Objet de diagnostic:
+<select name = "t">
+<option value = "1" selected> Diagnostic d'économie d'énergie domestique </option>
+<option value = "2"> Diagnostic de conservation d'énergie au bureau (Japon seulement) </option>
+</select>
+</li>
+
+<li> Mode d'écran:
+<select name = "v">
+<option value = "3"> version simplifiée </option>
+<option value = "2" selected> list screen version </option>
+<option value = "0"> Version détaillée </option>
+<option value = "1"> version de l'opération du bouton </option>
+</select>
+</li>
+
+<li> Version du commentaire de l'opération:
+<select name = "intro">
+<option value = "0" selected> none </option>
+<option value = "1"> Présent (version consolidée à écran unique uniquement) </option>
+</select>
+</li>
+
+<li> Paramètre langue / région:
+<select name = "lang">
+<option value = "ja"> Japonais / Région: Japon </option>
+<option value = "en"> English / Région: Japon </option>
+<option value = "fr" selected> anglais / région: Japon </option>
+<option value = "zh"> Chinois / Région: Chine </option>
+</select>
+</li>
+
+<li> traduction google:
+<select name = "translate">
+<option value = "0" selected> none </option>
+<option value = "1"> Oui </option>
+</select>
+</li>
+
+</ul>
+<input type = "submit" name = "submit" value = "Start diagnostic">
+</form>
+
+<p> En passant la chaîne de caractères des données enregistrées dans le <a href="./" target="_blank"> ./? data = *** </a> GET format comme autres paramètres, données d'entrée Vous pouvez obtenir des résultats de diagnostic à la main. Appuyez sur le bouton "Enregistrer" pour afficher la boîte de dialogue. </p>
+
+<h2> Explication technique sur le diagnostic d'économie d'énergie </h2>
+<p> Ce diagnostic est fourni par Hinode et Hokkaido Institute for Eco Life (Hinodeya Institute for Ecolife co.). Il s'agit d'une revue de la logique de calcul du «diagnostic Eko» qui est en cours d'élaboration par le ministère de l'Environnement à partir des bases, et est conçu pour être compatible avec des systèmes flexibles tels que multilingues. </p>
+<p> Les mesures efficaces varieront en fonction de la situation d'utilisation d'énergie de la maison et du bureau. En répondant dans la gamme à comprendre, il est possible d'analyser et de proposer des contre-mesures avec une situation plus familiale. Cependant, vous n'avez pas besoin de répondre de façon forcée aux éléments que vous ne connaissez pas. Grâce à une logique qui supposent la situation d'utilisation, des mesures appropriées sont proposées sans devoir répondre forcément. </p>
+<p> Nous proposons un modèle de mouvement, et nous calculons des valeurs numériques approximatives en fonction de l'entrée pour le contenu proposé, mais il n'y a aucune garantie de précision ou d'opération. Si des suggestions ou des chiffres inappropriés sont produits, nous serions ravis si vous pouviez nous contacter. Nous allons répondre au développement séparément pour les systèmes qui ont examiné la logique de diagnostic. </p>
+
+
+
+<h2> Enregistrement de développement </h2>
+<p> 17 janvier 2011 Début du projet de développement de la plate-forme de diagnostic </p>
+<p> 6 mai 2011 Plate-forme première version d'action par ActionScrpt 3 </p>
+<p> Organiser les termes le 17 février 2014 </p>
+<p> Réécrit Javascript le 12 avril 2016. Code de développement D6. </p>
+<p> 19 décembre 2016 Nous avons divisé la conception et la logique et le diagnostic commercial combiné et le diagnostic à domicile. Nous avons créé une version intelligente avec la progression du diagnostic par opération de bouton. </p>
+<p> 2 mars 2017 J'ai organisé la séparation entre l'écran intelligent et l'écran du PC. </p>
+<p> 21 mars 2017 J'ai fait les boutons sur l'écran intelligent plus clair. </p>
+<p> 11 avril 2017 Élaboration de l'ensemble du secteur ménager, approvisionnement en eau chaude, télévision, logique de réfrigérateur. </p>
+<p> Préparation de la Question Limited Version le 17 avril 2017. Correction d'un problème sur lequel la question du rafraîchissement n'est pas effectuée lors du retour à l'écran de saisie. </p>
+<p> Code couleur codé le contenu de la proposition du 18 avril 2017. </p>
+<p> Publication du paramètre de mode, 28 avril 2017, correction de bug que la pièce ne peut pas être ajoutée, ajout de profit </p>
+<p> 1er mai 2017 Problème corrigé de l'ajout de pièce / appareil devenu 2 ou plus </p>
+<p> Correction d'un problème qui n'a pas pu être affiché sur IE le 21 juin 2017. IE 10 ou supérieur est pris en charge. </p>
+<p> Création d'une version simplifiée le 27 juin 2017. Erreur correspondante dans l'affichage continu de la lumière du soleil. </p>
+<p> 3 juillet 2017 Affichage des effets correspondants des mesures combinées. </p>
+<p> 12 août 2017 intégration avec des langues étrangères et des versions régionales. Correction d'un bug où la répartition du CO2 est retournée à l'ensemble par saisie. Amélioration du calcul de la charge de chauffage. </p>
+<p> Correction d'un point d'erreur sur l'entrée du kérosène le 21 août 2017. </p>
+<p> Création d'un écran supérieur le 31 août 2017. Fonction de connexion en cours de développement. </p>
+<p> Migration de données de la version de la liste à la version détaillée, 4 septembre 2017, correction de l'écran intelligent. </p>
+<p> 10 septembre 2017 Organisez des fichiers de langue, créez une version anglaise. </p>

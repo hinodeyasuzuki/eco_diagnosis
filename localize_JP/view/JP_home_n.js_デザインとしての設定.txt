@@ -1,0 +1,22 @@
+//D6をロジックとしての設定とし、ここにデザイナー向けの制限設定を置く。
+
+//file name
+focus[*1]_[*2].js
+
+*1 target Mode  1:home, 2:office
+*2 Question Restrict set verstion   
+  	reserve  1:easy : less than 8 questions mode
+
+
+・表示させる質問
+・機器・部屋の追加の制限
+・表示させるグラフ、選択肢
+・表示させる対策
+　※主にタブボタン、移動ボタンを隠すことで対応
+
+
+ex.
+　質問は7項目のみ、対策はこれにより変化する主要な10項目
+　共通設定
+
+
