@@ -7,7 +7,7 @@ Eco Home Diagnosis System to reduce co2 reduction
 
 また、言語設定を変更することで、多言語・他地域の診断ソフトとして作ることができます。EXCELシートに記述して、コードとして書き出すことにより、他言語版として活用できます。
 
-## Thanks to 
+## Third party
 * jQuery JavaScript Library: Copyright 2005, 2013 jQuery Foundation, Inc. and other contributors
 * leanModal v1.1 by Ray Stone - http://finelysliced.com.au
 * jQuery Cookie Plugin v1.4.1: Copyright 2006, 2014 Klaus Hartl
