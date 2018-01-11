@@ -42,14 +42,14 @@ function getlogiclistoffice( $area )  {
 
 	';
 }
-	$includeeachjs = $include_common . getlogiclistoffice( "d6/logic" ) . getlogiclistoffice($lang["d6folder"] );
+	$includeeachjs = $include_common . getlogiclistoffice( "d6" ) . getlogiclistoffice($lang["d6folder"] );
 
 
 	//2 packed js for worker : execute shortoffice.bat to make this file 
-	$includesumjs  ='d6/'.$lang["d6folder"].'/d6office.js';
+	$includesumjs  = $lang["d6folder"].'/d6office.js';
 
 	//3 compressed for worker : execute http://dean.edwards.name/packer/ 
-	$includeminjs  ='d6/'.$lang["d6folder"].'/d6office.min.js';
+	$includeminjs  = $lang["d6folder"].'/d6office.min.js';
 
 	//4.5 compressed common logic : execute http://dean.edwards.name/packer/ 
 	$includemincommonjs  ='d6/d6common.min.js';

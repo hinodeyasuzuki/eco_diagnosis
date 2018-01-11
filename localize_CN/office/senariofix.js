@@ -106,7 +106,45 @@ D6.scenario.areafix = function() {
 				D6.area.seasonMonth = { winter:4, spring:2, summer:6 };
 				break;
 		}
+		
+		//calculate average cost for business
+		this.averageCostEnergy = this.getAverageCostEnergy( 
+						D6.consShow["TO"].business ,
+						D6.consShow["TO"].floor );
+		
+		//calculate average CO2
+		this.averageCO2Energy = [];
+		for( var i in this.averageCostEnergy ) {
+			this.averageCO2Energy[i] = 
+						D6.Unit.costToCons( this.averageCostEnergy[i] , i )
+						* D6.Unit.co2[i];
+		}
 	};
+	
+	// get average fee depend on business type,floor
+	// 	ret[energy_name]
+	//
+	//	energy_name: electricity,gas,kerosene,car
+	//
+	D6.area.getAverageCostEnergy= function( business, floor ) {
+		var ret;
+		ret = new Array();
+
+		var id;
+		for ( i in this.energyCode2id) {
+			id = this.energyCode2id[i];
+			if ( i=="electricity" ){
+				ret[i] = D6.Unit.consToCost(business * floor 
+							/ D6.Unit.jules.electricity / 12 
+						,"electricity", 1, 0 );			//月電気代
+			} else {
+				ret[i] = 0;
+			}
+		}
+
+		return ret;
+	};
+
 };
 
 

@@ -21,4 +21,4 @@ defInput[1] = ["i061", "title", "monthly electricity charge"];
 */
 
 //global 
-var showMeasureTable_Max = 7;	//createpage.js showMeasureTable() max result
+//var showMeasureTable_Max = 40;	//createpage.js showMeasureTable() max result

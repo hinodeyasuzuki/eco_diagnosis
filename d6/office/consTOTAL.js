@@ -195,6 +195,7 @@ DC.calc = function( ){
 	this.monthlyPrice["car"] = ret.monthly;
 	this.car = this.priceCar / D6.Unit.price.car;
 
+	//重油
 };
 
 
