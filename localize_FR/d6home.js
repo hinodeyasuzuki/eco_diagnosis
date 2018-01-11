@@ -409,7 +409,6 @@ D6.patch = function( target, fix ) {
 	for ( var v in fix ) {
 		target[v] = fix[v];
 	}
-	console.log( target );
 	return target;
 };
 
@@ -2349,32 +2348,7 @@ D6.Unit = {
  * 								2016/04/12 ported to JavaScript
  */
 
-D6.Unit = D6.Unit | {
-	
-	// co2 emission factor  kg-CO2/each unit
-	co2 : {
-		electricity:0.55,
-		nightelectricity:0.55,
-		sellelectricity:0.55,
-		nagas:2.23,
-		lpgas:5.98,
-		kerosene:2.49,
-		gasoline:2.32,
-		lightoil:2.62,
-		heavyoil:3,
-		coal:0,
-		biomass:0,
-		hotwater:0,
-		waste:0,
-		water:0,
-		gas:2.23,
-		car:2.32
-	},
-
-	defaultPriceElectricity : 0.27,
-
-	// unit price   euro/each unit in france
-	price : {
+D6.Unit.price = {
 		electricity:0.27,				// override in D6.area.setPersonArea by supplyer
 		nightelectricity:0.10,
 		sellelectricity:0.30,
@@ -2391,10 +2365,10 @@ D6.Unit = D6.Unit | {
 		water:0,
 		gas:1.20,
 		car:1.30
-	},
+	};
 
 	// intercept price when consumption is zero 	yen(in Japan)
-	priceBase : {
+D6.Unit.priceBase = {
 		electricity:0,
 		nightelectricity:21,
 		sellelectricity:0,
@@ -2411,10 +2385,10 @@ D6.Unit = D6.Unit | {
 		water:0,
 		gas:800,
 		car:0
-	},
+	};
 	
 	// names ( dataset is now witten in Japanse )
-	name : {
+D6.Unit.name = {
 		electricity:"electricity",
 		nightelectricity:"nightelectricity",
 		sellelectricity:"sellelectricity",
@@ -2431,172 +2405,8 @@ D6.Unit = D6.Unit | {
 		water:0,
 		gas:"nagas",
 		car:"car"
-	},
+	};
 	
-	// unit discription text
-	unitChar : {
-		electricity:"kWh",
-		nightelectricity:"kWh",
-		sellelectricity:"kWh",
-		nagas:"m3",
-		lpgas:"m3",
-		kerosene:"L",
-		gasoline:"L",
-		lightoil:"L",
-		heavyoil:"L",
-		coal:0,
-		biomass:0,
-		hotwater:0,
-		waste:0,
-		water:0,
-		gas:"m3",
-		car:"L"
-	},
-	
-	// second energy(end-use)  kcal/each unit
-	calorie : {
-		electricity:860,
-		nightelectricity:860,
-		sellelectricity:860,
-		nagas:11000,
-		lpgas:36000,
-		kerosene:8759,
-		gasoline:8258,
-		lightoil:9117,
-		heavyoil:9000,
-		coal:0,
-		biomass:0,
-		hotwater:0,
-		waste:0,
-		water:0,
-		gas:11000,
-		car:8258
-	},
-
-	// primary energy  MJ/each unit
-	jules : {
-		electricity:9.6,
-		nightelectricity:9.6,
-		sellelectricity:9.6,
-		nagas:46,
-		lpgas:60,
-		kerosene:38,
-		gasoline:38,
-		lightoil:38,
-		heavyoil:38,
-		coal:0,
-		biomass:0,
-		hotwater:0,
-		waste:0,
-		water:0,
-		gas:45,
-		car:38
-	},
-	
-	
-	// costToCons( cost, energy_name, elecType, kw ) -----------------------------
-	//		estimate consumption from cost, per month
-	// parameters
-	//		cost: energy fee/cost per month
-	//		energy_name: energy code
-	//		elecType: type of electricity supply
-	//			1:従量電灯A, 2:従量電灯B、3:時間帯別、4:低圧、5:低圧総合、6:高圧 in Japan
-	//		kw:	contract demand
-	// return
-	//		cons: energy consumption per month
-	costToCons : function( cost, energy_name, elecType, kw )
-	{
-		var ret;
-		if ( cost == -1 || cost == "" ) {
-			ret = "";
-		}
-		if (energy_name != "electricity" || typeof(D6.area.elecPrice) == undefined ) {
-			// not electricity or no regional parameters
-			if ( cost < D6.Unit.priceBase[energy_name] * 2 ) {
-				// estimation in case of nealy intercept price
-				ret = cost / D6.Unit.price[energy_name] / 2;
-			} else {
-				// ordinal estimation
-				ret = ( cost - D6.Unit.priceBase[energy_name] ) / D6.Unit.price[energy_name];
-			}
-
-		} else {
-			//regional electricity
-			if ( elecType < 0 || !elecType ) {
-				if ( D6.consShow["TO"].allDenka ) {
-					elecType = 3;
-				} else {
-					elecType = 1;
-				}
-			}
-			var def = D6.area.elecPrice[elecType];
-			ret = ( cost - kw * def[4] - def[3] ) / (( def[1] + def[2] ) / 2);
-		}
-		return ret;
-	},
-	
-	
-	//consToCost( cons, energy_name, elecType, kw ) -----------------------
-	//		estimate cost from energy consumption
-	// parameters
-	//		cons: energy consumption per month
-	//		energy_name: energy code
-	//		elecType: type of electricity supply
-	//			1:従量電灯A, 2:従量電灯B、3:時間帯別、4:低圧、5:低圧総合、6:高圧 in Japan
-	//		kw:	contract demand
-	// return
-	//		cost: energy fee/cost per month, not include intercept price
-	consToCost : function( cons, energy_name, elecType, kw )
-	{
-		var ret;
-
-		if ( cons == -1 || cons == "" ) {
-			ret = "";
-		}
-		if ( energy_name != "electricity" || typeof(D6.area.elecPrice) == undefined  ) {
-			// this is rough method, multify only unit price
-			// it will better to fix regionally
-			ret = cons * D6.Unit.price[energy_name];
-
-		} else {
-			// electricity
-			if ( elecType < 0 || !elecType ) {
-				if ( D6.consShow["TO"].allDenka ) {
-					elecType = 3;
-				} else {
-					elecType = 1;
-				}
-			}
-			var def = D6.area.elecPrice[elecType];
-			ret  = kw * def[4] + cons * ( def[1] + def[2] ) / 2;
-			if( ret > def[3] * 2 ) {
-				ret -= def[3];
-			} else {
-				ret /= 2;
-			}
-		}
-		return ret;
-	},
-	
-	// consToEnergy( cons, energy_name ) --------------------------------
-	//		calculate energy from energy consumption 
-	// parameters
-	//		cons: energy consumption per month
-	//		energy_name: energy code
-	// return
-	//		ret: energy MJ per month
-	consToEnergy : function( cons, energy_name )
-	{
-		var ret;
-
-		if ( cons == -1 || cons == "" ) {
-			ret = "";
-		}
-		ret = cons * D6.Unit.jules[energy_name]/1000000;
-
-		return ret;
-	},
-};
 
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
@@ -4679,7 +4489,7 @@ D6.disp.getMeasureDetail= function( mesid ) {
 	ret.mesID = mes.mesID;
 	ret.groupID = mes.groupID;
 	ret.consName = mes.cons.consName;
-	ret.figNum = mes.figNum;console.log( mes.figNum);
+	ret.figNum = mes.figNum;
 	ret.advice = mes.advice;
 	ret.joyfull = mes.joyfull;
 	ret.total = mes.cons.total;
@@ -4757,9 +4567,9 @@ D6.disp.tableMeasuresSimple = function( mes )
 
 //table of Measures data
 // consName
-// maxPrice		
+// maxPrice		not show over than this price
 // notSelected 	1:only not select
-D6.disp.getMeasureTable = function( consName, maxPrice = 1000000, notSelected = 0 )
+D6.disp.getMeasureTable = function( consName, maxPrice = 100000000, notSelected = 0 )
 {
 	var ret = [];
 	var i=0;
@@ -9700,8 +9510,8 @@ D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
 		}
 	}
 
-	//create consumption class,  grandsun of consTotal
-	//  crete grandsun after children
+	//create consumption class,  grandson of consTotal
+	//  create grandson after children
 	for( logic in D6.logicList ) {
 		tlogic = D6.logicList[logic];								//shortcut
 
@@ -9823,8 +9633,8 @@ D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
 		this.addMeasureEachCons( consList[i] );
 	}
 
-	// in case of calc by months, questions should be devided to months
-	//	and need dataset of templature, solar, average consumptions etc.
+	// in case of calculate by months, questions should be divided to months
+	//	and need dataset of temperature, solar, average consumptions etc.
 
 	// step 5 : set questions/inputs --------------------------
 	
@@ -9854,7 +9664,7 @@ D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
 
 	var iname;
 
-	// roop each input definition
+	// loop each input definition
 	for ( iname in D6.scenario.defInput ) {
 		//check is prohibited
 		if ( isProhivitedQuestion( iname ) ) continue;
@@ -9877,7 +9687,7 @@ D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
 		}
 	}
 		
-	//set easy ques list
+	//set easy question list
 	var ilist = [];
 	if ( D6.scenario.defEasyQues ) {
 		for( var i in D6.scenario.defEasyQues[0].ques ) {
@@ -9916,14 +9726,14 @@ D6.addMeasureEachCons = function( cons ) {
 
 // addConsSetting( consName ) ------------------------------------------------
 //		add consumption instance of countable rooms/equipments
-//		this function only incliment setting number, so after that reconstruct all consumptions
+//		this function only increment setting number, so after that reconstruct all consumptions
 // parameter
 //		consName : consumption code(string)
 // return
 //		none
 // set
-//		incliment the number of consumption setting
-//		also incliment part side of consumption
+//		increment the number of consumption setting
+//		also increment part side of consumption
 D6.addConsSetting = function(consName) {
 	var cons = "";
 	var pname = "";
@@ -9966,7 +9776,7 @@ D6.calcCons = function() {
 	//area parameters set
 	this.area.setCalcBaseParams();
 
-	//pre caclulation such as common parameters setting
+	//pre calculation such as common parameters setting
 	for ( i=0 ; i<D6.consList.length ; i++ ) {
 		this.consList[i].precalc();
 	}
@@ -9983,14 +9793,14 @@ D6.calcCons = function() {
 		this.consList[i].calcCO2();	
 	}
 
-	//adjust amonung each consumption
+	//adjust among each consumption
 	this.calcConsAdjust();
 
 	//calculate cost and energy
 	for ( i=0 ; i<this.consList.length ; i++ ) {
 		this.consList[i].calcCost();
 		this.consList[i].calcJules();
-		//set as original value, whitch is in case of no selection
+		//set as original value, which is in case of no selection
 		if ( this.isOriginal ) {
 			this.consList[i].co2Original = this.consList[i].co2;
 			this.consList[i].costOriginal = this.consList[i].cost;
@@ -10001,7 +9811,7 @@ D6.calcCons = function() {
 	
 
 //calcConsAdjust() --------------------------------------------------
-//		adjust amonung each consumption
+//		adjust among each consumption
 //		called from calcCons()
 D6.calcConsAdjust = function() {		
 	var ci, i, j;
@@ -10012,7 +9822,7 @@ D6.calcConsAdjust = function() {
 	var singleArray = true;
 	var lastname = "";
 		
-	// calc sum of part side consumptions of each consumption exclude total one
+	// calculate sum of part side consumptions of each consumption exclude total one
 	for ( ci in this.consShow ) {
 		consSum = this.consShow[ci];
 
@@ -10034,7 +9844,7 @@ D6.calcConsAdjust = function() {
 				energySum.calcCO2();
 
 				if ( consSum.residueCalc == "no") {
-					// refregerator pattern : each consumption is important
+					// refrigerator pattern : each consumption is important
 					consSum.copy( energySum );
 					consSum.add( consSum.partCons[0] );
 					consSum.calcCO2();
@@ -10047,9 +9857,9 @@ D6.calcConsAdjust = function() {
 						}
 						consSum.partCons[0].clear();
 					} else {
-						//calc residure
+						//calculate residue
 						if ( singleArray ) {
-							//set residure to partCons[0]
+							//set residue to partCons[0]
 							energySum.sub( consSum );
 							energySum.multiply( -1 );
 							consSum.partCons[0].copy( energySum );
@@ -10144,7 +9954,7 @@ D6.calcMeasures = function( gid ) {
 		selList[this.measureList[mes].mesID] =this.measureList[mes].selected;
 	}
 
-	//clear selection and calculrate
+	//clear selection and calculate
 	ret = this.clearSelectedMeasures( gid );
 
 	//set select one by one
@@ -10158,7 +9968,7 @@ D6.calcMeasures = function( gid ) {
 			this.isOriginal = false;
 
 			if ( mes.co2Change < 0 ) {
-				//set select in case of usefull measures
+				//set select in case of useful measures
 				mes.co2ChangeSumup = mes.co2Change;
 				mes.costChangeSumup = mes.costChange;
 				mes.costTotalChangeSumup = mes.costTotalChange;
@@ -10173,7 +9983,7 @@ D6.calcMeasures = function( gid ) {
 		}
 	}
 
-	//set selection propaty include not usefull
+	//set selection property include not useful
 	for ( mlistid in this.measureList ) {
 		mes = this.measureList[mlistid];
 		mes.selected = selList[mes.mesID];
@@ -10188,6 +9998,10 @@ D6.calcMeasures = function( gid ) {
 		}
 	}
 	this.resMeasure = ret2;
+	if ( D6.debugMode ) {
+		console.log( "measure calculate in d6.js calcMeasures() --- " );
+		console.log( ret2 );
+	}
 	return ret2;
 };
 
@@ -10299,7 +10113,7 @@ D6.calcMeasuresOne = function( gid ) {
 // measureAdd(mesId) set select flag and not calculate --------
 //
 // parameters
-//		mesId		measure id whitch you select
+//		mesId		measure id which you select
 // return
 //		none
 //
@@ -10319,7 +10133,7 @@ D6.measureAdd = function( mesId ) {
 // measureDelete(mesId) remove select flag and not calculate--------
 //
 // parameters
-//		mesId		measure id whitch you select
+//		mesId		measure id which you select
 // return
 //		none
 //
@@ -10354,7 +10168,7 @@ D6.clearSelectedMeasures = function( gid ) {
 		}
 	}
 		
-	//calclurate
+	//calculate
 	ret = this.calcMeasuresOne( gid );
 		
 	return ret;
@@ -10366,7 +10180,7 @@ D6.clearSelectedMeasures = function( gid ) {
 //
 // parameters
 //		gid		groupid, -1 is total
-//		count	max selecte number
+//		count	max selected number
 // return
 //		measure array defined in calcMeasuresOne
 //
@@ -10417,7 +10231,7 @@ D6.calcMaxMeasuresList = function( gid, count )
 		}
 		sumCO2 += maxCO2;
 		sumCOST += cost;
-		resultCalc = this.measureAdd( pt );			//select set to propaty
+		resultCalc = this.measureAdd( pt );			//select set to property
 		targetmes.addReduction();					//set reduction
 		resultCalc = this.calcMeasuresOne( -1 );	//main calculation for next step
 	}
@@ -10519,7 +10333,7 @@ D6.getTargetConsList  = function( consName )
 };
 
 	
-// getCommonParameters()  getter common resultparameters such as co2 ------------------
+// getCommonParameters()  getter common result parameters such as co2 ------------------
 //
 // retrun
 //		co2,cost
@@ -10539,7 +10353,7 @@ D6.getCommonParameters = function(){
 //
 // parameters
 //		ratio	ratio to average
-// retrun
+// return
 //		rank 1-100
 //
 D6.rankIn100 = function( ratio ){
@@ -10572,7 +10386,7 @@ D6.rankIn100 = function( ratio ){
 //
 // parameters
 //		strVal	original value
-// retrun
+// return
 //		halfVal replaced value
 //
 D6.toHalfWidth = function(strVal){

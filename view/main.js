@@ -215,7 +215,7 @@ getCalcResult = function( command, res ) {
 				$('.over15').toggle();
 			}
 			if( debugMode ) {
-				console.log( "return paramue from d6 worker----" );
+				console.log( "return parameters from d6 worker----" );
 				console.log( res );
 			}
 			break;
