@@ -1,0 +1,90 @@
+﻿<h2> About how to use energy saving diagnosis </h2>
+<p> Anyone can use this energy-saving diagnosis free of charge, but it does not guarantee the accuracy of the results. Please use it as a hint to promote energy conservation. </p>
+<p> You can not use the back button of the browser. </p>
+
+<h3> Recommended diagnostic screen </h3>
+<p> Although it is the same diagnostic content, there are three kinds of designs. If you want to easily tackle "<a href="./?lang=en&v=3"> simplified version </a>", if you want to see the outline of diagnosis, "<a href =" ./?lang=en&v=2"> List screen version </a> is recommended. Also, if you want to make a detailed detailed diagnosis, <a href="./?lang=en&v=0"> detailed version </a> is also available. In any case, you can proceed to more detailed diagnosis while taking over the data you filled in. </p>
+
+<h3> Content of diagnosis result </h3>
+<ul>
+<li> Countermeasures: Approximately 70 Items Calculate prepared countermeasures and select effective CO2 reduction measures for your home. We will show not only the CO2 reduction amount but also the reduction amount of the utility fee, so please refer to thinking about our efforts. In the list screen version and detailed version, you can choose a combination of countermeasures and can simulate how much reduction can be done at home. You also get <a class="button" href="./?lang=en">measure list</a>.</li>
+<li> Comparison: You can compare whether the energy consumption is high or low, compared with the same family number, local family. If there are 100 households in a similar environment, it also shows how many. </li>
+<li> Breakdown: We estimate what is the main cause of CO2 emissions in our household. For many applications, it is effective to take measures. </li>
+</ul>
+
+			<h2>Parameters</h2>
+<form action="./" method="get">
+<ul>
+	<li><label for="t">target</label>
+	<select id="t" name="t">
+		<option value="1" selected>home</option>
+		<option value="2">office(only japan)</option>
+	</select>
+	</li>
+
+	<li><label for="v">view mode</label>
+	<select id="v" name="v">
+		<option value="3" selected>easy</option>
+		<option value="2">one page</option>
+		<option value="0">detail</option>
+		<option value="1">button type</option>
+	</select>
+	</li>
+
+	<li><label for="intro">introduction</label>
+	<select id="intro" name="intro">
+		<option value="0" selected>no</option>
+		<option value="1">yes(only one page type)</option>
+	</select>
+	</li>
+
+	<li><label for="lang">language</label>
+	<select id="lang" name="lang">
+		<option value="en" selected>English in Japan</option>
+		<option value="ja">Japanese in Japan</option>
+		<option value="zh" >Chinese in China</option>
+		<option value="fr" >French in Japan</option>
+	</select>
+	</li>
+
+	<li><label for="translate">google translate</label>
+	<select id="translate" name="translate">
+		<option value="0" selected>no</option>
+		<option value="1" >yes</option>
+	</select>
+	</li>
+
+</ul>
+<input type="submit" name="submit" value="start diagnosis">
+</form>
+
+<p> By passing the character string of the saved data in the <a href="./" target="_blank"> ./? data =*** </a> GET format as other parameters, input data You can obtain diagnostic results by hand. Press the "Save" button to display the dialog. </p>
+
+<h2> Technical explanation on energy saving diagnosis </h2>
+<p> This diagnosis is provided by Hinode and Hitachi Eco Life Institute (Hinodeya Institute for Ecolife co.). It is a review of the calculation logic of 'Eko diagnosis' that is currently being advanced by the Ministry of the Environment from the basics, and it is designed to be compatible with flexible systems such as multilingual. </p>
+<p> Effective measures will vary depending on the energy use situation of home and office. By answering within the range to understand, it is possible to analyze and suggest countermeasures with more families situation. However, you do not need to forcibly answer items you do not know. Through logic that guesses the usage situation, appropriate measures are being proposed without having to forcibly answer. </p>
+<p> We propose a motion model, and we are calculating approximate numerical values ​​according to input for the proposed contents, but there is no guarantee of accuracy or operation. If inappropriate suggestions or numbers are output, we would be pleased if you could contact us. We will respond to development separately for systems that have reviewed the diagnostic logic. </p>
+
+<h2> Development record </h2>
+<p> January 17, 2011 Start of Diagnostic Platform Development Project </p>
+<p> May 6 th, 2011 Platform first action version by ActionScrpt 3 </p>
+<p> Organize terms on February 17, 2014 </p>
+<p> Rewrote Javascript on April 12, 2016. Development code D6. </p>
+<p> December 19, 2016 We divided the design and logic and combined business diagnosis and home diagnosis. We created a smart version with diagnostic progress by button operation. </p>
+<p> March 2, 2017 I organized the separation between the smart screen and the PC screen. </p>
+<p> March 21, 2017 I made the buttons on the smart screen clearer. </p>
+<p> April 11, 2017 Elaboration of the whole household sector, hot water supply, television, refrigerator logic. </p>
+<p> Preparation of Question Limited Version on April 17, 2017. Fixed a problem that question refreshing is not done when returning to the input screen. </p>
+<p> Color-coded on 18th April 2017 proposal content. </p>
+<p> Publication of mode setting, April 28, 2017, bug fix that room can not be added, addition of profit </p>
+<p> May 1, 2017 Fixed problem that room /device addition became 2 or more </p>
+<p> Fixed a problem that could not be displayed on IE on June 21, 2017. IE 10 or higher is supported. </p>
+<p> Creating a simplified version on June 27, 2017. Corresponding error in continuous display of sunlight. </p>
+<p> July 3, 2017 Corresponding effect display of combination measures. </p>
+<p> August 12, 2017 integration with foreign languages ​​and regional versions. Fixed a bug where CO2 breakdown is returned to the whole by input. Enhancement of heating load calculation. </p>
+<p> Fixed an error point on input of kerosene on August 21, 2017. </p>
+<p> Creating a top screen on August 31, 2017. Login function under development. </p>
+<p> Data migration from list version to detailed version, September 4, 2017, correction of smart screen. </p>
+<p> September 10, 2017 Organize language files, create English version. </p>
+
+
