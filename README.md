@@ -24,9 +24,6 @@ http://www.hinodeya-ecolife.com/diagnosis/
 In order to pack js files, you need Windows, commandline PHP, Excel
 php files are used as parameters set, if you want to execute listricted pattern of diagnosis, you can save as .html file.
 
-Copyright 2011－2018（C） Yasufumi Suzuki, Hinodeya Insititute for Ecolife co.Ltd.
+Copyright（C） 2011－2018 Yasufumi Suzuki, Hinodeya Insititute for Ecolife co.Ltd.
 Released under the MIT license
-
-
-
 
