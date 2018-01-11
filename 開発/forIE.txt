@@ -1,0 +1,21 @@
+for IE8
+--view/jstools/d3.ie8.min.js
+--view/jstools/aight.min.js
+view/jstools/jquery-1.12.1.min.js
+
+for IE9,IE10
+d6/base/base64.js
+
+
+
+IE10,11, not local, not worker
+オブジェクトは 'encode' プロパティまたはメソッドをサポートしていません。
+  IE9なら逆に動く
+
+Chrome, worker
+　保存できない、not workerならOK
+
+
+Edge　
+　保存値が生成されない
+

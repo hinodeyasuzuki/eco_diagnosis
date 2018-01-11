@@ -1,7 +1,7 @@
 <?php // set to Language/*.php ========================
-// 
-// 
-// 
+
+
+
 //----------system title-----------------------------------------------
 $lang["code"]='fr';
 $lang['home_title']='Diagnostic d\'économie d\'énergie domestique';
@@ -10,12 +10,12 @@ $lang['home_joy_title']='Diagnostic d\'économie d\'énergie de la maison (facil
 $lang['countfix_pre_after']='1';
 
 //--energy -----------------
-$lang["show_electricity"]=True;
-$lang["show_gas"]=True;
-$lang["show_kerosene"]=True;
-$lang["show_briquet"]=False;
-$lang["show_area"]=True;
-$lang["show_gasoline"]=True;
+$lang["show_electricity"]='TRUE';
+$lang["show_gas"]='TRUE';
+$lang["show_kerosene"]='TRUE';
+$lang["show_briquet"]='FALSE';
+$lang["show_area"]='TRUE';
+$lang["show_gasoline"]='TRUE';
 
 $lang["electricitytitle"]='Électrique';
 $lang["gastitle"]='gaz';
@@ -38,12 +38,12 @@ $lang['co2unit']='kg';
 $lang['energyunit']='GJ';
 $lang['monthunit']='moice';
 $lang['yearunit']='an';
-$lang["co2unitperyear"]='kg/an';
-$lang["co2unitpermonth"]='kg/moice';
-$lang["feeunitperyear"]='Euro/an';
-$lang["feeunitpermonth"]='Euro/moice';
-$lang["energyunitperyear"]='GJ/an';
-$lang["energyunitpermonth"]='GJ/moice';
+$lang["co2unitperyear"]='';
+$lang["co2unitpermonth"]='';
+$lang["feeunitperyear"]='';
+$lang["feeunitpermonth"]='';
+$lang["energyunitperyear"]='';
+$lang["energyunitpermonth"]='';
 
 //--common page-----------------
 $lang["startPageName"]='Dans l\'ensemble (simple)';
@@ -227,7 +227,7 @@ $lang['home_easy_p2_button_next']='Je clarifierai la grande cause';
 $lang['home_easy_p3title']='Caractéristiques de votre vie';
 $lang['home_easy_p3_1']='C\'est l\'analyse de l\'émission de CO2. La gauche vous montre, la droite montre la valeur standard de la maison dont l\'état vous ressemble.';
 $lang['home_easy_p3_button_next']='Mesures recommandées ici';
-$lang['home_easy_p4title_pre']=
+$lang['home_easy_p4title_pre']='';
 $lang['home_easy_p4title_after']=' Mesures recommandées';
 $lang['home_easy_p4_button_next']='Les mesures les plus recommandées';
 $lang['home_easy_p4_1']='C\'est une mesure d\'économie d\'énergie recommandée adaptée à votre domicile. Cliquez sur le titre pour expliquer en détail. Le ★ mark of profit est une mesure qui peut prendre l\'original même s\'il y a un coût d\'achat.';
@@ -264,11 +264,11 @@ $lang['home_list_message']='Choisissez la contre-mesure qui vous convient parmi 
 
 //--createpage-----------------
 
-$lang["younow"]='toiStatut actuel';
+$lang["younow"]='Statut actuel';
 $lang["youafter"]='Après les mesures';
 $lang["average"]='moyenne';
 $lang["compare"]='Comparaison';
-$lang["comparetoaverage"]='moyenneComparaison';
+$lang["comparetoaverage"]='';
 $lang["co2emission"]='Emissions de CO2';
 $lang["co2reductiontitle"]='Effet de réduction de CO2';
 $lang["fee"]='Coûts des services publics';
@@ -276,7 +276,7 @@ $lang["feereductiontitle"]='Réduction du coût de l\'utilité';
 $lang["initialcosttitle"]='Montant de l\'investissement initial';
 $lang["loadperyear"]='Montant du fardeau annuel';
 $lang["primaryenergy"]='Consommation d\'énergie primaire';
-$lang["other"]='Autre';
+$lang["ohter"]='Autre';
 
 
 
@@ -285,8 +285,9 @@ $lang['office_title']='Diagnostic facile d\'économie d\'énergie dans les étab
 $lang["officecall"]='Votre entreprise';
 $lang["officecount"]='Bureau';
 $lang["totaloffice"]='Ensemble complet';
-$lang["officenow"]='BureauStatut actuel';
+$lang["officenow"]='Statut actuel';
 $lang["compareoffice"]='function(target) {return "Sur la même échelle" + target};';
 
 
 $lang['button_demand']='Demande';
+

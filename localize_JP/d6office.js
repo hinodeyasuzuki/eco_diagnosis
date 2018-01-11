@@ -409,7 +409,6 @@ D6.patch = function( target, fix ) {
 	for ( var v in fix ) {
 		target[v] = fix[v];
 	}
-	console.log( target );
 	return target;
 };
 

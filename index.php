@@ -217,8 +217,8 @@ $scripts  .='
 	<script src="view/main.js" type="text/javascript"></script>
 	<script src="view/createpage.js" type="text/javascript"></script>
 	<script src="view/graph.js" type="text/javascript"></script>
-	<script src="http://d3js.org/d3.v4.min.js"></script>
-	<script src="http://dimplejs.org/dist/dimple.v2.3.0.min.js"></script>
+	<script src="view/jstools/d3.min.js"></script>
+	<script src="view/jstools/dimple.v2.2.0.min.js"></script>
 	<!--[if lte IE 10]><script>alert("Sorry, this page does not work under IE8, and too slow under IE10.\n Please use IE11 up, chrome, Edge, Firefox or safari.");</script><![endif]-->';
 
 
