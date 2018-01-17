@@ -23,17 +23,34 @@ http://www.hinodeya-ecolife.com/diagnosis/
 
 ## Install
 In order to pack js files, you need Windows, commandline PHP, Excel
+
 php files are used as parameters set, if you want to execute listricted pattern of diagnosis, you can save as .html file.
 
 ## making your area/language system
 The base advice algolism is set for Japan. 
 
 index.php   access file in oder to manage develop/release, language, etc.
-/base/      main logic
-/logic_**/  localize file set
 
-1)EXCEL set
-You can fill efficent equipment, price, adive message, subsidy information, question text, select options, in order to fit your area and language. And also set translation for 
+/d6/      main logic files
+
+/view/    design inculde template, css and js as action. there is 8 types of view in original.
+
+/logic_**/  localized files set in this folder
+
+
+step1)EXCEL setting
+
+You can fill efficent equipment, price, adive message, subsidy information, question text, select options, in order to fit your area and language. And also set messages in your language.
+
+step2)copy excel sheet to /logic_**/language_set.php, /logic_**/home/senario_fix.js
+
+ ** is your country code and language code. Please copy code from excel to program files.
+
+step3)configure index.php
+
+ add new language code if you need. 
+
+step4) access and check
 
 Copyright 2011－2018（C） Yasufumi Suzuki, Hinodeya Insititute for Ecolife co.Ltd.
 Released under the MIT license
