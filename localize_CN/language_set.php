@@ -75,7 +75,7 @@ $lang["co2compare08"]='略低于家庭平均碳排放量，低碳生活。';
 $lang["co2compare10"]='与家庭平均碳排放量持平。';
 $lang["co2compare12"]='略高于家庭平均碳排放量，通过升级改造，还能有很大进步空间。';
 $lang["co2compare14"]='高于家庭平均碳排放量，通过升级改造，还能有很大进步空间。';
-$lang["rankcomment"]='function(same,youcount,rank) {return "假如有100个类似家庭" + youcount + "，您家排在第" +   youcount+ "名。<br>"};';
+$lang["rankcomment"]='function(same,youcount,rank) {return "假如有100个类似家庭" + youcount + "，您家排在第" +   rank+ "名。<br>"};';
 
 
 
