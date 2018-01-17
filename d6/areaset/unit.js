@@ -40,7 +40,7 @@ D6.Unit = {
 
 	// unit price   yen(in Japan)/each unit
 	price : {
-		electricity:27,				// override in D6.area.setPersonArea by supplyer
+		electricity:27,				// override in D6.area.setPersonArea by supplier
 		nightelectricity:10,
 		sellelectricity:30,
 		nagas:150,
@@ -169,8 +169,9 @@ D6.Unit = {
 	//		kw:	contract demand
 	// return
 	//		cons: energy consumption per month
-	costToCons : function( cost, energy_name, elecType, kw=0 )
+	costToCons : function( cost, energy_name, elecType, kw )
 	{
+		if(typeof kw === 'undefined') kw = 0;
 		var ret;
 		if ( cost == -1 || cost == "" ) {
 			ret = "";
