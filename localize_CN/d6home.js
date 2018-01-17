@@ -2109,7 +2109,7 @@ D6.Unit = {
 
 	// unit price   yen(in Japan)/each unit
 	price : {
-		electricity:27,				// override in D6.area.setPersonArea by supplyer
+		electricity:27,				// override in D6.area.setPersonArea by supplier
 		nightelectricity:10,
 		sellelectricity:30,
 		nagas:150,
@@ -2238,8 +2238,9 @@ D6.Unit = {
 	//		kw:	contract demand
 	// return
 	//		cons: energy consumption per month
-	costToCons : function( cost, energy_name, elecType, kw=0 )
+	costToCons : function( cost, energy_name, elecType, kw )
 	{
+		if(typeof kw === 'undefined') kw = 0;
 		var ret;
 		if ( cost == -1 || cost == "" ) {
 			ret = "";
@@ -5085,8 +5086,12 @@ D6.disp.tableMeasuresSimple = function( mes )
 // consName
 // maxPrice		not show over than this price
 // notSelected 	1:only not select
-D6.disp.getMeasureTable = function( consName, maxPrice = 100000000, notSelected = 0 )
+D6.disp.getMeasureTable = function( consName, maxPrice, notSelected )
 {
+	//cannot set default in function for IE
+	if(typeof maxPrice === 'undefined') maxPrice = 100000000;
+	if(typeof notSelected === 'undefined') notSelected = 0;
+
 	var ret = [];
 	var i=0;
 	var mes;

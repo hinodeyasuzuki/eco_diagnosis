@@ -47,6 +47,7 @@ div.page {
 
 div.widthhalf{
 	width:700px;
+	max-width:100%;
 }
 
 
@@ -372,10 +373,17 @@ table{
 #tabcontents li{
 	padding:3px;
 }
+#tabcontents li.nodata{
+	padding:0px;
+}
 
 #step span{
 	padding-left:5px;
 	padding-right:5px;
+}
+
+input, select{
+	width:130px;
 }
 
 
