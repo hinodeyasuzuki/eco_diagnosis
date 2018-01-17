@@ -75,7 +75,7 @@ $lang["co2compare08"]='平均よりも少なめです。すてきな暮らしで
 $lang["co2compare10"]='平均と同じ程度です。';
 $lang["co2compare12"]='平均よりもやや多めです。改善により光熱費が下がる余地は大きそうです。';
 $lang["co2compare14"]='平均よりも多めです。改善により光熱費が下がる余地は大きそうです。';
-$lang["rankcomment"]='function(same,youcount,rank) {return same +"が100" + youcount + "あったとすると、少ないほうから" +   youcount+ "番目です。<br>"};';
+$lang["rankcomment"]='function(same,youcount,rank) {return same +"が100" + youcount + "あったとすると、少ないほうから" +   rank+ "番目です。<br>"};';
 
 
 
