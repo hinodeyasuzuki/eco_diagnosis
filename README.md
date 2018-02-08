@@ -1,11 +1,11 @@
 # eco_diagnosis
 Eco Home Diagnosis System to reduce co2 reduction
 
-アンケート入力をもとに、家庭ごとのCO2削減対策を提案するソフトです。その家庭のエネルギー利用状況を分析し、効果的な対策を選んで提案します。
-基本は家庭向けですが、小規模事業者の診断にも対応できます。
-また、言語設定を変更することで、多言語・他地域の診断ソフトとして作ることができます。EXCELシートに記述して、コードとして書き出すことにより、他言語版として活用できます。
+エネルギー消費に関する簡単なアンケート入力をもとに、CO2排出量の分析を行い、約60項目のCO2排出削減対策の中から効果的なものを計算して提案するソフトです。
+基本は家庭向けですが、小規模事業者の診断にも対応しています。
+言語設定と地域用ロジックを変更することで、多言語・他地域の診断ソフトとして作ることができます。言語管理には、EXCELシートを利用しており、ソースコードが出力されます。
 
-This program can advice how to reduce CO2 emission by some question. In this software over 60 measures is set, calculate each measures by input value, show adive fitted to home. It is made for not only home but also small office.
+This program can advice how to reduce CO2 emission by some question about energy consumption. In this software over 60 measures is set, calculate each measures by input value, show adive fitted to home. It can be used for not only home but also small office.
 You can make your area/language software by support of Excel file.
 
 ## Third party
@@ -18,8 +18,21 @@ You can make your area/language software by support of Excel file.
 * php-packer: originally created by Dean Edwards, ported to PHP by Nicolas Martin. Packed for composer and slightly extended by Thomas Lutz.
 * intro.js : introjs.com
  
-## Release Site
-http://www.hinodeya-ecolife.com/diagnosis/
+## Test Site
+http://www.hinodeya-ecolife.com/diagnosis/?lang=ja	Japanese Default
+
+You can design visual and flow.
+
+http://www.hinodeya-ecolife.com/diagnosis/?v=0&lang=en　detail diagnosis(english)
+
+http://www.hinodeya-ecolife.com/diagnosis/?v=1&lang=en　button desgin
+
+http://www.hinodeya-ecolife.com/diagnosis/?v=2&lang=en　one page diagnosis
+
+http://www.hinodeya-ecolife.com/diagnosis/?v=3&lang=en　easy desgin
+
+http://www.hinodeya-ecolife.com/diagnosis/?v=4&lang=en　information about diagnosis
+
 
 ## Install
 In order to pack js files, you need Windows, commandline PHP, Excel
