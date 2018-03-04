@@ -27,6 +27,7 @@ function graphItemizeCommon( ret, targetname ) {
 	if (!$('#'+targetname).is(':visible')) {
 		return;
 	}
+console.log(ret);
 	//caption: graph captions translate
 	if (targetMode == 1 ){
 		var captions = {you:lang.younow ,after:lang.youafter, average:lang.average };
@@ -40,7 +41,7 @@ function graphItemizeCommon( ret, targetname ) {
 	var captionCompare = lang.compare;
 	var captionPercent =lang.percent;
 
-	$("#"+targetname).html("<h3>" + titles[ret.yaxis] + 
+	$("#"+targetname).html("<h3>" + titles[ret.yaxis] +
 		 ( hideAverage != 1 ? ":" + ret.averageCaption + captionCompareAverage + "（" + ret.consTitle  + "）" : "" ) + 
 	"</h3>");
 	

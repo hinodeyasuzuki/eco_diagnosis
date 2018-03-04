@@ -2,7 +2,7 @@
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
- * disp.js 
+ * d6_get.js 
  * 
  * display data create main Class
  * 		combined with disp_input.js, disp_demand.js, disp_measue.js
@@ -17,28 +17,26 @@
  * 
  * showResultTable()		get collective result
  *
- * dataAverage()			get average value
- * getAverageTable()		get average table data set
+ * getAverage()			get average value
+ * getAverage_cons()		get average table data set
  *
- * getItemizeTable()		itemize
+ * getItemize()		itemize
  * getItemizeGraph()
  * dataItemize()			get itemized value
  * 
- * getMonthlyGraph()		monthly graph data
+ * getMonthly()		monthly graph data
  * 
  */
 
  //resolve D6
-var D6 = D6||{};
+var D6 = D6 || {};
 
-D6.disp = 
-{
 	//result total values
 	//	param
 	//		consName : ex. "consTotal"
 	//  return
 	//		graphItemize,graphMonthly,average,cons,measure
-	showResultTable : function(consName){
+D6.getAllResult = function(consName){
 		var ret = [];
 		if ( consName ) {
 			if ( !D6.logicList[consName] ) consName = "consTotal";
@@ -50,25 +48,25 @@ D6.disp =
 		var consCode = D6.consListByName[consName][0].consCode;
 
 		//create collective result
-		ret.graphItemize = this.getItemizeGraph(consCode);
 		ret.common = D6.getCommonParameters();
 		
-		ret.graphMonthly = this.getMonthlyGraph();		
-		ret.average = this.getAverageTable(consCode);
-		ret.averageData = this.dataAverage();
-		ret.cons = this.getItemizeTable(consCode);
-		ret.measure = this.getMeasureTable(consName);
+		ret.monthly = this.getMonthly();		
+		ret.average = this.getAverage(consCode);
+		ret.average_graph = this.getAverage_graph();
+		ret.itemize = this.getItemize(consCode);
+		ret.itemize_graph = this.getItemizeGraph(consCode);
+		ret.measure = this.getMeasure(consName);
 
 		return ret;
-	},
+	};
 	
 	
-	//compare to average value 
+	//compare to average value about one Consumption
 	// params
 	//		consCode : consumption category
 	// return
 	//		you and average params
-	getAverageTable  : function ( consCode ){
+D6.getAverage = function ( consCode ){
 		var ret = [];
 		ret.you = D6.consShow[consCode].co2Original*12;		//yearly co2 emission
 		ret.after = D6.consShow[consCode].co2*12;			//yearly co2 after set measures
@@ -76,27 +74,32 @@ D6.disp =
 		ret.youc = D6.consShow[consCode].costOriginal*12;	//yearly cost
 		ret.afterc = D6.consShow[consCode].cost*12;			//yearly cost after set measures
 		ret.avc = D6.average.consList[consCode].cost*12;	//yearly average cost
+
 		ret.rank100 = D6.rankIn100( ret.you/ret.av);		//rank( 1-100 )
 		ret.afterrank100 = D6.rankIn100( ret.after/ret.av);	//rank after set measures( 1-100 )
+
 		ret.samehome = D6.scenario.defSelectValue["sel021"][Math.max(1,D6.doc.data["i021"])];
 			//same home's name
 		ret.sameoffice = D6.scenario.defSelectValue["sel001"][Math.max(1,D6.doc.data["i001"])];
 			//same office's name
+
 		ret.consCode = consCode;
-		return ret;
-		
-	},
+		return ret;		
+	};
 	
 	//average compare result 
-	dataAverage : function()
+D6.getAverage_graph = function()
 	{		
 		var ret = [];
 		ret.cost = [];
 		ret.co2 = [];
+
+		//	co2[1], cost[1] average
 		ret.cost[1] = D6.area.averageCostEnergy;
 		ret.co2[1] = D6.area.averageCO2Energy;
 		ret.co2[1].total = ret.co2[1].electricity + ret.co2[1].gas + ret.co2[1].kerosene + ret.co2[1].car;
-		
+
+		//  co2[0], cost[0] user
 		ret.cost[0] = [];
 		ret.cost[0].electricity = D6.consTotal.priceEle;
 		ret.cost[0].gas = D6.consTotal.priceGas;
@@ -110,7 +113,7 @@ D6.disp =
 		ret.co2[0].car = D6.consTotal.car * D6.Unit.co2.gasoline;
 		ret.co2[0].total = D6.consTotal.co2Original;
 		return ret;
-	},
+	};
 
 	//itemized value
 	// parameter
@@ -118,7 +121,7 @@ D6.disp =
 	// result
 	//		ret[nowConsCode] : itemized data for table( all items )
 	//
-	getItemizeTable  : function (consCode){
+D6.getItemize = function (consCode){
 		var ret = [];
 		var cons;
 		var i = 0;
@@ -152,7 +155,7 @@ D6.disp =
 			i++;
 		}
 		return ret;
-	},
+	};
 
 	
 	//itemize graph data set
@@ -161,7 +164,7 @@ D6.disp =
 	//		sort:sort target (co2,energy,money)
 	// result
 	//		itemized co2 graph data
-	getItemizeGraph  : function ( consCode, sort ){
+D6.getItemizeGraph = function ( consCode, sort ){
 		var otherCaption = "other";
 
 		if ( consCode ) {
@@ -296,14 +299,14 @@ D6.disp =
 		ret.consTitle = D6.consShow[consCode].title;
 
 		return ret;
-	},
+	};
 
 	//CO2 itemize array
 	//
 	// return
 	//		consObject array ( [0] is consTotal ) only for graph
 	//		
-	dataItemize : function()
+D6.dataItemize = function()
 	{
 		var consShow = D6.consShow;
 
@@ -327,7 +330,7 @@ D6.disp =
 		cons_temp.unshift( consShow["TO"] );
 
 		return cons_temp;
-	},
+	};
 
 
 	//monthly graph data
@@ -335,8 +338,8 @@ D6.disp =
 	// return
 	//		ret.data[]	graph data
 	//		ret.yaxis	title
-	getMonthlyGraph  : function ( ){
-		var retall = [];
+D6.getMonthly  = function ( ){
+		var ret = [];
 		var menu = {
 			co2: {sort:"co2", title:"kg", round:1, divide:1},
 			energy: {sort:"jules", title:"MJ", round:1, divide:1000},
@@ -353,24 +356,53 @@ D6.disp =
 		];
 		var ene2 = [];
 		
-		var ret = [];
+		var month = [];
 		var ri = 0;
-		var captions = [];
 		var e;
 		for ( var m=1 ; m<=12 ; m++ ){
-			captions[m-1] = m;
 			for ( e=0 ; e<ene1.length ;e++ ){
 				if ( !D6.consShow["TO"].monthlyPrice[ene1[e].ene] ) continue;
-				ret[ri] = [];
-				ret[ri]["month"] = m;
-				ret[ri][show.title] = Math.round(D6.consShow["TO"].monthlyPrice[ene1[e].ene][m-1]/show.divide*show.round)/show.round;
-				ret[ri]["energyname"] = ene1[e].ene;
+				month[ri] = [];
+				month[ri]["month"] = m;
+				month[ri][show.title] = Math.round(D6.consShow["TO"].monthlyPrice[ene1[e].ene][m-1]/show.divide*show.round)/show.round;
+				month[ri]["energyname"] = ene1[e].ene;
 				ri++;
 			}
 		}
-		retall.data = ret;
-		retall.yaxis = show.title;
-		return retall;
-	}
+		ret.data = month;
+		ret.yaxis = show.title;
+		return ret;
 };
+
+
+// getGid(consName)  getter group id of consumption ------------------
+//
+// parameters
+//		consName	consumption name
+// retrun
+//		groupID		0-9
+//
+D6.getGid  = function( consName ) {
+	return D6.logicList[consName].groupID;
+};
+	
+
+	
+// getCommonParameters()  getter common result parameters such as co2 ------------------
+//
+// retrun
+//		co2,cost
+//
+D6.getCommonParameters = function(){
+	var ret = [];
+	ret.co2Original = D6.consListByName["consTotal"][0].co2Original;
+	ret.co2 = D6.consListByName["consTotal"][0].co2;
+	ret.costOriginal = D6.consListByName["consTotal"][0].costOriginal;
+	ret.cost = D6.consListByName["consTotal"][0].cost;
+		
+	return ret;
+};
+
+
+
 

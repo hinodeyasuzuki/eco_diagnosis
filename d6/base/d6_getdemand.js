@@ -22,7 +22,7 @@
 // return
 //		retall.log		log graph data
 //		retall.sumup	pile up graph data
-D6.disp.getDemandGraph  = function ( ){
+D6.getDemandGraph  = function ( ){
 	var work = {};
 	var retone = {};
 	var retall = {};
@@ -146,7 +146,7 @@ D6.disp.getDemandGraph  = function ( ){
 	
 
 //create input dialog of demand
-D6.disp.getInputDemandSumup = function() {
+D6.getInputDemandSumup = function() {
 	var work = {};
 	var ret = {};
 	var title = {};
@@ -185,7 +185,7 @@ D6.disp.getInputDemandSumup = function() {
 };
 
 //create input diakog 
-D6.disp.getInputDemandLog = function() {
+D6.getInputDemandLog = function() {
 	var ret = [];
 	for ( var t=0 ; t<24 ; t++ ){
 		ret[t] = this.createComboBox( "i056" + (t+1), true );

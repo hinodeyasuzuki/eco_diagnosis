@@ -16,7 +16,7 @@
 //resolve D6
 var D6 = D6||{};
 
-// evaluateAxisPoint()
+// getEvaluateAxisPoint()
 //
 // parameters
 // 		target : dummy
@@ -27,7 +27,7 @@ var D6 = D6||{};
 // value base is  D6.doc.data[inName]
 // weight is defined in D6.scenario.defInput[inName]
 //
-D6.evaluateAxisPoint = function( target,inpListDefCode ) {
+D6.getEvaluateAxisPoint = function( target,inpListDefCode ) {
 	//calc environmental load, performance, action points
 	var retall = {};
 	retall[0] = [0,"",""];

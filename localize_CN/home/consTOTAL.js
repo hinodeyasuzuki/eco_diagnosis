@@ -124,7 +124,7 @@ DC.calc = function( ){
 	var seasonConsPattern = D6.area.getSeasonParamCommon();
 
 	//電気の推計
-	ret = D6.Monthly.seasonCalc( this.priceEle, this.seasonPrice["electricity"], this.monthlyPrice["electricity"], seasonConsPattern.electricity, "electricity" );
+	ret = D6.calcMonthly( this.priceEle, this.seasonPrice["electricity"], this.monthlyPrice["electricity"], seasonConsPattern.electricity, "electricity" );
 	this.priceEle = ret.ave;
 	this.seasonPrice["electricity"] = ret.season;
 	this.monthlyPrice["electricity"] = ret.monthly;
@@ -180,7 +180,7 @@ DC.calc = function( ){
 	}
 
 	//gas
-	ret = D6.Monthly.seasonCalc( this.priceGas, this.seasonPrice["gas"], this.monthlyPrice["gas"], seasonConsPattern.gas, "gas" );
+	ret = D6.calcMonthly( this.priceGas, this.seasonPrice["gas"], this.monthlyPrice["gas"], seasonConsPattern.gas, "gas" );
 	this.priceGas = ret.ave;
 	this.seasonPrice["gas"] = ret.season;
 	this.monthlyPrice["gas"] = ret.monthly;
@@ -189,7 +189,7 @@ DC.calc = function( ){
 											/D6.Unit.price.gas;
 
 	//coal
-	ret = D6.Monthly.seasonCalc( this.priceCoal, this.seasonPrice["coal"], this.monthlyPrice["coal"], seasonConsPattern.coal, "coal" );
+	ret = D6.calcMonthly( this.priceCoal, this.seasonPrice["coal"], this.monthlyPrice["coal"], seasonConsPattern.coal, "coal" );
 	this.priceCoal = ret.ave;
 	this.seasonPrice["coal"] = ret.season;
 	this.monthlyPrice["coal"] = ret.monthly;
@@ -197,14 +197,14 @@ DC.calc = function( ){
 	this.coal = this.priceCoal / D6.Unit.price.coal;
 
 	//hotwater
-	ret = D6.Monthly.seasonCalc( this.priceHotWater, this.seasonPrice["hotwater"], this.monthlyPrice["hotwater"], seasonConsPattern.hotwater, "hotwater" );
+	ret = D6.calcMonthly( this.priceHotWater, this.seasonPrice["hotwater"], this.monthlyPrice["hotwater"], seasonConsPattern.hotwater, "hotwater" );
 	this.priceHotWater = ret.ave;
 	this.hotwater = this.priceHotWater / D6.Unit.price.hotwater;
 	this.seasonPrice["hotwater"] = ret.season;
 	this.monthlyPrice["hotwater"] = ret.monthly;
 
 	//gasoline
-	ret = D6.Monthly.seasonCalc( this.priceCar, this.seasonPrice["car"], this.monthlyPrice["car"], seasonConsPattern.car, "car" );
+	ret = D6.calcMonthly( this.priceCar, this.seasonPrice["car"], this.monthlyPrice["car"], seasonConsPattern.car, "car" );
 	this.priceCar = ret.ave;
 	this.seasonPrice["car"] = ret.season;
 	this.monthlyPrice["car"] = ret.monthly;

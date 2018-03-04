@@ -9,7 +9,7 @@
  * License: http://creativecommons.org/licenses/LGPL/2.1/
  * 
  * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- * 								2016/11/23 divided from disp.js
+ * 								2016/11/23 divided from js
  * 
  * getInputPage()		create html input pages
  * createComboBox()		combo box component
@@ -38,7 +38,7 @@
 //		ret.combos[] 		input components html list
 //		ret.addlist[]		addable equipment/room list
 //
-D6.disp.getInputPage = function( consName,subName ) {
+D6.getInputPage = function( consName,subName ) {
 	var ret = [];
 	var group = [];			//group name
 	var groupAddable = [];		//countable consumption list such as rooms/equipments
@@ -174,7 +174,7 @@ D6.disp.getInputPage = function( consName,subName ) {
 //		onlyCombo : create only combobox and not wrap table style
 // return
 //		disp : combobox html
-D6.disp.createComboBox = function( inpId, onlyCombo )
+D6.createComboBox = function( inpId, onlyCombo )
 {
 	var disp = "";
 	var selid = "sel" + inpId.substr( 1,3 );
@@ -230,7 +230,7 @@ D6.disp.createComboBox = function( inpId, onlyCombo )
 //		onlyCombo : create only textbox and not wrap table style
 // return
 //		disp : textbox html
-D6.disp.createTextArea = function( inpId, onlyCombo )
+D6.createTextArea = function( inpId, onlyCombo )
 {
 	var disp = "";
 	var selid = "sel" + inpId.substr( 1,3 );
@@ -262,7 +262,7 @@ D6.disp.createTextArea = function( inpId, onlyCombo )
 
 // tfHandlerCombo( name ) ------------------------------------------------
 //		set data to Input[] from combobox
-D6.disp.tfHandlerCombo = function( name ) {
+D6.tfHandlerCombo = function( name ) {
 	return function( e ) {
 		Input[name] = e.target.value;
     		e.target.removeEventListener( Event.ENTER_FRAME, arguments.callee );
@@ -271,13 +271,13 @@ D6.disp.tfHandlerCombo = function( name ) {
 
 	
 // parameters used in button view
-D6.disp.nowQuesCode = 0;		//now question code "i" + num
-D6.disp.nowQuesID = -1;			//now index in series of questions
-D6.disp.quesOrder = [];			//question code list
+D6.nowQuesCode = 0;		//now question code "i" + num
+D6.nowQuesID = -1;			//now index in series of questions
+D6.quesOrder = [];			//question code list
 	
 //getFirstQues() --------------------------------------------
 //		return first question data, for smartphone
-D6.disp.getFirstQues = function(consName, subName)
+D6.getFirstQues = function(consName, subName)
 {
 	var definp;
 	var cons;
@@ -304,7 +304,7 @@ D6.disp.getFirstQues = function(consName, subName)
 
 //getNextQues() --------------------------------------------
 //		return next question data, for smartphone
-D6.disp.getNextQues = function()
+D6.getNextQues = function()
 {
 	nowQuesID++;
 	nowQuesCode =  quesOrder[nowQuesID];
@@ -313,7 +313,7 @@ D6.disp.getNextQues = function()
 
 //getPrevQues() --------------------------------------------
 //		return previous question data, for smartphone
-D6.disp.getPrevQues = function()
+D6.getPrevQues = function()
 {
 	nowQuesID--;
 	if ( nowQuesID < 0) nowQuesID = 0;
@@ -338,7 +338,7 @@ D6.disp.getPrevQues = function()
 //		ret.defSelectData		list of data
 //		ret.selected			selected value
 //		ret.consTitle			related consumption name
-D6.disp.getQues = function( id ){
+D6.getQues = function( id ){
 	ret = {};
 	if ( this.isEndOfQues() ) {
 		ret.info = "end";
@@ -367,7 +367,7 @@ D6.disp.getQues = function( id ){
 // return 
 //		ret.queslist[] 		question list
 //
-D6.disp.getQuesList = function() {
+D6.getQuesList = function() {
 	var ret = [];	
 	ret.queslist = D6.doc.data;
 	return ret;
@@ -377,7 +377,7 @@ D6.disp.getQuesList = function() {
 //		check if end of series of questions, for smartphone
 // return
 //		true: end of question 
-D6.disp.isEndOfQues = function()
+D6.isEndOfQues = function()
 {
 	var ret = false;
 	if ( nowQuesID+1 > quesOrder.length ) {
@@ -389,7 +389,7 @@ D6.disp.isEndOfQues = function()
 // escapeHtml() ----------------------------------------------
 //		sanitize input
 //
-D6.disp.escapeHtml = function (String) {
+D6.escapeHtml = function (String) {
 	var escapeMap = {
 		'&': '&amp;',
 		"'": '&#x27;',

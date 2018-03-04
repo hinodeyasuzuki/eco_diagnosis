@@ -163,7 +163,7 @@ D6.consTotal.calc = function( ){
 	var seasonConsPattern = D6.area.getSeasonParamCommon();
 
 	//estimate of electricity
-	ret = D6.Monthly.seasonCalc( this.priceEle, this.seasonPrice["electricity"], this.monthlyPrice["electricity"], seasonConsPattern.electricity, "electricity" );
+	ret = D6.calcMonthly( this.priceEle, this.seasonPrice["electricity"], this.monthlyPrice["electricity"], seasonConsPattern.electricity, "electricity" );
 	this.priceEle = ret.ave;
 	this.seasonPrice["electricity"] = ret.season;
 	this.monthlyPrice["electricity"] = ret.monthly;
@@ -257,7 +257,7 @@ D6.consTotal.calc = function( ){
 	}
 
 	//gas
-	ret = D6.Monthly.seasonCalc( this.priceGas, this.seasonPrice["gas"], this.monthlyPrice["gas"], seasonConsPattern.gas, "gas" );
+	ret = D6.calcMonthly( this.priceGas, this.seasonPrice["gas"], this.monthlyPrice["gas"], seasonConsPattern.gas, "gas" );
 	this.priceGas = ret.ave;
 	this.seasonPrice["gas"] = ret.season;
 	this.monthlyPrice["gas"] = ret.monthly;
@@ -266,7 +266,7 @@ D6.consTotal.calc = function( ){
 											/D6.Unit.price.gas;
 
 	//kerosene
-	ret = D6.Monthly.seasonCalc( this.priceKeros, this.seasonPrice["kerosene"], this.monthlyPrice["kerosene"], seasonConsPattern.kerosene, "kerosene" );
+	ret = D6.calcMonthly( this.priceKeros, this.seasonPrice["kerosene"], this.monthlyPrice["kerosene"], seasonConsPattern.kerosene, "kerosene" );
 	this.priceKeros = ret.ave;
 	this.seasonPrice["kerosene"] = ret.season;
 	this.monthlyPrice["kerosene"] = ret.monthly;
@@ -278,7 +278,7 @@ D6.consTotal.calc = function( ){
 	this.kerosene = this.priceKeros / D6.Unit.price.kerosene;
 
 	//gasoline
-	ret = D6.Monthly.seasonCalc( this.priceCar, this.seasonPrice["car"], this.monthlyPrice["car"], seasonConsPattern.car, "car" );
+	ret = D6.calcMonthly( this.priceCar, this.seasonPrice["car"], this.monthlyPrice["car"], seasonConsPattern.car, "car" );
 	this.priceCar = ret.ave;
 	this.seasonPrice["car"] = ret.season;
 	this.monthlyPrice["car"] = ret.monthly;
