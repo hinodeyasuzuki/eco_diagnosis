@@ -19,7 +19,7 @@ D6.acadd = {
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //
-//  return addac[time_slot_index][heat_month_index]
+//  return acadd[time_slot_index][heat_month_index]
 //
 //		time_slot_index:
 //				0:morning
@@ -35,17 +35,12 @@ D6.acadd = {
 //				5:use heat for 6 months
 //				6:use heat for 8 months
 //
+// this data is transformed by AMEDAS ( meteorological data ) in Japan
 //
+// factorPrefTimeMonth[Prefecture Code][Time Code][Month Code]
 //
-//アメダス10分間データを元に算出:追加電熱負荷
+// used in Unit.setArea() function and set Unit.plusHeatFactor_mon
 //
-//	配列は　  [朝、昼、夕、夜]の係数で、
-//	それぞれ　[暖房半月、暖房1ヶ月、暖房2ヶ月、暖房3ヶ月、暖房4ヶ月、暖房6ヶ月、暖房8ヶ月]
-//	の規定温度における消費量に対する割合を示す。
-//
-// Unit.setArea()で　該当する地域について　plusHeatFactor_mon　にコピーをして利用
-//
-
 
 factorPrefTimeMonth : [
 [ [ 0, 0, 0, 0, 0, 0, 0],   //神戸

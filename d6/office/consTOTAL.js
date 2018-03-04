@@ -146,7 +146,7 @@ DC.calc = function( ){
 	var seasonConsPattern = D6.area.getSeasonParamCommon();
 
 	//電気の推計
-	ret = D6.Monthly.seasonCalc( this.priceEle, this.seasonPrice[0], this.monthlyPrice[0], seasonConsPattern.electricity, "electricity" );
+	ret = D6.calcMonthly( this.priceEle, this.seasonPrice[0], this.monthlyPrice[0], seasonConsPattern.electricity, "electricity" );
 	this.priceEle = ret.ave;
 	this.seasonPrice["electricity"] = ret.season;
 	this.monthlyPrice["electricity"] = ret.monthly;
@@ -172,7 +172,7 @@ DC.calc = function( ){
 	}
 
 	//ガス
-	ret = D6.Monthly.seasonCalc( this.priceGas, this.seasonPrice[1], this.monthlyPrice[1], seasonConsPattern.gas, "gas" );
+	ret = D6.calcMonthly( this.priceGas, this.seasonPrice[1], this.monthlyPrice[1], seasonConsPattern.gas, "gas" );
 	this.priceGas = ret.ave;
 	this.seasonPrice["gas"] = ret.season;
 	this.monthlyPrice["gas"] = ret.monthly;
@@ -182,14 +182,14 @@ DC.calc = function( ){
 	if ( this.gas < 0 ) this.gas = 0;
 
 	//灯油
-	ret = D6.Monthly.seasonCalc( this.priceKeros, this.seasonPrice[2], this.monthlyPrice[2], seasonConsPattern.kerosene, "kerosene" );
+	ret = D6.calcMonthly( this.priceKeros, this.seasonPrice[2], this.monthlyPrice[2], seasonConsPattern.kerosene, "kerosene" );
 	this.priceKeros = ret.ave;
 	this.seasonPrice["kerosene"] = ret.season;
 	this.monthlyPrice["kerosene"] = ret.monthly;
 	this.kerosene = this.priceKeros / D6.Unit.price.kerosene;
 
 	//ガソリン
-	ret = D6.Monthly.seasonCalc( this.priceCar, this.seasonPrice[3], this.monthlyPrice[3], seasonConsPattern.car, "car" );
+	ret = D6.calcMonthly( this.priceCar, this.seasonPrice[3], this.monthlyPrice[3], seasonConsPattern.car, "car" );
 	this.priceCar = ret.ave;
 	this.seasonPrice["car"] = ret.season;
 	this.monthlyPrice["car"] = ret.monthly;

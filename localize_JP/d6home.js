@@ -21,24 +21,24 @@
  * D6 functions 
  *
 //====Create Pages=====
-D6.disp.getInputPage(consName, subName)		create input page (disp_input.js)
+D6.getInputPage(consName, subName)		create input page (input.js)
 				consName: consumption code name
 				subName: sub category of consumption name
 
-D6.disp.showResultTable(consName)			get total result 
+D6.getAllResult(consName)			get total result 
 				consName: consumption code name
 				
-D6.disp.showItemizeGraph(consCode, sort )	get itemized graph data
+D6.showItemizeGraph(consCode, sort )	get itemized graph data
 				consCode: consumption short code
 				sort: target 
 
-D6.disp.createDemandSumupPage()				get demand value
-D6.disp.createDemandLogPage()
-D6.disp.demandGraph()						get demand graph
+D6.createDemandSumupPage()				get demand value
+D6.createDemandLogPage()
+D6.demandGraph()						get demand graph
 
-D6.disp.getMeasureComment(id)				comment of measure
+D6.getMeasureComment(id)				comment of measure
 				id:measureID
-D6.disp.modalHtml( id, ret )				measure detail data to show dialog	
+D6.modalHtml( id, ret )				measure detail data to show dialog	
 				id:measureID
 
 //====Calculation set no return =====
@@ -60,9 +60,28 @@ D6.doc.loadDataSet(data)					load saved data
 
 **/
 
+//TODO new result 180304 ==================================
+//
+//	command.command			text
+//	command.action_list		array
+//	command.return_list		array
+//	command.return_text		1:return text 0:not
+//
+//	for node.js as JSON
+//
+//	result.command			command to call
+//  result.errormessage		error message if not null 
+//	result.monthly
+//	result.itemize
+//	result.measure
+//	result.detail
+//
+// make html at ay generator
+
+
+
 //resolve D6 -------------------------------------
 var D6 = D6||{};
-D6.debugMode = false;	//Debug to console.log, set in workercalc(start,*)
 
 
 //onmessage(event ) function called as worker ========================================
@@ -108,12 +127,19 @@ D6.workercalc = function( command, param ){
 		case "start" :
 			//program setting , execute only once.
 			D6.viewparam = D6.viewparam || {};
-			D6.viewparam.dispMode = param.dispMode;
+			D6.viewparam.ode = param.ode;
 			D6.viewparam.focusMode = param.focusMode;
 			D6.viewparam.countfix_pre_after = param.countfix_pre_after;
 			
+			//set debug mode
+			if ( param.debugMode && param.debugMode == 1 ){
+				D6.debugMode = true;
+			} else {
+				D6.debugMode = false;
+			}
+
 			//initialize datasets
-			D6.setscenario(param.prohibitQuestions, param.allowedQuestions, param.defInput);
+			D6.constructor(param.prohibitQuestions, param.allowedQuestions, param.defInput);
 
 			// set file data
 			if ( typeof(param.rdata) != "undefined" && param.rdata ) {
@@ -124,26 +150,18 @@ D6.workercalc = function( command, param ){
 				}
 			}
 			
-			//set debug mode
-			if ( param.debugMode && param.debugMode == 1 ){
-				D6.debugMode = true;
-			} else {
-				D6.debugMode = false;
-			}
-
 			//calculation
-			D6.calcAverage();
-			D6.calcMeasures(-1);
+			D6.calculateAll();
 
 			//get initial page as consTotal
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.disp.showResultTable( "consTotal" );
+			result = D6.getAllResult( "consTotal" );
 
 			//create input componets
-			result.inputPage = D6.disp.getInputPage(param.consName,param.subName);
+			result.inputPage = D6.getInputPage(param.consName,param.subName);
 
 			//button selection
-			result.quesone = D6.disp.getFirstQues(param.consName,param.subName);
+			result.quesone = D6.getFirstQues(param.consName,param.subName);
 
 			//debug
 			if ( D6.debugMode ) {
@@ -154,7 +172,7 @@ D6.workercalc = function( command, param ){
 			break;
 
 		case "addandstart":
-			//in case of structure is changed
+			//change structure such as number of equipments
 			var serialize = D6.doc.serialize();
 			param.rdata = btoa(unescape(encodeURIComponent(serialize)));
 
@@ -169,17 +187,16 @@ D6.workercalc = function( command, param ){
 			}
 
 			//calculate
-			D6.calcAverage();
-			D6.calcMeasures(-1);
+			D6.calculateAll();
 
 			//#0 page is basic question
 			var showName = D6.consListByName[param.consName][0].sumConsName;
 
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.disp.showResultTable(showName );
+			result = D6.getAllResult(showName );
 
-			//create input componets
-			result.inputPage = D6.disp.getInputPage(showName,param.subName);
+			//create input components
+			result.inputPage = D6.getInputPage(showName,param.subName);
 
 			break;
 
@@ -187,69 +204,66 @@ D6.workercalc = function( command, param ){
 			//menu selected / main cons change		
 
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.disp.showResultTable(param.consName);
+			result = D6.getAllResult(param.consName);
 
 			//create input componets
-			result.inputPage = D6.disp.getInputPage(param.consName,param.subName);
+			result.inputPage = D6.getInputPage(param.consName, param.subName);
 
 			//button selection
-			result.quesone = D6.disp.getFirstQues(param.consName,param.subName);
+			result.quesone = D6.getFirstQues(param.consName, param.subName);
 
 			break;
 
 		case "subtabclick" :
 			//create input componets / sub cons change
-			result.inputPage = D6.disp.getInputPage(param.consName,param.subName);
+			result.inputPage = D6.getInputPage(param.consName, param.subName);
 			result.subName = param.subName;
 			break;
 
 		case "inchange" :
 			//in case of changing input value, recalc.
 			D6.inSet(param.id,param.val);
-			if ( D6.scenario.defCalcAverage.indexOf( param.id ) != -1 ){
-				D6.calcAverage();
-			}
 			if ( param.id == D6.scenario.measuresSortChange ){
 				D6.sortTarget =  D6.scenario.measuresSortTarget[param.val < 0 ? 0:param.val];
 			}
-			D6.calcMeasures(-1);
+			D6.calculateAll();
 
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.disp.showResultTable();	//show result 
+			result = D6.getAllResult();	//show result 
 			break;
 
 		case "inchange_only" :
-			//in case of changing input value, recalc.
+			//in case of changing input value.
 			D6.inSet(param.id,param.val);
 			result = "ok";
 			break;
 
 		case "quesone_next" : 
-			result.quesone = D6.disp.getNextQues();
+			result.quesone = D6.getNextQues();
 			break;
 			
 		case "quesone_prev" : 
-			result.quesone = D6.disp.getPrevQues();
+			result.quesone = D6.getPrevQues();
 			break;
 			
 		case "quesone_set" : 
 			D6.inSet(param.id,param.val);
-			result.quesone = D6.disp.getNextQues();
+			result.quesone = D6.getNextQues();
 			break;
 			
 		case "recalc" :
 			//only recalc no graph data
-			D6.calcAverage();
-			D6.calcMeasures(-1);
+			D6.calculateAll();
 
-			result = D6.disp.showResultTable(param.consName);
+			result = D6.getAllResult(param.consName);
+			
 			//create input componets
-			result.inputPage = D6.disp.getInputPage(param.consName,param.subName);
+			result.inputPage = D6.getInputPage(param.consName,param.subName);
 			break;
 
 		case "pagelist" :
 			//create itemize list
-			result.inputPage = D6.disp.getInputPage(param.consName,param.subName);
+			result.inputPage = D6.getInputPage(param.consName,param.subName);
 			break;
 			
 		case "measureadd" :
@@ -259,7 +273,7 @@ D6.workercalc = function( command, param ){
 			D6.calcMeasures(-1);
 
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.disp.showResultTable();
+			result = D6.getAllResult();
 			break;
 
 		case "measuredelete" :
@@ -268,17 +282,17 @@ D6.workercalc = function( command, param ){
 			D6.calcMeasures(-1);
 
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.disp.showResultTable();
+			result = D6.getAllResult();
 			break;
 
 		case "graphchange" :
 			//change graph
-			result.graphItemize = D6.disp.getItemizeGraph("", param.graph);
+			result.itemize_graph = D6.getItemizeGraph("", param.graph);
 			break;
 
 		case "evaluateaxis" :
 			//calc evaluate axis point
-			result.evaluateAxis = D6.evaluateAxisPoint("", param.subName);
+			result.evaluateAxis = D6.getEvaluateAxisPoint("", param.subName);
 			break;
 
 		case "add_demand" :
@@ -299,20 +313,20 @@ D6.workercalc = function( command, param ){
 
 		case "demand" :
 			//create input componets and graph for demand page
-			result.demandin = D6.disp.getInputDemandSumup();
-			result.demandlog = D6.disp.getInputDemandLog();
-			result.graphDemand = D6.disp.getDemandGraph();
+			result.demandin = D6.getInputDemandSumup();
+			result.demandlog = D6.getInputDemandLog();
+			result.graphDemand = D6.getDemandGraph();
 			break;
 			
 		case "inchange_demand" :
 			D6.inSet(param.id,param.val);
-			result.graphDemand = D6.disp.getDemandGraph();
+			result.graphDemand = D6.getDemandGraph();
 			break;
 			
 		case "modal" :
-			//display detail information about measure, modal dialog
+			//ay detail information about measure, modal dialog
 			var id =param.mid;
-			result.measureDetail = D6.disp.getMeasureDetail( id );	
+			result.measure_detail = D6.getMeasureDetail( id );	
 			break;
 
 		case "save" :
@@ -329,12 +343,12 @@ D6.workercalc = function( command, param ){
 
 		case "getinputpage" :
 			//create input componets
-			result.inputPage = D6.disp.getInputPage(param.consName,param.subName);
+			result.inputPage = D6.getInputPage(param.consName,param.subName);
 			break;
 
 		case "getqueslist" :
 			//return question list
-			result.queslist = D6.disp.getQuesList();
+			result.queslist = D6.getQuesList();
 			break;
 
 		case "common" :
@@ -360,13 +374,13 @@ D6.workercalc = function( command, param ){
 			D6.calcMeasures(-1);
 
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.disp.showResultTable();
+			result = D6.getAllResult();
 			
-			//create input componets
-			result.inputPage = D6.disp.getInputPage(param.consName,param.subName);
+			//create input components
+			result.inputPage = D6.getInputPage(param.consName,param.subName);
 			
 			//calc evaluate axis point
-			result.evaluateAxis = D6.evaluateAxisPoint("", param.subName);
+			result.evaluateAxis = D6.getEvaluateAxisPoint("", param.subName);
 			break;
 
 		default:
@@ -459,7 +473,7 @@ D6.acadd = {
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //
-//  return addac[time_slot_index][heat_month_index]
+//  return acadd[time_slot_index][heat_month_index]
 //
 //		time_slot_index:
 //				0:morning
@@ -475,17 +489,12 @@ D6.acadd = {
 //				5:use heat for 6 months
 //				6:use heat for 8 months
 //
+// this data is transformed by AMEDAS ( meteorological data ) in Japan
 //
+// factorPrefTimeMonth[Prefecture Code][Time Code][Month Code]
 //
-//アメダス10分間データを元に算出:追加電熱負荷
+// used in Unit.setArea() function and set Unit.plusHeatFactor_mon
 //
-//	配列は　  [朝、昼、夕、夜]の係数で、
-//	それぞれ　[暖房半月、暖房1ヶ月、暖房2ヶ月、暖房3ヶ月、暖房4ヶ月、暖房6ヶ月、暖房8ヶ月]
-//	の規定温度における消費量に対する割合を示す。
-//
-// Unit.setArea()で　該当する地域について　plusHeatFactor_mon　にコピーをして利用
-//
-
 
 factorPrefTimeMonth : [
 [ [ 0, 0, 0, 0, 0, 0, 0],   //神戸
@@ -2827,7 +2836,7 @@ D6.ConsBase.init = function(){
 		}
 	};
 
-	//is thhis measurea selected?
+	//is this measure selected?
 	this.isSelected = function( mName ){
 		if ( !this.measures[mName] ) {
 			return false;
@@ -3351,7 +3360,7 @@ D6.doc =
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
- * monthly.js 
+ * d6_calcmonthly.js 
  * 
  * D6 Monthly Class, calculate season or monthly difference
  * 
@@ -3363,9 +3372,9 @@ D6.doc =
  * 
  */
 
-D6.Monthly = {};
+D6 = D6 || {};
 
-D6.Monthly.seasonCalc = function( ave, season, monthly, seasonPatternP, energyCode ) {
+D6.calcMonthly = function( ave, season, monthly, seasonPatternP, energyCode ) {
 	// first use monthly, season
 	// next  use seasonPattern
 
@@ -3483,7 +3492,7 @@ D6.Monthly.seasonCalc = function( ave, season, monthly, seasonPatternP, energyCo
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
- * disp.js 
+ * d6_get.js 
  * 
  * display data create main Class
  * 		combined with disp_input.js, disp_demand.js, disp_measue.js
@@ -3498,28 +3507,26 @@ D6.Monthly.seasonCalc = function( ave, season, monthly, seasonPatternP, energyCo
  * 
  * showResultTable()		get collective result
  *
- * dataAverage()			get average value
- * getAverageTable()		get average table data set
+ * getAverage()			get average value
+ * getAverage_cons()		get average table data set
  *
- * getItemizeTable()		itemize
+ * getItemize()		itemize
  * getItemizeGraph()
  * dataItemize()			get itemized value
  * 
- * getMonthlyGraph()		monthly graph data
+ * getMonthly()		monthly graph data
  * 
  */
 
  //resolve D6
-var D6 = D6||{};
+var D6 = D6 || {};
 
-D6.disp = 
-{
 	//result total values
 	//	param
 	//		consName : ex. "consTotal"
 	//  return
 	//		graphItemize,graphMonthly,average,cons,measure
-	showResultTable : function(consName){
+D6.getAllResult = function(consName){
 		var ret = [];
 		if ( consName ) {
 			if ( !D6.logicList[consName] ) consName = "consTotal";
@@ -3531,25 +3538,25 @@ D6.disp =
 		var consCode = D6.consListByName[consName][0].consCode;
 
 		//create collective result
-		ret.graphItemize = this.getItemizeGraph(consCode);
 		ret.common = D6.getCommonParameters();
 		
-		ret.graphMonthly = this.getMonthlyGraph();		
-		ret.average = this.getAverageTable(consCode);
-		ret.averageData = this.dataAverage();
-		ret.cons = this.getItemizeTable(consCode);
-		ret.measure = this.getMeasureTable(consName);
+		ret.monthly = this.getMonthly();		
+		ret.average = this.getAverage(consCode);
+		ret.average_graph = this.getAverage_graph();
+		ret.itemize = this.getItemize(consCode);
+		ret.itemize_graph = this.getItemizeGraph(consCode);
+		ret.measure = this.getMeasure(consName);
 
 		return ret;
-	},
+	};
 	
 	
-	//compare to average value 
+	//compare to average value about one Consumption
 	// params
 	//		consCode : consumption category
 	// return
 	//		you and average params
-	getAverageTable  : function ( consCode ){
+D6.getAverage = function ( consCode ){
 		var ret = [];
 		ret.you = D6.consShow[consCode].co2Original*12;		//yearly co2 emission
 		ret.after = D6.consShow[consCode].co2*12;			//yearly co2 after set measures
@@ -3557,27 +3564,32 @@ D6.disp =
 		ret.youc = D6.consShow[consCode].costOriginal*12;	//yearly cost
 		ret.afterc = D6.consShow[consCode].cost*12;			//yearly cost after set measures
 		ret.avc = D6.average.consList[consCode].cost*12;	//yearly average cost
+
 		ret.rank100 = D6.rankIn100( ret.you/ret.av);		//rank( 1-100 )
 		ret.afterrank100 = D6.rankIn100( ret.after/ret.av);	//rank after set measures( 1-100 )
+
 		ret.samehome = D6.scenario.defSelectValue["sel021"][Math.max(1,D6.doc.data["i021"])];
 			//same home's name
 		ret.sameoffice = D6.scenario.defSelectValue["sel001"][Math.max(1,D6.doc.data["i001"])];
 			//same office's name
+
 		ret.consCode = consCode;
-		return ret;
-		
-	},
+		return ret;		
+	};
 	
 	//average compare result 
-	dataAverage : function()
+D6.getAverage_graph = function()
 	{		
 		var ret = [];
 		ret.cost = [];
 		ret.co2 = [];
+
+		//	co2[1], cost[1] average
 		ret.cost[1] = D6.area.averageCostEnergy;
 		ret.co2[1] = D6.area.averageCO2Energy;
 		ret.co2[1].total = ret.co2[1].electricity + ret.co2[1].gas + ret.co2[1].kerosene + ret.co2[1].car;
-		
+
+		//  co2[0], cost[0] user
 		ret.cost[0] = [];
 		ret.cost[0].electricity = D6.consTotal.priceEle;
 		ret.cost[0].gas = D6.consTotal.priceGas;
@@ -3591,7 +3603,7 @@ D6.disp =
 		ret.co2[0].car = D6.consTotal.car * D6.Unit.co2.gasoline;
 		ret.co2[0].total = D6.consTotal.co2Original;
 		return ret;
-	},
+	};
 
 	//itemized value
 	// parameter
@@ -3599,7 +3611,7 @@ D6.disp =
 	// result
 	//		ret[nowConsCode] : itemized data for table( all items )
 	//
-	getItemizeTable  : function (consCode){
+D6.getItemize = function (consCode){
 		var ret = [];
 		var cons;
 		var i = 0;
@@ -3633,7 +3645,7 @@ D6.disp =
 			i++;
 		}
 		return ret;
-	},
+	};
 
 	
 	//itemize graph data set
@@ -3642,7 +3654,7 @@ D6.disp =
 	//		sort:sort target (co2,energy,money)
 	// result
 	//		itemized co2 graph data
-	getItemizeGraph  : function ( consCode, sort ){
+D6.getItemizeGraph = function ( consCode, sort ){
 		var otherCaption = "other";
 
 		if ( consCode ) {
@@ -3777,14 +3789,14 @@ D6.disp =
 		ret.consTitle = D6.consShow[consCode].title;
 
 		return ret;
-	},
+	};
 
 	//CO2 itemize array
 	//
 	// return
 	//		consObject array ( [0] is consTotal ) only for graph
 	//		
-	dataItemize : function()
+D6.dataItemize = function()
 	{
 		var consShow = D6.consShow;
 
@@ -3808,7 +3820,7 @@ D6.disp =
 		cons_temp.unshift( consShow["TO"] );
 
 		return cons_temp;
-	},
+	};
 
 
 	//monthly graph data
@@ -3816,8 +3828,8 @@ D6.disp =
 	// return
 	//		ret.data[]	graph data
 	//		ret.yaxis	title
-	getMonthlyGraph  : function ( ){
-		var retall = [];
+D6.getMonthly  = function ( ){
+		var ret = [];
 		var menu = {
 			co2: {sort:"co2", title:"kg", round:1, divide:1},
 			energy: {sort:"jules", title:"MJ", round:1, divide:1000},
@@ -3834,26 +3846,55 @@ D6.disp =
 		];
 		var ene2 = [];
 		
-		var ret = [];
+		var month = [];
 		var ri = 0;
-		var captions = [];
 		var e;
 		for ( var m=1 ; m<=12 ; m++ ){
-			captions[m-1] = m;
 			for ( e=0 ; e<ene1.length ;e++ ){
 				if ( !D6.consShow["TO"].monthlyPrice[ene1[e].ene] ) continue;
-				ret[ri] = [];
-				ret[ri]["month"] = m;
-				ret[ri][show.title] = Math.round(D6.consShow["TO"].monthlyPrice[ene1[e].ene][m-1]/show.divide*show.round)/show.round;
-				ret[ri]["energyname"] = ene1[e].ene;
+				month[ri] = [];
+				month[ri]["month"] = m;
+				month[ri][show.title] = Math.round(D6.consShow["TO"].monthlyPrice[ene1[e].ene][m-1]/show.divide*show.round)/show.round;
+				month[ri]["energyname"] = ene1[e].ene;
 				ri++;
 			}
 		}
-		retall.data = ret;
-		retall.yaxis = show.title;
-		return retall;
-	}
+		ret.data = month;
+		ret.yaxis = show.title;
+		return ret;
 };
+
+
+// getGid(consName)  getter group id of consumption ------------------
+//
+// parameters
+//		consName	consumption name
+// retrun
+//		groupID		0-9
+//
+D6.getGid  = function( consName ) {
+	return D6.logicList[consName].groupID;
+};
+	
+
+	
+// getCommonParameters()  getter common result parameters such as co2 ------------------
+//
+// retrun
+//		co2,cost
+//
+D6.getCommonParameters = function(){
+	var ret = [];
+	ret.co2Original = D6.consListByName["consTotal"][0].co2Original;
+	ret.co2 = D6.consListByName["consTotal"][0].co2;
+	ret.costOriginal = D6.consListByName["consTotal"][0].costOriginal;
+	ret.cost = D6.consListByName["consTotal"][0].cost;
+		
+	return ret;
+};
+
+
+
 
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
@@ -3873,7 +3914,7 @@ D6.disp =
 //resolve D6
 var D6 = D6||{};
 
-// evaluateAxisPoint()
+// getEvaluateAxisPoint()
 //
 // parameters
 // 		target : dummy
@@ -3884,7 +3925,7 @@ var D6 = D6||{};
 // value base is  D6.doc.data[inName]
 // weight is defined in D6.scenario.defInput[inName]
 //
-D6.evaluateAxisPoint = function( target,inpListDefCode ) {
+D6.getEvaluateAxisPoint = function( target,inpListDefCode ) {
 	//calc environmental load, performance, action points
 	var retall = {};
 	retall[0] = [0,"",""];
@@ -3972,7 +4013,7 @@ D6.evaluateAxisPoint = function( target,inpListDefCode ) {
  * License: http://creativecommons.org/licenses/LGPL/2.1/
  * 
  * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- * 								2016/11/23 divided from disp.js
+ * 								2016/11/23 divided from js
  * 
  * getInputPage()		create html input pages
  * createComboBox()		combo box component
@@ -4001,7 +4042,7 @@ D6.evaluateAxisPoint = function( target,inpListDefCode ) {
 //		ret.combos[] 		input components html list
 //		ret.addlist[]		addable equipment/room list
 //
-D6.disp.getInputPage = function( consName,subName ) {
+D6.getInputPage = function( consName,subName ) {
 	var ret = [];
 	var group = [];			//group name
 	var groupAddable = [];		//countable consumption list such as rooms/equipments
@@ -4137,7 +4178,7 @@ D6.disp.getInputPage = function( consName,subName ) {
 //		onlyCombo : create only combobox and not wrap table style
 // return
 //		disp : combobox html
-D6.disp.createComboBox = function( inpId, onlyCombo )
+D6.createComboBox = function( inpId, onlyCombo )
 {
 	var disp = "";
 	var selid = "sel" + inpId.substr( 1,3 );
@@ -4193,7 +4234,7 @@ D6.disp.createComboBox = function( inpId, onlyCombo )
 //		onlyCombo : create only textbox and not wrap table style
 // return
 //		disp : textbox html
-D6.disp.createTextArea = function( inpId, onlyCombo )
+D6.createTextArea = function( inpId, onlyCombo )
 {
 	var disp = "";
 	var selid = "sel" + inpId.substr( 1,3 );
@@ -4225,7 +4266,7 @@ D6.disp.createTextArea = function( inpId, onlyCombo )
 
 // tfHandlerCombo( name ) ------------------------------------------------
 //		set data to Input[] from combobox
-D6.disp.tfHandlerCombo = function( name ) {
+D6.tfHandlerCombo = function( name ) {
 	return function( e ) {
 		Input[name] = e.target.value;
     		e.target.removeEventListener( Event.ENTER_FRAME, arguments.callee );
@@ -4234,13 +4275,13 @@ D6.disp.tfHandlerCombo = function( name ) {
 
 	
 // parameters used in button view
-D6.disp.nowQuesCode = 0;		//now question code "i" + num
-D6.disp.nowQuesID = -1;			//now index in series of questions
-D6.disp.quesOrder = [];			//question code list
+D6.nowQuesCode = 0;		//now question code "i" + num
+D6.nowQuesID = -1;			//now index in series of questions
+D6.quesOrder = [];			//question code list
 	
 //getFirstQues() --------------------------------------------
 //		return first question data, for smartphone
-D6.disp.getFirstQues = function(consName, subName)
+D6.getFirstQues = function(consName, subName)
 {
 	var definp;
 	var cons;
@@ -4267,7 +4308,7 @@ D6.disp.getFirstQues = function(consName, subName)
 
 //getNextQues() --------------------------------------------
 //		return next question data, for smartphone
-D6.disp.getNextQues = function()
+D6.getNextQues = function()
 {
 	nowQuesID++;
 	nowQuesCode =  quesOrder[nowQuesID];
@@ -4276,7 +4317,7 @@ D6.disp.getNextQues = function()
 
 //getPrevQues() --------------------------------------------
 //		return previous question data, for smartphone
-D6.disp.getPrevQues = function()
+D6.getPrevQues = function()
 {
 	nowQuesID--;
 	if ( nowQuesID < 0) nowQuesID = 0;
@@ -4301,7 +4342,7 @@ D6.disp.getPrevQues = function()
 //		ret.defSelectData		list of data
 //		ret.selected			selected value
 //		ret.consTitle			related consumption name
-D6.disp.getQues = function( id ){
+D6.getQues = function( id ){
 	ret = {};
 	if ( this.isEndOfQues() ) {
 		ret.info = "end";
@@ -4330,7 +4371,7 @@ D6.disp.getQues = function( id ){
 // return 
 //		ret.queslist[] 		question list
 //
-D6.disp.getQuesList = function() {
+D6.getQuesList = function() {
 	var ret = [];	
 	ret.queslist = D6.doc.data;
 	return ret;
@@ -4340,7 +4381,7 @@ D6.disp.getQuesList = function() {
 //		check if end of series of questions, for smartphone
 // return
 //		true: end of question 
-D6.disp.isEndOfQues = function()
+D6.isEndOfQues = function()
 {
 	var ret = false;
 	if ( nowQuesID+1 > quesOrder.length ) {
@@ -4352,7 +4393,7 @@ D6.disp.isEndOfQues = function()
 // escapeHtml() ----------------------------------------------
 //		sanitize input
 //
-D6.disp.escapeHtml = function (String) {
+D6.escapeHtml = function (String) {
 	var escapeMap = {
 		'&': '&amp;',
 		"'": '&#x27;',
@@ -4390,7 +4431,7 @@ D6.disp.escapeHtml = function (String) {
  * License: http://creativecommons.org/licenses/LGPL/2.1/
  * 
  * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- * 								2016/11/23 divided from disp.js
+ * 								2016/11/23 divided from js
  *
  * getMeasureDetail()
  * tableMeasuresDetail()	for debug
@@ -4404,7 +4445,7 @@ D6.disp.escapeHtml = function (String) {
 //		mesid : measure sequence id
 // return
 //		ret: subset of measureBase class
-D6.disp.getMeasureDetail= function( mesid ) {
+D6.getMeasureDetail= function( mesid ) {
 	var ret = [];
 	var mes = D6.measureList[mesid];
 		
@@ -4449,52 +4490,12 @@ D6.disp.getMeasureDetail= function( mesid ) {
 	return ret;
 };
 
-// tableMeasuresDetail( mes ) ---------------------------------------------
-//		detail number result of measure, easy text output for test
-// parameters
-//		mes: measure list
-// return
-//		ret: text output
-D6.disp.tableMeasuresDetail = function( mes )
-{
-	var ret = "";
-	for ( var i=0 ; i<mes.length ; i++ ) {
-		ret +=  ( mes[i].titleShort +  "　　　　　　"  ).substr( 0, 8 )
-			+ "\t E:" + ( "   " + Math.round(mes[i].energy[Code.electricity]
-								+mes[i].energy[Code.electricity2]) ).substr(-4) 
-			+ " G:" + ( "   " + Math.round(mes[i].energy[Code.gas]) ).substr(-4) 
-			+ " K:" + ( "   " +  Math.round(mes[i].energy[Code.kerosene])  ).substr(-4) 
-			+ " C:" + ( "   " +  Math.round(mes[i].energy[Code.car])  ).substr(-4) 
-			+ " CO2:" + ( "   " +  Math.round(mes[i].co2) ).substr(-4)
-			+ " CO2C:" + ( "   " +  Math.round(mes[i].co2Change) ).substr(-4)  + "\n";
-	}
-	return ret;
-};
 
-// tableMeasuresSimple( mes ) ----------------------------------------------
-//			simple list of measures
-D6.disp.tableMeasuresSimple = function( mes )
-{
-	var ret = "";
-	var mesList;
-
-	for ( var i=0 ; i<mes.length ; i++ ) {
-		mesList = D6.measureList[mes[i].mesID];
-		if ( !isNaN( mesList.co2Change ) ) {
-			ret +=  ( mes[i].mesID + " " + mesList.title +  "　　　　　　　　　　　　　　　　"  ).substr( 0, 20 )
-				+  ( "   " + (-Math.round(mesList.co2Change * 12)) ).substr(-4)  + "kg削減 "
-				+ "\n";
-		}
-	}
-	return ret;
-};
-		
-
-//table of Measures data
+//get Measures data
 // consName
 // maxPrice		not show over than this price
 // notSelected 	1:only not select
-D6.disp.getMeasureTable = function( consName, maxPrice, notSelected )
+D6.getMeasure = function( consName, maxPrice, notSelected )
 {
 	//cannot set default in function for IE
 	if(typeof maxPrice === 'undefined') maxPrice = 100000000;
@@ -4584,7 +4585,7 @@ D6.disp.getMeasureTable = function( consName, maxPrice, notSelected )
 // return
 //		retall.log		log graph data
 //		retall.sumup	pile up graph data
-D6.disp.getDemandGraph  = function ( ){
+D6.getDemandGraph  = function ( ){
 	var work = {};
 	var retone = {};
 	var retall = {};
@@ -4708,7 +4709,7 @@ D6.disp.getDemandGraph  = function ( ){
 	
 
 //create input dialog of demand
-D6.disp.getInputDemandSumup = function() {
+D6.getInputDemandSumup = function() {
 	var work = {};
 	var ret = {};
 	var title = {};
@@ -4747,7 +4748,7 @@ D6.disp.getInputDemandSumup = function() {
 };
 
 //create input diakog 
-D6.disp.getInputDemandLog = function() {
+D6.getInputDemandLog = function() {
 	var ret = [];
 	for ( var t=0 ; t<24 ; t++ ){
 		ret[t] = this.createComboBox( "i056" + (t+1), true );
@@ -5433,7 +5434,7 @@ D6.consTotal.calc = function( ){
 	var seasonConsPattern = D6.area.getSeasonParamCommon();
 
 	//estimate of electricity
-	ret = D6.Monthly.seasonCalc( this.priceEle, this.seasonPrice["electricity"], this.monthlyPrice["electricity"], seasonConsPattern.electricity, "electricity" );
+	ret = D6.calcMonthly( this.priceEle, this.seasonPrice["electricity"], this.monthlyPrice["electricity"], seasonConsPattern.electricity, "electricity" );
 	this.priceEle = ret.ave;
 	this.seasonPrice["electricity"] = ret.season;
 	this.monthlyPrice["electricity"] = ret.monthly;
@@ -5527,7 +5528,7 @@ D6.consTotal.calc = function( ){
 	}
 
 	//gas
-	ret = D6.Monthly.seasonCalc( this.priceGas, this.seasonPrice["gas"], this.monthlyPrice["gas"], seasonConsPattern.gas, "gas" );
+	ret = D6.calcMonthly( this.priceGas, this.seasonPrice["gas"], this.monthlyPrice["gas"], seasonConsPattern.gas, "gas" );
 	this.priceGas = ret.ave;
 	this.seasonPrice["gas"] = ret.season;
 	this.monthlyPrice["gas"] = ret.monthly;
@@ -5536,7 +5537,7 @@ D6.consTotal.calc = function( ){
 											/D6.Unit.price.gas;
 
 	//kerosene
-	ret = D6.Monthly.seasonCalc( this.priceKeros, this.seasonPrice["kerosene"], this.monthlyPrice["kerosene"], seasonConsPattern.kerosene, "kerosene" );
+	ret = D6.calcMonthly( this.priceKeros, this.seasonPrice["kerosene"], this.monthlyPrice["kerosene"], seasonConsPattern.kerosene, "kerosene" );
 	this.priceKeros = ret.ave;
 	this.seasonPrice["kerosene"] = ret.season;
 	this.monthlyPrice["kerosene"] = ret.monthly;
@@ -5548,7 +5549,7 @@ D6.consTotal.calc = function( ){
 	this.kerosene = this.priceKeros / D6.Unit.price.kerosene;
 
 	//gasoline
-	ret = D6.Monthly.seasonCalc( this.priceCar, this.seasonPrice["car"], this.monthlyPrice["car"], seasonConsPattern.car, "car" );
+	ret = D6.calcMonthly( this.priceCar, this.seasonPrice["car"], this.monthlyPrice["car"], seasonConsPattern.car, "car" );
 	this.priceCar = ret.ave;
 	this.seasonPrice["car"] = ret.season;
 	this.monthlyPrice["car"] = ret.monthly;
@@ -8990,22 +8991,31 @@ D6.scenario.areafix = function() {
  *								2011/05/06 ported to ActionScript3
  * 								2016/04/12 ported to JavaScript
  * 
- * setscenario()				initialize diagnosis structure by scenario file
- * addMeasureEachCons()			add measure definition
- * addConsSetting()				add consumption definition 
+ * need d6_construct, d6_calccons, d6_calcmeasures, d6_calcaverage, d6_setvalue, d6_tools
+ * 
+ * construct();
+ *   setscenario()					initialize diagnosis structure by scenario file
+ *   addMeasureEachCons()			add measure definition
+ *   addConsSetting()				add consumption definition 
+ 
  * calcCons()					calculate consumption
  * calcConsAdjust()				adjust consumption
+
  * calcMeasures()				calculate measure
  * calcMeasuresLifestyle()		calculate all measures and select lifestyle
  * calcMeasuresNotLifestyle()	calculate all measures and select not lifestyle
  * calcMeasuresOne()			calculate in temporal selection
- * measureAdd()					set select flag and not calculate 
  * calcMaxMeasuresList()		automatic select max combination 
+
  * calcAverage()				get avearage consumption
+ * rankIn100()					get rank				
+
  * inSet()						input data setter
+ * measureAdd()					set select flag and not calculate 
+ * measureDelete()				clear select flag and not calculate 
+
  * getGid()						get group id
  * getCommonParameters()		result common parameters
- * rankIn100()					get rank				
  * 
  * toHalfWidth()
  * ObjArraySort()
@@ -9035,6 +9045,51 @@ D6.average = { consList:""
 	
 D6.isOriginal = true;					//in case of no measure is selected
 D6.sortTarget = "co2ChangeOriginal";	//by which measureas are sorted, changeable by input
+
+//view / Debug set. set in workercalc(start,*)
+D6.viewparam = {};
+D6.debugMode = false;
+
+
+//constructor 
+D6.constructor = function(a, b, c){
+	D6.setscenario(a, b, c);
+};
+
+//calculate
+D6.calculateAll = function(){
+	D6.calcCons();
+	D6.calcAverage();
+	D6.calcMeasures(-1);
+};
+
+	
+
+	
+	
+	/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * diagnosis.js 
+ * 
+ * D6 Constructor Class
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/17 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 								2018/03/04 divided only constructor functions
+ * 
+ * setscenario()				initialize diagnosis structure by scenario file
+ * addMeasureEachCons()			add measure definition
+ * addConsSetting()				add consumption definition 
+ */
+ 
+//resolve D6
+var D6 = D6||{};
 
 
 /* setscenario -------------------------------------------------------------
@@ -9356,6 +9411,31 @@ D6.addConsSetting = function(consName) {
 	}
 };
 	
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * diagnosis.js 
+ * 
+ * D6 calc Cons Class
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/17 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 								2018/03/04 divide consumption calculation functions 
+ * 
+ * calcCons()					calculate consumption
+ * calcConsAdjust()				adjust consumption
+ * getTargetConsList()			get Cons by name
+ * getGid()						get group id
+ */
+ 
+//resolve D6
+var D6 = D6||{};
+
 
 // calcCons() -------------------------------------------------------
 //		calculate consumption in consumption instance
@@ -9521,6 +9601,176 @@ D6.calcConsAdjust = function() {
 	}
 };
 
+
+// getTargetConsList(consName)  getter consumption object ------------------
+//
+// parameters
+//		consName	consumption name
+// retrun
+//		consumption object / object array
+//
+D6.getTargetConsList  = function( consName )
+{
+	var i,c=0;
+	var target = new Array();
+	var ret;
+
+	if ( consName != "" ) {
+		for ( i=0 ; i<this.consList.length ; i++ ) {
+			if ( this.consList[i].consName == consName ) {
+				target[c++] = this.consList[i];
+			}
+		}
+		if ( target.length == 1 ) {
+			//in case of single
+			ret = target[0];
+		} else {
+			//in case of array
+			ret = target;
+		}
+	}
+	return ret;
+};
+
+// getGid(consName)  getter group id of consumption ------------------
+//
+// parameters
+//		consName	consumption name
+// retrun
+//		groupID		0-9
+//
+D6.getGid  = function( consName ) {
+	return D6.logicList[consName].groupID;
+};
+	
+
+	
+// getCommonParameters()  getter common result parameters such as co2 ------------------
+//
+// retrun
+//		co2,cost
+//
+D6.getCommonParameters = function(){
+	var ret = [];
+	ret.co2Original = D6.consListByName["consTotal"][0].co2Original;
+	ret.co2 = D6.consListByName["consTotal"][0].co2;
+	ret.costOriginal = D6.consListByName["consTotal"][0].costOriginal;
+	ret.cost = D6.consListByName["consTotal"][0].cost;
+		
+	return ret;
+};
+
+
+
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * diagnosis.js 
+ * 
+ * D6 Main Class calc average functions
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/17 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 								2018/03/04 divided as average functions
+ * 
+ * calcAverage()				get avearage consumption
+ * rankIn100()					get rank				
+ * 
+ */
+ 
+//resolve D6
+var D6 = D6||{};
+
+
+// calcAverage()  get avearage consumption ------------------
+//
+// parameters
+//		none
+// return
+//		none
+//
+// set D6.average.consList[]
+//
+D6.calcAverage = function(){
+	D6.averageMode = true;			//not use input parameters
+	this.calcCons();				//and calculate, then get average
+
+	this.average.consList = {};
+	for( var c in this.consShow ) {
+		this.average.consList[c] = {};
+		this.average.consList[c].co2 = this.consShow[c].co2;
+		this.average.consList[c].cost = this.consShow[c].cost;
+		this.average.consList[c].jules = this.consShow[c].jules;
+		this.average.consList[c].title = this.consShow[c].title;
+	}
+	D6.averageMode = false;	
+};
+
+	
+
+// rankIn100(ratio)  calculate rank by ratio to average ------------------
+//
+// parameters
+//		ratio	ratio to average
+// return
+//		rank 	number 1-100 in 100 
+//
+D6.rankIn100 = function( ratio ){
+	var ret;
+	var lognum;
+
+	var width = 0.5;		// set diffusion parameter
+
+	if ( ratio <= 0 ) {
+		//in case of minus
+		ratio = 0.1;
+	}
+	lognum = Math.log( ratio );
+
+	if ( lognum < -width ) {
+		// rank 1-10
+		ret = Math.max( 1, Math.round( ( lognum + 1 ) / width * 10 ) );
+	} else if ( lognum < width ) {
+		// rank 11-90
+		ret = Math.round(( lognum + width ) / ( width * 2) * 80 + 10 );
+	} else {
+		// rank 91-100
+		ret = Math.min( 100, Math.round( ( lognum - width ) / ( width * 2) * 10 ) + 90 );
+	}
+	return ret;
+};
+
+	
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * diagnosis.js 
+ * 
+ * D6 Class calc measures functions
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/17 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 
+ * calcMeasures()				calculate measure
+ * calcMeasuresLifestyle()		calculate all measures and select lifestyle
+ * calcMeasuresNotLifestyle()	calculate all measures and select not lifestyle
+ * calcMeasuresOne()			calculate in temporal selection
+ * calcMaxMeasuresList()		automatic select max combination 
+ */
+ 
+//resolve D6
+var D6 = D6||{};
 
 
 // calcMeasures(gid)  calculate all measures -----------------------------
@@ -9701,43 +9951,6 @@ D6.calcMeasuresOne = function( gid ) {
 };
 
 
-// measureAdd(mesId) set select flag and not calculate --------
-//
-// parameters
-//		mesId		measure id which you select
-// return
-//		none
-//
-D6.measureAdd = function( mesId ) {
-	var gid;
-	var ret = "";
-		
-	gid = this.measureList[mesId].groupID;
-	this.measureList[mesId].selected = true;
-	this.isOriginal = false;
-	//ret = this.calcMeasures( gid );	//recalc -> not calc
-
-	return ret;
-};
-
-
-// measureDelete(mesId) remove select flag and not calculate--------
-//
-// parameters
-//		mesId		measure id which you select
-// return
-//		none
-//
-D6.measureDelete = function( mesId ) {
-	var gid;
-	var ret ="";
-
-	this.measureList[mesId].selected = false;
-	gid = this.measureList[mesId].groupID;
-	//ret = this.calcMeasures( gid );	//recalc 
-
-	return ret;
-};
 
 // clearSelectedMeasures(gid)  clear all selection and calculate all --------
 //
@@ -9835,29 +10048,28 @@ D6.calcMaxMeasuresList = function( gid, count )
 
 
 
-// calcAverage()  get avearage consumption ------------------
-//
-// parameters
-//		none
-// return
-//		none
-//
-// set D6.average.consList[]
-//
-D6.calcAverage = function(){
-	D6.averageMode = true;			//not use input parameters
-	this.calcCons();				//and calculate, then get average
-
-	this.average.consList = {};
-	for( var c in this.consShow ) {
-		this.average.consList[c] = {};
-		this.average.consList[c].co2 = this.consShow[c].co2;
-		this.average.consList[c].cost = this.consShow[c].cost;
-		this.average.consList[c].jules = this.consShow[c].jules;
-		this.average.consList[c].title = this.consShow[c].title;
-	}
-	D6.averageMode = false;	
-};
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * diagnosis.js 
+ * 
+ * D6 Main Class
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/17 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 
+ * inSet()						input data setter
+ * measureAdd()					set select flag and not calculate 
+ * measureDelete()				clear select flag and not calculate 
+ */
+ 
+//resolve D6
+var D6 = D6||{};
 
 	
 // inSet(id, val)  input data setter ------------------
@@ -9881,97 +10093,70 @@ D6.inSet = function ( id, val ){
 };
 
 	
-// getGid(consName)  getter group id of consumption ------------------
+// measureAdd(mesId) set select flag and not calculate --------
 //
 // parameters
-//		consName	consumption name
-// retrun
-//		groupID		0-9
-//
-D6.getGid  = function( consName ) {
-	return D6.logicList[consName].groupID;
-};
-	
-
-// getTargetConsList(consName)  getter consumption object ------------------
-//
-// parameters
-//		consName	consumption name
-// retrun
-//		consumption object / object array
-//
-D6.getTargetConsList  = function( consName )
-{
-	var i,c=0;
-	var target = new Array();
-	var ret;
-
-	if ( consName != "" ) {
-		for ( i=0 ; i<this.consList.length ; i++ ) {
-			if ( this.consList[i].consName == consName ) {
-				target[c++] = this.consList[i];
-			}
-		}
-		if ( target.length == 1 ) {
-			//in case of single
-			ret = target[0];
-		} else {
-			//in case of array
-			ret = target;
-		}
-	}
-	return ret;
-};
-
-	
-// getCommonParameters()  getter common result parameters such as co2 ------------------
-//
-// retrun
-//		co2,cost
-//
-D6.getCommonParameters = function(){
-	var ret = [];
-	ret.co2Original = D6.consListByName["consTotal"][0].co2Original;
-	ret.co2 = D6.consListByName["consTotal"][0].co2;
-	ret.costOriginal = D6.consListByName["consTotal"][0].costOriginal;
-	ret.cost = D6.consListByName["consTotal"][0].cost;
-		
-	return ret;
-};
-
-
-// rankIn100(ratio)  calculate rank by ratio to average ------------------
-//
-// parameters
-//		ratio	ratio to average
+//		mesId		measure id which you select
 // return
-//		rank 1-100
+//		none
 //
-D6.rankIn100 = function( ratio ){
-	var ret;
-	var lognum;
+D6.measureAdd = function( mesId ) {
+	var gid;
+	var ret = "";
+		
+	gid = this.measureList[mesId].groupID;
+	this.measureList[mesId].selected = true;
+	this.isOriginal = false;
+	//ret = this.calcMeasures( gid );	//recalc -> not calc
 
-	var width = 0.5;		// set diffusion parameter
-
-	if ( ratio <= 0 ) {
-		//in case of minus
-		ratio = 0.1;
-	}
-	lognum = Math.log( ratio );
-
-	if ( lognum < -width ) {
-		// rank 1-10
-		ret = Math.max( 1, Math.round( ( lognum + 1 ) / width * 10 ) );
-	} else if ( lognum < width ) {
-		// rank 11-90
-		ret = Math.round(( lognum + width ) / ( width * 2) * 80 + 10 );
-	} else {
-		// rank 91-100
-		ret = Math.min( 100, Math.round( ( lognum - width ) / ( width * 2) * 10 ) + 90 );
-	}
 	return ret;
 };
 
+
+// measureDelete(mesId) remove select flag and not calculate--------
+//
+// parameters
+//		mesId		measure id which you select
+// return
+//		none
+//
+D6.measureDelete = function( mesId ) {
+	var gid;
+	var ret ="";
+
+	this.measureList[mesId].selected = false;
+	gid = this.measureList[mesId].groupID;
+	//ret = this.calcMeasures( gid );	//recalc 
+
+	return ret;
+};
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * diagnosis.js 
+ * 
+ * D6 Main Class as tools
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/17 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 								2018/03/04 divide as tools
+ * 
+ * toHalfWidth()
+ * ObjArraySort()
+ * 
+ * 
+ */
+ 
+//resolve D6
+var D6 = D6||{};
+
+	
 	
 // toHalfWidth(strVal)  change double width charactor------------------
 //
