@@ -9,7 +9,7 @@
  * License: http://creativecommons.org/licenses/LGPL/2.1/
  * 
  * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- * 								2016/11/23 divided from disp.js
+ * 								2016/11/23 divided from js
  *
  * getMeasureDetail()
  * tableMeasuresDetail()	for debug
@@ -23,7 +23,7 @@
 //		mesid : measure sequence id
 // return
 //		ret: subset of measureBase class
-D6.disp.getMeasureDetail= function( mesid ) {
+D6.getMeasureDetail= function( mesid ) {
 	var ret = [];
 	var mes = D6.measureList[mesid];
 		
@@ -68,52 +68,12 @@ D6.disp.getMeasureDetail= function( mesid ) {
 	return ret;
 };
 
-// tableMeasuresDetail( mes ) ---------------------------------------------
-//		detail number result of measure, easy text output for test
-// parameters
-//		mes: measure list
-// return
-//		ret: text output
-D6.disp.tableMeasuresDetail = function( mes )
-{
-	var ret = "";
-	for ( var i=0 ; i<mes.length ; i++ ) {
-		ret +=  ( mes[i].titleShort +  "　　　　　　"  ).substr( 0, 8 )
-			+ "\t E:" + ( "   " + Math.round(mes[i].energy[Code.electricity]
-								+mes[i].energy[Code.electricity2]) ).substr(-4) 
-			+ " G:" + ( "   " + Math.round(mes[i].energy[Code.gas]) ).substr(-4) 
-			+ " K:" + ( "   " +  Math.round(mes[i].energy[Code.kerosene])  ).substr(-4) 
-			+ " C:" + ( "   " +  Math.round(mes[i].energy[Code.car])  ).substr(-4) 
-			+ " CO2:" + ( "   " +  Math.round(mes[i].co2) ).substr(-4)
-			+ " CO2C:" + ( "   " +  Math.round(mes[i].co2Change) ).substr(-4)  + "\n";
-	}
-	return ret;
-};
 
-// tableMeasuresSimple( mes ) ----------------------------------------------
-//			simple list of measures
-D6.disp.tableMeasuresSimple = function( mes )
-{
-	var ret = "";
-	var mesList;
-
-	for ( var i=0 ; i<mes.length ; i++ ) {
-		mesList = D6.measureList[mes[i].mesID];
-		if ( !isNaN( mesList.co2Change ) ) {
-			ret +=  ( mes[i].mesID + " " + mesList.title +  "　　　　　　　　　　　　　　　　"  ).substr( 0, 20 )
-				+  ( "   " + (-Math.round(mesList.co2Change * 12)) ).substr(-4)  + "kg削減 "
-				+ "\n";
-		}
-	}
-	return ret;
-};
-		
-
-//table of Measures data
+//get Measures data
 // consName
 // maxPrice		not show over than this price
 // notSelected 	1:only not select
-D6.disp.getMeasureTable = function( consName, maxPrice, notSelected )
+D6.getMeasure = function( consName, maxPrice, notSelected )
 {
 	//cannot set default in function for IE
 	if(typeof maxPrice === 'undefined') maxPrice = 100000000;

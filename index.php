@@ -122,18 +122,24 @@ $scripts = "";
 //base D6 scripts (common) in case useCode==1
 $include_common  ='
 	<script src="d6/base/base64.js" type="text/javascript"></script>
-	<script src="d6/base/disp.js" type="text/javascript"></script>
-	<script src="d6/base/disp_input.js" type="text/javascript"></script>
-	<script src="d6/base/disp_measure.js" type="text/javascript"></script>
-	<script src="d6/base/disp_demand.js" type="text/javascript"></script>
+	<script src="d6/base/d6_get.js" type="text/javascript"></script>
+	<script src="d6/base/d6_getinput.js" type="text/javascript"></script>
+	<script src="d6/base/d6_getmeasure.js" type="text/javascript"></script>
+	<script src="d6/base/d6_getdemand.js" type="text/javascript"></script>
 	<script src="d6/base/objectcreate.js" type="text/javascript"></script>
 	<script src="d6/base/energy.js" type="text/javascript"></script>
 	<script src="d6/base/consbase.js" type="text/javascript"></script>
 	<script src="d6/base/measurebase.js" type="text/javascript"></script>
 	<script src="d6/base/doc.js" type="text/javascript"></script>
-	<script src="d6/base/monthly.js" type="text/javascript"></script>
-	<script src="d6/base/evaluateaxis.js" type="text/javascript"></script>
+	<script src="d6/base/d6_calcmonthly.js" type="text/javascript"></script>
 	<script src="d6/base/d6.js" type="text/javascript"></script>
+	<script src="d6/base/d6_getevaluateaxis.js" type="text/javascript"></script>
+	<script src="d6/base/d6_construct.js" type="text/javascript"></script>
+	<script src="d6/base/d6_calccons.js" type="text/javascript"></script>
+	<script src="d6/base/d6_calcaverage.js" type="text/javascript"></script>
+	<script src="d6/base/d6_calcmeasures.js" type="text/javascript"></script>
+	<script src="d6/base/d6_setvalue.js" type="text/javascript"></script>
+	<script src="d6/base/d6_tools.js" type="text/javascript"></script>
 	<script src="d6/d6facade.js" type="text/javascript"></script>
 	
 ';

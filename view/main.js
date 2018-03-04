@@ -122,6 +122,7 @@ $(document).ready(function(){
 		param.rdata = localStorage.getItem('sindan' + languageMode+ targetMode );
 		if ( debugMode ) console.log( "data loaded from localStorage" );
 	}
+	
 	//start page
 	param.consName = tabNowName;
 	param.subName = tabSubNowName;
@@ -133,7 +134,9 @@ $(document).ready(function(){
 	param.targetMode = targetMode;
 	param.focusMode = focusMode;
 	param.countfix_pre_after = lang.countfix_pre_after;
+
 	if (debugMode) console.log(param);
+	
 	startCalc( "start", param );
 
 });
@@ -191,17 +194,22 @@ getCalcResult = function( command, res ) {
 		case "start":
 		case "addandstart":
 		case "tabclick":
+			// display input and result as start mode
+			
+			//display tabs, input page
 			inputHtml = createInputPage( res.inputPage );
 			$('#tab').html( inputHtml.menu );
 			$('#tabcontents').html( inputHtml.combo );
-			
+
+			//display results
 			$("#average").html(showAverageTable(res.average));
-			$("#cons").html(showItemizeTable(res.cons));
+			$("#cons").html(showItemizeTable(res.itemize));
 			$("#measure").html("<h3>" + lang.effectivemeasures + "</h3>" + showMeasureTable(res.measure));
 			leanModalSet();
 
-			graphItemize( res.graphItemize );
-			graphMonthly( res.graphMonthly );
+			//display graph
+			graphItemize( res.itemize_graph );
+			graphMonthly( res.monthly );
 			
 			//tab click method
 			$('#tab li').click(function() {
@@ -214,6 +222,8 @@ getCalcResult = function( command, res ) {
 			if ( localStorage.getItem('sindanOver15') ) {
 				$('.over15').toggle();
 			}
+			
+			//debug
 			if( debugMode ) {
 				console.log( "return parameters from d6 worker----" );
 				console.log( res );
@@ -221,23 +231,25 @@ getCalcResult = function( command, res ) {
 			break;
 		
 		case "subtabclick":
+			//sub tab click method : main tab is not changed
 			inputHtml = createInputPage( res.inputPage );
 			$('#tabcontents').html( inputHtml.combo );
-			//sub tab click method : main tab is not changed
 			tabset(tabNow);
+
 			tabSubNowName = res.subName;
-			var page = tabNowName;
-			var subpage = tabSubNowName;
-			//$('li#subpage' + page + "-" + subpage ).css('display','block');
+
 			$('ul.submenu li' ).removeClass('select');
-			$('ul.submenu li#' + page + "-" + subpage ).addClass('select');
+			$('ul.submenu li#' + tabNowName + "-" + tabSubNowName ).addClass('select');
 
 			break;
 		
 		case "modal":
+			//show modal page for measure detail
 			$("#header")[0].scrollIntoView(true);
 			leanModalSet();
-			var modalHtml = createModalPage( res.measureDetail );
+			
+			//create modal page
+			var modalHtml = createModalPage( res.measure_detail );
 			$("#modal-contents").html( modalHtml );
 			if ( typeof( modalJoy ) != 'undefined' && modalJoy == 1 ){
 				$(".modaljoyfull").show();
@@ -248,15 +260,21 @@ getCalcResult = function( command, res ) {
 		case "inchange":
 		case "measureadd":
 		case "measuredelete":
+			//in case of input change
+			
+			//change result
 			$("#average").html(showAverageTable(res.average));
-			$("#cons").html(showItemizeTable(res.cons));
-			graphItemize( res.graphItemize );
-			graphMonthly( res.graphMonthly );
+			$("#cons").html(showItemizeTable(res.itemize));
+			graphItemize( res.itemize_graph );
+			graphMonthly( res.monthly );
+			
+			//change measure list
 			$("#measure").html("<h3>" + lang.effectivemeasures + "</h3>" + showMeasureTable(res.measure) );
 			leanModalSet();
 			if ( localStorage.getItem('sindanOver15') ) {
 				$('.over15').show();
 			}
+			
 			//comment
 			$("#totalReduceComment").html( showMeasureTotalMessage( res.common ) );
 			break;
@@ -267,7 +285,7 @@ getCalcResult = function( command, res ) {
 			break;
 
 		case "graphchange":
-			graphItemize( res.graphItemize );
+			graphItemize( res.itemize_graph );
 			break;
 			
 		case "add_demand":			//view_base

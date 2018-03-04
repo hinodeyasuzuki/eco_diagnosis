@@ -21,24 +21,24 @@
  * D6 functions 
  *
 //====Create Pages=====
-D6.disp.getInputPage(consName, subName)		create input page (disp_input.js)
+D6.getInputPage(consName, subName)		create input page (input.js)
 				consName: consumption code name
 				subName: sub category of consumption name
 
-D6.disp.showResultTable(consName)			get total result 
+D6.getAllResult(consName)			get total result 
 				consName: consumption code name
 				
-D6.disp.showItemizeGraph(consCode, sort )	get itemized graph data
+D6.showItemizeGraph(consCode, sort )	get itemized graph data
 				consCode: consumption short code
 				sort: target 
 
-D6.disp.createDemandSumupPage()				get demand value
-D6.disp.createDemandLogPage()
-D6.disp.demandGraph()						get demand graph
+D6.createDemandSumupPage()				get demand value
+D6.createDemandLogPage()
+D6.demandGraph()						get demand graph
 
-D6.disp.getMeasureComment(id)				comment of measure
+D6.getMeasureComment(id)				comment of measure
 				id:measureID
-D6.disp.modalHtml( id, ret )				measure detail data to show dialog	
+D6.modalHtml( id, ret )				measure detail data to show dialog	
 				id:measureID
 
 //====Calculation set no return =====
@@ -60,9 +60,28 @@ D6.doc.loadDataSet(data)					load saved data
 
 **/
 
+//TODO new result 180304 ==================================
+//
+//	command.command			text
+//	command.action_list		array
+//	command.return_list		array
+//	command.return_text		1:return text 0:not
+//
+//	for node.js as JSON
+//
+//	result.command			command to call
+//  result.errormessage		error message if not null 
+//	result.monthly
+//	result.itemize
+//	result.measure
+//	result.detail
+//
+// make html at ay generator
+
+
+
 //resolve D6 -------------------------------------
 var D6 = D6||{};
-D6.debugMode = false;	//Debug to console.log, set in workercalc(start,*)
 
 
 //onmessage(event ) function called as worker ========================================
@@ -108,12 +127,19 @@ D6.workercalc = function( command, param ){
 		case "start" :
 			//program setting , execute only once.
 			D6.viewparam = D6.viewparam || {};
-			D6.viewparam.dispMode = param.dispMode;
+			D6.viewparam.ode = param.ode;
 			D6.viewparam.focusMode = param.focusMode;
 			D6.viewparam.countfix_pre_after = param.countfix_pre_after;
 			
+			//set debug mode
+			if ( param.debugMode && param.debugMode == 1 ){
+				D6.debugMode = true;
+			} else {
+				D6.debugMode = false;
+			}
+
 			//initialize datasets
-			D6.setscenario(param.prohibitQuestions, param.allowedQuestions, param.defInput);
+			D6.constructor(param.prohibitQuestions, param.allowedQuestions, param.defInput);
 
 			// set file data
 			if ( typeof(param.rdata) != "undefined" && param.rdata ) {
@@ -124,26 +150,18 @@ D6.workercalc = function( command, param ){
 				}
 			}
 			
-			//set debug mode
-			if ( param.debugMode && param.debugMode == 1 ){
-				D6.debugMode = true;
-			} else {
-				D6.debugMode = false;
-			}
-
 			//calculation
-			D6.calcAverage();
-			D6.calcMeasures(-1);
+			D6.calculateAll();
 
 			//get initial page as consTotal
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.disp.showResultTable( "consTotal" );
+			result = D6.getAllResult( "consTotal" );
 
 			//create input componets
-			result.inputPage = D6.disp.getInputPage(param.consName,param.subName);
+			result.inputPage = D6.getInputPage(param.consName,param.subName);
 
 			//button selection
-			result.quesone = D6.disp.getFirstQues(param.consName,param.subName);
+			result.quesone = D6.getFirstQues(param.consName,param.subName);
 
 			//debug
 			if ( D6.debugMode ) {
@@ -154,7 +172,7 @@ D6.workercalc = function( command, param ){
 			break;
 
 		case "addandstart":
-			//in case of structure is changed
+			//change structure such as number of equipments
 			var serialize = D6.doc.serialize();
 			param.rdata = btoa(unescape(encodeURIComponent(serialize)));
 
@@ -169,17 +187,16 @@ D6.workercalc = function( command, param ){
 			}
 
 			//calculate
-			D6.calcAverage();
-			D6.calcMeasures(-1);
+			D6.calculateAll();
 
 			//#0 page is basic question
 			var showName = D6.consListByName[param.consName][0].sumConsName;
 
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.disp.showResultTable(showName );
+			result = D6.getAllResult(showName );
 
-			//create input componets
-			result.inputPage = D6.disp.getInputPage(showName,param.subName);
+			//create input components
+			result.inputPage = D6.getInputPage(showName,param.subName);
 
 			break;
 
@@ -187,69 +204,66 @@ D6.workercalc = function( command, param ){
 			//menu selected / main cons change		
 
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.disp.showResultTable(param.consName);
+			result = D6.getAllResult(param.consName);
 
 			//create input componets
-			result.inputPage = D6.disp.getInputPage(param.consName,param.subName);
+			result.inputPage = D6.getInputPage(param.consName, param.subName);
 
 			//button selection
-			result.quesone = D6.disp.getFirstQues(param.consName,param.subName);
+			result.quesone = D6.getFirstQues(param.consName, param.subName);
 
 			break;
 
 		case "subtabclick" :
 			//create input componets / sub cons change
-			result.inputPage = D6.disp.getInputPage(param.consName,param.subName);
+			result.inputPage = D6.getInputPage(param.consName, param.subName);
 			result.subName = param.subName;
 			break;
 
 		case "inchange" :
 			//in case of changing input value, recalc.
 			D6.inSet(param.id,param.val);
-			if ( D6.scenario.defCalcAverage.indexOf( param.id ) != -1 ){
-				D6.calcAverage();
-			}
 			if ( param.id == D6.scenario.measuresSortChange ){
 				D6.sortTarget =  D6.scenario.measuresSortTarget[param.val < 0 ? 0:param.val];
 			}
-			D6.calcMeasures(-1);
+			D6.calculateAll();
 
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.disp.showResultTable();	//show result 
+			result = D6.getAllResult();	//show result 
 			break;
 
 		case "inchange_only" :
-			//in case of changing input value, recalc.
+			//in case of changing input value.
 			D6.inSet(param.id,param.val);
 			result = "ok";
 			break;
 
 		case "quesone_next" : 
-			result.quesone = D6.disp.getNextQues();
+			result.quesone = D6.getNextQues();
 			break;
 			
 		case "quesone_prev" : 
-			result.quesone = D6.disp.getPrevQues();
+			result.quesone = D6.getPrevQues();
 			break;
 			
 		case "quesone_set" : 
 			D6.inSet(param.id,param.val);
-			result.quesone = D6.disp.getNextQues();
+			result.quesone = D6.getNextQues();
 			break;
 			
 		case "recalc" :
 			//only recalc no graph data
-			D6.calcAverage();
-			D6.calcMeasures(-1);
+			D6.calculateAll();
 
-			result = D6.disp.showResultTable(param.consName);
+			result = D6.getAllResult(param.consName);
+			
 			//create input componets
-			result.inputPage = D6.disp.getInputPage(param.consName,param.subName);
+			result.inputPage = D6.getInputPage(param.consName,param.subName);
 			break;
 
 		case "pagelist" :
 			//create itemize list
-			result.inputPage = D6.disp.getInputPage(param.consName,param.subName);
+			result.inputPage = D6.getInputPage(param.consName,param.subName);
 			break;
 			
 		case "measureadd" :
@@ -259,7 +273,7 @@ D6.workercalc = function( command, param ){
 			D6.calcMeasures(-1);
 
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.disp.showResultTable();
+			result = D6.getAllResult();
 			break;
 
 		case "measuredelete" :
@@ -268,17 +282,17 @@ D6.workercalc = function( command, param ){
 			D6.calcMeasures(-1);
 
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.disp.showResultTable();
+			result = D6.getAllResult();
 			break;
 
 		case "graphchange" :
 			//change graph
-			result.graphItemize = D6.disp.getItemizeGraph("", param.graph);
+			result.itemize_graph = D6.getItemizeGraph("", param.graph);
 			break;
 
 		case "evaluateaxis" :
 			//calc evaluate axis point
-			result.evaluateAxis = D6.evaluateAxisPoint("", param.subName);
+			result.evaluateAxis = D6.getEvaluateAxisPoint("", param.subName);
 			break;
 
 		case "add_demand" :
@@ -299,20 +313,20 @@ D6.workercalc = function( command, param ){
 
 		case "demand" :
 			//create input componets and graph for demand page
-			result.demandin = D6.disp.getInputDemandSumup();
-			result.demandlog = D6.disp.getInputDemandLog();
-			result.graphDemand = D6.disp.getDemandGraph();
+			result.demandin = D6.getInputDemandSumup();
+			result.demandlog = D6.getInputDemandLog();
+			result.graphDemand = D6.getDemandGraph();
 			break;
 			
 		case "inchange_demand" :
 			D6.inSet(param.id,param.val);
-			result.graphDemand = D6.disp.getDemandGraph();
+			result.graphDemand = D6.getDemandGraph();
 			break;
 			
 		case "modal" :
-			//display detail information about measure, modal dialog
+			//ay detail information about measure, modal dialog
 			var id =param.mid;
-			result.measureDetail = D6.disp.getMeasureDetail( id );	
+			result.measure_detail = D6.getMeasureDetail( id );	
 			break;
 
 		case "save" :
@@ -329,12 +343,12 @@ D6.workercalc = function( command, param ){
 
 		case "getinputpage" :
 			//create input componets
-			result.inputPage = D6.disp.getInputPage(param.consName,param.subName);
+			result.inputPage = D6.getInputPage(param.consName,param.subName);
 			break;
 
 		case "getqueslist" :
 			//return question list
-			result.queslist = D6.disp.getQuesList();
+			result.queslist = D6.getQuesList();
 			break;
 
 		case "common" :
@@ -360,13 +374,13 @@ D6.workercalc = function( command, param ){
 			D6.calcMeasures(-1);
 
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.disp.showResultTable();
+			result = D6.getAllResult();
 			
-			//create input componets
-			result.inputPage = D6.disp.getInputPage(param.consName,param.subName);
+			//create input components
+			result.inputPage = D6.getInputPage(param.consName,param.subName);
 			
 			//calc evaluate axis point
-			result.evaluateAxis = D6.evaluateAxisPoint("", param.subName);
+			result.evaluateAxis = D6.getEvaluateAxisPoint("", param.subName);
 			break;
 
 		default:

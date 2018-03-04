@@ -325,7 +325,7 @@ D6.ConsBase.init = function(){
 		}
 	};
 
-	//is thhis measurea selected?
+	//is this measure selected?
 	this.isSelected = function( mName ){
 		if ( !this.measures[mName] ) {
 			return false;

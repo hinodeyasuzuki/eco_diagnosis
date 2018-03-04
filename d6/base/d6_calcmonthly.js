@@ -2,7 +2,7 @@
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
- * monthly.js 
+ * d6_calcmonthly.js 
  * 
  * D6 Monthly Class, calculate season or monthly difference
  * 
@@ -14,9 +14,9 @@
  * 
  */
 
-D6.Monthly = {};
+D6 = D6 || {};
 
-D6.Monthly.seasonCalc = function( ave, season, monthly, seasonPatternP, energyCode ) {
+D6.calcMonthly = function( ave, season, monthly, seasonPatternP, energyCode ) {
 	// first use monthly, season
 	// next  use seasonPattern
 
