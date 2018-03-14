@@ -27,7 +27,6 @@ function graphItemizeCommon( ret, targetname ) {
 	if (!$('#'+targetname).is(':visible')) {
 		return;
 	}
-console.log(ret);
 	//caption: graph captions translate
 	if (targetMode == 1 ){
 		var captions = {you:lang.younow ,after:lang.youafter, average:lang.average };
@@ -82,6 +81,7 @@ console.log(ret);
 	var chart = new dimple.chart(svg, ret.data);
 	var xAxis = chart.addCategoryAxis("x", captionCompare);
 	xAxis.fontSize = "13px";
+	xAxis.title = "";
 	//sort data and set axis
 	var categoryOrder = [];
 	categoryOrder[0] = captions.you;
@@ -177,23 +177,27 @@ function graphEnergy( averageData ) {
 	}
     var chart = new dimple.chart(svg, data);
 
-	//x
+	//x axis
 	var xAxis = chart.addCategoryAxis("x", ["energy","user"]);
 	xAxis.fontSize = "15px";
+	xAxis.title = "";
 	xAxis.addOrderRule([lang.youcall, lang.average]);
 	xAxis.addOrderRule([lang.electricitytitle, lang.gastitle,lang.kerosenetitle,lang.gasolinetitle ]);
 
-	//y
+	//y axis
 	var yAxis = chart.addMeasureAxis("y",lang.fee);
 	yAxis.tickFormat = "";
 	yAxis.fontSize = "15px";
+	yAxis.title = "光熱費（円/月）";
 	
 	//legend
 	var myLegend = chart.addLegend(wid-160, 10, 160, 20);
 	myLegend.fontSize = "12px";
 
+	//set color
 	chart.assignColor(lang.youcall, "orange");
 	chart.assignColor(lang.average, "green");
+
 	chart.setBounds(80, 10, wid-150, hei-70); //left padding, top padding, graph width, graph height
 	
     chart.addSeries("user", dimple.plot.bar);
@@ -222,21 +226,24 @@ function graphCO2averageCommon( averageData, target ) {
 
 	var svgco2 = dimple.newSvg('#'+target, wid, hei);
     var data = [
-      { "user":lang.youcall, "CO2":Math.round(averageData.co2[0].total*12) },
-      { "user":lang.average, "CO2":Math.round(averageData.co2[1].total*12) }
+      { "user":lang.average, "CO2":Math.round(averageData.co2[1].total*12) },
+      { "user":lang.youcall, "CO2":Math.round(averageData.co2[0].total*12) }
     ];
     var chart = new dimple.chart(svgco2, data);
 
-	//x
+	//x axis
 	var xAxis = chart.addCategoryAxis("x", "user");
 	xAxis.fontSize = "15px";
-	xAxis.addOrderRule([lang.youcall, lang.average]);
+	xAxis.addOrderRule([lang.average,lang.youcall]);
+	xAxis.title = "";
 
-	//y
+	//y axis
 	var yAxis = chart.addMeasureAxis("y","CO2");
 	yAxis.tickFormat = "";
 	yAxis.fontSize = "15px";
+	yAxis.title = "CO2排出量（kg/年）";
 	
+	//set color
 	chart.assignColor(lang.youcall, "red");
 	chart.assignColor(lang.average, "green");
 	chart.setBounds(80, 10, wid-150, hei-70); //left padding, top padding, graph width, graph height

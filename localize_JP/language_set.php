@@ -317,9 +317,11 @@ $lang['home_lifegame_top99']='　人類は地球温暖化の進行を止める�
 $lang['button_end']='やめる';
 $lang['button_agree']='設定する';
 $lang['button_commit']='実行します';
+
 $lang['home_lifegame_button_sel99']='すみません、やります。';
 $lang['home_lifegame_button_sel3a']='ちがいます';
 $lang['home_lifegame_button_sel3b']='まあ、それでいいです。';
 
-$lang['home_uchieco_title']='うちエコ診断WEB';
+//----------8 uchieco web -----------------------------------------------
+$lang['home_uchieco_title']='うちエコキッズWEB診断';
 

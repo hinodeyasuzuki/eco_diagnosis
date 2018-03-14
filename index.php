@@ -67,7 +67,7 @@ $forceModeDefs = [
 	1 => [ 1, "true" ,"false" ],	//develop mode
 	2 => [ 2, "true" ,"false" ],	//packed check
 	3 => [ 2, "true" ,"true"  ],	//worker check
-	4 => [ 3, "true" ,"false" ],	//compressed check
+	4 => [ 3, "false" ,"false" ],	//compressed check
 	5 => [ 3, "false" ,"true" ]		//release
 ];
 
@@ -75,13 +75,14 @@ list( $useCode, $debugMode, $useWorker ) =  $forceModeDefs[$forceMode];
 
 
 //language set =======================================================
-//default relation of language and country
+//default relation of language and country white list
 $countryList = [];
 $countryList["ja"] = "JP";
 $countryList["cn"] = "CN";
 $countryList["zh"] = "CN";
 $countryList["en"] = "JP";
 $countryList["fr"] = "FR";
+$countryList["zz"] = "ZZ";
 
 if (! isset($countryList[$languageMode]) ) {
 	//default setting
@@ -99,7 +100,6 @@ $lang = [];
 if ( $countryMode ==  $countryList[$languageMode] && $languageMode != "en" ) {
 	$lang["d6folder"] = "./localize_" . $countryMode;
 } else {
-	$countryMode = ( isset($_GET["c"]) ? substr($_GET["c"], 0, 2) : $countryList[$languageMode] );
 	$lang["d6folder"] = "./localize_" . $countryMode ."_" . $languageMode;
 }
 
@@ -233,24 +233,18 @@ $targetModeName = array( 1=>"home", 2=>"office" );
 $scripts .= "<script src='" . $lang["d6folder"] . "/view/" . $countryMode . "_" . $targetModeName[$targetMode] . "_" . $focusMode . ".js' type='text/javascript'></script>";
 
 
+
 // code minimumization/worker type --------------------------------------------------------
 if ( $useCode==1 ) {
 	$scripts .= $includeeachjs;
-} else if ( $useCode<=3 ) {
-	if ( $useWorker == "false" ) {
-		if ( $useCode==2 ) {
-			$scripts .=  "<script src='" .$includesumjs . "' type='text/javascript'></script>";
-		} else {
-			$scripts .=  "<script src='" .$includeminjs . "' type='text/javascript'></script>";
-		}
-	}
-} else if (  $useCode==4 ) {
-	$scripts .="<script src='" .$includemincommonjs . "' type='text/javascript'></script>";
-	$scripts .= $include_logic;
-} else {
-	$scripts .="<script src='" .$includemincommonjs . "' type='text/javascript'></script>";
-	$scripts .="<script src='" .$includeminlogicjs . "' type='text/javascript'></script>";
+} else if ( $useCode==2 && $useWorker =="false" ) {
+	$scripts .= "<script src='" .$includemincorejs . "' type='text/javascript'></script>";
+	$scripts .= "<script src='" .$includesumjs_direct . "' type='text/javascript'></script>";
+} else if ( $useCode==3 && $useWorker =="false") {
+	$scripts .= "<script src='" .$includemincorejs . "' type='text/javascript'></script>";
+	$scripts .= "<script src='" .$includeminjs_direct . "' type='text/javascript'></script>";
 }
+//in case of worker, no need to include in html.
 
 
 // show introduction/tutorial  --------------------------------------------------
@@ -284,6 +278,7 @@ if ( $data ) {
 } else {
 	$scripts .= "	<script>paramdata='';</script>";
 }
+
 
 //templates depend on displayMode =====================================================
 switch( $dispMode ) {

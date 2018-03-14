@@ -111,6 +111,9 @@ td {
 td.right {
 	text-align:right;
 }
+td.left {
+	text-align:left;
+}
 
 div.subtitle {
 	font-size:110%;

@@ -1,4 +1,4 @@
-﻿/*  2017/12/16  version 1.0
+﻿/* 2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -13,6 +13,8 @@
  *								2011/01/21 original PHP version
  *								2011/05/06 ported to ActionScript3
  * 								2016/04/12 ported to JavaScript
+ * 								2017/12/16 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
  * 
  * init()			initialize, set parameters when construction
  * precalc()		called just before calc(), input data treatment and clear consumption data
@@ -35,21 +37,20 @@ D6.consTVsum.init = function() {
 	//construction setting
 	this.consName = "consTVsum";    	//code name of this consumption 
 	this.consCode = "TV";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "テレビ";				//consumption title name
+    this.title = "TV";				//consumption title name
 	this.orgCopyNum = 1;                //original copy number in case of countable consumption, other case set 0
-	this.addable = "テレビ";			//the name of object shown as add target
 	this.groupID = "7";					//number code in items
 	this.color = "#00ff00";				//color definition in graph
-	this.countCall = "台目";			//how to point n-th equipment
 
     this.sumConsName = "consTotal";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 	this.residueCalc = "sumup";			//calculate type of residue	no/sumup/yes
 
 	//guide message in input page
-	this.inputGuide = "家全体のテレビの使い方について";
+	this.inputGuide = "how to use TV totally";
 };
 D6.consTVsum.init();
+
 
 D6.consTVsum.calc = function() {
 	this.useTime =this.input( "i601", 8.5 );	//time to use hour

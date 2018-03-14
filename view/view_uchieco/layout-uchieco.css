@@ -20,6 +20,9 @@ li.nodata {
 
 div.page {
 	position:relative;
+	padding:20px;
+	border: 1px solid #8F8;
+	text-align:center;
 }
 
 
@@ -38,23 +41,25 @@ div.page {
 	padding:6px;
 	padding-left:15px;
 	padding-right:15px;
-	margin:6px;
+	margin:4px;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
 	font-weight:600;
 	cursor: pointer;
 	color:#000;
-	background:#cbf8ff;
 	white-space: nowrap;
 	box-shadow:2px 2px 2px #555;
 	line-height:2.7em;
 	top:-10px;
 }
 
+.button{
+	background:#cbf8ff;
+}
 .menubutton, span.next{
 	padding-top:2px;
 	padding-bottom:2px;
-	line-height:1.6em;	
+	line-height:2em;	
 	background-color:#8bffc8;
 }
 
@@ -68,30 +73,22 @@ div.page {
 }
 
 
-.button:hover, .menu span:hover {
-	background:#aaaafa;
-}
-
-
-a:hover {
-	color:#5a9aba;
-}
-
-span.selected {
-	background:#1a5a9a;
-	color:#fff;
-}
 
 h2.constitle{
 	display:none;
 }
 
-#step{
+.step{
 	line-height:2em;
 	background-color:#FFC;
 }
 
-#step span{
+.life{
+	line-height:2em;
+	padding-left:30px;
+}
+
+.step span{
 	cursor: pointer;
 	padding:3px;
 	margin:5px;
@@ -99,14 +96,78 @@ h2.constitle{
 	padding-right:25px;
 	background-color:#FF8;
 }
+.life span{
+	cursor: pointer;
+	padding:3px;
+	margin:1px;
+	padding-left:25px;
+	padding-right:25px;
+	background-color:#FF8;
+}
+.step span:hover, .step span:focus, .life span:hover, .life span:focus{
+	color:#fafafa;
+	background:#009800;
+}
 
-#header span:hover{
+.button:hover, .menu span:hover, span.next:hover, .button:focus, .menu span:focus, span.next:focus {
+	color:#fafafa;
+	background:#009800;
+}
+
+
+a:hover {
+	color:#5a9aba;
+}
+
+/*
+.step span.already{
 	color:#fafafa;
 	background:#009800!important;
 }
+*/
+span.selected {
+	background:#1a5a9a;
+	color:#fff;
+}
 
-#step span.already{
-	color:#fafafa;
-	background:#009800!important;
+
+ul.submenu {
+	display:none;
+}
+
+li#subpageeasy01-easy01 h3{
+	display:none;
+}
+
+li#subpageeasy01-easy01 {
+	text-align:left;
+}
+
+div.column2 {
+	float:left;
+	width:47%;
+}
+
+.over15 {
+	border-color:#ff0000;
+}
+
+#measure{
+	padding-top: 0px !important;
+}
+
+
+@media screen and (max-width: 640px) {
+	div.page {
+		text-align:left;
+	}
+	div.sm100,div.column2 {
+		width:100% !important;
+	}
+	.step span{
+		padding-left:5px;
+		padding-right:5px;
+	}
+	
 }
 
