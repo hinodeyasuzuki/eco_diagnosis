@@ -1,4 +1,4 @@
-/*  2017/12/10  version 1.0
+/* 2017/12/10  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -12,6 +12,8 @@
  *								2011/01/21 original PHP version
  *								2011/05/06 ported to ActionScript3
  * 								2016/04/12 ported to JavaScript
+ * 								2017/12/10 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
  * 
  * init()			initialize, set parameters when construction
  * precalc()		called just before calc(), input data treatment and clear consumption data
@@ -28,11 +30,11 @@ D6.consAC.init = function() {
 	//construction setting
 	this.consName = "consAC";           //code name of this consumption 
 	this.consCode = "";                 //short code to access consumption, only set main consumption user for itemize
-    this.title = "部屋空調";			//consumption title name
+    this.title = "room air conditioning";			//consumption title name
 	this.orgCopyNum = 1;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "2";					//number code in items
 	this.color = "#ff0000";				//color definition in graph
-	this.countCall = "部屋目";			//how to point n-th equipment
+	this.countCall = "th room";			//how to point n-th equipment
 
     this.sumConsName = "";				//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
@@ -48,10 +50,8 @@ D6.consAC.init = function() {
 		"consACcool",
 		"consACheat"
 	];
-
 };
 D6.consAC.init();
-
 
 D6.consAC.precalc = function() {
 	this.clear();

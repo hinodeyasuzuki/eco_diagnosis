@@ -1,4 +1,4 @@
-﻿/*  2017/12/15  version 1.0
+﻿/* 2017/12/15  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -12,6 +12,8 @@
  *								2011/01/21 original PHP version
  *								2011/05/06 ported to ActionScript3
  * 								2016/04/12 ported to JavaScript
+ * 								2017/12/15 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
  * 
  * init()			initialize, set parameters when construction
  * precalc()		called just before calc(), input data treatment and clear consumption data
@@ -28,20 +30,21 @@ D6.consLI.init = function() {
 	//construction setting
 	this.consName = "consLI";   		//code name of this consumption 
 	this.consCode = "";            		//short code to access consumption, only set main consumption user for itemize
-    this.title = "照明";				//consumption title name
+    this.title = "light";				//consumption title name
 	this.orgCopyNum = 1;                //original copy number in case of countable consumption, other case set 0
-	this.addable = "照明する部屋";		//add message
+	this.addable = "room for lighting";		//add message
 	this.groupID = "6";					//number code in items
 	this.color = "#ffff00";				//color definition in graph
-	this.countCall = "部屋目";			//how to point n-th equipment
+	this.countCall = "th room";			//how to point n-th equipment
 
     this.sumConsName = "consLIsum";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
-	this.inputGuide = "個別部屋の照明の使い方について";
+	this.inputGuide = "how to use each room lighting";
 };
 D6.consLI.init();
+
 
 D6.consLI.precalc = function( ) {
 	this.clear();

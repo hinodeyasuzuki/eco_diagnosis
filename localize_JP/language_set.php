@@ -321,7 +321,7 @@ $lang['home_lifegame_button_sel3a']='';
 $lang['home_lifegame_button_sel3b']='';
 
 //----------8 uchieco web -----------------------------------------------
-$lang['home_uchieco_title']='';
+$lang['home_uchieco_title']='うちエコキッズWEB診断';
 
 
 

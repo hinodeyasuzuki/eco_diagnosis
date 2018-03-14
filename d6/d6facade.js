@@ -18,31 +18,16 @@
 
 
 /*
- * D6 functions 
+ * work as D6 facade on web-worker. Call such functions through this onmessage() call.
  *
-//====Create Pages=====
-D6.getInputPage(consName, subName)		create input page (input.js)
+
+
+------ structure creation  ------
+D6.constructor()							generate calculation logic
+D6.addConsSetting(consName)					add countable consumption, ex. room, equipment
 				consName: consumption code name
-				subName: sub category of consumption name
 
-D6.getAllResult(consName)			get total result 
-				consName: consumption code name
-				
-D6.showItemizeGraph(consCode, sort )	get itemized graph data
-				consCode: consumption short code
-				sort: target 
-
-D6.createDemandSumupPage()				get demand value
-D6.createDemandLogPage()
-D6.demandGraph()						get demand graph
-
-D6.getMeasureComment(id)				comment of measure
-				id:measureID
-D6.modalHtml( id, ret )				measure detail data to show dialog	
-				id:measureID
-
-//====Calculation set no return =====
-D6.setscenario()							generate calculation logic
+------ data set and calculation  ------
 D6.calcAverage()							calculate average		
 D6.calcMeasures(cid)						calculate measures		
 				cid:consumption ID , -1 is total consumption
@@ -52,29 +37,75 @@ D6.inSet(id,val)							set data when input change
 D6.measureAdd(mesId)						add(accept) one measure and calculate
 D6.measureDelete(mesid)						delete(recall) one measure and calculate
 				mesid:measure id
-D6.addConsSetting(consName)					add countable consumption, ex. room, equipment
-				consName: consumption code name
+D6.calculateAll();							full data re-calclation, collective
+
+------ file io  ------
 D6.doc.serialize()							serialize input data for saving
 D6.doc.loadDataSet(data)					load saved data
 				data:serialized data
 
-**/
+----- html component create ------
+D6.getInputPage(consName, subName)		get input page 
+				consName: consumption code name
+				subName: sub category of consumption name
+
+D6.getItemizeGraph(consCode, sort )		get itemized graph data
+				consCode: consumption short code
+				sort: target 
+
+D6.getEvaluateAxisPoint()				get 
+
+// related to button selection page
+D6.getNextQues()
+D6.getPrevQues()
+
+// related to demand graph
+D6.getInputDemandSumup()				get demand value
+D6.getInputDemandLog()
+D6.getDemandGraph()						get demand graph
+
+// one measure detail
+D6.getMeasureDetail( id, ret )		s	measure detail data to show dialog	
+				id:measureID
+D6.getMeasureComment(id)				comment of measure
+				id:measureID
+
+// collective 
+D6.getAllResult(consName)			get total result 
+				consName: consumption code name
+				
+
+*/
 
 //TODO new result 180304 ==================================
-//
+// in order to create common facade call , as common
 //	command.command			text
 //	command.action_list		array
 //	command.return_list		array
 //	command.return_text		1:return text 0:not
 //
-//	for node.js as JSON
 //
+// command
+//  param.construct			construct D6 senario 			default false
+//  param.calc				calculate consumption,measure	default true
+//  param.getresult			calculate consumption,measure	default true
+//  param.getinput			calculate consumption,measure	default true
+//
+// parametes set in case of parameter exist
+//  param.rdata				file data set
+//  param.id, param.val		set one data
+//  param.inputs[ {id:in**, val:** },.... ]		set multi data
+//  param.addmeasureid		select one measure
+//  param.deletemeasureid	select unset one measure
+//
+// return value
 //	result.command			command to call
 //  result.errormessage		error message if not null 
 //	result.monthly
 //	result.itemize
 //	result.measure
-//	result.detail
+//	result.measuredetail
+//	result.demand
 //
 // make html at ay generator
 
@@ -84,7 +115,7 @@ D6.doc.loadDataSet(data)					load saved data
 var D6 = D6||{};
 
 
-//onmessage(event ) function called as worker ========================================
+// onmessage(event) function called as worker ========================================
 //
 onmessage = function (event) {
   
@@ -114,7 +145,7 @@ onmessage = function (event) {
 };
 
 
-//workercalc(command, param)  simulating worker for non worker ========================
+// workercalc(command, param)  simulating worker for non worker ========================
 // parameters
 // 		command: command code(string)
 // 		param: parameters array
@@ -138,7 +169,7 @@ D6.workercalc = function( command, param ){
 				D6.debugMode = false;
 			}
 
-			//initialize datasets
+			//initialize D6 datasets
 			D6.constructor(param.prohibitQuestions, param.allowedQuestions, param.defInput);
 
 			// set file data
@@ -353,6 +384,12 @@ D6.workercalc = function( command, param ){
 
 		case "common" :
 			//common action to get full data set----------------------------------
+			var measurechange  = false;
+			//construct d6 senario
+			if ( typeof(param.construct) != "undefined" && param.construct ) {
+				D6.constructor(param.prohibitQuestions, param.allowedQuestions, param.defInput);
+			}
+			//file data load
 			if ( typeof(param.rdata) != "undefined" && param.rdata ) {
 				try {
 					D6.doc.loadDataSet( decodeURIComponent(escape(atob(param.rdata))) );
@@ -360,7 +397,7 @@ D6.workercalc = function( command, param ){
 					//console.log("load data error");
 				}
 			}
-			//set one data
+			//set one input data
 			if ( typeof(param.id) != "undefined" && param.id ) {
 				D6.inSet(param.id,param.val);
 			}
@@ -370,17 +407,32 @@ D6.workercalc = function( command, param ){
 					D6.inSet(param.inputs[inp].id,param.inputs[inp].val);
 				}
 			}
-			D6.measureAdd( param.mid );
-			D6.calcMeasures(-1);
+			//measure select
+			if ( typeof(param.addmeasureid) != "undefined" && param.addmeasureid) {
+				D6.measureAdd( param.addmeasureid );
+				measurechange = true;
+			}
+			if ( typeof(param.deletemeasureid) != "undefined" && param.deletemeasureid) {
+				D6.measureDelete( param.deletemeasureid );
+				measurechange = true;
+			}
+
+			//calc and return
+			if ( measurechange ) {
+				D6.calcMeasures(-1);
+				result = D6.getAllResult();
+			} else if ( typeof(param.calc) == "undefined" || param.calc ) {
+				D6.calculateAll(-1);
+			}
 
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.getAllResult();
-			
+			if ( typeof(param.getresult) == "undefined" || param.getresult ) {
+				result = D6.getAllResult();
+			}
 			//create input components
-			result.inputPage = D6.getInputPage(param.consName,param.subName);
-			
-			//calc evaluate axis point
-			result.evaluateAxis = D6.getEvaluateAxisPoint("", param.subName);
+			if ( typeof(param.getinput) == "undefined" || param.getinput ) {
+				result.inputPage = D6.getInputPage(param.consName,param.subName);
+			}
 			break;
 
 		default:

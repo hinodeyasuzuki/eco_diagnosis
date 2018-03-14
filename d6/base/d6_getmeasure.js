@@ -127,6 +127,7 @@ D6.getMeasure = function( consName, maxPrice, notSelected )
 		ret[i].relation = relation;
 		ret[i].payBackYear = mes.payBackYear;
 		ret[i].lifeTime = mes.lifeTime;
+		ret[i].lifestyle = mes.lifestyle;
 		if ( mes.cons.color || mes.cons.consName=="consTOTAL"){
 			ret[i].color = mes.cons.color;
 		} else {

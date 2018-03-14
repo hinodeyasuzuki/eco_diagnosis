@@ -1,4 +1,4 @@
-﻿/*  2017/12/14  version 1.0
+﻿/* 2017/12/14  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -13,6 +13,8 @@
  *								2011/05/06 ported to ActionScript3
  * 								2016/04/12 ported to JavaScript
  *								2016/06/09 divided from consBase
+ * 								2017/12/14 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
  * 
  * init()			initialize, set parameters when construction
  * precalc()		called just before calc(), input data treatment and clear consumption data
@@ -24,13 +26,12 @@
  
 //Inherited class of D6.consCRsum
 D6.consEnergy = D6.object( D6.ConsBase );
-DC = D6.consEnergy;
 
-DC.init = function() {
+D6.consEnergy.init = function() {
 	//construction setting
 	this.consName = "consEnergy";    	//code name of this consumption 
 	this.consCode = "";            		//short code to access consumption, only set main consumption user for itemize
-    this.title = "全般エネルギー設定";	//consumption title name
+    this.title = "General Energy Setting";	//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "0";					//number code in items
 	this.color = "#ff0000";				//color definition in graph
@@ -40,20 +41,20 @@ DC.init = function() {
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
-	this.inputGuide = "家全体でのエネルギーの使い方や、1ヶ月あたりの光熱費について";
+	this.inputGuide = "the use of energy of the whole house, monthly bills";
 
 	// add instance combined to this class
 	this.partConsName = [		
 	];
 };
-DC.init();
+D6.consEnergy.init();
 
 
-DC.calc = function() {
+D6.consEnergy.calc = function() {
 	this.clear();
 };
 
-DC.calcMeasure = function() {
+D6.consEnergy.calcMeasure = function() {
 };
 
 

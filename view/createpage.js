@@ -19,7 +19,7 @@
 //		res.subguide[cons][subcons]	submenu guidance text for input
 //		res.combos[cons][subcons]	one component of combo written in html
 //	return
-//		page.conbo		input page html and submenu
+//		page.combo		input page html and submenu
 //		page.menu		main menu html
 //
 //  global
@@ -85,13 +85,25 @@ createInputPage = function (res) {
 				combo += ">";
 				combo += "<h3>" + res.subgroup[c][d] + "</h3>";
 				combo += "<p>" + res.subguide[c][d] + "</p>";
-				combo += "<table style='border:0;height:1em;width:100%'>";
-				combo += res.combos[c][d];
-				combo += "</table>";
+				
+				//2 column
+				var leftc = Math.round(res.combos[c][d].length / 2);
+				var rightc = res.combos[c][d].length;
+				combo += "<div class='column2'><table style='border:0;height:1em;width:100%'>";
+				for ( var i=0 ; i<leftc ; i++ ) {
+					combo+= res.combos[c][d][i];
+				}
+				combo += "</table></div>\n";
+				combo += "<div class='column2'><table style='border:0;height:1em;width:100%'>";
+				for ( i=leftc ; i<rightc ; i++ ) {
+					combo+= res.combos[c][d][i];
+				}
+				combo += "</table></div>\n";
+				
 				combo += "</li>";
 			}
 			//end of page wrapper
-			combo += "</ul></li>";
+			combo += "<p style='clear:both;'></p></ul></li>";
 	};
 		
 	page.combo = combo;
@@ -114,8 +126,8 @@ createInputPage = function (res) {
 //
 createInputButtonPageOne = function (res) {
 		if ( !res ) return "";
-		var page = "<p>" + res.title;
-		page += lang.QuestionNumber(res.numques, res.nowques ) + "</p>";
+		var page = "<h2>" + res.title;
+		page += lang.QuestionNumber(res.numques, res.nowques ) + "</h2>";
 		page += "<p>" + res.text + "</p>\n<p>";
 		for ( var i in res.defSelectValue ){
 			if( res.defSelectData[i] == -1 ) continue;
@@ -515,8 +527,8 @@ showItemizeTableSort = function (target){
 showMeasureTable = function( mesArray ){
 		var ret ="<table id='itemize' width='100%'><tr><th width='60%'>" 
 			+ lang.measure + "</th><th>" 
-			+ lang.co2reductiontitle + "(" + lang.co2unitperyear + ")</th><th>" 
-			+ ( hidePrice == 1 ? "" : lang.feereductiontitle + "(" + lang.feeunitperyear + ")</th><th>" )
+			+ lang.co2reductiontitle + " (" + lang.co2unitperyear + ")</th><th>" 
+			+ ( hidePrice == 1 ? "" : lang.feereductiontitle + " (" + lang.feeunitperyear + ")</th><th>" )
 			+ lang.merit + "</th>"+ ( pageMode != "m1" ? "<th>" + lang.select + "</th>" : "" ) 
 			+  "</tr>";
 		var mes;
@@ -583,11 +595,10 @@ showMeasureTable = function( mesArray ){
 				// restrict number of measures 
 				ret += "<tr id='mestr" + mes.mesID + "' class='" 
 					+ ( mes.selected ? "messelected " : "") 
-					+ ( count > 15 ? "over15'" : "'") 
-					+ ( count > 15 ? "style='display:none;'" : "") 
+					+ ( mes.lifestyle==1 ? "lifestyle'" : "invest'") 
 					+ ">";
 				// title and action to show detail
-				ret += "<td class='conscolor' style='border-color:"+mes.color+";" 
+				ret += "<td class='conscolor left' style='border-color:"+mes.color+";" 
 					+ mesbgcolor + "'><a rel='leanModal' href='#leanModalDialog' onclick='showModal( " + mes.mesID + ");'>"
 					+ mes.title + ( mes.conssubID > 0 ? "(" + (mes.consmesTitlePrefix ? mes.consmesTitlePrefix : mes.conssubID) + ")" : "" )
 					+ (debugMode ? " " + mes.consconsName : "")
@@ -889,7 +900,7 @@ base64.makeDOMException = function() {
     } catch (tmp) {
         // not available, just passback a duck-typed equiv
         // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Error
-        // https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Error/prototype
+        //https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Error/prototype
         var ex = new Error("DOM Exception 5");
 
         // ex.number and ex.description is IE-specific.

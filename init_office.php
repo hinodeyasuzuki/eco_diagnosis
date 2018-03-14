@@ -45,15 +45,17 @@ function getlogiclistoffice( $area )  {
 	$includeeachjs = $include_common . getlogiclistoffice( "d6" ) . getlogiclistoffice($lang["d6folder"] );
 
 
-	//2 packed js for worker : execute shortoffice.bat to make this file 
+	//2,3 packed js for worker : execute shortoffice.bat to make this file 
 	$includesumjs  = $lang["d6folder"].'/d6office.js';
+	$includesumjs_direct  = $lang["d6folder"].'/d6office_localize.js';
 
-	//3 compressed for worker : execute http://dean.edwards.name/packer/ 
+	//4,5 compressed for worker : execute http://dean.edwards.name/packer/ 
 	$includeminjs  = $lang["d6folder"].'/d6office.min.js';
+	$includeminjs_direct  = $lang["d6folder"].'/d6office_localize.min.js';
 
-	//4.5 compressed common logic : execute http://dean.edwards.name/packer/ 
-	$includemincommonjs  ='d6/d6common.min.js';
+	//2,4 compressed common logic : execute http://dean.edwards.name/packer/ 
+	$includemincorejs  ='d6/d6office_core.min.js';
 
 	//5 compressed common logic : execute http://dean.edwards.name/packer/ 
-	$includeminlogicjs  ='d6/'.$lang["d6folder"].'/d6officelogic.min.js';
+	//$includeminlogicjs  ='d6/'.$lang["d6folder"].'/d6officelogic.min.js';
 

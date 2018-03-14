@@ -1,17 +1,19 @@
-﻿/*  2017/12/14  version 1.0
+﻿/* 2017/12/14  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
- * consCKpot.js 
+ * consCRsum.js 
  * 
  * calculate consumption and measures related to car total
  * 
  * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
+ * s
  * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
  *								2011/01/21 original PHP version
  *								2011/05/06 ported to ActionScript3
  * 								2016/04/12 ported to JavaScript
+ * 								2017/12/14 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
  * 
  * init()			initialize, set parameters when construction
  * precalc()		called just before calc(), input data treatment and clear consumption data
@@ -37,7 +39,7 @@ D6.consCRsum.init = function () {
 	//construction setting
 	this.consName = "consCRsum";    	//code name of this consumption 
 	this.consCode = "CR";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "車";					//consumption title name
+    this.title = "vehicle";					//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "8";					//number code in items
 	this.color = "#ee82ee";				//color definition in graph
@@ -47,9 +49,10 @@ D6.consCRsum.init = function () {
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
-	this.inputGuide = "車・バイクの使い方について";
+	this.inputGuide = "How to use cars, automobile";
 };
 D6.consCRsum.init();
+
 
 D6.consCRsum.precalc = function() {
 	this.clear();
@@ -59,8 +62,10 @@ D6.consCRsum.precalc = function() {
 	this.car =  this.priceCar /D6.Unit.price.car;	//monthly gasoline　L/month
 };
 
+
 D6.consCRsum.calc = function() {
 };
+
 
 D6.consCRsum.calcMeasure = function( ){
 	//mCRecoDrive

@@ -62,8 +62,8 @@ D6.getInputPage = function( consName,subName ) {
 		subgroup[q.cname] = [];
 		subguide[q.cname] = [];
 		combos[q.cname] = [];
-		subguide[q.cname][subcode] = "";
-		combos[q.cname][subcode] = "";
+		subguide[q.cname][subcode] = [];
+		combos[q.cname][subcode] = [];
 
 		//only same to consName
 		for( var i in q.ques ) {
@@ -71,9 +71,9 @@ D6.getInputPage = function( consName,subName ) {
 			if ( !definp && D6.debugMode ) console.log( "defEasyQues error no " + q.ques[i] + " in scenarioset" );
 			subgroup[q.cname][subcode] = q.title;
 			if ( definp.varType == "String" ) {
-				combos[q.cname][subcode] += this.createTextArea( q.ques[i] );
+				combos[q.cname][subcode].push( this.createTextArea( q.ques[i] ) );
 			} else {
-				combos[q.cname][subcode] += this.createComboBox( q.ques[i] );
+				combos[q.cname][subcode].push( this.createComboBox( q.ques[i] ) );
 			}
 		}
 	}
@@ -127,7 +127,7 @@ D6.getInputPage = function( consName,subName ) {
 						}
 					}
 					subguide[cname][subcode] = cons.inputGuide;
-					combos[cname][subcode] = "";
+					combos[cname][subcode] = [];
 				}
 				
 				// make addlist such as countable equipment or room  
@@ -144,9 +144,9 @@ D6.getInputPage = function( consName,subName ) {
 		
 				//create combobox
 				if ( definp.varType == "String" ) {
-					combos[cname][subcode] += this.createTextArea( i );
+					combos[cname][subcode].push( this.createTextArea( i ) );
 				} else {
-					combos[cname][subcode] += this.createComboBox( i );
+					combos[cname][subcode].push( this.createComboBox( i ) );
 				}
 			}
 		}

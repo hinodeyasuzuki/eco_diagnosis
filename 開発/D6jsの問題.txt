@@ -62,4 +62,21 @@ base,disp		d6共通  ※dispの言語依存を除く
 				cn	
 
 
+■言語ファイルを分ける
+
+d6
+  home_common.min.js
+  office_common.min.js
+
+location_JP
+   +areaset
+   +home
+   +office
+   +view
+  d6_v3_***.xls
+  home.min.js   ※importScripts('../d6/home_common.min.js');でコモンを呼ぶ
+  office.min.js
+
+
+
 

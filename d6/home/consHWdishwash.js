@@ -1,4 +1,4 @@
-﻿/*  2017/12/14  version 1.0
+﻿/* 2017/12/14  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -11,6 +11,8 @@
  * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
  *								2013/10/03 created as ActionScript3
  * 								2016/04/12 ported to JavaScript
+ * 								2017/12/14 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
  * 
  * init()			initialize, set parameters when construction
  * precalc()		called just before calc(), input data treatment and clear consumption data
@@ -31,7 +33,7 @@ D6.consHWdishwash.init = function() {
 	//construction setting
 	this.consName = "consHWdishwash";  	//code name of this consumption 
 	this.consCode = "HW";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "食器洗い";			//consumption title name
+    this.title = "Dish Wash";			//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "1";					//number code in items
 	this.color = "#ffb700";				//color definition in graph
@@ -41,7 +43,7 @@ D6.consHWdishwash.init = function() {
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
-	this.inputGuide = "食器洗いの使い方について";
+	this.inputGuide = "How to use the dishwasher";
 };
 D6.consHWdishwash.init();
 

@@ -4,13 +4,15 @@
  * Home Energy Diagnosis System Ver.6
  * consHWsum.js 
  * 
- * calculate consumption and measures related to dresser
+ * calculate consumption and measures related to hot water supply
  * 
  * License: http://creativecommons.org/licenses/LGPL/2.1/
  * 
  * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
  *								2013/10/03 original ActionScript3
  * 								2016/04/12 ported to JavaScript
+ * 								2017/12/15 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
  * 
  * init()			initialize, set parameters when construction
  * precalc()		called just before calc(), input data treatment and clear consumption data
@@ -25,11 +27,11 @@ D6.consHWsum = D6.object( D6.ConsBase );
 
 
 //initialize-------------------------------
-DC.init = function() {
+D6.consHWsum.init = function() {
 	//construction setting
 	this.consName = "consHWsum";   	 	//code name of this consumption 
 	this.consCode = "HW";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "給湯";				//consumption title name
+    this.title = "hot water supply";				//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "1";					//number code in items
 	this.color = "#ffb700";				//color definition in graph
@@ -39,7 +41,7 @@ DC.init = function() {
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
-	this.inputGuide = "給湯全般の使い方について";
+	this.inputGuide = "how to use hot water supply in general";
 
 	this.hwEnergy = 0;
 
@@ -72,11 +74,11 @@ DC.init = function() {
 
 	this.reduceRateKeepStop;
 };
-DC.init();	// initialize when this class is loaded
+D6.consHWsum.init();	// initialize when this class is loaded
 
 
 //change Input data to local value 
-DC.precalc = function() {
+D6.consHWsum.precalc = function() {
 	this.clear();
 
 	// use answers for calclation
@@ -112,7 +114,7 @@ DC.precalc = function() {
 };
 
 // calculation of this consumption ------------------------------------
-DC.calc = function() {		
+D6.consHWsum.calc = function() {		
 	// guess equip type
 	if ( this.equipType <= 0 ) {
 		if ( this.priceGas == 0 ) {
@@ -258,7 +260,7 @@ DC.calc = function() {
 //		none
 // set
 //		calclate result in this.measures[] also link to D6.measuresList[]
-DC.calcMeasure = function() {
+D6.consHWsum.calcMeasure = function() {
 	var goodPerformance = false;
 		
 	// installed good performance equipments
@@ -342,7 +344,7 @@ DC.calcMeasure = function() {
 };
 
 //hot water energy is also adjusted 
-DC.calcAdjustStrategy = function( energyAdj ){
+D6.consHWsum.calcAdjustStrategy = function( energyAdj ){
 	this.heatEnergy *= energyAdj[this.mainSource];
 	this.tanklossEnergy *= energyAdj[this.mainSource];
 	this.hwEnergy *= energyAdj[this.mainSource];

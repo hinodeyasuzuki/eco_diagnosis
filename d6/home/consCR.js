@@ -1,4 +1,4 @@
-﻿/*  2017/12/14  version 1.0
+﻿/* 2017/12/14  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -12,6 +12,8 @@
  *								2011/01/21 original PHP version
  *								2011/05/06 ported to ActionScript3
  * 								2016/04/12 ported to JavaScript
+ * 								2017/12/14 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
  * 
  * init()			initialize, set parameters when construction
  * precalc()		called just before calc(), input data treatment and clear consumption data
@@ -24,25 +26,26 @@
 //Inherited class of D6.consCRsum
 D6.consCR = D6.object( D6.consCRsum );
 
-
 D6.consCR.init = function() {
 	//construction setting
 	this.consName = "consCR";    		//code name of this consumption 
 	this.consCode = "";            		//short code to access consumption, only set main consumption user for itemize
-    this.title = "車両";				//consumption title name
+    this.title = "vehicle";				//consumption title name
 	this.orgCopyNum = 1;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "8";					//number code in items
 	this.color = "#ee82ee";				//color definition in graph
-	this.countCall = "台目";			//how to point n-th equipment
+	this.countCall = "th car";			//how to point n-th equipment
+	this.addable = "vehicle";
 
 	//consCR is sub aggrigation, consCRtrip is connected to  consCRsum
     this.sumConsName = "";				//code name of consumption sum up include this
 	this.sumCons2Name = "consCRsum";	//code name of consumption related to this
 
 	//guide message in input page
-	this.inputGuide = "保有する車ごとの性能・使い方について";
+	this.inputGuide = "the performance and use of each car";
 };
 D6.consCR.init();
+
 
 D6.consCR.precalc = function() {
 	this.clear();
@@ -86,12 +89,16 @@ D6.consCR.calc2nd = function( ) {
 
 
 D6.consCR.calcMeasure = function() {
-	//mCRreplace
-	this.measures["mCRreplace"].calcReduceRate( (this.performanceNew - this.performanceNow ) / this.performanceNew );
-
+	//mCRreplace	
+	if ( !this.isSelected( "mCRreplaceElec" ) ) {
+		this.measures["mCRreplace"].calcReduceRate( (this.performanceNew - this.performanceNow ) / this.performanceNew );
+	}
+	
 	//mCRreplaceElec
-	this.measures["mCRreplaceElec"].clear();
-	this.measures["mCRreplaceElec"].electricity = this.performanceNow * this.car / this.performanceElec;
+	if ( !this.isSelected( "mCRreplace" ) ) {
+		this.measures["mCRreplaceElec"].clear();
+		this.measures["mCRreplaceElec"].electricity = this.performanceNow * this.car / this.performanceElec;
+	}
 
 };
 

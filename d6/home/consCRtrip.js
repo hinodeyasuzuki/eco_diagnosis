@@ -1,10 +1,10 @@
-﻿/*  2017/12/14  version 1.0
+﻿/* 2017/12/14  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
- * consCKpot.js 
+ * consCRtrip.js 
  * 
- * calculate consumption and measures related to pot
+ * calculate consumption and measures related to movement with cars
  * 
  * License: http://creativecommons.org/licenses/LGPL/2.1/
  * 
@@ -12,6 +12,8 @@
  *								2011/01/21 original PHP version
  *								2011/05/06 ported to ActionScript3
  * 								2016/04/12 ported to JavaScript
+ * 								2017/12/14 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
  * 
  * init()			initialize, set parameters when construction
  * precalc()		called just before calc(), input data treatment and clear consumption data
@@ -24,25 +26,26 @@
 //Inherited class of D6.consCRsum
 D6.consCRtrip = D6.object( D6.consCRsum );
 
-//初期設定値
+//initialize
 D6.consCRtrip.init = function() {
 	//construction setting
 	this.consName = "consCRtrip";    		//code name of this consumption 
 	this.consCode = "";            		//short code to access consumption, only set main consumption user for itemize
-    this.title = "移動";				//consumption title name
+    this.title = "movement";				//consumption title name
 	this.orgCopyNum = 1;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "8";					//number code in items
 	this.color = "#ee82ee";				//color definition in graph
-	this.countCall = "ヶ所目";			//how to point n-th equipment
-	this.addable = "移動先";
+	this.countCall = "th places";			//how to point n-th equipment
+	this.addable = "destination";
 
     this.sumConsName = "consCRsum";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
-	this.inputGuide = "移動先ごとの車等の使い方について";
+	this.inputGuide = "how to use cars by destinations";
 };
 D6.consCRtrip.init();
+
 
 D6.consCRtrip.precalc = function() {
 	this.clear();

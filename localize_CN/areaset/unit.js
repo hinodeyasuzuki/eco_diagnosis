@@ -236,7 +236,7 @@ D6.Unit.consToCost = function( cons, energy_name, elecType, kw )
 		if ( cons == -1 || cons == "" ) {
 			ret = "";
 		}
-		//とりあえず単価をかけあわせる 地域等により変更することが望ましい
+		//static function
 		ret = cons * D6.Unit.jules[energy_name]/1000000;
 
 		return ret;

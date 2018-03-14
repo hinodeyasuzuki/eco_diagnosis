@@ -1,4 +1,4 @@
-/*  2017/12/14  version 1.0
+/* 2017/12/14  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -12,6 +12,8 @@
  *								2011/01/21 original PHP version
  *								2011/05/06 ported to ActionScript3
  * 								2016/04/12 ported to JavaScript
+ * 								2017/12/14 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
  * 
  * init()			initialize, set parameters when construction
  * precalc()		called just before calc(), input data treatment and clear consumption data
@@ -28,7 +30,7 @@ D6.consCKsum.init = function() {
 	//construction setting
 	this.consName = "consCKsum";    	//code name of this consumption 
 	this.consCode = "CK";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "調理";				//consumption title name
+    this.title = "Cooking";				//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "4";					//number code in items
 	this.color = "#ffe4b5";				//color definition in graph
@@ -39,7 +41,7 @@ D6.consCKsum.init = function() {
 	this.residueCalc = "no";			//calculate residue
 
 	//guide message in input page
-	this.inputGuide = "調理関連の使い方について";
+	this.inputGuide = "How to use cooking equipments";
 };
 D6.consCKsum.init();
 

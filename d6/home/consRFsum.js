@@ -1,10 +1,10 @@
-﻿/*  2017/12/10  version 1.0
+﻿/* 2017/12/10  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
- * consRF.js 
+ * consRFsum.js 
  * 
- * calculate consumption and measures related to refrigelator
+ * calculate consumption and measures related to refrigerator in your hourse
  * total use
  * 
  * License: http://creativecommons.org/licenses/LGPL/2.1/
@@ -13,6 +13,8 @@
  *								2011/01/21 original PHP version
  *								2011/05/06 ported to ActionScript3
  * 								2016/04/12 ported to JavaScript
+ * 								2017/12/10 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
  */
 
 //Inherited class of D6.ConsBase
@@ -23,9 +25,8 @@ D6.consRFsum.init = function() {
 	//construction setting
 	this.consName = "consRFsum";      	//code name of this consumption 
 	this.consCode = "RF";              	//short code to access consumption, only set main consumption user for itemize
-    this.title = "冷蔵庫";				//consumption title name
+    this.title = "refrigerator";				//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
-	this.addable = "冷蔵庫";			//the name of object shown as add target
     this.sumConsName = "consTotal";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 	this.groupID = "3";					//number code in items
@@ -34,9 +35,10 @@ D6.consRFsum.init = function() {
 	this.residueCalc = "no";			//evaluate residue as #0 or not	no/sumup/yes
 
 	//guide message in input page
-	this.inputGuide = "家全体での冷蔵庫の使い方について";
+	this.inputGuide = "usage of refrigerator";
 };
 D6.consRFsum.init();
+
 
 D6.consRFsum.calc = function( ) {
 	this.clear();	
