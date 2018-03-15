@@ -135,13 +135,6 @@ graphChange = function(){
 };
 
 
-//over15show() -----------------------------------------
-//		measures list is restricted in 15. this button shows measures more than 15.
-over15show = function() {
-	localStorage.setItem('sindanOver15', "1");
-	$('.over15').show();
-};
-
 	
 //dataSave() -------------------------------------------
 //		save input data
@@ -211,7 +204,6 @@ modeChange = function( id ){
 	} else if ( id == "m2" ){
 		//measures select mode
 		$('#divco2').css('display','inline-block');
-//		$('.leftmenu').css('display','none');
 		$('.leftmenu').css('display','inline-block');
 		$('.result').css('display','inline-block');
 		$('.mesmenu').css('display','inline-block');						

@@ -312,14 +312,6 @@ conschange = function( consName, subName ){
 	
 };
 
-//over15show() -----------------------------------------
-//		show measures more than 15
-over15show = function() {
-	localStorage.setItem('sindanOver15', "1");
-	$('.over15').show();
-};
-
-
 
 //dataSave() -------------------------------------------
 //		save input data

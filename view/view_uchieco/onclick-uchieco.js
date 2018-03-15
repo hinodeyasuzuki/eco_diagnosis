@@ -104,7 +104,7 @@ getCalcResult = function( command, res ) {
 //			$("#cons").html(showItemizeTableSort(res.itemize));
 			$("#measure").html(showMeasureTable(res.measure));
 			leanModalSet();
-			$('.over15').show();
+			$('#itemize').removeClass("limit");
 			showLifestyle();
 
 			//itemize graph
@@ -154,7 +154,6 @@ getCalcResult = function( command, res ) {
 			graphItemize( res.itemize_graph );
 			graphMonthly( res.graphMonthly );
 			$("#totalReduceComment").html( showMeasureTotalMessage( res.common ) );
-			$('.over15').show();
 			showLifestyle();
 			break;
 
@@ -333,14 +332,6 @@ conschange = function( consName, subName ){
 //	startCalc( "pagelist", param );
 	
 };
-
-//over15show() -----------------------------------------
-//		show measures more than 15
-over15show = function() {
-	localStorage.setItem('sindanOver15', "1");
-	$('.over15').show();
-};
-
 
 
 //dataSave() -------------------------------------------
