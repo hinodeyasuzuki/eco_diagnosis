@@ -104,12 +104,14 @@ h2.constitle{
 	padding-right:25px;
 	background-color:#FF8;
 }
-.step span:hover, .step span:focus, .life span:hover, .life span:focus{
+.step span:hover, .step span:focus, 
+.life span:hover, .life span:focus{
 	color:#fafafa;
 	background:#009800;
 }
 
-.button:hover, .menu span:hover, span.next:hover, .button:focus, .menu span:focus, span.next:focus {
+.button:hover, .menu span:hover, span.next:hover,
+.button:focus, .menu span:focus, span.next:focus {
 	color:#fafafa;
 	background:#009800;
 }

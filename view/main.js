@@ -74,6 +74,7 @@ var tabNowName = "easy01";		// default page
 var tabSubNowName = "easy01";	// default sub page
 var showPageName = lang.startPageName;	// title of default page
 var tabSubNow = tabNowName + "-" + tabSubNowName;
+var showOver15 = false;
 
 var tabNowIndex = 0;
 var tabSubNowCode = "";
@@ -239,8 +240,8 @@ getCalcResult = function( command, res ) {
 			});			
 			tabset(tabNow);	
 
-			if ( localStorage.getItem('sindanOver15') ) {
-				$('.over15').toggle();
+			if ( showOver15 ) {
+				$('#itemize').removeClass("limit");
 			}
 			
 			//debug
@@ -291,8 +292,8 @@ getCalcResult = function( command, res ) {
 			//change measure list
 			$("#measure").html(mestitle + showMeasureTable(res.measure) );
 			leanModalSet();
-			if ( localStorage.getItem('sindanOver15') ) {
-				$('.over15').show();
+			if ( showOver15 ) {
+				$('#itemize').removeClass("limit");
 			}
 			
 			//comment

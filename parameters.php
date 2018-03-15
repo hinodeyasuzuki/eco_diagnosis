@@ -4,7 +4,7 @@
  *	parameters setting 
  */
 
-$opendate = "2018/01/09";		//release date
+$opendate = "2018/03/15";		//release date
 
 //comment out when you need to set parameters under this file================================
 

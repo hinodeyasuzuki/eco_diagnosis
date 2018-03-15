@@ -37,8 +37,8 @@ D6.consTVsum.init = function() {
 	//construction setting
 	this.consName = "consTVsum";    	//code name of this consumption 
 	this.consCode = "TV";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "TV";				//consumption title name
-	this.orgCopyNum = 1;                //original copy number in case of countable consumption, other case set 0
+    this.title = "TV";					//consumption title name
+	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "7";					//number code in items
 	this.color = "#00ff00";				//color definition in graph
 

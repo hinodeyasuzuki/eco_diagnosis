@@ -196,7 +196,7 @@ createPageList = function (res) {
 createModalPage = function( mes ){
 		ret = getMeasureComment( mes );
 		var modalHtml = "<h2>" + mes.title + "</h2>";
-		modalHtml += "<img src='./view/images/p" + mes.figNum + ".jpg' class='modalfig' title='イラスト'>";
+		modalHtml += "<img src='./view/images/p" + mes.figNum + ".jpg' class='modalfig' alt='figure of "+ mes.title+"'>";
 		modalHtml += "<div class='modaladvice'><p>" + mes.advice + "</p><hr></div>";
 		modalHtml += "<div class='modaljoyfull' style='display:none;'><p>" + mes.joyfull + "</p><hr></div>";
 
@@ -525,7 +525,7 @@ showItemizeTableSort = function (target){
 // global
 //		showMeasureTable_Max   : list size
 showMeasureTable = function( mesArray ){
-		var ret ="<table id='itemize' width='100%'><tr><th width='60%'>" 
+		var ret ="<table id='itemize' class='limit' width='100%'><tr><th width='60%'>" 
 			+ lang.measure + "</th><th>" 
 			+ lang.co2reductiontitle + " (" + lang.co2unitperyear + ")</th><th>" 
 			+ ( hidePrice == 1 ? "" : lang.feereductiontitle + " (" + lang.feeunitperyear + ")</th><th>" )
@@ -1015,4 +1015,11 @@ base64.encode = function(s) {
         break;
     }
     return x.join('');
+};
+
+//over15show() -----------------------------------------
+//		show measures more than 15
+over15show = function() {
+	showOver15 = true;
+	$('#itemize').removeClass("limit");
 };
