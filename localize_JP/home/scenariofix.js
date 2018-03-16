@@ -387,6 +387,26 @@ D6.scenario.areafix = function() {
 	D6.scenario.defInput["i621"] = {  cons:"consTVsum",  title:"テレビの性能",  unit:"",  text:"テレビの省エネ性能は良いですか。（1級ですか）", inputType:"sel621", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"3",d11p:"0",d12t:"2",d12p:"1",d13t:"1",d13p:"2",d1w:"1",d1d:"0", d21t:"3",d21p:"0",d22t:"2",d22p:"1",d23t:"1",d23p:"2",d2w:"1",d2d:"0", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel621"]= [ "選んで下さい", "とてもよい", "ふつう", "あまりよくない", "わからない", "" ];			D6.scenario.defSelectData['sel621']= [ '-1', '1', '2', '3', '4' ];
 	D6.scenario.defInput["i421"] = {  cons:"consDRsum",  title:"洗濯機の性能",  unit:"",  text:"洗濯機の省エネ性能は良いですか。（1級ですか）", inputType:"sel421", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"3",d11p:"0",d12t:"2",d12p:"1",d13t:"1",d13p:"2",d1w:"1",d1d:"0", d21t:"3",d21p:"0",d22t:"2",d22p:"1",d23t:"1",d23p:"2",d2w:"1",d2d:"0", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel421"]= [ "選んで下さい", "とてもよい", "ふつう", "あまりよくない", "わからない", "" ];			D6.scenario.defSelectData['sel421']= [ '-1', '1', '2', '3', '4' ];
 	D6.scenario.defInput["i721"] = {  cons:"consRFsum",  title:"冷蔵庫の性能",  unit:"",  text:"冷蔵庫の省エネ性能は良いですか。（1級ですか）", inputType:"sel721", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"3",d11p:"0",d12t:"2",d12p:"1",d13t:"1",d13p:"2",d1w:"1",d1d:"0", d21t:"3",d21p:"0",d22t:"2",d22p:"1",d23t:"1",d23p:"2",d2w:"1",d2d:"0", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel721"]= [ "選んで下さい", "とてもよい", "ふつう", "あまりよくない", "わからない", "" ];			D6.scenario.defSelectData['sel721']= [ '-1', '1', '2', '3', '4' ];
-	
+
+/*	
+	//the way to create a new measure==========================================================
+	1) write measure data set to excel sheet, and get one line of definition in this function
+
+ex. 	D6.scenario.defMeasures['mTOsolar'] = { mid:"1",  name:"mTOsolar",  title:"太陽光発電を設置する",  easyness:"0.5",  refCons:"consTotal",  titleShort:"太陽光発電", level:"",  figNum:"25",  lifeTime:"20",  price:"400000",  roanShow:"",  standardType:"",  subsidy :"",  advice:"....",   lifestyle:"",   season:"wss"};
+
+	2)write question related to the measure to excel sheet, and get one line of definition in this function
+
+ex.	D6.scenario.defInput["i242"] = {  cons:"consACheat",  title:"部屋の寒さ",  unit:"",  text:"その部屋は暖房は効きますか", inputType:"sel242", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel242"]= [ "選んで下さい", "暖房すると寒さは感じない", "やや寒い", "なかなか暖まらない", "暖房しても寒い", "暖房はしない", "" ];			D6.scenario.defSelectData['sel242']= [ '-1', '1', '2', '3', '4', '5' ];
+
+	3)override and add functions in cons strategy file. to similar to /d6/home/*.php
+
+	D6.consTotal.org_calcMeasure	D6.consTotal.calcMeasure;
+	D6.consTotal.calcMeasure = {
+		D6.consTotal.org_calcMeasure();
+		//reduce 0.2 of total
+		this.measures[ "mHWshowerTime" ].calcReduceRate( 0.2 );
+	};
+*/
+
 };
 

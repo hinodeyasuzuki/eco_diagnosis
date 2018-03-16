@@ -7,7 +7,7 @@
 * 								2016/04/12 js
 */
 
-D6.area = D6.patch( D6.area , {
+D6.patch( D6.area , {
 
 	//name of prefecture/city
 	//	prefName[prefectureid/cityid]

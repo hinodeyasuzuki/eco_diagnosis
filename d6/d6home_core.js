@@ -854,6 +854,7 @@ D6.area = {
 	3.95	,	//hokkaido
 	],
 
+	
 	// convert energy name to energy_type id
 	//
 	//	energyCode2id[energy_name]	: get energy code

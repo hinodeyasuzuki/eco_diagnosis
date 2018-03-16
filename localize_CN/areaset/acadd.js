@@ -16,7 +16,7 @@
  * 								2018/03/14 			global setting fix
  */
 
-D6.acadd = Object.assign( D6.acadd, {
+D6.patch( D6.acadd, {
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //

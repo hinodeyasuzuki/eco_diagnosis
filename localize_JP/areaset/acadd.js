@@ -16,7 +16,7 @@
  * 								2018/03/14 			global setting fix
  */
 
-D6.acadd = Object.assign( D6.acadd, {
+D6.patch( D6.acadd, {
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //
@@ -235,17 +235,6 @@ factorPrefTimeMonth : [
 	[ [ 0, 0, 0, 0, 0, 0, 0],   //那覇
 	  [ 0, 0, 0, 0, 0, 0, 0], 
 	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0] ] ],
-
-	getArray : function( prefParam ) {
-		var ret;
-		var pref = prefParam;
-		if ( pref>47 || pref <0 ) {
-			pref = 0;
-		}
-		ret = this.factorPrefTimeMonth[parseInt(pref)];
-
-		return ret;
-	}
+	  [ 0, 0, 0, 0, 0, 0, 0] ] ]
 
 });

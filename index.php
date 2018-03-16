@@ -14,7 +14,7 @@
 //develop mode parameters  =======================================================
 session_start();
 date_default_timezone_set("Asia/Tokyo");
-$jqueryVersion = "3.3.1";
+$jqueryVersion = "2.2.4";
 $forceMode = 5;		//can be over rided 1:debug, 3:worker test, 4:packer test, 5;release
 
 

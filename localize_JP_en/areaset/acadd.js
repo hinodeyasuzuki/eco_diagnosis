@@ -16,7 +16,7 @@
  * 								2018/03/14 			global setting fix
  */
 
-
+D6.patch( D6.acadd, {
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //
@@ -42,7 +42,7 @@
 //
 // used in Unit.setArea() function and set Unit.plusHeatFactor_mon
 //
-D6.acadd.factorPrefTimeMonth = [
+factorPrefTimeMonth : [
 	[ [ 0, 0, 0, 0, 0, 0, 0],   //神戸
 	  [ 0, 0, 0, 0, 0, 0, 0], 
 	  [ 0, 0, 0, 0, 0, 0, 0], 
@@ -235,5 +235,6 @@ D6.acadd.factorPrefTimeMonth = [
 	[ [ 0, 0, 0, 0, 0, 0, 0],   //那覇
 	  [ 0, 0, 0, 0, 0, 0, 0], 
 	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0] ] ];
+	  [ 0, 0, 0, 0, 0, 0, 0] ] ]
 
+});

@@ -16,7 +16,7 @@
  * 								2018/03/14 			global setting fix
  */
  
-D6.accons = Object.assign( D6.accons, {
+D6.patch( D6.accons, {
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //
