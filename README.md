@@ -72,7 +72,7 @@ You can fill efficent equipment, price, adive message, subsidy information, ques
 * intro.js : introjs.com
  
 
-#copyright
+## copyright
 Copyright 2011－2018（C） Yasufumi Suzuki, Hinodeya Insititute for Ecolife co.Ltd.
 Released under the MIT license
 
