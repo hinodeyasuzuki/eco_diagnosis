@@ -1,10 +1,10 @@
-/*  2017/12/15  version 1.0
+/* 2017/12/15  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
- * consLIsum.js 
+ * consTotal.js 
  * 
- * calculate consumption and measures related to light
+ * calculate consumption and measures related to total house
  * 
  * License: http://creativecommons.org/licenses/LGPL/2.1/
  * 
@@ -12,6 +12,8 @@
  *								2011/01/21 original PHP version
  *								2011/05/06 ported to ActionScript3
  * 								2016/04/12 ported to JavaScript
+ * 								2017/12/15 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
  * 
  * init()			initialize, set parameters when construction
  * precalc()		called just before calc(), input data treatment and clear consumption data
@@ -26,6 +28,22 @@ D6.consTotal = D6.object( D6.ConsBase );
 
 //initialize setting
 D6.consTotal.init = function() {
+	//construction setting
+	this.consName = "consTotal";   		//code name of this consumption 
+	this.consCode = "TO";           	//short code to access consumption, only set main consumption user for itemize
+    this.title = "whole";				//consumption title name
+	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
+	this.groupID = "9";					//number code in items
+	this.color = "#a9a9a9";				//color definition in graph
+	this.countCall = "";				//how to point n-th equipment
+
+    this.sumConsName = "";				//code name of consumption sum up include this
+	this.sumCons2Name = "";	//code name of consumption related to this
+
+	//guide message in input page
+	this.inputGuide = "Basic information about the area and house";
+
+
 	//parameters related to solar and nitght time electricity usage
 	this.ratioNightEcocute = 0.4;		//night consumption rate of heat pump
 	this.ratioNightHWElec = 0.6;		//night consumption rate of not heat pump
@@ -40,23 +58,9 @@ D6.consTotal.init = function() {
 
 	this.seasonConsPattern = [ 1.4, 1, 1.2 ];	// consumption rate  - winter, spring, summer
 
-	//construction setting
-	this.consName = "consTotal";   		//code name of this consumption 
-	this.consCode = "TO";           	//short code to access consumption, only set main consumption user for itemize
-    this.title = "全体";				//consumption title name
-	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
-	this.groupID = "9";					//number code in items
-	this.color = "#a9a9a9";				//color definition in graph
-	this.countCall = "";				//how to point n-th equipment
-
-    this.sumConsName = "";				//code name of consumption sum up include this
-	this.sumCons2Name = "";	//code name of consumption related to this
-
-	//guide message in input page
-	this.inputGuide = "地域や家の基本情報について";
-
 };
 D6.consTotal.init();
+
 
 //change Input data to local value 
 D6.consTotal.precalc = function() {

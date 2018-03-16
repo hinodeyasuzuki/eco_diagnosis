@@ -56,17 +56,19 @@ $include_logic .= getlogiclist( $lang["d6folder"] );
 
 $includeeachjs = $include_common . $include_logic;
 
-//2 packed js for worker : execute short.bat to make this file 
+//3 packed js for worker : execute short.bat to make this file 
 $includesumjs  = $lang["d6folder"].'/d6home.js';
+$includesumjs_direct  = $lang["d6folder"].'/d6home_localize.js';
 
-//3 compressed for worker : execute http://dean.edwards.name/packer/ 
+//5 compressed for worker : execute http://dean.edwards.name/packer/ 
 $includeminjs  = $lang["d6folder"].'/d6home.min.js';
+$includeminjs_direct  = $lang["d6folder"].'/d6home_localize.min.js';
 	
-//4.5 compressed common logic : execute http://dean.edwards.name/packer/ 
-$includemincommonjs  ='d6/d6common.min.js';
+//2,4 compressed common logic : execute http://dean.edwards.name/packer/ 
+$includemincorejs  ='d6/d6home_core.min.js';
 
 //5 compressed common logic : execute http://dean.edwards.name/packer/ 
-$includeminlogicjs  ='d6/'.$lang["d6folder"].'/d6homelogic.min.js';
+//$includeminlogicjs  ='d6/'.$lang["d6folder"].'/d6homelogic.min.js';
 	
 // joyfull mode not use------------------------------------------------------
 if ( $joyfullMode == 1 ) {

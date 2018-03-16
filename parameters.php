@@ -4,7 +4,11 @@
  *	parameters setting 
  */
 
+<<<<<<< HEAD
 $opendate = "2018/01/04";		//release date
+=======
+$opendate = "2018/03/15";		//release date
+>>>>>>> ac37b6a... make d6_core as independent to localize
 
 //comment out when you need to set parameters under this file================================
 

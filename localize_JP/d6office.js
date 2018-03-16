@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿/*  2017/12/10  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -8774,3 +8775,7 @@ D6.ObjArraySort = function(ary, key, order) {
     });
 };
 
+=======
+importScripts('../d6/d6office_core.js');
+importScripts('./d6office_localize.js');
+>>>>>>> ac37b6a... make d6_core as independent to localize

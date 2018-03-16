@@ -49,13 +49,6 @@ graphChange = function(){
 };
 
 
-//over15show() -----------------------------------------
-//		measures list is restricted in 15. this button shows measures more than 15.
-over15show = function() {
-	localStorage.setItem('sindanOver15', "1");
-	$('.over15').show();
-};
-
 	
 //dataSave() -------------------------------------------
 //		save input data

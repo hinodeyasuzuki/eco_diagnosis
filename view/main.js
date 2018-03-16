@@ -13,9 +13,10 @@
 */
 
 /*
-	1) click function is listed in each view as view/onclick*.js
-	2) startCalc(param, command ) connect to D6 calculation
-	3) result is dealed in getCalcResult( command, res )
+	1) click function is listed in each view in view/onclick*.js and call startCalc(param, command ) in d6facade.js
+	2) startCalc call workerCalc(param, command ) function as web-worker in d6facade.js
+	3) d6 functions are written in d6*.js
+	4) callback getCalcResult( command, res ) function in main.js or override in view
 	
 	"command" string is same to "command" 
 	
@@ -24,15 +25,15 @@
 	addandstart			add one room or equipment and calculate 
 	tabclick			change consumption group and prepare questions
 	subtabclick			change consumption of subgroup and prepare questions
-	inchange			set input paramue and calculate
-	inchange_only		set input paramue but not calculate
-	quespne_next		go to next question in case of smartphone
-	quesone_prev		go to previous question in case of smartphone
-	quesone_set			set input paramue and go to next question in case of smartphone
+	inchange			set input parameter and calculate
+	inchange_only		set input parameter but not calculate
+	quespne_next		go to next question in case of smart phone
+	quesone_prev		go to previous question in case of smartp hone
+	quesone_set			set input parameter and go to next question in case of smart phone
 	recalc				calculate
-	pagelist			consumption list which can be select in case of smartphone
+	pagelist			consumption list which can be select in case of smart phone
 	measureadd			adopt measure as selectedlist and calculate
-	measuredelete		release measure whitch is in selectedlist and calclulate
+	measuredelete		release measure which is in selectedlist and calculate
 	graphchange			change graph type
 	add_demand			add equipment to estimate demand
 	demand				show demand estimation page with graph
@@ -44,6 +45,20 @@
 	load				load input data from browser -- not installed --
 	common				any type of use
 */
+
+var commandset = {
+	"start" : {
+		recalc : true,
+		draw_tab : true,
+		draw_inputPage : true,
+		draw_buttonInputPage : true,
+		draw_graphAverage : true,
+		draw_tableAverage : true,
+		draw_graphMonthly : true,
+		draw_graphItemize : true,
+		draw_tableMeasures : true,
+	}
+};
 
 //useWorker,debugMode is set in php files
 var includejs = ( useCode==2 ? includesumjs : includeminjs);
@@ -59,6 +74,7 @@ var tabNowName = "easy01";		// default page
 var tabSubNowName = "easy01";	// default sub page
 var showPageName = lang.startPageName;	// title of default page
 var tabSubNow = tabNowName + "-" + tabSubNowName;
+var showOver15 = false;
 
 var tabNowIndex = 0;
 var tabSubNowCode = "";
@@ -84,6 +100,8 @@ onloadStartParamsSet = function(param){
 
 // initialize after html and scripts are loaded ========================================
 $(document).ready(function(){
+	
+	//common start condition design
 	$(".preloader").hide();
 	$(".contents").show();
 	$(".page").css({opacity: '1'});
@@ -106,7 +124,6 @@ $(document).ready(function(){
 
 	} else {
 		//no web-worker
-		if ( useWorker ) //alert("sorrry.  web woker dosen't work.");
 		useWorker = false;
 		includejs = " [use each js] ";
 	};
@@ -137,6 +154,7 @@ $(document).ready(function(){
 
 	if (debugMode) console.log(param);
 	
+	//initialize d6
 	startCalc( "start", param );
 
 });
@@ -175,9 +193,10 @@ function startCalc( command, param ){
 
 
 // getCalcResult( command, res ) ----------------------------------------------
-//		call backed by web-worker, called after workercalc
+//		common page generator
+//		call backed by web-worker, called by workercalc in d6facade.js
 //		display calculation result
-//		in smartphone this is overrided in design-common/onclick-buttons.js
+//		in smart phone this is override in design-common/onclick-buttons.js
 // parameter
 //		command : action code( string ) switch action with this code
 //		res : result parameters from worker
@@ -189,6 +208,8 @@ getCalcResult = function( command, res ) {
 	function isset( data ){
 		return ( typeof( data ) != 'undefined' );
 	};
+
+	var mestitle = "<h3>" + lang.effectivemeasures + "</h3>";
 	switch( command ) {
 		
 		case "start":
@@ -202,9 +223,9 @@ getCalcResult = function( command, res ) {
 			$('#tabcontents').html( inputHtml.combo );
 
 			//display results
-			$("#average").html(showAverageTable(res.average));
-			$("#cons").html(showItemizeTable(res.itemize));
-			$("#measure").html("<h3>" + lang.effectivemeasures + "</h3>" + showMeasureTable(res.measure));
+			$("#average").html( showAverageTable(res.average) );
+			$("#cons").html( showItemizeTable(res.itemize) );
+			$("#measure").html( mestitle + showMeasureTable(res.measure) );
 			leanModalSet();
 
 			//display graph
@@ -219,8 +240,8 @@ getCalcResult = function( command, res ) {
 			});			
 			tabset(tabNow);	
 
-			if ( localStorage.getItem('sindanOver15') ) {
-				$('.over15').toggle();
+			if ( showOver15 ) {
+				$('#itemize').removeClass("limit");
 			}
 			
 			//debug
@@ -263,16 +284,16 @@ getCalcResult = function( command, res ) {
 			//in case of input change
 			
 			//change result
-			$("#average").html(showAverageTable(res.average));
-			$("#cons").html(showItemizeTable(res.itemize));
+			$("#average").html( showAverageTable(res.average) );
+			$("#cons").html( showItemizeTable(res.itemize) );
 			graphItemize( res.itemize_graph );
 			graphMonthly( res.monthly );
 			
 			//change measure list
-			$("#measure").html("<h3>" + lang.effectivemeasures + "</h3>" + showMeasureTable(res.measure) );
+			$("#measure").html(mestitle + showMeasureTable(res.measure) );
 			leanModalSet();
-			if ( localStorage.getItem('sindanOver15') ) {
-				$('.over15').show();
+			if ( showOver15 ) {
+				$('#itemize').removeClass("limit");
 			}
 			
 			//comment
@@ -289,13 +310,13 @@ getCalcResult = function( command, res ) {
 			break;
 			
 		case "add_demand":			//view_base
-			$("div#inDemandSumup").html(showDemandSumupPage(res.demandin));
-			$("div#inDemandLog").html(showDemandLogPage(res.demandlog));
+			$("div#inDemandSumup").html( showDemandSumupPage(res.demandin) );
+			$("div#inDemandLog").html( showDemandLogPage(res.demandlog) );
 			break;
 
 		case "demand":				//view_base
-			$("div#inDemandSumup").html(showDemandSumupPage(res.demandin));
-			$("div#inDemandLog").html(showDemandLogPage(res.demandlog));
+			$("div#inDemandSumup").html( showDemandSumupPage(res.demandin) );
+			$("div#inDemandLog").html( showDemandLogPage(res.demandlog) );
 			graphDemand( res.graphDemand );
 			break;
 			

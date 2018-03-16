@@ -32,6 +32,52 @@ var itemizeGraphTarget = "";
 var graphCO2averageTarget = "";
 var modechangeid = "";
 
+// change display lifestyle or invest 
+var displifestyle  = true;
+showLifestyle = function(){
+	var c = 0;
+	var maxshow = 12;		//max show
+	if ( displifestyle ) {
+		$("tr").each(function(){
+			if( $(this).hasClass("invest") ) $(this).hide();
+			if( $(this).hasClass("lifestyle") ){
+				c++;
+				if ( c>=maxshow ) { 
+					$(this).hide();
+				} else {
+					$(this).show();
+				}
+			}
+		});
+	} else {
+		$("tr").each(function(){
+			if( $(this).hasClass("lifestyle") ) $(this).hide();
+			if( $(this).hasClass("invest") ){
+				c++;
+				if ( c>=maxshow ) {
+					$(this).hide();
+				} else {
+					$(this).show();
+				}
+			}
+		});
+	}
+};
+
+changeLifeStyle = function(m){
+	if ( (displifestyle && m==0) || ( !displifestyle && m==1) ) {
+		displifestyle = !displifestyle;
+	}
+	showLifestyle();
+	if ( m==0 ){
+		$("#L0").addClass("selected");
+		$("#L1").removeClass("selected");
+	} else {
+		$("#L0").removeClass("selected");
+		$("#L1").addClass("selected");
+	}
+};
+
 // getCalcResult( command, res ) --------------------------------------
 //		callback by web-worker, override to main.js
 //		display calculation result
@@ -55,29 +101,33 @@ getCalcResult = function( command, res ) {
 				$("#quescontents").html( createInputButtonPageOne(res.quesone) );
 			}
 			$('#tabcontents').html( inputHtml.combo );
-			$("#cons").html(showItemizeTableSort(res.cons));
+//			$("#cons").html(showItemizeTableSort(res.itemize));
 			$("#measure").html(showMeasureTable(res.measure));
 			leanModalSet();
+			$('#itemize').removeClass("limit");
+			showLifestyle();
 
+			//itemize graph
 			if ( itemizeGraphTarget !="" ) {
-				graphItemizeCommon( res.graphItemize, itemizeGraphTarget );
+				graphItemizeCommon( res.itemize_graph, itemizeGraphTarget );
 			} else {
-				graphItemize( res.graphItemize );
+				graphItemize( res.itemize_graph );
 			}
 			$("#totalReduceComment").html( showMeasureTotalMessage( res.common ) );
 
-			graphEnergy(res.averageData);
+			//energy compare to average graph
+			graphEnergy(res.average_graph);
 			if ( graphCO2averageTarget !="" ) {
-				graphCO2averageCommon(res.averageData, graphCO2averageTarget);
+				graphCO2averageCommon(res.average_graph, graphCO2averageTarget);
 			} else {
-				graphCO2average(res.averageData);
+				graphCO2average(res.average_graph);
 			}
 			if( debugMode ) {
 				console.log( "return value from d6 worker----" );
 				console.log( res );
 			}
 			if ( modechangeid == "m6" ) {
-				uchiecoTargetSet( res.averageData );
+				uchiecoTargetSet( res.average_graph );
 			}
 			break;
 		
@@ -88,6 +138,7 @@ getCalcResult = function( command, res ) {
 		case "quesone_next":
 		case "quesone_prev":
 			if ( res.quesone.info == "end") {
+				$( "#p5").show();	
 				modeChange("m5");
 			} else {
 				var ret = createInputButtonPageOne(res.quesone);
@@ -98,14 +149,16 @@ getCalcResult = function( command, res ) {
 		case "measureadd":
 		case "measuredelete":
 			$("#average").html(showAverageTable(res.average));
-			$("#cons").html(showItemizeTable(res.cons));
-			graphItemize( res.graphItemize );
+//			$("#cons").html(showItemizeTable(res.cons));
+			$("#measure").html(showMeasureTable(res.measure));
+			graphItemize( res.itemize_graph );
 			graphMonthly( res.graphMonthly );
 			$("#totalReduceComment").html( showMeasureTotalMessage( res.common ) );
+			showLifestyle();
 			break;
 
 		case "graphchange":
-			graphItemize( res );
+			graphItemize( res.itemize_graph );
 			break;
 		
 		case "save":
@@ -116,7 +169,7 @@ getCalcResult = function( command, res ) {
 		case "modal":
 			$("#header")[0].scrollIntoView(true);
 			leanModalSet();
-			var modalHtml = createModalPage( res.measureDetail );
+			var modalHtml = createModalPage( res.measure_detail );
 			$("#modal-contents").html( modalHtml );
 			if ( typeof( modalJoy ) != 'undefined' && modalJoy == 1 ){
 				$(".modaljoyfull").show();
@@ -280,14 +333,6 @@ conschange = function( consName, subName ){
 	
 };
 
-//over15show() -----------------------------------------
-//		show measures more than 15
-over15show = function() {
-	localStorage.setItem('sindanOver15', "1");
-	$('.over15').show();
-};
-
-
 
 //dataSave() -------------------------------------------
 //		save input data
@@ -351,6 +396,8 @@ uchiecoTargetSet = function(res) {
 //		id : code "m1" to "m10" (string)
 modeChange = function( id ){
 	var param={};
+	param.consName = tabNowName;
+	param.subName = tabSubNowName;
 
 	modechangeid = id;
 	$(".menu span").removeClass("selected");
@@ -358,20 +405,16 @@ modeChange = function( id ){
 	$(".menu").hide();
 	$(".page").hide();
 	$( "#p" + id.substr(1,10) ).show();	
-	$("#step span").removeClass("already");
+	$(".step span").removeClass("selected");
 
 	switch( id ) {
 		case "m2":
 			//guide
-			param.consName = tabNowName;
-			param.subName = tabSubNowName;
-			$("#s4").addClass("already");
+			$("#s4").addClass("selected");
 			break;
 		case "m3":
 			//　question
-			param.consName = tabNowName;
-			param.subName = tabSubNowName;
-			$("#s4").addClass("already");
+			$("#s4").addClass("selected");
 			/* //in case of question list change
 			param.subName = [
 			'i010',
@@ -387,20 +430,17 @@ modeChange = function( id ){
 			break;
 		case "m4":
 			// question list
-			$("#s4").addClass("already");
+			$("#s4").addClass("selected");
+			startCalc( "recalc", param );
 			break;
 		case "m5":
 			// 
-			param.consName = tabNowName;
-			param.subName = tabSubNowName;
-			$("#s5").addClass("already");
+			$("#s5").addClass("selected");
 			startCalc( "recalc", param );
 			break;
 		case "m6":
-			param.consName = tabNowName;
-			param.subName = tabSubNowName;
 			graphCO2averageTarget = "graphCO2average2";
-			$("#s6").addClass("already");
+			$("#s6").addClass("selected");
 			startCalc( "recalc", param );
 			break;
 		case "m7":
@@ -408,18 +448,14 @@ modeChange = function( id ){
 			hideAverage = 1;
 			itemizeGraphTarget = "graph2";
 			graphCO2averageTarget = "";
-			param.consName = tabNowName;
-			param.subName = tabSubNowName;
-			$("#s7").addClass("already");
+			$("#s7").addClass("selected");
 			startCalc( "recalc", param );
 			break;
 		case "m8":
 			hideAverage = 1;
 			pageMode = "m2";
 			itemizeGraphTarget = "";
-			param.consName = tabNowName;
-			param.subName = tabSubNowName;
-			$("#s8").addClass("already");
+			$("#s8").addClass("selected");
 			startCalc( "recalc", param );
 			break;
 		case "m9":
