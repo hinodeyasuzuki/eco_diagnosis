@@ -22,5 +22,7 @@ $opendate = "2018/03/15";		//release date
 //$hidePrice = 0;			//set as $_GET["hideprice"] 0:show,1:hide   dont show price
 //$messhownumber = 7;		//set as $_GET["messhownumber"] dispMode 3/6
 
-$oneAreaRelease = false;		//set true in case of release as one area
+$oneAreaRelease = false;		//set true in case of release in one area
+								//false: generate related develop link
 
+								

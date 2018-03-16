@@ -16,7 +16,7 @@
  * 								2018/03/14 			global setting fix
  */
 
-D6.area = Object.assign( D6.area, {
+D6.patch( D6.area, {
 
 	//name of prefecture
 	//	prefName[prefecture]

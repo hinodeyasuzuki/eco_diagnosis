@@ -408,7 +408,7 @@ D6.scenario.areafix = function() {
  * 								2018/03/14 			global setting fix
  */
 
-D6.acadd = Object.assign( D6.acadd, {
+D6.patch( D6.acadd, {
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //
@@ -627,18 +627,7 @@ factorPrefTimeMonth : [
 	[ [ 0, 0, 0, 0, 0, 0, 0],   //那覇
 	  [ 0, 0, 0, 0, 0, 0, 0], 
 	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0] ] ],
-
-	getArray : function( prefParam ) {
-		var ret;
-		var pref = prefParam;
-		if ( pref>47 || pref <0 ) {
-			pref = 0;
-		}
-		ret = this.factorPrefTimeMonth[parseInt(pref)];
-
-		return ret;
-	}
+	  [ 0, 0, 0, 0, 0, 0, 0] ] ]
 
 });
 ﻿/*  2017/12/16  version 1.0
@@ -659,7 +648,7 @@ factorPrefTimeMonth : [
  * 								2018/03/14 			global setting fix
  */
  
-D6.accons = Object.assign( D6.accons, {
+D6.patch( D6.accons, {
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //
@@ -882,18 +871,7 @@ factorPrefTimeMonth : [
 [ [ 0.11, 0.07, 0.06, 0.05, 0.04, 0.08, 0.08, 0.39, 0.38, 0.38, 0.36, 0.33],   //那覇
   [ 0.08, 0.03, 0.02, 0.02, 0.02, 0.06, 0.06, 0.61, 0.59, 0.58, 0.56, 0.51], 
   [ 0.09, 0.05, 0.03, 0.03, 0.02, 0.06, 0.06, 0.46, 0.45, 0.44, 0.43, 0.39], 
-  [ 0.11, 0.07, 0.06, 0.05, 0.04, 0.08, 0.08, 0.35, 0.35, 0.34, 0.33, 0.3] ] ],
-  
-	getArray : function( prefParam ) {
-		var ret;
-		var pref = prefParam;
-		if ( pref>47 || pref <0 ) {
-			pref = 0;
-		}
-		ret = this.factorPrefTimeMonth[pref];
-
-		return ret;
-	}
+  [ 0.11, 0.07, 0.06, 0.05, 0.04, 0.08, 0.08, 0.35, 0.35, 0.34, 0.33, 0.3] ] ]
 
 });
 
@@ -915,7 +893,7 @@ factorPrefTimeMonth : [
  * 								2018/03/14 			global setting fix
  */
  
-D6.acload = Object.assign( D6.acload, {
+D6.patch( D6.acload, {
 
 // getArray(param)  return paramArray
 //		param: prefecture(original)
@@ -1139,19 +1117,7 @@ factorPrefTimeMonth: [
 [ [ 0.12, 0.08, 0.07, 0.06, 0.05, 0.05, 0.09, 0.55, 0.55, 0.53, 0.52, 0.47],   //那覇
   [ 0.09, 0.04, 0.03, 0.02, 0.02, 0.06, 0.06, 0.76, 0.75, 0.74, 0.72, 0.67], 
   [ 0.1, 0.05, 0.04, 0.03, 0.03, 0.07, 0.07, 0.64, 0.62, 0.62, 0.6, 0.54], 
-  [ 0.12, 0.08, 0.06, 0.06, 0.04, 0.08, 0.08, 0.51, 0.5, 0.49, 0.48, 0.43] ] ],
-
-
-	getArray : function( prefParam ) {
-		var ret;
-		var pref = prefParam;
-		if ( pref>47 || pref <0 ) {
-			pref = 0;
-		}
-		ret = this.factorPrefTimeMonth[pref];
-
-		return ret;
-	}
+  [ 0.12, 0.08, 0.06, 0.06, 0.04, 0.08, 0.08, 0.51, 0.5, 0.49, 0.48, 0.43] ] ]
 
 } );
 ﻿/* 2017/12/16  version 1.0
@@ -1172,7 +1138,7 @@ factorPrefTimeMonth: [
  * 								2018/03/14 			global setting fix
  */
 
-D6.area = Object.assign( D6.area, {
+D6.patch( D6.area, {
 
 	//name of prefecture
 	//	prefName[prefecture]

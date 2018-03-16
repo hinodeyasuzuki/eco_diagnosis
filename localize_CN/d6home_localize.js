@@ -423,7 +423,7 @@ D6.scenario.areafix = function() {
  * 								2018/03/14 			global setting fix
  */
 
-D6.acadd = Object.assign( D6.acadd, {
+D6.patch( D6.acadd, {
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //
@@ -537,7 +537,7 @@ factorPrefTimeMonth : [
  * 								2018/03/14 			global setting fix
  */
  
-D6.accons = Object.assign( D6.accons, {
+D6.patch( D6.accons, {
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //
@@ -647,8 +647,7 @@ factorPrefTimeMonth : [
  * 								2018/03/14 			global setting fix
  */
  
-D6.acload = Object.assign( D6.acload, {
-
+D6.patch( D6.acload, {
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //
@@ -749,7 +748,7 @@ factorPrefTimeMonth: [
 * 								2016/04/12 js
 */
 
-D6.area = D6.patch( D6.area , {
+D6.patch( D6.area , {
 
 	//name of prefecture/city
 	//	prefName[prefectureid/cityid]

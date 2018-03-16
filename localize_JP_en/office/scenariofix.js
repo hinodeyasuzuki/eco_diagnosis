@@ -22,4 +22,4 @@
 // called by diagnosis.js  just after create scenario
 D6.scenario.areafix = function() {
 
-}
+};

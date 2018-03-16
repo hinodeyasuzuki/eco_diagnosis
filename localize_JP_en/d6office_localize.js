@@ -22,7 +22,7 @@
 // called by diagnosis.js  just after create scenario
 D6.scenario.areafix = function() {
 
-}
+};
 ﻿/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -41,7 +41,7 @@ D6.scenario.areafix = function() {
  * 								2018/03/14 			global setting fix
  */
 
-
+D6.patch( D6.acadd, {
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //
@@ -67,7 +67,7 @@ D6.scenario.areafix = function() {
 //
 // used in Unit.setArea() function and set Unit.plusHeatFactor_mon
 //
-D6.acadd.factorPrefTimeMonth = [
+factorPrefTimeMonth : [
 	[ [ 0, 0, 0, 0, 0, 0, 0],   //神戸
 	  [ 0, 0, 0, 0, 0, 0, 0], 
 	  [ 0, 0, 0, 0, 0, 0, 0], 
@@ -260,8 +260,9 @@ D6.acadd.factorPrefTimeMonth = [
 	[ [ 0, 0, 0, 0, 0, 0, 0],   //那覇
 	  [ 0, 0, 0, 0, 0, 0, 0], 
 	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0] ] ];
+	  [ 0, 0, 0, 0, 0, 0, 0] ] ]
 
+});
 ﻿/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -281,6 +282,7 @@ D6.acadd.factorPrefTimeMonth = [
  */
  
 
+D6.patch( D6.accons, {
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //
@@ -310,7 +312,7 @@ D6.acadd.factorPrefTimeMonth = [
 // Unit.setArea()で　該当する地域について　airconFactor_mon　にコピーをして利用
 //
 
-D6.accons.factorPrefTimeMonth = [
+factorPrefTimeMonth : [
 [ [ 0.69, 0.65, 0.6, 0.56, 0.5, 0.42, 0.38, 0.34, 0.33, 0.28, 0.23, 0.18],   //神戸
   [ 0.45, 0.42, 0.39, 0.36, 0.32, 0.28, 0.27, 0.65, 0.63, 0.55, 0.48, 0.39], 
   [ 0.53, 0.5, 0.46, 0.43, 0.38, 0.32, 0.31, 0.46, 0.44, 0.4, 0.34, 0.28], 
@@ -503,7 +505,10 @@ D6.accons.factorPrefTimeMonth = [
 [ [ 0.11, 0.07, 0.06, 0.05, 0.04, 0.08, 0.08, 0.39, 0.38, 0.38, 0.36, 0.33],   //那覇
   [ 0.08, 0.03, 0.02, 0.02, 0.02, 0.06, 0.06, 0.61, 0.59, 0.58, 0.56, 0.51], 
   [ 0.09, 0.05, 0.03, 0.03, 0.02, 0.06, 0.06, 0.46, 0.45, 0.44, 0.43, 0.39], 
-  [ 0.11, 0.07, 0.06, 0.05, 0.04, 0.08, 0.08, 0.35, 0.35, 0.34, 0.33, 0.3] ] ];
+  [ 0.11, 0.07, 0.06, 0.05, 0.04, 0.08, 0.08, 0.35, 0.35, 0.34, 0.33, 0.3] ] ]
+  
+});
+
   
 
  ﻿/*  2017/12/16  version 1.0
@@ -524,8 +529,7 @@ D6.accons.factorPrefTimeMonth = [
  * 								2018/03/14 			global setting fix
  */
  
-D6.acload = Object.assign( D6.acload, {
-
+D6.patch( D6.acload, {
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //
@@ -781,7 +785,7 @@ factorPrefTimeMonth: [
  * 								2018/03/14 			global setting fix
  */
 
-D6.area = Object.assign( D6.area, {
+D6.patch( D6.area, {
 
 	//name of prefecture
 	//	prefName[prefecture]
