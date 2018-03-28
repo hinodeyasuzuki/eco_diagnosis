@@ -611,15 +611,6 @@ D6.accons = {
 //				5:use heat for 6 months
 //				6:use heat for 8 months
 //
-//アメダス10分間データを元に算出:エアコン消費電力量
-//
-//	配列は　  [朝、昼、夕、夜]の係数で、
-//	それぞれ　[暖房半月、暖房1ヶ月、暖房2ヶ月、暖房3ヶ月、暖房4ヶ月、暖房6ヶ月、暖房8ヶ月、
-//				冷房半月、冷房1ヶ月、冷房2ヶ月、冷房3ヶ月、冷房4ヶ月]
-//	の規定温度における消費量に対する割合を示す。
-//
-// Unit.setArea()で　該当する地域について　airconFactor_mon　にコピーをして利用
-//
 
 factorPrefTimeMonth: [
 [ [ 0.69, 0.65, 0.6, 0.56, 0.5, 0.42, 0.38, 0.34, 0.33, 0.28, 0.23, 0.18],   //kobe
@@ -681,14 +672,6 @@ D6.acload = {
 //				5:use heat for 6 months
 //				6:use heat for 8 months
 //
-//アメダス10分間データを元に算出:暖房負荷
-//
-//	配列は　  [朝、昼、夕、夜]の係数で、
-//	それぞれ　[暖房半月、暖房1ヶ月、暖房2ヶ月、暖房3ヶ月、暖房4ヶ月、暖房6ヶ月、暖房8ヶ月、
-//				冷房半月、冷房1ヶ月、冷房2ヶ月、冷房3ヶ月、冷房4ヶ月]
-//	の規定温度における消費量に対する割合を示す。
-//
-// Unit.setArea()で　該当する地域について　heatFactor_mon　にコピーをして利用
 //
 
 	//sample
@@ -846,7 +829,7 @@ D6.area = {
 
 	// solar factor
 	//
-	//		prefPVElectricity( prefecture )
+	//		prefPVElectricity( prefecture ) generation kWH/year per 3kW of solar panel
 	//
 	prefPVElectricity : [
 
@@ -854,6 +837,7 @@ D6.area = {
 	3.95	,	//hokkaido
 	],
 
+	
 	// convert energy name to energy_type id
 	//
 	//	energyCode2id[energy_name]	: get energy code
@@ -884,25 +868,16 @@ D6.area = {
 	//
 	seasonMonth : { winter:4, spring:5, summer:3 },
 
-
-	// heat load factore table
+	
+	// heat load factore table get from acload/accons/acadd
 	//
-	//エアコン・冷暖房負荷算出用　
-	//	配列は　  [朝、昼、夕、夜]の係数で、
-	//	それぞれ　[暖房半月、暖房1ヶ月、暖房2ヶ月、暖房3ヶ月、暖房4ヶ月、暖房6ヶ月、暖房8ヶ月、
-	//				冷房半月、冷房1ヶ月、冷房2ヶ月、冷房3ヶ月、冷房4ヶ月]
-	//	の規定温度における消費量に対する割合を示す。
-	//	この計算方法等については、京都府地球温暖化防止活動推進センター,2006より
-
 	// accons factor copy from D6.accons
-	//月数別のエアコン負荷（初期設定は神戸市）
 	airconFactor_mon :
 			  [ [ 0.66, 0.62, 0.59, 0.55, 0.50, 0.41, 0.37, 0.39, 0.36, 0.31, 0.26, 0.20 ],
    				[ 0.43, 0.39, 0.37, 0.34, 0.30, 0.27, 0.26, 0.79, 0.75, 0.67, 0.59, 0.49 ],
      			[ 0.47, 0.45, 0.42, 0.39, 0.35, 0.30, 0.29, 0.57, 0.55, 0.49, 0.43, 0.35 ],
      			[ 0.62, 0.58, 0.55, 0.51, 0.47, 0.39, 0.35, 0.34, 0.32, 0.27, 0.23, 0.18 ] ],
 	// heat factor copy from D6.heatcons
-	//月数別の熱需要負荷（初期設定は神戸市）
 	heatFactor_mon:
 			  [ [ 0.64, 0.61, 0.60, 0.57, 0.53, 0.53, 0.44, 0.54, 0.54, 0.43, 0.36, 0.28 ],
      			[ 0.48, 0.45, 0.42, 0.39, 0.34, 0.30, 0.30, 0.88, 0.85, 0.78, 0.70, 0.59 ],
@@ -1428,24 +1403,24 @@ D6.Unit = {
 		car:0
 	},
 	
-	// names ( dataset is now witten in Japanse )
+	// names
 	name : {
-		electricity:"電気",
-		nightelectricity:"夜間電気",
-		sellelectricity:"売電",
-		nagas:"都市ガス",
-		lpgas:"LPガス",
-		kerosene:"灯油",
-		gasoline:"ガソリン",
-		lightoil:"軽油",
-		heavyoil:"重油",
+		electricity:"electricity",
+		nightelectricity:"night electricity",
+		sellelectricity:"sell electricity",
+		nagas:"natural gas",
+		lpgas:"LP gas",
+		kerosene:"kerosene",
+		gasoline:"gas",
+		lightoil:"light oil",
+		heavyoil:"heavy oil",
 		coal:0,
 		biomass:0,
 		hotwater:0,
 		waste:0,
 		water:0,
-		gas:"都市ガス",
-		car:"ガソリン"
+		gas:"natural gas",
+		car:"gas"
 	},
 	
 	// unit discription text
@@ -1515,7 +1490,6 @@ D6.Unit = {
 	//		cost: energy fee/cost per month
 	//		energy_name: energy code
 	//		elecType: type of electricity supply
-	//			1:従量電灯A, 2:従量電灯B、3:時間帯別、4:低圧、5:低圧総合、6:高圧 in Japan
 	//		kw:	contract demand
 	// return
 	//		cons: energy consumption per month
@@ -1558,7 +1532,6 @@ D6.Unit = {
 	//		cons: energy consumption per month
 	//		energy_name: energy code
 	//		elecType: type of electricity supply
-	//			1:従量電灯A, 2:従量電灯B、3:時間帯別、4:低圧、5:低圧総合、6:高圧 in Japan
 	//		kw:	contract demand
 	// return
 	//		cost: energy fee/cost per month, not include intercept price

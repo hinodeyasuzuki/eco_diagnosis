@@ -17,8 +17,14 @@ date_default_timezone_set("Asia/Tokyo");
 $jqueryVersion = "2.2.4";
 $forceMode = 5;		//can be over rided 1:debug, 3:worker test, 4:packer test, 5;release
 
-
+/*
 //display mode setting by get parameters ==============================================================
+//
+//
+//
+//
+*/
+
 //languageMode: ja, cn 2charactor
 $languageMode 	= ( isset($_GET["lang"]) ? substr($_GET["lang"], 0, 2) : 
 						( isset($_SESSION["language"]) ? $_SESSION["language"] :"ja" ) );
@@ -99,8 +105,10 @@ $countryMode = ( isset($_GET["c"]) ? substr($_GET["c"], 0, 2) : $countryList[$la
 $lang = [];		
 if ( $countryMode ==  $countryList[$languageMode] && $languageMode != "en" ) {
 	$lang["d6folder"] = "./localize_" . $countryMode;
+	$lang["localizeCode"] = $countryMode;
 } else {
 	$lang["d6folder"] = "./localize_" . $countryMode ."_" . $languageMode;
+	$lang["localizeCode"] =  $countryMode ."_" . $countryMode;
 }
 
 $_SESSION["language"] = $languageMode;
@@ -116,7 +124,16 @@ $lang["energyunitperyear"] = $lang['energyunit'] .'/' . $lang['yearunit'];
 $lang["energyunitpermonth"] = $lang['energyunit'] .'/' . $lang['monthunit'];
 
 
-//pickup javascript files to design system ==================================================
+
+/*
+//pickup javascripts ==============================================================
+//
+//
+//
+//
+*/
+
+//pickup javascripts files to design system ==================================================
 $scripts = "";
 
 //base D6 scripts (common) in case useCode==1
@@ -164,9 +181,9 @@ $jssets = "<script>var targetMode=" . $targetMode
 			. ";var messhownumber=" . $messhownumber 
 			. ";var hideAverage='" . $hideAverage . "'" 
 			. ";var hidePrice='" . $hidePrice . "'" 
-			. ";var includeminjs='" . $includeminjs . "'"
-			. ";var includesumjs='" . $includesumjs . "'"
-			. ";var lang={};" ;
+			. ";var includeminjs='" . $includeminjs_worker . "'"
+			. ";var includesumjs='" . $includesumjs_worker . "'"
+			. ";var lang={};\n" ;
 foreach ( $lang as $param => $value ) {
 	//copy Language set to javascript with easy encode
 	if ( substr($value,0,5) == "funct" ) {
@@ -279,6 +296,14 @@ if ( $data ) {
 	$scripts .= "	<script>paramdata='';</script>";
 }
 
+
+/*
+//templates ==============================================================
+//
+//
+//
+//
+*/
 
 //templates depend on displayMode =====================================================
 switch( $dispMode ) {

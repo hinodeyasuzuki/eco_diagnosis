@@ -20,6 +20,7 @@
 
 // D6.scenario.areafix
 // called by diagnosis.js  just after create scenario
+//
 D6.scenario.areafix = function() {
 
 	// prefecture definition ----------------------------------------------------
@@ -387,6 +388,26 @@ D6.scenario.areafix = function() {
 	D6.scenario.defInput["i621"] = {  cons:"consTVsum",  title:"テレビの性能",  unit:"",  text:"テレビの省エネ性能は良いですか。（1級ですか）", inputType:"sel621", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"3",d11p:"0",d12t:"2",d12p:"1",d13t:"1",d13p:"2",d1w:"1",d1d:"0", d21t:"3",d21p:"0",d22t:"2",d22p:"1",d23t:"1",d23p:"2",d2w:"1",d2d:"0", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel621"]= [ "選んで下さい", "とてもよい", "ふつう", "あまりよくない", "わからない", "" ];			D6.scenario.defSelectData['sel621']= [ '-1', '1', '2', '3', '4' ];
 	D6.scenario.defInput["i421"] = {  cons:"consDRsum",  title:"洗濯機の性能",  unit:"",  text:"洗濯機の省エネ性能は良いですか。（1級ですか）", inputType:"sel421", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"3",d11p:"0",d12t:"2",d12p:"1",d13t:"1",d13p:"2",d1w:"1",d1d:"0", d21t:"3",d21p:"0",d22t:"2",d22p:"1",d23t:"1",d23p:"2",d2w:"1",d2d:"0", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel421"]= [ "選んで下さい", "とてもよい", "ふつう", "あまりよくない", "わからない", "" ];			D6.scenario.defSelectData['sel421']= [ '-1', '1', '2', '3', '4' ];
 	D6.scenario.defInput["i721"] = {  cons:"consRFsum",  title:"冷蔵庫の性能",  unit:"",  text:"冷蔵庫の省エネ性能は良いですか。（1級ですか）", inputType:"sel721", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"3",d11p:"0",d12t:"2",d12p:"1",d13t:"1",d13p:"2",d1w:"1",d1d:"0", d21t:"3",d21p:"0",d22t:"2",d22p:"1",d23t:"1",d23p:"2",d2w:"1",d2d:"0", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel721"]= [ "選んで下さい", "とてもよい", "ふつう", "あまりよくない", "わからない", "" ];			D6.scenario.defSelectData['sel721']= [ '-1', '1', '2', '3', '4' ];
+
+	
+	D6.Unit.name = {
+		electricity:"電気",
+		nightelectricity:"夜間電気",
+		sellelectricity:"売電",
+		nagas:"都市ガス",
+		lpgas:"LPガス",
+		kerosene:"灯油",
+		gasoline:"ガソリン",
+		lightoil:"軽油",
+		heavyoil:"重油",
+		coal:0,
+		biomass:0,
+		hotwater:0,
+		waste:0,
+		water:0,
+		gas:"都市ガス",
+		car:"ガソリン"
+	};
 
 /*	
 	//the way to create a new measure==========================================================
