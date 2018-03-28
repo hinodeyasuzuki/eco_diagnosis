@@ -78,24 +78,24 @@ D6.Unit = {
 		car:0
 	},
 	
-	// names ( dataset is now witten in Japanse )
+	// names
 	name : {
-		electricity:"電気",
-		nightelectricity:"夜間電気",
-		sellelectricity:"売電",
-		nagas:"都市ガス",
-		lpgas:"LPガス",
-		kerosene:"灯油",
-		gasoline:"ガソリン",
-		lightoil:"軽油",
-		heavyoil:"重油",
+		electricity:"electricity",
+		nightelectricity:"night electricity",
+		sellelectricity:"sell electricity",
+		nagas:"natural gas",
+		lpgas:"LP gas",
+		kerosene:"kerosene",
+		gasoline:"gas",
+		lightoil:"light oil",
+		heavyoil:"heavy oil",
 		coal:0,
 		biomass:0,
 		hotwater:0,
 		waste:0,
 		water:0,
-		gas:"都市ガス",
-		car:"ガソリン"
+		gas:"natural gas",
+		car:"gas"
 	},
 	
 	// unit discription text
@@ -165,7 +165,6 @@ D6.Unit = {
 	//		cost: energy fee/cost per month
 	//		energy_name: energy code
 	//		elecType: type of electricity supply
-	//			1:従量電灯A, 2:従量電灯B、3:時間帯別、4:低圧、5:低圧総合、6:高圧 in Japan
 	//		kw:	contract demand
 	// return
 	//		cons: energy consumption per month
@@ -208,7 +207,6 @@ D6.Unit = {
 	//		cons: energy consumption per month
 	//		energy_name: energy code
 	//		elecType: type of electricity supply
-	//			1:従量電灯A, 2:従量電灯B、3:時間帯別、4:低圧、5:低圧総合、6:高圧 in Japan
 	//		kw:	contract demand
 	// return
 	//		cost: energy fee/cost per month, not include intercept price

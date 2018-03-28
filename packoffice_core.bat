@@ -10,8 +10,8 @@ copy /b d6office.js + .\d6\office\scenarioset.js + .\d6\office\scenariofix.js + 
 
 copy /b d6office.js + .\d6\base\d6.js  d6office.js
 
-php .\php-packer\shortoffice.php > .\d6\d6office_core.min.js
-copy /b d6office.js .\d6\d6office_core.js
+php .\php-packer\shortoffice.php > .\dist\d6office_core.min.js
+copy /b d6office.js .\dist\d6office_core.js
 del d6office.js
 
 

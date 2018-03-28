@@ -57,8 +57,8 @@ getCalcResult = function( command, res ) {
 			$("#p3").show();
 			$("#r1").show();
 			$("#r3").show();
-			graphItemize( res.graphItemize );
-			graphMonthly( res.graphMonthly );
+			graphItemize( res.itemize_graph );
+			graphMonthly( res.monthly );
 			if ( command != "recalc" ) {
 				$("#p3").hide();
 				$("#r1").hide();
@@ -114,8 +114,8 @@ getCalcResult = function( command, res ) {
 			$("#cons").html(showItemizeTable(res.cons));
 			$("#r1").show();
 			$("#r3").show();
-			graphItemize( res.graphItemize );
-			graphMonthly( res.graphMonthly );
+			graphItemize( res.itemize_graph );
+			graphMonthly( res.monthly );
 			$("#r3").hide();
 			break;
 

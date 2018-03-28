@@ -78,5 +78,9 @@ location_JP
   office.min.js
 
 
-
+■開発環境をnpm にする
+　node-module 以外は作成。これだけgitの対象外とする。
+　php-packerは webpackで実行（nodeからインストール）
+  vue.jsによる開発とする。
+　jqueryは別途読み込み（パッケージ指定）。
 

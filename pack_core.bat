@@ -12,6 +12,6 @@ copy /b d6home_2.js + .\d6\base\d6.js + .\d6\base\d6_construct.js + .\d6\base\d6
 del d6home_1.js
 del d6home_2.js
 
-php .\php-packer\shorthome.php > .\d6\d6home_core.min.js
-copy /b d6home.js .\d6\d6home_core.js
+php .\php-packer\shorthome.php > .\dist\d6home_core.min.js
+copy /b d6home.js .\dist\d6home_core.js
 del d6home.js
