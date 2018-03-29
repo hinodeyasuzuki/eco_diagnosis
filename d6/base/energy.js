@@ -13,6 +13,8 @@
  * 								2016/04/12 ported to JavaScript
  */
 
+//resolve D6
+var D6 = D6||{};
 
 D6.Energy = {
 	//value of each energy type

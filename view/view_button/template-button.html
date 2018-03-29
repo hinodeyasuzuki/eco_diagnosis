@@ -13,7 +13,6 @@
 	<meta name="viewport" content="target-densitydpi=device-dpi, width=320, initial-scale=1.0, user-scalable=yes">
 	<link href="view/common.css" rel="stylesheet" type="text/css" />
 	<link href="view/view_button/layout-button.css" rel="stylesheet" type="text/css" />
-	<script src="view/jstools/jquery-<?php echo $jqueryVersion; ?>.min.js" type="text/javascript"></script>
 <?php
 	if ( !$oneAreaRelease ) {
 ?>
@@ -23,7 +22,6 @@
 	<link rel="alternate" hreflang="fr" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=fr&v=1" />
 <?php
 	}
-	echo $jsgoogle_analytics;
 ?>
 
 	<title><?php echo $title;?></title>
@@ -180,6 +178,7 @@
 		echo $jssets;
 		echo $scripts;
 		echo $jsgoogle;
+		echo $jsgoogle_analytics;
 	?>
 
 	<script src="view/view_button/onclick-button.js" type="text/javascript"></script>

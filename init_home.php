@@ -66,6 +66,7 @@ $includeminjs_direct  = 'dist/d6home_' . $lang["localizeCode"] . '.min.js';
 	
 //2,4 compressed common logic : execute http://dean.edwards.name/packer/ 
 $includemincorejs  ='dist/d6home_core.min.js';
+$includesumcorejs  ='dist_develop/d6home_core.js';
 
 	
 // joyfull mode not use------------------------------------------------------

@@ -55,4 +55,5 @@ function getlogiclistoffice( $area )  {
 
 	//2,4 compressed common logic : execute http://dean.edwards.name/packer/ 
 	$includemincorejs  ='dist/d6office_core.min.js';
+	$includesumcorejs  ='dist_develop/d6office_core.js';
 
