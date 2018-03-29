@@ -2,6 +2,1409 @@
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
+ * acadd.js for override
+ * 
+ * AreaParameters acadd: additional heat load cannot supply with  air conditioner
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/21 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 								2017/12/16 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
+ */
+
+D6.patch( D6.acadd, {
+// getArray(param)  return paramArray
+//		param: prefecture(original)
+//
+//  return acadd[time_slot_index][heat_month_index]
+//
+//		time_slot_index:
+//				0:morning
+//				1:noon
+//				2:evening
+//				3:night
+//		heat_month_index
+//				0:use heat for a half month
+//				1:use heat for one month
+//				2:use heat for 2 months
+//				3:use heat for 3 months
+//				4:use heat for 4 months
+//				5:use heat for 6 months
+//				6:use heat for 8 months
+//
+// this data is transformed by AMEDAS ( meteorological data ) in Japan
+//
+// factorPrefTimeMonth[Prefecture Code][Time Code][Month Code]
+//
+// used in Unit.setArea() function and set Unit.plusHeatFactor_mon
+//
+factorPrefTimeMonth : [
+
+	[ [ 0.17, 0.16, 0.14, 0.12, 0.09, 0.06, 0.05],   //hokkaido
+	  [ 0.06, 0.05, 0.04, 0.04, 0.03, 0.02, 0.01], 
+	  [ 0.09, 0.09, 0.07, 0.06, 0.04, 0.03, 0.02], 
+	  [ 0.16, 0.15, 0.13, 0.11, 0.09, 0.06, 0.04] ], 
+
+	[ [ 0.17, 0.16, 0.14, 0.12, 0.09, 0.06, 0.05],   //hokkaido
+	  [ 0.06, 0.05, 0.04, 0.04, 0.03, 0.02, 0.01], 
+	  [ 0.09, 0.09, 0.07, 0.06, 0.04, 0.03, 0.02], 
+	  [ 0.16, 0.15, 0.13, 0.11, 0.09, 0.06, 0.04] ], 
+
+	[ [ 0.17, 0.16, 0.14, 0.12, 0.09, 0.06, 0.05],   //hokkaido
+	  [ 0.06, 0.05, 0.04, 0.04, 0.03, 0.02, 0.01], 
+	  [ 0.09, 0.09, 0.07, 0.06, 0.04, 0.03, 0.02], 
+	  [ 0.16, 0.15, 0.13, 0.11, 0.09, 0.06, 0.04] ], 
+
+
+	[ [ 0.02, 0.01, 0.01, 0.01, 0.01, 0, 0],   //uchunomiya
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0.01, 0.01, 0, 0, 0, 0, 0] ], 
+ 	  
+ 	[ [ 0.02, 0.01, 0.01, 0.01, 0.01, 0, 0],   //uchunomiya
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0.01, 0.01, 0, 0, 0, 0, 0] ], 
+ 	  
+    [ [ 0, 0, 0, 0, 0, 0, 0],   //tokyo
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0] ], 
+	  
+    [ [ 0, 0, 0, 0, 0, 0, 0],   //tokyo
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0] ], 
+	  
+    [ [ 0, 0, 0, 0, 0, 0, 0],   //tokyo
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0] ], 
+	  
+    [ [ 0, 0, 0, 0, 0, 0, 0],   //tokyo
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0] ], 
+	  
+	[ [ 0.07, 0.06, 0.05, 0.04, 0.03, 0.02, 0.02],   //nagano
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0.01, 0.01, 0.01, 0, 0, 0, 0], 
+	  [ 0.05, 0.04, 0.03, 0.02, 0.02, 0.01, 0.01] ], 
+ 
+	[ [ 0, 0, 0, 0, 0, 0, 0],   //miyazaki
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0] ], 
+	  
+	[ [ 0, 0, 0, 0, 0, 0, 0],   //naha
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0] ] ,
+	  
+	[ [ 0, 0, 0, 0, 0, 0, 0],   //naha
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0] ] 
+]
+
+});
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * accons.js  for override
+ * 
+ * AreaParameters  accons: electricity consumption rate of air conditioner used as heater
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/21 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 								2017/12/16 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
+ */
+ 
+D6.patch( D6.accons, {
+// getArray(param)  return paramArray
+//		param: prefecture(original)
+//
+//  return accons[time_slot_index][heat_month_index]
+//
+//		time_slot_index:
+//				0:morning
+//				1:noon
+//				2:evening
+//				3:night
+//		heat_month_index
+//				0:use heat for a half month
+//				1:use heat for one month
+//				2:use heat for 2 months
+//				3:use heat for 3 months
+//				4:use heat for 4 months
+//				5:use heat for 6 months
+//				6:use heat for 8 months
+//
+
+factorPrefTimeMonth : [
+
+[ [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.94, 0.77, 0.06, 0.05, 0.03, 0.02, 0.02],   //sapporo
+  [ 1.14, 1.13, 1.1, 1.05, 0.98, 0.8, 0.67, 0.2, 0.17, 0.13, 0.1, 0.08], 
+  [ 1.2, 1.19, 1.16, 1.13, 1.06, 0.88, 0.72, 0.1, 0.08, 0.05, 0.04, 0.03], 
+  [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.95, 0.79, 0.03, 0.02, 0.01, 0.01, 0.01] ], 
+  
+[ [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.94, 0.77, 0.06, 0.05, 0.03, 0.02, 0.02],   //sapporo
+  [ 1.14, 1.13, 1.1, 1.05, 0.98, 0.8, 0.67, 0.2, 0.17, 0.13, 0.1, 0.08], 
+  [ 1.2, 1.19, 1.16, 1.13, 1.06, 0.88, 0.72, 0.1, 0.08, 0.05, 0.04, 0.03], 
+  [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.95, 0.79, 0.03, 0.02, 0.01, 0.01, 0.01] ], 
+  
+[ [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.94, 0.77, 0.06, 0.05, 0.03, 0.02, 0.02],   //sapporo
+  [ 1.14, 1.13, 1.1, 1.05, 0.98, 0.8, 0.67, 0.2, 0.17, 0.13, 0.1, 0.08], 
+  [ 1.2, 1.19, 1.16, 1.13, 1.06, 0.88, 0.72, 0.1, 0.08, 0.05, 0.04, 0.03], 
+  [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.95, 0.79, 0.03, 0.02, 0.01, 0.01, 0.01] ], 
+  
+[ [ 1.02, 1, 0.97, 0.91, 0.83, 0.67, 0.56, 0.18, 0.16, 0.13, 0.1, 0.08],   //uchunmiya
+  [ 0.48, 0.46, 0.44, 0.41, 0.37, 0.32, 0.3, 0.54, 0.5, 0.44, 0.38, 0.31], 
+  [ 0.64, 0.62, 0.6, 0.55, 0.5, 0.42, 0.37, 0.32, 0.31, 0.27, 0.22, 0.18], 
+  [ 0.97, 0.95, 0.93, 0.88, 0.81, 0.65, 0.54, 0.11, 0.1, 0.08, 0.06, 0.05] ], 
+
+[ [ 1.02, 1, 0.97, 0.91, 0.83, 0.67, 0.56, 0.18, 0.16, 0.13, 0.1, 0.08],   //uchunmiya
+  [ 0.48, 0.46, 0.44, 0.41, 0.37, 0.32, 0.3, 0.54, 0.5, 0.44, 0.38, 0.31], 
+  [ 0.64, 0.62, 0.6, 0.55, 0.5, 0.42, 0.37, 0.32, 0.31, 0.27, 0.22, 0.18], 
+  [ 0.97, 0.95, 0.93, 0.88, 0.81, 0.65, 0.54, 0.11, 0.1, 0.08, 0.06, 0.05] ], 
+
+[ [ 0.64, 0.63, 0.6, 0.55, 0.5, 0.41, 0.37, 0.31, 0.28, 0.25, 0.21, 0.16],   //tokyo
+  [ 0.39, 0.37, 0.35, 0.32, 0.29, 0.26, 0.25, 0.62, 0.57, 0.52, 0.45, 0.37], 
+  [ 0.42, 0.4, 0.39, 0.36, 0.33, 0.28, 0.26, 0.43, 0.4, 0.37, 0.32, 0.26], 
+  [ 0.58, 0.56, 0.54, 0.5, 0.46, 0.38, 0.34, 0.25, 0.23, 0.21, 0.17, 0.13] ], 
+
+[ [ 0.64, 0.63, 0.6, 0.55, 0.5, 0.41, 0.37, 0.31, 0.28, 0.25, 0.21, 0.16],   //tokyo
+  [ 0.39, 0.37, 0.35, 0.32, 0.29, 0.26, 0.25, 0.62, 0.57, 0.52, 0.45, 0.37], 
+  [ 0.42, 0.4, 0.39, 0.36, 0.33, 0.28, 0.26, 0.43, 0.4, 0.37, 0.32, 0.26], 
+  [ 0.58, 0.56, 0.54, 0.5, 0.46, 0.38, 0.34, 0.25, 0.23, 0.21, 0.17, 0.13] ], 
+  
+[ [ 0.64, 0.63, 0.6, 0.55, 0.5, 0.41, 0.37, 0.31, 0.28, 0.25, 0.21, 0.16],   //tokyo
+  [ 0.39, 0.37, 0.35, 0.32, 0.29, 0.26, 0.25, 0.62, 0.57, 0.52, 0.45, 0.37], 
+  [ 0.42, 0.4, 0.39, 0.36, 0.33, 0.28, 0.26, 0.43, 0.4, 0.37, 0.32, 0.26], 
+  [ 0.58, 0.56, 0.54, 0.5, 0.46, 0.38, 0.34, 0.25, 0.23, 0.21, 0.17, 0.13] ], 
+  
+[ [ 0.64, 0.63, 0.6, 0.55, 0.5, 0.41, 0.37, 0.31, 0.28, 0.25, 0.21, 0.16],   //tokyo
+  [ 0.39, 0.37, 0.35, 0.32, 0.29, 0.26, 0.25, 0.62, 0.57, 0.52, 0.45, 0.37], 
+  [ 0.42, 0.4, 0.39, 0.36, 0.33, 0.28, 0.26, 0.43, 0.4, 0.37, 0.32, 0.26], 
+  [ 0.58, 0.56, 0.54, 0.5, 0.46, 0.38, 0.34, 0.25, 0.23, 0.21, 0.17, 0.13] ], 
+
+[ [ 1.2, 1.18, 1.15, 1.1, 1.02, 0.84, 0.7, 0.14, 0.12, 0.09, 0.07, 0.05],   //nagano
+  [ 0.88, 0.84, 0.81, 0.74, 0.66, 0.54, 0.49, 0.57, 0.51, 0.43, 0.35, 0.29], 
+  [ 0.99, 0.96, 0.93, 0.86, 0.79, 0.64, 0.55, 0.31, 0.26, 0.21, 0.16, 0.13], 
+  [ 1.16, 1.14, 1.11, 1.06, 0.99, 0.82, 0.68, 0.09, 0.07, 0.05, 0.04, 0.03] ], 
+
+[ [ 0.64, 0.61, 0.57, 0.52, 0.47, 0.4, 0.37, 0.29, 0.28, 0.26, 0.22, 0.18],   //miyazaki
+  [ 0.29, 0.26, 0.23, 0.2, 0.18, 0.18, 0.18, 0.62, 0.61, 0.58, 0.52, 0.44], 
+  [ 0.36, 0.33, 0.3, 0.27, 0.24, 0.23, 0.22, 0.46, 0.45, 0.43, 0.38, 0.32], 
+  [ 0.58, 0.54, 0.51, 0.47, 0.42, 0.36, 0.33, 0.24, 0.24, 0.22, 0.19, 0.15] ], 
+  
+[ [ 0.11, 0.07, 0.06, 0.05, 0.04, 0.08, 0.08, 0.39, 0.38, 0.38, 0.36, 0.33],   //naha
+  [ 0.08, 0.03, 0.02, 0.02, 0.02, 0.06, 0.06, 0.61, 0.59, 0.58, 0.56, 0.51], 
+  [ 0.09, 0.05, 0.03, 0.03, 0.02, 0.06, 0.06, 0.46, 0.45, 0.44, 0.43, 0.39], 
+  [ 0.11, 0.07, 0.06, 0.05, 0.04, 0.08, 0.08, 0.35, 0.35, 0.34, 0.33, 0.3] ] 
+
+[ [ 0.11, 0.07, 0.06, 0.05, 0.04, 0.08, 0.08, 0.39, 0.38, 0.38, 0.36, 0.33],   //naha
+  [ 0.08, 0.03, 0.02, 0.02, 0.02, 0.06, 0.06, 0.61, 0.59, 0.58, 0.56, 0.51], 
+  [ 0.09, 0.05, 0.03, 0.03, 0.02, 0.06, 0.06, 0.46, 0.45, 0.44, 0.43, 0.39], 
+  [ 0.11, 0.07, 0.06, 0.05, 0.04, 0.08, 0.08, 0.35, 0.35, 0.34, 0.33, 0.3] ] 
+
+  ]
+  
+});
+
+ 
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * accons.js  for override
+ * 
+ * AreaParameters  acload: heat load of house 
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/21 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 								2017/12/16 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
+ */
+ 
+D6.patch( D6.acload, {
+// getArray(param)  return paramArray
+//		param: prefecture(original)
+//
+//  return acloat[time_slot_index][heat_month_index]
+//
+//		time_slot_index:
+//				0:morning
+//				1:noon
+//				2:evening
+//				3:night
+//		heat_month_index
+//				0:use heat for a half month
+//				1:use heat for one month
+//				2:use heat for 2 months
+//				3:use heat for 3 months
+//				4:use heat for 4 months
+//				5:use heat for 6 months
+//				6:use heat for 8 months
+//
+//
+
+factorPrefTimeMonth: [
+[ [ 1.06, 1.05, 1.03, 1, 0.95, 0.95, 0.82, 0.09, 0.09, 0.05, 0.03, 0.02],   //sapporo
+  [ 0.93, 0.92, 0.9, 0.87, 0.83, 0.7, 0.59, 0.27, 0.23, 0.18, 0.14, 0.11], 
+  [ 0.99, 0.98, 0.96, 0.93, 0.88, 0.76, 0.64, 0.14, 0.11, 0.07, 0.05, 0.04], 
+  [ 1.05, 1.04, 1.02, 0.99, 0.95, 0.83, 0.7, 0.04, 0.03, 0.02, 0.01, 0.01] ], 
+  
+[ [ 1.06, 1.05, 1.03, 1, 0.95, 0.95, 0.82, 0.09, 0.09, 0.05, 0.03, 0.02],   //sapporo(asahikawa)
+  [ 0.93, 0.92, 0.9, 0.87, 0.83, 0.7, 0.59, 0.27, 0.23, 0.18, 0.14, 0.11], 
+  [ 0.99, 0.98, 0.96, 0.93, 0.88, 0.76, 0.64, 0.14, 0.11, 0.07, 0.05, 0.04], 
+  [ 1.05, 1.04, 1.02, 0.99, 0.95, 0.83, 0.7, 0.04, 0.03, 0.02, 0.01, 0.01] ], 
+ 
+[ [ 1.06, 1.05, 1.03, 1, 0.95, 0.95, 0.82, 0.09, 0.09, 0.05, 0.03, 0.02],   //sapporo
+  [ 0.93, 0.92, 0.9, 0.87, 0.83, 0.7, 0.59, 0.27, 0.23, 0.18, 0.14, 0.11], 
+  [ 0.99, 0.98, 0.96, 0.93, 0.88, 0.76, 0.64, 0.14, 0.11, 0.07, 0.05, 0.04], 
+  [ 1.05, 1.04, 1.02, 0.99, 0.95, 0.83, 0.7, 0.04, 0.03, 0.02, 0.01, 0.01] ], 
+
+[ [ 0.84, 0.83, 0.81, 0.78, 0.73, 0.73, 0.61, 0.25, 0.25, 0.18, 0.14, 0.11],   //utunomiya
+  [ 0.52, 0.5, 0.48, 0.45, 0.41, 0.35, 0.33, 0.65, 0.62, 0.55, 0.48, 0.4], 
+  [ 0.63, 0.62, 0.6, 0.56, 0.52, 0.44, 0.39, 0.43, 0.41, 0.36, 0.3, 0.24], 
+  [ 0.81, 0.8, 0.79, 0.76, 0.71, 0.61, 0.51, 0.15, 0.14, 0.11, 0.09, 0.07] ], 
+
+[ [ 0.84, 0.83, 0.81, 0.78, 0.73, 0.73, 0.61, 0.25, 0.25, 0.18, 0.14, 0.11],   //utunomiya
+  [ 0.52, 0.5, 0.48, 0.45, 0.41, 0.35, 0.33, 0.65, 0.62, 0.55, 0.48, 0.4], 
+  [ 0.63, 0.62, 0.6, 0.56, 0.52, 0.44, 0.39, 0.43, 0.41, 0.36, 0.3, 0.24], 
+  [ 0.81, 0.8, 0.79, 0.76, 0.71, 0.61, 0.51, 0.15, 0.14, 0.11, 0.09, 0.07] ], 
+
+[ [ 0.63, 0.62, 0.6, 0.57, 0.53, 0.53, 0.44, 0.43, 0.43, 0.35, 0.28, 0.23],   //tokyo
+  [ 0.44, 0.42, 0.4, 0.37, 0.34, 0.3, 0.29, 0.75, 0.7, 0.63, 0.56, 0.47], 
+  [ 0.48, 0.45, 0.44, 0.41, 0.37, 0.32, 0.3, 0.58, 0.54, 0.5, 0.43, 0.35], 
+  [ 0.6, 0.58, 0.56, 0.53, 0.5, 0.41, 0.37, 0.36, 0.33, 0.3, 0.24, 0.19] ], 
+
+[ [ 0.63, 0.62, 0.6, 0.57, 0.53, 0.53, 0.44, 0.43, 0.43, 0.35, 0.28, 0.23],   //tokyo
+  [ 0.44, 0.42, 0.4, 0.37, 0.34, 0.3, 0.29, 0.75, 0.7, 0.63, 0.56, 0.47], 
+  [ 0.48, 0.45, 0.44, 0.41, 0.37, 0.32, 0.3, 0.58, 0.54, 0.5, 0.43, 0.35], 
+  [ 0.6, 0.58, 0.56, 0.53, 0.5, 0.41, 0.37, 0.36, 0.33, 0.3, 0.24, 0.19] ], 
+
+[ [ 0.63, 0.62, 0.6, 0.57, 0.53, 0.53, 0.44, 0.43, 0.43, 0.35, 0.28, 0.23],   //tokyo
+  [ 0.44, 0.42, 0.4, 0.37, 0.34, 0.3, 0.29, 0.75, 0.7, 0.63, 0.56, 0.47], 
+  [ 0.48, 0.45, 0.44, 0.41, 0.37, 0.32, 0.3, 0.58, 0.54, 0.5, 0.43, 0.35], 
+  [ 0.6, 0.58, 0.56, 0.53, 0.5, 0.41, 0.37, 0.36, 0.33, 0.3, 0.24, 0.19] ], 
+
+[ [ 0.63, 0.62, 0.6, 0.57, 0.53, 0.53, 0.44, 0.43, 0.43, 0.35, 0.28, 0.23],   //tokyo
+  [ 0.44, 0.42, 0.4, 0.37, 0.34, 0.3, 0.29, 0.75, 0.7, 0.63, 0.56, 0.47], 
+  [ 0.48, 0.45, 0.44, 0.41, 0.37, 0.32, 0.3, 0.58, 0.54, 0.5, 0.43, 0.35], 
+  [ 0.6, 0.58, 0.56, 0.53, 0.5, 0.41, 0.37, 0.36, 0.33, 0.3, 0.24, 0.19] ], 
+
+[ [ 0.98, 0.96, 0.93, 0.9, 0.85, 0.85, 0.73, 0.2, 0.2, 0.13, 0.1, 0.07],   //nagano(karuizawa)
+  [ 0.76, 0.74, 0.72, 0.67, 0.62, 0.52, 0.48, 0.7, 0.63, 0.54, 0.45, 0.37], 
+  [ 0.83, 0.81, 0.79, 0.75, 0.7, 0.59, 0.51, 0.42, 0.36, 0.29, 0.22, 0.18], 
+  [ 0.94, 0.92, 0.9, 0.87, 0.82, 0.72, 0.6, 0.13, 0.1, 0.07, 0.05, 0.04] ], 
+
+[ [ 0.62, 0.6, 0.57, 0.53, 0.49, 0.49, 0.42, 0.4, 0.4, 0.37, 0.31, 0.25],   //miyazaki(takachiho)
+  [ 0.33, 0.3, 0.26, 0.23, 0.2, 0.21, 0.21, 0.75, 0.74, 0.71, 0.65, 0.56], 
+  [ 0.41, 0.38, 0.35, 0.31, 0.28, 0.26, 0.25, 0.61, 0.6, 0.57, 0.51, 0.43], 
+  [ 0.58, 0.55, 0.53, 0.49, 0.45, 0.39, 0.35, 0.34, 0.33, 0.31, 0.27, 0.21] ], 
+
+[ [ 0.12, 0.08, 0.07, 0.06, 0.05, 0.05, 0.09, 0.55, 0.55, 0.53, 0.52, 0.47],   //okinawa
+  [ 0.09, 0.04, 0.03, 0.02, 0.02, 0.06, 0.06, 0.76, 0.75, 0.74, 0.72, 0.67], 
+  [ 0.1, 0.05, 0.04, 0.03, 0.03, 0.07, 0.07, 0.64, 0.62, 0.62, 0.6, 0.54], 
+  [ 0.12, 0.08, 0.06, 0.06, 0.04, 0.08, 0.08, 0.51, 0.5, 0.49, 0.48, 0.43] ],
+  
+[ [ 0.12, 0.08, 0.07, 0.06, 0.05, 0.05, 0.09, 0.55, 0.55, 0.53, 0.52, 0.47],   //okinawa
+  [ 0.09, 0.04, 0.03, 0.02, 0.02, 0.06, 0.06, 0.76, 0.75, 0.74, 0.72, 0.67], 
+  [ 0.1, 0.05, 0.04, 0.03, 0.03, 0.07, 0.07, 0.64, 0.62, 0.62, 0.6, 0.54], 
+  [ 0.12, 0.08, 0.06, 0.06, 0.04, 0.08, 0.08, 0.51, 0.5, 0.49, 0.48, 0.43] ],
+]
+
+
+
+} );
+
+/**
+* Home-Eco Diagnosis for JavaScript
+* AreaParameters area: parameters by prefecture for home
+* 
+* @author Yasufumi SUZUKI  2011/04/15 Diagnosis5
+*								2011/05/06 actionscript3
+* 								2016/04/12 js
+*/
+
+D6.patch( D6.area , {
+
+	//name of prefecture/city
+	//	prefName[prefectureid/cityid]
+	//
+	//都道府県名
+	prefName : [ 
+		'上海',
+		"長春",	//1
+		"北京",
+		"青島",
+		"鄭州",
+		"蘭州", //5
+		"上海",
+		"重慶",
+		"敦煌",
+		"拉萨",
+		"昆明",	//10
+		"広州",
+		"海口"
+	],
+
+	prefDefault : 6,	//not selected
+
+	// heat category with prefecture
+	//	prefHeatingLeverl[prefecture]
+	//
+	//	return code
+	//		1:cold area in Japan(Hokkaido)
+	//			.
+	//			.
+	//		6:hot area in Japan(Okinawa)
+	//
+	//
+	prefHeatingLeverl : [ 
+		5, //8,1,32,25	'上海',			//2
+		1, //-11,-23, 29, 18"長春",		//1　旭川 -3,-13, 26,17
+		2, //2,-10,31,22"北京",			//2	札幌 -1,-7, 27,19
+		2, //3,-4, 28,23"青島",			//3
+		3, //6,-5, 32,23 "鄭州",		//3 宇都宮 8,-3, 31, 22
+		2, //2, -11, 29, 16 "蘭州",		//5
+		5, //8,1,32,25	'上海',			//5 東京 10, 1, 31, 23
+		5, //9,5, 35,25"重慶",			//5
+		2, //-2,-16,33,16 "敦煌",		//5
+		4, //7,-10, 23,10"拉萨",　夏が涼しい	//4	軽井沢 2,-9, 26,16
+		6, //15, 2, 24,16 "昆明",　夏が涼しい	//6 高千穂 9,-1, 30, 21
+		7, //18,10,33,25 "広州",				//7 那覇 20, 15, 32, 27
+		7, //21,15,33,25 "海口"					//7
+ 	],
+
+								
+	// CO2 emittion factor
+	//	co2ElectCompanyUnit[elec_company]
+	//
+	//	elec_company
+	//		1:hokkaido electric power company.
+	//			.
+	//			.
+	//		9:okinawa electric power company.
+	//
+	co2ElectCompanyUnit : [ 0.55, 0.55, 0.55, 0.55, 0.55, 0.55
+										, 0.55, 0.55, 0.55, 0.55, 0.55 ],
+
+	//	electricity company code by prefecture
+	//
+	//	prefToEleArea[prefecture]
+	//
+	//都道府県の電力会社コード
+	// 0:北海道、1:東北電力 2:東京電力 3:中部電力 4:北陸電力 5:関西電力
+	// 6:中国電力 7:四国電力 8:九州電力 9:沖縄電力
+	prefToEleArea : [ 2,
+				2, 2, 2, 2, 2, 2, 2,
+				2, 2, 2, 2, 2, 2, 2,
+				1, 4, 4, 4, 2, 3, 3, 3, 3,
+				3, 5, 5, 5, 5, 5, 5,
+				6, 6, 6, 6, 6, 7, 7, 7, 7,
+				8, 8, 8, 8, 8, 8, 8, 9 ],
+
+	//electricity supply company price ratio
+	electCompanyPrice : [
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1,
+		1
+	],
+
+
+	//	electricity charge unit table
+	//
+	//	elecPrice[electicity_type][calc_type]
+	//
+	//	electicity_type
+	//		1:depend on consumption type A
+	//		2:depend on consumption type B
+	//		3:demand pricing 
+	//		4:low voltage 
+	//		5:integrated low voltage 
+	//		6:high voltage 
+	//	calc_type
+	//		1:peak time unit
+	//		2:average unit
+	//		3:price down unit
+	//		4:cut off
+	//		5:base charge to contract kW
+	//
+	//	
+	elecPrice : {
+		// 1:従量電灯A, 2:従量電灯B、3:時間帯別、4:低圧、5:低圧総合、6:高圧
+		// ピーク単価,標準単価,割引単価,切片,kW契約単価
+		1: [ 33.32, 33.32, 33.32, -1500, 0 ],
+		2: [ 33.32, 33.32, 33.32, -1500, 280 ],
+		3: [ 38.89, 27.32, 13.10, 2160, 0 ],
+		4: [ 17.98, 16.53, 16.53, 0, 1054 ],
+		5: [ 20.22, 18.56, 18.56, 64800, 0 ],
+		6: [ 22.58, 17.36, 13.08, 0, 1733 ]
+	},
+
+	//electricity supply company price
+	elecCompanyPrice : {
+	},
+
+
+	// meteorological annal average templature C
+	//
+	//		prefTemplature( prefecture )
+	//
+	//
+	//気象庁｢気象庁年報｣ 平成19年　各都道府県の平均気温
+	//数値は各都道府県の県庁所在地の気象官署の観測値。
+	//  （ただし、埼玉県は熊谷市、滋賀県は彦根市の気象官署の観測値)
+	// Unit.setArea()で　該当する地域について　averageTemplature　にコピーをして利用
+	//
+	prefTemplature : [
+
+		19, //8,1,32,25	'上海',
+		13, //-11,-23, 29, 18"長春",
+		20, //2,-10,31,22"北京",	
+		14, //3,-4, 28,23"青島",
+		21, //6,-5, 32,23 "鄭州",
+		19, //2, -11, 29, 16 "蘭州",
+		19, //8,1,32,25	'上海',
+		23, //9,5, 35,25"重慶",
+		21, //-2,-16,33,16 "敦煌",
+		16, //7,-10, 23,10"拉萨",
+		24, //15, 2, 24,16 "昆明",	//10
+		26, //18,10,33,25 "広州",
+		30, //21,15,33,25 "海口"
+	],
+
+	// solar factor
+	//
+	//		prefPVElectricity( prefecture )
+	//
+	// ex. JWA　monsola05
+	//  annual solar energy input at most provable direction kWh/m2/day
+	prefPVElectricity : [
+		4,4,4,4,4,4,4,4,4,4,4,4,4,4
+	],
+
+	// convert energy name to energy_type id
+	//
+	//	energyCode2id[energy_name]	: get energy code
+	//
+	energyCode2id : {
+		"electricity" : 0,
+		"gas" : 1,
+		"kerosene" : 2,
+		"coal" : 4,
+		"hotwater" : 5,
+		"car" : 3 
+	},
+
+	//convert season name to season id.
+	//
+	//	seasonCode2id[season_name]	: get season code
+	//
+	seasonCode2id : {
+		"winter" : 0,
+		"spring" : 1,
+		"summer" : 2
+	},
+
+	// months include to each season
+	//	seasonMonth[seasonName]
+	//	
+	//	seasonName
+	//		winter/spring/summer  , autumn include to spring
+	//
+	seasonMonth : { winter:4, spring:5, summer:3 },
+
+
+
+	// home original function/data set ==================================
+
+	// average energy fee per month
+	//		prefKakeiEnergy[prefecture][energy_type]
+	//
+	//		prefecture(0-47 in Japan)
+	//		energy_type
+	//			0:electicity
+	//			1:gas
+	//			2:kerosene
+	//			3:gasoline
+	//
+	//地域別平均光熱費 2人以上世帯（補正後）
+	//　中国の電力消費 2011年 413kWh/年・人　http://www.chinaero.com.cn/zxdt/djxx/ycwz/2014/05/146440.shtml
+	//　413×1元/kWh×3人÷12
+	prefKakeiEnergy : [ 
+		[ 200, 80, 0, 50, 5, 0 ],  //東京都区部
+		[ 150, 80, 0, 50, 5, 300 ],  //旭川市
+		[ 150, 80, 0, 50, 5, 250 ],  //札幌市
+		[ 150, 80, 0, 50, 5, 250 ],  //札幌市
+		[ 150, 80, 0, 50, 5, 200 ],  //宇都宮市
+		[ 150, 80, 0, 50, 5, 250 ],  //札幌市
+		[ 200, 80, 0, 50, 5, 0 ],  //東京都区部
+		[ 200, 80, 0, 50, 5, 200 ],  //東京都区部
+		[ 150, 80, 0, 50, 5, 250 ],  //札幌市
+		[ 150, 80, 0, 50, 5, 200 ],  //奈良市
+		[ 150, 80, 0, 50, 5, 200 ],  //奈良市
+		[ 200, 80, 0, 50, 5, 0 ],   //那覇市
+		[ 200, 80, 0, 50, 5, 0 ]   //那覇市
+
+	],
+
+	// Hot Water Supply by local government per m2 in Season
+	//
+	prefHotWaterPrice : [ 
+		0, //8,1,32,25	'上海',
+		31, //-11,-23, 29, 18"長春",
+		25, //2,-10,31,22"北京",	
+		25, //3,-4, 28,23"青島",
+		22, //6,-5, 32,23 "鄭州", 0.19*120
+		17, //2, -11, 29, 16 "蘭州", 4.2*4
+		0, //8,1,32,25	'上海',
+		24, //9,5, 35,25"重慶",		12元/m2 + 44元/GJ
+		20, //-2,-16,33,16 "敦煌",
+		20, //7,-10, 23,10"拉萨",
+		0, //15, 2, 24,16 "昆明",	//10
+		0, //18,10,33,25 "広州",
+		0, //21,15,33,25 "海口"
+	],
+
+	// seasonal energy fee factor to average
+	//
+	//	prefSeasonFactorArray[prefecture][season][energy_type]
+	//
+	//	prefecture:
+	//	season:
+	//		0:wihter
+	//		1:spring
+	//		2:summer
+	//	energy_type
+	//		0:electicity
+	//		1:gas
+	//		2:kerosene
+	//		3:gasoline
+	//
+	//季節別負荷係数
+	prefSeasonFactorArray : [
+
+	[ [ 1.1218, 1.3846, 2.4812, 1.0011 ], [ 0.8666, 0.9201, 0.393, 0.8726 ], [ 1.0599, 0.6203, 0.0368, 1.2109 ] ],   //tokyo
+	[ [ 1.149, 1.1094, 1.8254, 0.9243 ], [ 0.9482, 0.9876, 0.8169, 1.0159 ], [ 0.8876, 0.8749, 0.2047, 1.0743 ] ],   //sapporo
+	[ [ 1.149, 1.1094, 1.8254, 0.9243 ], [ 0.9482, 0.9876, 0.8169, 1.0159 ], [ 0.8876, 0.8749, 0.2047, 1.0743 ] ],   //sapporo
+	[ [ 1.149, 1.1094, 1.8254, 0.9243 ], [ 0.9482, 0.9876, 0.8169, 1.0159 ], [ 0.8876, 0.8749, 0.2047, 1.0743 ] ],   //sapporo
+	[ [ 1.1498, 1.2742, 1.934, 1.0276 ], [ 0.9069, 0.9497, 0.6857, 0.9587 ], [ 0.9555, 0.7183, 0.2786, 1.032 ] ],   //utsunomiya
+	[ [ 1.149, 1.1094, 1.8254, 0.9243 ], [ 0.9482, 0.9876, 0.8169, 1.0159 ], [ 0.8876, 0.8749, 0.2047, 1.0743 ] ],   //sapporo
+	[ [ 1.1218, 1.3846, 2.4812, 1.0011 ], [ 0.8666, 0.9201, 0.393, 0.8726 ], [ 1.0599, 0.6203, 0.0368, 1.2109 ] ],   //tokyo
+	[ [ 1.1218, 1.3846, 2.4812, 1.0011 ], [ 0.8666, 0.9201, 0.393, 0.8726 ], [ 1.0599, 0.6203, 0.0368, 1.2109 ] ],   //tokyo
+	[ [ 1.149, 1.1094, 1.8254, 0.9243 ], [ 0.9482, 0.9876, 0.8169, 1.0159 ], [ 0.8876, 0.8749, 0.2047, 1.0743 ] ],   //sapporo
+	[ [ 1.1301, 1.3407, 2.324, 0.9201 ], [ 0.8464, 0.9429, 0.4949, 0.9414 ], [ 1.0826, 0.6409, 0.0765, 1.2042 ] ],   //nara
+	[ [ 1.1301, 1.3407, 2.324, 0.9201 ], [ 0.8464, 0.9429, 0.4949, 0.9414 ], [ 1.0826, 0.6409, 0.0765, 1.2042 ] ],   //nara
+	[ [ 0.8457, 1.1222, 1.5081, 0.9201 ], [ 0.9351, 0.9941, 0.8528, 0.9802 ], [ 1.3139, 0.847, 0.5678, 1.1395 ] ],   //naha
+	[ [ 0.8457, 1.1222, 1.5081, 0.9201 ], [ 0.9351, 0.9941, 0.8528, 0.9802 ], [ 1.3139, 0.847, 0.5678, 1.1395 ] ]   //naha
+
+	],
+
+
+
+	//	factor to average fee
+	//		kakeiNumCoefficent[person_in_home][energy_type]
+	//
+	//		pserson_in_home
+	//			0: single home
+	//			1: 2 person in home
+	//			2: 3 person in home
+	//			3: 4 person in home
+	//			4: 5 person in home
+	//			5: more than 6 person in home
+	//		energy_type
+	//			0:electicity
+	//			1:gas
+	//			2:kerosene
+	//			3:gasoline
+	//
+	//世帯人数別の支出金額比率（標準値に対する割合:家計調査より）
+	//	[電気、ガス、灯油、ガソリン]
+	//	[1人世帯、2人世帯、3人世帯、4人世帯、5人世帯、6人以上世帯]
+	//　　出典について複数の環境家計簿からの集計値（確認：評価基礎情報ではない）
+	kakeiNumCoefficent:
+			  [ [ 0.47, 0.52,  0.37, 0.45, 0.4, 0.4 ],
+				[ 0.86, 0.83,  0.90, 0.79, 0.8, 0.8 ],
+				[ 0.99, 1.00,  0.90, 0.98, 1.0, 1.0 ],
+				[ 1.07, 1.10,  0.85, 1.16, 1.1, 1.1 ],
+				[ 1.24, 1.17,  1.10, 1.26, 1.3, 1.3 ],
+				[ 1.55, 1.19,  1.67, 1.33, 1.4, 1.4  ]
+	],
+
+	//	urban / ural area fee per month
+	//		urbanCostCoefficient[energy_type][area_type]
+	//
+	//		energy_type
+	//			0:electicity
+	//			1:gas
+	//			2:kerosene
+	//			3:gasoline
+	//		area_type
+	//			0:urban
+	//			1:ural
+	//
+	//郊外の場合の比率　家計調査より 2001～2007年
+	//　都市部：大都市と中都市の平均
+	//　郊外：小都市A、小都市B、町村の平均 
+	urbanCostCoefficient :
+			[ [ 8762, 9618 ],
+			  [ 6100, 5133 ],
+			  [ 828,  1898 ],
+			  [ 3415, 6228 ],
+			  [ 3,  20 ],
+			  [ 24,  5 ]
+	],
+} );
+
+
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * unit.js 
+ * 
+ * any kind of unit related to energy type is defined here, change here
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/21 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ */
+
+//fix D6.Unit
+
+	// unit price   元(in China)/each unit
+D6.Unit.price = {
+		electricity:1,			// override in D6.area.setPersonArea by supplyer
+		nightelectricity:0.3,
+		sellelectricity:1,
+		nagas:10,
+		lpgas:30,
+		kerosene:7,
+		gasoline:8,
+		lightoil:7,
+		heavyoil:6,
+		coal:3,
+		biomass:0,
+		hotwater:0.036,
+		waste:0,
+		water:0,
+		gas:10,
+		car:8
+	};
+
+	// intercept price when consumption is zero
+D6.Unit.priceBase = {
+		electricity:0,
+		nightelectricity:0,
+		sellelectricity:0,
+		nagas:0,
+		lpgas:0,
+		kerosene:0,
+		gasoline:0,
+		lightoil:0,
+		heavyoil:0,
+		coal:0,
+		biomass:0,
+		hotwater:50,
+		waste:0,
+		water:0,
+		gas:0,
+		car:0
+	};
+	
+	// names ( dataset is now witten in Japanse )
+D6.Unit.name = {
+		electricity:"电力",
+		nightelectricity:"电力",
+		sellelectricity:"売電",
+		nagas:"都市ガス",
+		lpgas:"LPガス",
+		kerosene:"灯油",
+		gasoline:"ガソリン",
+		lightoil:"軽油",
+		heavyoil:"重油",
+		coal:"煤球",
+		biomass:0,
+		hotwater:"区供热",
+		waste:0,
+		water:0,
+		gas:"气",
+		car:"汽油"
+	};
+	
+	// unit discription text
+D6.Unit.unitChar = {
+		electricity:"kWh",
+		nightelectricity:"kWh",
+		sellelectricity:"kWh",
+		nagas:"m3",
+		lpgas:"m3",
+		kerosene:"L",
+		gasoline:"L",
+		lightoil:"L",
+		heavyoil:"L",
+		coal:"kg",
+		biomass:0,
+		hotwater:"MJ",
+		waste:0,
+		water:0,
+		gas:"m3",
+		car:"L"
+	};
+	
+	// second energy(end-use)  kcal/each unit
+D6.Unit.calorie = {
+		electricity:860,
+		nightelectricity:860,
+		sellelectricity:860,
+		nagas:11000,
+		lpgas:36000,
+		kerosene:8759,
+		gasoline:8258,
+		lightoil:9117,
+		heavyoil:9000,
+		coal:8000,
+		biomass:0,
+		hotwater:225,
+		waste:0,
+		water:0,
+		gas:11000,
+		car:8258
+	};
+
+	// primary energy  MJ/each unit
+D6.Unit.jules = {
+		electricity:9.6,
+		nightelectricity:9.6,
+		sellelectricity:9.6,
+		nagas:46,
+		lpgas:60,
+		kerosene:38,
+		gasoline:38,
+		lightoil:38,
+		heavyoil:38,
+		coal:32,
+		biomass:0,
+		hotwater:1,
+		waste:0,
+		water:0,
+		gas:45,
+		car:38
+	};
+	
+	
+	// costToCons( cost, energy_name, elecType, kw ) -----------------------------
+	//		estimate consumption from cost, per month
+	// parameters
+	//		cost: energy fee/cost per month
+	//		energy_name: energy code
+	//		elecType: type of electricity supply
+	//			1:従量電灯A, 2:従量電灯B、3:時間帯別、4:低圧、5:低圧総合、6:高圧 in Japan
+	//		kw:	contract demand
+	// return
+	//		cons: energy consumption per month
+D6.Unit.costToCons = function( cost, energy_name, elecType, kw )
+	{
+		var ret;
+		if ( cost == -1 || cost == "" ) {
+			ret = "";
+		}
+		if (energy_name != "electricity" || typeof(D6.area.elecPrice) == undefined ) {
+			// not electricity or no regional parameters
+			if ( cost < D6.Unit.priceBase[energy_name] * 2 ) {
+				// estimation in case of nealy intercept price
+				ret = cost / D6.Unit.price[energy_name] / 2;
+			} else {
+				// ordinal estimation
+				ret = ( cost - D6.Unit.priceBase[energy_name] ) / D6.Unit.price[energy_name];
+			}
+
+		} else {
+			//regional electricity
+			if ( elecType < 0 || !elecType ) {
+				if ( D6.consShow["TO"].allDenka ) {
+					elecType = 3;
+				} else {
+					elecType = 1;
+				}
+			}
+			var def = D6.area.elecPrice[elecType];
+			ret = ( cost - kw * def[4] - def[3] ) / (( def[1] + def[2] ) / 2);
+		}
+		return ret;
+	};
+	
+	
+	//consToCost( cons, energy_name, elecType, kw ) -----------------------
+	//		estimate cost from energy consumption
+	// parameters
+	//		cons: energy consumption per month
+	//		energy_name: energy code
+	//		elecType: type of electricity supply
+	//			1:従量電灯A, 2:従量電灯B、3:時間帯別、4:低圧、5:低圧総合、6:高圧 in Japan
+	//		kw:	contract demand
+	// return
+	//		cost: energy fee/cost per month, not include intercept price
+D6.Unit.consToCost = function( cons, energy_name, elecType, kw )
+	{
+		var ret;
+
+		if ( cons == -1 || cons == "" ) {
+			ret = "";
+		}
+//		if ( energy_name != "electricity" || typeof(D6.area.elecPrice) == undefined  ) {
+			// this is rough method, multify only unit price
+			// it will better to fix regionally
+			ret = cons * D6.Unit.price[energy_name];
+/*
+		} else {
+			// electricity
+			if ( elecType < 0 || !elecType ) {
+				if ( D6.consShow["TO"].allDenka ) {
+					elecType = 3;
+				} else {
+					elecType = 1;
+				}
+			}
+			var def = D6.area.elecPrice[elecType];
+			ret  = kw * def[4] + cons * ( def[1] + def[2] ) / 2;
+			if( ret > def[3] * 2 ) {
+				ret -= def[3];
+			} else {
+				ret /= 2;
+			}
+		}
+*/
+		return ret;
+	};
+	
+	// consToEnergy( cons, energy_name ) --------------------------------
+	//		calculate energy from energy consumption 
+	// parameters
+	//		cons: energy consumption per month
+	//		energy_name: energy code
+	// return
+	//		ret: energy MJ per month
+	consToEnergy = function( cons, energy_name )
+	{
+		var ret;
+
+		if ( cons == -1 || cons == "" ) {
+			ret = "";
+		}
+		//static function
+		ret = cons * D6.Unit.jules[energy_name]/1000000;
+
+		return ret;
+	};
+
+
+/**
+* Home-Eco Diagnosis for JavaScript
+* 
+* ConsHTsum
+*/
+
+DC = D6.consHTsum;
+
+//initialize setting
+DC.init = function() {
+	this.title = "供暖";
+	this.inputGuide = "如何使用整个房子的供暖";
+	
+};
+DC.init();
+
+//change Input data to local value 
+DC.precalc = function() {
+	this.clear();			//clear data
+
+	//入力値の読み込み
+	this.prefecture =this.input( "i021", 6 );		//city, prefecture
+	this.heatArea = D6.area.getHeatingLevel(this.prefecture);
+
+	this.person =this.input( "i001", 3 );			//person
+	this.houseType =this.input( "i002", 2 );		//standalone / apartment CN
+	this.houseSize =D6.consShow["TO"].houseSize;	//home size 
+
+	this.priceHotWater = this.input( "i066" , 1 ) == 1 ? D6.area.averageCostEnergy.hotwater * this.houseSize / 100 : 0;
+
+	this.heatSpace  =this.input( "i201", this.heatArea < 5 ? 0.8 : 0.2 );	//part of heating CN
+	this.heatEquip =this.input( "i202", -1 );		//equipment for heating
+	this.heatTime  =this.input( "i204", this.heatArea < 5 ? 24 : 4 );		//heat time CN
+	this.heatTemp  =this.input( "i205", 21 );		//暖房設定温度
+	this.priceEleSpring =this.input( "i0912", -1 );	//電気料金（春秋）
+	this.priceEleWinter =this.input( "i0911", -1 );	//電気料金（冬）
+	this.priceGasWinter =this.input( "i0921", -1 );	//ガス料金（冬）
+	this.consKeros =this.input( "i064", -1 );		//灯油消費量
+
+	this.performanceWindow =this.input( "i041", -1 );	//窓の断熱性能
+	this.performanceWall =this.input( "i042", -1 );	//壁の断熱性能 グラスウール換算mm
+	this.reformWindow =this.input( "i043", -1 );	//窓の断熱リフォーム
+	this.reformfloor =this.input( "i044", -1 );		//天井・床の断熱リフォーム
+};
+
+DC.calc = function() {
+	//熱量計算
+	var heatKcal = this.calcHeatLoad();
+
+	//月平均値への換算
+	heatKcal *= D6.area.seasonMonth.winter / 12;
+	this.endEnergy = heatKcal;
+
+	//熱源の推計　記入がない場合にはガスか灯油
+	if ( this.heatEquip <= 0 ) {
+		if ( this.consKeros > 0 
+			||D6.area.averageCostEnergy.kerosene > 10 
+		) {
+			//灯油が標準10元以上もしくは記入がある
+			this.heatEquip = 4;
+		} else if ( this.priceGasWinter < 0 
+				|| this.priceGasWinter > 40 
+		) {
+			//ガス代が一定ある
+			this.heatEquip = 3;
+		} else {
+			//電気しか使っていない
+			this.heatEquip = 1;
+		}
+	}
+
+	//電気でまかないきれない分の計算
+	var elecOver = 0;
+	var coef = ( this.heatEquip == 1 ? this.apf : 1 );
+	if ( this.heatEquip == 1 || this.heatEquip == 2 ) {
+		if ( this.priceEleWinter > 0  ) {
+			var priceMaxCons = this.priceEleWinter * 0.7
+					/ D6.Unit.price.electricity 
+					* D6.Unit.seasonMonth.winter / 12;
+			if ( heatKcal / coef /D6.Unit.calorie.electricity > priceMaxCons ) {
+				//価格からの最大値を超えて電気が消費されている場合
+				var elecOver = heatKcal - priceMaxCons * coef *D6.Unit.calorie.electricity;
+				heatKcal -= elecOver;
+			}
+		}
+	}
+
+	//熱源の割り振り
+	this.calcACkwh = heatKcal / this.apf /D6.Unit.calorie.electricity;
+
+	if ( this.priceHotWater > 0 ) {
+		//熱供給 CN
+		this.mainSource = "hotwater";
+		this[this.mainSource] =  heatKcal /D6.Unit.calorie[this.mainSource];
+	} else if ( this.heatEquip == 1) {
+		//エアコン
+		//消費電力量　kWh/月
+		this.mainSource = "electricity";
+		this[this.mainSource] =  this.calcACkwh;
+
+	} else {
+		if ( this.heatEquip == 2 ) {
+			//電熱暖房 CN
+			//消費電力量　kWh/月
+			this.mainSource = "electricity";
+		} else if ( this.heatEquip == 3 ) {
+			//ガス暖房
+			//消費ガス量　m3/月
+			this.mainSource = "gas";
+		} else if ( this.heatEquip == 4 ) {
+			//灯油暖房
+			//消費灯油量　L/月
+			this.mainSource = "kerosene";
+		} else if ( this.heatEquip == 7 ) {
+			//温水供給
+			this.mainSource = "hotwater";
+		} else if ( this.heatEquip == 8 ) {
+			this.mainSource = "coal";	//CN
+		} else {
+			//温水供給
+			this.mainSource = "hotwater";
+		}
+		this[this.mainSource] =  heatKcal /D6.Unit.calorie[this.mainSource];
+	}
+	//電気で賄えない分を割りふる
+	if ( elecOver > 0 ) {
+		//寒い地域なら灯油
+		if (D6.Unit.areaHeating <= 4 && this.priceKeros > 0 ) {
+			this.kerosene =  elecOver /D6.Unit.calorie.kerosene;
+		} else {
+			this.gas =  elecOver /D6.Unit.calorie.gas;
+		}
+	}
+};
+
+//対策計算
+DC.calcMeasure = function() {
+	//断熱
+	if ( !this.isSelected( "mHTuchimadoAll" ) && !this.isSelected( "mHTloweAll" ) && this.houseType != 2){
+		this.measures["mHTdoubleGlassAll"].calcReduceRate( this.reduceRateDouble );
+	}
+	if (  !this.isSelected( "mHTloweAll" ) ){
+		this.measures["mHTuchimadoAll"].calcReduceRate( this.reduceRateUchimado );
+	}
+	if (  this.houseType != 2){
+		this.measures["mHTloweAll"].calcReduceRate( this.reduceRateLowe );
+	}
+};
+
+
+
+
+/**
+* Home-Eco Diagnosis for JavaScript
+* 
+* ConsHWsum
+*/
+
+DC = D6.consHWsum;		// short cut
+
+//initialize-------------------------------
+DC.init = function() {
+	this.title = "热水器";				//consumption title for person
+	this.inputGuide = "如何使用热水供应一般";		//guidance in question
+	
+};
+DC.init();	// initialize when this class is loaded
+
+
+//change Input data to local value 
+DC.paramSet = function() {
+	// use answers for calclation
+	this.person =this.input( "i001", 3 );				//世帯人数
+	this.housetype =this.input( "i002", 2 );			//戸建て集合 CN
+	this.tabDayWeek =this.input( "i103", 0 );			//浴槽にためる日数 CN
+	this.tabDayWeekSummer =this.input( "i104", 0 );		//浴槽にためる日数夏 CN
+	this.showerMinutes =this.input( "i105"
+			, this.showerWaterMinutes * this.person );	//シャワー時間（分）
+	this.showerMinutesSummer =this.input( "i106"
+			, this.showerWaterMinutes * this.person );	//シャワー時間（分）夏
+	this.savingShower =this.input( "i116", -1 );		//節水シャワーヘッド
+	this.tabKeepHeatingTime =this.input( "i108"
+			, (this.person > 1 ? 3 : 0 ) );				//保温時間
+	this.keepMethod =this.input( "i110", 5 );			//追い焚きの方法（割）
+	this.tabInsulation =this.input( "i117", -1 );		//断熱
+	this.tabHeight =this.input( "i107", 8 );			//お湯張りの高さ（割）
+	
+	this.equipType = this.input( "i101", -1 );			//給湯器の種類
+	this.priceGas = D6.consShow["TO"].priceGas;			//月ガス代
+	this.priceKeros = D6.consShow["TO"].priceKeros;		//冬の月灯油代
+
+	this.dresserMonth = this.input( "i114", 4 );		//洗面でのお湯を使う期間（月）
+	this.dishWashMonth = this.input( "i115", 4 );		//食器洗いでのお湯を使う期間（月）　99は食洗機
+	this.dishWashWater = this.input( "i113", 3 );		//食器洗いで水を使うようにしているか 1いつも、4していない
+	this.cookingFreq = this.input( "i802", 6 );			//調理の頻度（割）
+	
+	this.keepSeason =this.input( "i131", 4 );			//トイレ保温をしているか 1:通年、4していない CN
+};
+
+
+/**
+* Home-Eco Diagnosis for JavaScript
+* 
+* ConsTotal
+*/
+
+DC = D6.consTotal;		//temporaly set as DC
+
+//initialize
+DC.init = function() {
+	//construction definition
+	this.title = "整体";
+	this.inputGuide = "有关地区和房子的基本信息";
+
+};
+DC.init();
+
+//Documentからの変換
+DC.paramSet = function() {
+	this.person =this.input( "i001", 3 );			//世帯人数
+
+	//solar
+	this.solarSet =this.input( "i051", 0 );					//太陽光発電の設置　あり=1
+	this.solarKw =this.input( "i052", this.solarSet * 3.5 );	//太陽光発電の設置容量(kW)
+	this.solarYear =this.input( "i053", 0 );				//太陽光発電の設置年
+	
+	//electricity
+	this.priceEle = this.input( "i061"
+			,D6.area.averageCostEnergy.electricity );	//月電気代
+	this.priceEleSpring = this.input( "i0912" ,-1 );
+	this.priceEleSummer = this.input( "i0913" ,-1 );
+	this.priceEleWinter = this.input( "i0911" ,-1 );
+
+	this.priceEleSell =this.input( "i062", 0 );		//月売電
+				
+	//gas
+	this.priceGas =this.input( "i063"
+			,D6.area.averageCostEnergy.gas );			//月ガス代
+	this.priceGasSpring =this.input( "i0932" ,-1 );
+	this.priceGasSummer =this.input( "i0933" ,-1 );
+	this.priceGasWinter =this.input( "i0931" ,-1 );
+
+	this.houseType =this.input( "i002", 2 );			//戸建て集合
+	this.houseSize =this.input( "i003", 
+			( this.person == 1 ? 60 : (80 + this.person * 10) ) );
+													//家の広さ
+
+	this.heatEquip =this.input( "i202", -1 );			//主な暖房機器
+
+	//coal
+	this.priceCoal = this.input( "i065" ,D6.area.averageCostEnergy.coal );
+	this.priceCoalSpring =this.input( "i0942" ,-1 );
+	this.priceCoalSummer =this.input( "i0943" ,-1 );
+	this.priceCoalWinter =this.input( "i0941" ,-1 );
+
+	this.priceHotWater = this.input( "i066" , 1 ) == 1 ? D6.area.averageCostEnergy.hotwater * this.houseSize / 100 : 0;
+
+	if( this.priceKerosWinter == -1 ) {
+		if (D6.area.averageCostEnergy.kerosene < 1000 ) {
+			this.priceKeros =this.input( "i064", 0 );		//冬の月灯油代0（円)
+		} else {
+			this.priceKeros =this.input( "i064"
+				,D6.area.averageCostEnergy.kerosene 
+				/ D6.area.seasonMonth.winter * 12 );	//月灯油代標準値（円)　入力は冬
+		}
+	}
+
+	this.priceCar =this.input( "i075"
+			,D6.area.averageCostEnergy.car );			//月車燃料代
+	this.equipHWType = this.input( "i101", 1 );			//給湯器の種類
+
+	this.generateEleUnit = D6.area.unitPVElectricity;	//地域別の値を読み込む
+		
+	//灯油・ガスが無記入の場合は、平均値としてガスに灯油分を加えておく
+	if (D6.area.averageCostEnergy.kerosene < 1000 ) {
+		if (this.input( "i063", -1 ) < 0 			//ガスの記入がない
+			&&this.input( "i0931", -1 ) < 0 
+			&&this.input( "i0932", -1 ) < 0 
+			&&this.input( "i0933", -1 ) < 0 
+		) {
+			//灯油分のエネルギーをガスに追加
+			this.keros2gas =D6.area.averageCostEnergy.kerosene
+					/D6.Unit.price.kerosene
+					*D6.Unit.calorie.kerosene
+					/D6.Unit.calorie.gas
+					*D6.Unit.price.gas;
+			this.priceGasSpring += this.keros2gas;
+			this.priceGasWinter += this.keros2gas;				
+		}
+	}
+
+	//季節別の光熱費の入力のパターン（初期値　-1:無記入）
+	this.seasonPrice =  {
+			electricity :	[ this.priceEleWinter, this.priceEleSpring, this.priceEleSummer ],		//電気
+			gas :			[ this.priceGasWinter, this.priceGasSpring, this.priceGasSummer ],		//ガス
+			kerosene:		[ this.priceKeros, this.priceKerosSpring,this.priceKerosSummer ], 		//灯油
+			coal :			[ -1, -1,-1 ], 
+			hotwater :		[ -1, -1,-1 ],
+			car :			[ -1, -1,-1 ] 		//ガソリン
+	};
+
+	//毎月の消費量の入力のパターン（初期値　-1：無記入）
+	this.monthlyPrice = {
+			electricity :	[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
+			gas :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
+			kerosene :		[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
+			coal :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
+			hotwater :		[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
+			car :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ] 
+	};
+};
+
+
+//消費量の計算
+DC.calc = function( ){
+
+	this.clear();			//結果の消去
+	var ret;					//return values
+
+	//入力値の読み込み
+	this.paramSet();
+
+	//季節係数の読込（全エネルギー）
+	var seasonConsPattern = D6.area.getSeasonParamCommon();
+
+	//電気の推計
+	ret = D6.calcMonthly( this.priceEle, this.seasonPrice["electricity"], this.monthlyPrice["electricity"], seasonConsPattern.electricity, "electricity" );
+	this.priceEle = ret.ave;
+	this.seasonPrice["electricity"] = ret.season;
+	this.monthlyPrice["electricity"] = ret.monthly;
+		//光熱費の記入がないときには、分野の単純積み上げとする
+	this.noConsData = ret.noConsData 
+					&& ( this.input( "i061", -1) == -1 );
+					//&& !D6.averageMode;
+		
+	//depend on hot water equipment
+	if ( this.equipHWType == 5 ) {
+		this.averagePriceElec = this.ratioNightHWElec *D6.Unit.price.nightelectricity 
+						+ ( 1 - this.ratioNightHWElec ) *D6.Unit.price.electricity;
+		this.allDenka = true;
+		
+	} else if (this.equipHWType == 6 ) {
+		this.averagePriceElec = this.ratioNightEcocute *D6.Unit.price.nightelectricity 
+						+ ( 1 - this.ratioNightEcocute ) *D6.Unit.price.electricity;
+		this.allDenka = true;
+		
+	} else {
+		this.averagePriceElec =D6.Unit.price.electricity;
+		this.allDenka = false;
+	}
+
+	//base price
+	var priceBase;
+	if ( this.allDenka ) {
+		priceBase = D6.Unit.price.nightelectricity;
+	} else {
+		priceBase = 0;
+	}
+
+	//solar generation
+	var generateEle = this.generateEleUnit * this.solarKw / 12;
+	
+	//solar sell price 
+	var pvSellUnitPrice = D6.Unit.price.sellelectricity;
+
+	//PV installed
+	if ( this.solarKw > 0 ) {
+		// gross = electricity consumed in home include self consumption amount
+		this.grossElectricity = ( 1 - this.solarSaleRatio ) * generateEle 
+					+ Math.max(0, ( this.priceEle 
+												-  this.priceEleSell
+												+ this.solarSaleRatio * generateEle * pvSellUnitPrice 
+												- priceBase ) 
+											) / this.averagePriceElec;
+		this.electricity = this.grossElectricity - generateEle;
+	} else {
+		//not installed
+		this.electricity = ( this.priceEle - priceBase ) / this.averagePriceElec;
+		this.grossElectricity = this.electricity;
+	}
+
+	//gas
+	ret = D6.calcMonthly( this.priceGas, this.seasonPrice["gas"], this.monthlyPrice["gas"], seasonConsPattern.gas, "gas" );
+	this.priceGas = ret.ave;
+	this.seasonPrice["gas"] = ret.season;
+	this.monthlyPrice["gas"] = ret.monthly;
+
+	this.gas = ( this.priceGas -D6.Unit.priceBase.gas ) 
+											/D6.Unit.price.gas;
+
+	//coal
+	ret = D6.calcMonthly( this.priceCoal, this.seasonPrice["coal"], this.monthlyPrice["coal"], seasonConsPattern.coal, "coal" );
+	this.priceCoal = ret.ave;
+	this.seasonPrice["coal"] = ret.season;
+	this.monthlyPrice["coal"] = ret.monthly;
+	
+	this.coal = this.priceCoal / D6.Unit.price.coal;
+
+	//hotwater
+	ret = D6.calcMonthly( this.priceHotWater, this.seasonPrice["hotwater"], this.monthlyPrice["hotwater"], seasonConsPattern.hotwater, "hotwater" );
+	this.priceHotWater = ret.ave;
+	this.hotwater = this.priceHotWater / D6.Unit.price.hotwater;
+	this.seasonPrice["hotwater"] = ret.season;
+	this.monthlyPrice["hotwater"] = ret.monthly;
+
+	//gasoline
+	ret = D6.calcMonthly( this.priceCar, this.seasonPrice["car"], this.monthlyPrice["car"], seasonConsPattern.car, "car" );
+	this.priceCar = ret.ave;
+	this.seasonPrice["car"] = ret.season;
+	this.monthlyPrice["car"] = ret.monthly;
+
+	this.car = this.priceCar / D6.Unit.price.car;
+	
+};
+
+
+//対策計算
+DC.calcMeasure = function( ) {
+	var mes;
+
+	var solar_reduceVisualize = this.reduceHEMSRatio;		//モニターによる消費電力削減率
+	var solar_sellPrice = 1;				//売電単価
+
+	//mTOsolar-----------------------------------------
+	mes = this.measures[ "mTOsolar" ];		//set mes
+	mes.copy( this );
+	
+	// not installed and ( stand alone or desired )
+	if ( this.solarKw == 0 
+		&& ( this.houseType != 2 || this.replace_solar ) 
+	) {
+		// monthly generate electricity
+		var solar_generate_kWh = this.generateEleUnit * this.standardSize / 12;
+
+		// saving by generation
+		var solar_priceDown = solar_generate_kWh * this.solarSaleRatio * solar_sellPrice 
+						+ solar_generate_kWh * ( 1 - this.solarSaleRatio ) *D6.Unit.price.electricity;
+
+		// saving by visualize display
+		var solar_priceVisualize = this.electricity * solar_reduceVisualize
+							*D6.Unit.price.electricity;
+		
+		//electricity and cost
+		mes.electricity = this.electricity * ( 1 - solar_reduceVisualize ) - solar_generate_kWh;
+		mes.costUnique = this.cost - solar_priceDown - solar_priceVisualize;	
+		
+		//initial cost 
+		mes.priceNew = this.standardSize * mes.priceOrg;	
+		//comment add to original definition
+		mes.advice = D6.scenario.defMeasures['mTOsolar']['advice'] 
+			+ "<br>　标准" + this.standardSize + "kW的是该类型的计算结果。";
+	}
+
+	//mTOhems HEMS-----------------------------------------
+	mes = this.measures[ "mTOhems" ];		//set mes
+	mes.copy( this );
+	
+	//pv system is not installed  --- pv system includes visualize display
+	if ( !this.isSelected( "mTOsolar" ) ) {
+		mes.electricity = this.electricity * ( 1 - this.reduceHEMSRatio );
+	}
+	
+	//mTOsolarSmall ベランダ太陽光------------------------------------------
+	mes = this.measures[ "mTOsolarSmall" ];		//set mes
+	mes.copy( this );
+	var watt_panel = 50;			// install panel size (W)
+	var eff = 0.3;						// effectiveness to roof 
+	mes.electricity -= watt_panel / 1000 * eff * this.generateEleUnit / 12 ;
+
+};
+
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
  * scenariofix.js 
  * 
  * fix area function and data between home and office
@@ -402,1401 +1805,6 @@ D6.scenario.areafix = function() {
 
 };
 
-
-
-
-﻿/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * acadd.js for override
- * 
- * AreaParameters acadd: additional heat load cannot supply with  air conditioner
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/21 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- * 								2017/12/16 ver.1.0 set functions
- * 								2018/03/14 			global setting fix
- */
-
-D6.patch( D6.acadd, {
-// getArray(param)  return paramArray
-//		param: prefecture(original)
-//
-//  return acadd[time_slot_index][heat_month_index]
-//
-//		time_slot_index:
-//				0:morning
-//				1:noon
-//				2:evening
-//				3:night
-//		heat_month_index
-//				0:use heat for a half month
-//				1:use heat for one month
-//				2:use heat for 2 months
-//				3:use heat for 3 months
-//				4:use heat for 4 months
-//				5:use heat for 6 months
-//				6:use heat for 8 months
-//
-// this data is transformed by AMEDAS ( meteorological data ) in Japan
-//
-// factorPrefTimeMonth[Prefecture Code][Time Code][Month Code]
-//
-// used in Unit.setArea() function and set Unit.plusHeatFactor_mon
-//
-factorPrefTimeMonth : [
-
-	[ [ 0.17, 0.16, 0.14, 0.12, 0.09, 0.06, 0.05],   //hokkaido
-	  [ 0.06, 0.05, 0.04, 0.04, 0.03, 0.02, 0.01], 
-	  [ 0.09, 0.09, 0.07, 0.06, 0.04, 0.03, 0.02], 
-	  [ 0.16, 0.15, 0.13, 0.11, 0.09, 0.06, 0.04] ], 
-
-	[ [ 0.17, 0.16, 0.14, 0.12, 0.09, 0.06, 0.05],   //hokkaido
-	  [ 0.06, 0.05, 0.04, 0.04, 0.03, 0.02, 0.01], 
-	  [ 0.09, 0.09, 0.07, 0.06, 0.04, 0.03, 0.02], 
-	  [ 0.16, 0.15, 0.13, 0.11, 0.09, 0.06, 0.04] ], 
-
-	[ [ 0.17, 0.16, 0.14, 0.12, 0.09, 0.06, 0.05],   //hokkaido
-	  [ 0.06, 0.05, 0.04, 0.04, 0.03, 0.02, 0.01], 
-	  [ 0.09, 0.09, 0.07, 0.06, 0.04, 0.03, 0.02], 
-	  [ 0.16, 0.15, 0.13, 0.11, 0.09, 0.06, 0.04] ], 
-
-
-	[ [ 0.02, 0.01, 0.01, 0.01, 0.01, 0, 0],   //uchunomiya
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0.01, 0.01, 0, 0, 0, 0, 0] ], 
- 	  
- 	[ [ 0.02, 0.01, 0.01, 0.01, 0.01, 0, 0],   //uchunomiya
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0.01, 0.01, 0, 0, 0, 0, 0] ], 
- 	  
-    [ [ 0, 0, 0, 0, 0, 0, 0],   //tokyo
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0] ], 
-	  
-    [ [ 0, 0, 0, 0, 0, 0, 0],   //tokyo
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0] ], 
-	  
-    [ [ 0, 0, 0, 0, 0, 0, 0],   //tokyo
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0] ], 
-	  
-    [ [ 0, 0, 0, 0, 0, 0, 0],   //tokyo
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0] ], 
-	  
-	[ [ 0.07, 0.06, 0.05, 0.04, 0.03, 0.02, 0.02],   //nagano
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0.01, 0.01, 0.01, 0, 0, 0, 0], 
-	  [ 0.05, 0.04, 0.03, 0.02, 0.02, 0.01, 0.01] ], 
- 
-	[ [ 0, 0, 0, 0, 0, 0, 0],   //miyazaki
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0] ], 
-	  
-	[ [ 0, 0, 0, 0, 0, 0, 0],   //naha
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0] ] ,
-	  
-	[ [ 0, 0, 0, 0, 0, 0, 0],   //naha
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0] ] 
-]
-
-});
-﻿/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * accons.js  for override
- * 
- * AreaParameters  accons: electricity consumption rate of air conditioner used as heater
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/21 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- * 								2017/12/16 ver.1.0 set functions
- * 								2018/03/14 			global setting fix
- */
- 
-D6.patch( D6.accons, {
-// getArray(param)  return paramArray
-//		param: prefecture(original)
-//
-//  return accons[time_slot_index][heat_month_index]
-//
-//		time_slot_index:
-//				0:morning
-//				1:noon
-//				2:evening
-//				3:night
-//		heat_month_index
-//				0:use heat for a half month
-//				1:use heat for one month
-//				2:use heat for 2 months
-//				3:use heat for 3 months
-//				4:use heat for 4 months
-//				5:use heat for 6 months
-//				6:use heat for 8 months
-//
-
-factorPrefTimeMonth : [
-
-[ [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.94, 0.77, 0.06, 0.05, 0.03, 0.02, 0.02],   //sapporo
-  [ 1.14, 1.13, 1.1, 1.05, 0.98, 0.8, 0.67, 0.2, 0.17, 0.13, 0.1, 0.08], 
-  [ 1.2, 1.19, 1.16, 1.13, 1.06, 0.88, 0.72, 0.1, 0.08, 0.05, 0.04, 0.03], 
-  [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.95, 0.79, 0.03, 0.02, 0.01, 0.01, 0.01] ], 
-  
-[ [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.94, 0.77, 0.06, 0.05, 0.03, 0.02, 0.02],   //sapporo
-  [ 1.14, 1.13, 1.1, 1.05, 0.98, 0.8, 0.67, 0.2, 0.17, 0.13, 0.1, 0.08], 
-  [ 1.2, 1.19, 1.16, 1.13, 1.06, 0.88, 0.72, 0.1, 0.08, 0.05, 0.04, 0.03], 
-  [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.95, 0.79, 0.03, 0.02, 0.01, 0.01, 0.01] ], 
-  
-[ [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.94, 0.77, 0.06, 0.05, 0.03, 0.02, 0.02],   //sapporo
-  [ 1.14, 1.13, 1.1, 1.05, 0.98, 0.8, 0.67, 0.2, 0.17, 0.13, 0.1, 0.08], 
-  [ 1.2, 1.19, 1.16, 1.13, 1.06, 0.88, 0.72, 0.1, 0.08, 0.05, 0.04, 0.03], 
-  [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.95, 0.79, 0.03, 0.02, 0.01, 0.01, 0.01] ], 
-  
-[ [ 1.02, 1, 0.97, 0.91, 0.83, 0.67, 0.56, 0.18, 0.16, 0.13, 0.1, 0.08],   //uchunmiya
-  [ 0.48, 0.46, 0.44, 0.41, 0.37, 0.32, 0.3, 0.54, 0.5, 0.44, 0.38, 0.31], 
-  [ 0.64, 0.62, 0.6, 0.55, 0.5, 0.42, 0.37, 0.32, 0.31, 0.27, 0.22, 0.18], 
-  [ 0.97, 0.95, 0.93, 0.88, 0.81, 0.65, 0.54, 0.11, 0.1, 0.08, 0.06, 0.05] ], 
-
-[ [ 1.02, 1, 0.97, 0.91, 0.83, 0.67, 0.56, 0.18, 0.16, 0.13, 0.1, 0.08],   //uchunmiya
-  [ 0.48, 0.46, 0.44, 0.41, 0.37, 0.32, 0.3, 0.54, 0.5, 0.44, 0.38, 0.31], 
-  [ 0.64, 0.62, 0.6, 0.55, 0.5, 0.42, 0.37, 0.32, 0.31, 0.27, 0.22, 0.18], 
-  [ 0.97, 0.95, 0.93, 0.88, 0.81, 0.65, 0.54, 0.11, 0.1, 0.08, 0.06, 0.05] ], 
-
-[ [ 0.64, 0.63, 0.6, 0.55, 0.5, 0.41, 0.37, 0.31, 0.28, 0.25, 0.21, 0.16],   //tokyo
-  [ 0.39, 0.37, 0.35, 0.32, 0.29, 0.26, 0.25, 0.62, 0.57, 0.52, 0.45, 0.37], 
-  [ 0.42, 0.4, 0.39, 0.36, 0.33, 0.28, 0.26, 0.43, 0.4, 0.37, 0.32, 0.26], 
-  [ 0.58, 0.56, 0.54, 0.5, 0.46, 0.38, 0.34, 0.25, 0.23, 0.21, 0.17, 0.13] ], 
-
-[ [ 0.64, 0.63, 0.6, 0.55, 0.5, 0.41, 0.37, 0.31, 0.28, 0.25, 0.21, 0.16],   //tokyo
-  [ 0.39, 0.37, 0.35, 0.32, 0.29, 0.26, 0.25, 0.62, 0.57, 0.52, 0.45, 0.37], 
-  [ 0.42, 0.4, 0.39, 0.36, 0.33, 0.28, 0.26, 0.43, 0.4, 0.37, 0.32, 0.26], 
-  [ 0.58, 0.56, 0.54, 0.5, 0.46, 0.38, 0.34, 0.25, 0.23, 0.21, 0.17, 0.13] ], 
-  
-[ [ 0.64, 0.63, 0.6, 0.55, 0.5, 0.41, 0.37, 0.31, 0.28, 0.25, 0.21, 0.16],   //tokyo
-  [ 0.39, 0.37, 0.35, 0.32, 0.29, 0.26, 0.25, 0.62, 0.57, 0.52, 0.45, 0.37], 
-  [ 0.42, 0.4, 0.39, 0.36, 0.33, 0.28, 0.26, 0.43, 0.4, 0.37, 0.32, 0.26], 
-  [ 0.58, 0.56, 0.54, 0.5, 0.46, 0.38, 0.34, 0.25, 0.23, 0.21, 0.17, 0.13] ], 
-  
-[ [ 0.64, 0.63, 0.6, 0.55, 0.5, 0.41, 0.37, 0.31, 0.28, 0.25, 0.21, 0.16],   //tokyo
-  [ 0.39, 0.37, 0.35, 0.32, 0.29, 0.26, 0.25, 0.62, 0.57, 0.52, 0.45, 0.37], 
-  [ 0.42, 0.4, 0.39, 0.36, 0.33, 0.28, 0.26, 0.43, 0.4, 0.37, 0.32, 0.26], 
-  [ 0.58, 0.56, 0.54, 0.5, 0.46, 0.38, 0.34, 0.25, 0.23, 0.21, 0.17, 0.13] ], 
-
-[ [ 1.2, 1.18, 1.15, 1.1, 1.02, 0.84, 0.7, 0.14, 0.12, 0.09, 0.07, 0.05],   //nagano
-  [ 0.88, 0.84, 0.81, 0.74, 0.66, 0.54, 0.49, 0.57, 0.51, 0.43, 0.35, 0.29], 
-  [ 0.99, 0.96, 0.93, 0.86, 0.79, 0.64, 0.55, 0.31, 0.26, 0.21, 0.16, 0.13], 
-  [ 1.16, 1.14, 1.11, 1.06, 0.99, 0.82, 0.68, 0.09, 0.07, 0.05, 0.04, 0.03] ], 
-
-[ [ 0.64, 0.61, 0.57, 0.52, 0.47, 0.4, 0.37, 0.29, 0.28, 0.26, 0.22, 0.18],   //miyazaki
-  [ 0.29, 0.26, 0.23, 0.2, 0.18, 0.18, 0.18, 0.62, 0.61, 0.58, 0.52, 0.44], 
-  [ 0.36, 0.33, 0.3, 0.27, 0.24, 0.23, 0.22, 0.46, 0.45, 0.43, 0.38, 0.32], 
-  [ 0.58, 0.54, 0.51, 0.47, 0.42, 0.36, 0.33, 0.24, 0.24, 0.22, 0.19, 0.15] ], 
-  
-[ [ 0.11, 0.07, 0.06, 0.05, 0.04, 0.08, 0.08, 0.39, 0.38, 0.38, 0.36, 0.33],   //naha
-  [ 0.08, 0.03, 0.02, 0.02, 0.02, 0.06, 0.06, 0.61, 0.59, 0.58, 0.56, 0.51], 
-  [ 0.09, 0.05, 0.03, 0.03, 0.02, 0.06, 0.06, 0.46, 0.45, 0.44, 0.43, 0.39], 
-  [ 0.11, 0.07, 0.06, 0.05, 0.04, 0.08, 0.08, 0.35, 0.35, 0.34, 0.33, 0.3] ] 
-
-[ [ 0.11, 0.07, 0.06, 0.05, 0.04, 0.08, 0.08, 0.39, 0.38, 0.38, 0.36, 0.33],   //naha
-  [ 0.08, 0.03, 0.02, 0.02, 0.02, 0.06, 0.06, 0.61, 0.59, 0.58, 0.56, 0.51], 
-  [ 0.09, 0.05, 0.03, 0.03, 0.02, 0.06, 0.06, 0.46, 0.45, 0.44, 0.43, 0.39], 
-  [ 0.11, 0.07, 0.06, 0.05, 0.04, 0.08, 0.08, 0.35, 0.35, 0.34, 0.33, 0.3] ] 
-
-  ]
-  
-});
-
- ﻿/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * accons.js  for override
- * 
- * AreaParameters  acload: heat load of house 
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/21 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- * 								2017/12/16 ver.1.0 set functions
- * 								2018/03/14 			global setting fix
- */
- 
-D6.patch( D6.acload, {
-// getArray(param)  return paramArray
-//		param: prefecture(original)
-//
-//  return acloat[time_slot_index][heat_month_index]
-//
-//		time_slot_index:
-//				0:morning
-//				1:noon
-//				2:evening
-//				3:night
-//		heat_month_index
-//				0:use heat for a half month
-//				1:use heat for one month
-//				2:use heat for 2 months
-//				3:use heat for 3 months
-//				4:use heat for 4 months
-//				5:use heat for 6 months
-//				6:use heat for 8 months
-//
-//
-
-factorPrefTimeMonth: [
-[ [ 1.06, 1.05, 1.03, 1, 0.95, 0.95, 0.82, 0.09, 0.09, 0.05, 0.03, 0.02],   //sapporo
-  [ 0.93, 0.92, 0.9, 0.87, 0.83, 0.7, 0.59, 0.27, 0.23, 0.18, 0.14, 0.11], 
-  [ 0.99, 0.98, 0.96, 0.93, 0.88, 0.76, 0.64, 0.14, 0.11, 0.07, 0.05, 0.04], 
-  [ 1.05, 1.04, 1.02, 0.99, 0.95, 0.83, 0.7, 0.04, 0.03, 0.02, 0.01, 0.01] ], 
-  
-[ [ 1.06, 1.05, 1.03, 1, 0.95, 0.95, 0.82, 0.09, 0.09, 0.05, 0.03, 0.02],   //sapporo(asahikawa)
-  [ 0.93, 0.92, 0.9, 0.87, 0.83, 0.7, 0.59, 0.27, 0.23, 0.18, 0.14, 0.11], 
-  [ 0.99, 0.98, 0.96, 0.93, 0.88, 0.76, 0.64, 0.14, 0.11, 0.07, 0.05, 0.04], 
-  [ 1.05, 1.04, 1.02, 0.99, 0.95, 0.83, 0.7, 0.04, 0.03, 0.02, 0.01, 0.01] ], 
- 
-[ [ 1.06, 1.05, 1.03, 1, 0.95, 0.95, 0.82, 0.09, 0.09, 0.05, 0.03, 0.02],   //sapporo
-  [ 0.93, 0.92, 0.9, 0.87, 0.83, 0.7, 0.59, 0.27, 0.23, 0.18, 0.14, 0.11], 
-  [ 0.99, 0.98, 0.96, 0.93, 0.88, 0.76, 0.64, 0.14, 0.11, 0.07, 0.05, 0.04], 
-  [ 1.05, 1.04, 1.02, 0.99, 0.95, 0.83, 0.7, 0.04, 0.03, 0.02, 0.01, 0.01] ], 
-
-[ [ 0.84, 0.83, 0.81, 0.78, 0.73, 0.73, 0.61, 0.25, 0.25, 0.18, 0.14, 0.11],   //utunomiya
-  [ 0.52, 0.5, 0.48, 0.45, 0.41, 0.35, 0.33, 0.65, 0.62, 0.55, 0.48, 0.4], 
-  [ 0.63, 0.62, 0.6, 0.56, 0.52, 0.44, 0.39, 0.43, 0.41, 0.36, 0.3, 0.24], 
-  [ 0.81, 0.8, 0.79, 0.76, 0.71, 0.61, 0.51, 0.15, 0.14, 0.11, 0.09, 0.07] ], 
-
-[ [ 0.84, 0.83, 0.81, 0.78, 0.73, 0.73, 0.61, 0.25, 0.25, 0.18, 0.14, 0.11],   //utunomiya
-  [ 0.52, 0.5, 0.48, 0.45, 0.41, 0.35, 0.33, 0.65, 0.62, 0.55, 0.48, 0.4], 
-  [ 0.63, 0.62, 0.6, 0.56, 0.52, 0.44, 0.39, 0.43, 0.41, 0.36, 0.3, 0.24], 
-  [ 0.81, 0.8, 0.79, 0.76, 0.71, 0.61, 0.51, 0.15, 0.14, 0.11, 0.09, 0.07] ], 
-
-[ [ 0.63, 0.62, 0.6, 0.57, 0.53, 0.53, 0.44, 0.43, 0.43, 0.35, 0.28, 0.23],   //tokyo
-  [ 0.44, 0.42, 0.4, 0.37, 0.34, 0.3, 0.29, 0.75, 0.7, 0.63, 0.56, 0.47], 
-  [ 0.48, 0.45, 0.44, 0.41, 0.37, 0.32, 0.3, 0.58, 0.54, 0.5, 0.43, 0.35], 
-  [ 0.6, 0.58, 0.56, 0.53, 0.5, 0.41, 0.37, 0.36, 0.33, 0.3, 0.24, 0.19] ], 
-
-[ [ 0.63, 0.62, 0.6, 0.57, 0.53, 0.53, 0.44, 0.43, 0.43, 0.35, 0.28, 0.23],   //tokyo
-  [ 0.44, 0.42, 0.4, 0.37, 0.34, 0.3, 0.29, 0.75, 0.7, 0.63, 0.56, 0.47], 
-  [ 0.48, 0.45, 0.44, 0.41, 0.37, 0.32, 0.3, 0.58, 0.54, 0.5, 0.43, 0.35], 
-  [ 0.6, 0.58, 0.56, 0.53, 0.5, 0.41, 0.37, 0.36, 0.33, 0.3, 0.24, 0.19] ], 
-
-[ [ 0.63, 0.62, 0.6, 0.57, 0.53, 0.53, 0.44, 0.43, 0.43, 0.35, 0.28, 0.23],   //tokyo
-  [ 0.44, 0.42, 0.4, 0.37, 0.34, 0.3, 0.29, 0.75, 0.7, 0.63, 0.56, 0.47], 
-  [ 0.48, 0.45, 0.44, 0.41, 0.37, 0.32, 0.3, 0.58, 0.54, 0.5, 0.43, 0.35], 
-  [ 0.6, 0.58, 0.56, 0.53, 0.5, 0.41, 0.37, 0.36, 0.33, 0.3, 0.24, 0.19] ], 
-
-[ [ 0.63, 0.62, 0.6, 0.57, 0.53, 0.53, 0.44, 0.43, 0.43, 0.35, 0.28, 0.23],   //tokyo
-  [ 0.44, 0.42, 0.4, 0.37, 0.34, 0.3, 0.29, 0.75, 0.7, 0.63, 0.56, 0.47], 
-  [ 0.48, 0.45, 0.44, 0.41, 0.37, 0.32, 0.3, 0.58, 0.54, 0.5, 0.43, 0.35], 
-  [ 0.6, 0.58, 0.56, 0.53, 0.5, 0.41, 0.37, 0.36, 0.33, 0.3, 0.24, 0.19] ], 
-
-[ [ 0.98, 0.96, 0.93, 0.9, 0.85, 0.85, 0.73, 0.2, 0.2, 0.13, 0.1, 0.07],   //nagano(karuizawa)
-  [ 0.76, 0.74, 0.72, 0.67, 0.62, 0.52, 0.48, 0.7, 0.63, 0.54, 0.45, 0.37], 
-  [ 0.83, 0.81, 0.79, 0.75, 0.7, 0.59, 0.51, 0.42, 0.36, 0.29, 0.22, 0.18], 
-  [ 0.94, 0.92, 0.9, 0.87, 0.82, 0.72, 0.6, 0.13, 0.1, 0.07, 0.05, 0.04] ], 
-
-[ [ 0.62, 0.6, 0.57, 0.53, 0.49, 0.49, 0.42, 0.4, 0.4, 0.37, 0.31, 0.25],   //miyazaki(takachiho)
-  [ 0.33, 0.3, 0.26, 0.23, 0.2, 0.21, 0.21, 0.75, 0.74, 0.71, 0.65, 0.56], 
-  [ 0.41, 0.38, 0.35, 0.31, 0.28, 0.26, 0.25, 0.61, 0.6, 0.57, 0.51, 0.43], 
-  [ 0.58, 0.55, 0.53, 0.49, 0.45, 0.39, 0.35, 0.34, 0.33, 0.31, 0.27, 0.21] ], 
-
-[ [ 0.12, 0.08, 0.07, 0.06, 0.05, 0.05, 0.09, 0.55, 0.55, 0.53, 0.52, 0.47],   //okinawa
-  [ 0.09, 0.04, 0.03, 0.02, 0.02, 0.06, 0.06, 0.76, 0.75, 0.74, 0.72, 0.67], 
-  [ 0.1, 0.05, 0.04, 0.03, 0.03, 0.07, 0.07, 0.64, 0.62, 0.62, 0.6, 0.54], 
-  [ 0.12, 0.08, 0.06, 0.06, 0.04, 0.08, 0.08, 0.51, 0.5, 0.49, 0.48, 0.43] ],
-  
-[ [ 0.12, 0.08, 0.07, 0.06, 0.05, 0.05, 0.09, 0.55, 0.55, 0.53, 0.52, 0.47],   //okinawa
-  [ 0.09, 0.04, 0.03, 0.02, 0.02, 0.06, 0.06, 0.76, 0.75, 0.74, 0.72, 0.67], 
-  [ 0.1, 0.05, 0.04, 0.03, 0.03, 0.07, 0.07, 0.64, 0.62, 0.62, 0.6, 0.54], 
-  [ 0.12, 0.08, 0.06, 0.06, 0.04, 0.08, 0.08, 0.51, 0.5, 0.49, 0.48, 0.43] ],
-]
-
-
-
-} );
-/**
-* Home-Eco Diagnosis for JavaScript
-* AreaParameters area: parameters by prefecture for home
-* 
-* @author Yasufumi SUZUKI  2011/04/15 Diagnosis5
-*								2011/05/06 actionscript3
-* 								2016/04/12 js
-*/
-
-D6.patch( D6.area , {
-
-	//name of prefecture/city
-	//	prefName[prefectureid/cityid]
-	//
-	//都道府県名
-	prefName : [ 
-		'上海',
-		"長春",	//1
-		"北京",
-		"青島",
-		"鄭州",
-		"蘭州", //5
-		"上海",
-		"重慶",
-		"敦煌",
-		"拉萨",
-		"昆明",	//10
-		"広州",
-		"海口"
-	],
-
-	prefDefault : 6,	//not selected
-
-	// heat category with prefecture
-	//	prefHeatingLeverl[prefecture]
-	//
-	//	return code
-	//		1:cold area in Japan(Hokkaido)
-	//			.
-	//			.
-	//		6:hot area in Japan(Okinawa)
-	//
-	//
-	prefHeatingLeverl : [ 
-		5, //8,1,32,25	'上海',			//2
-		1, //-11,-23, 29, 18"長春",		//1　旭川 -3,-13, 26,17
-		2, //2,-10,31,22"北京",			//2	札幌 -1,-7, 27,19
-		2, //3,-4, 28,23"青島",			//3
-		3, //6,-5, 32,23 "鄭州",		//3 宇都宮 8,-3, 31, 22
-		2, //2, -11, 29, 16 "蘭州",		//5
-		5, //8,1,32,25	'上海',			//5 東京 10, 1, 31, 23
-		5, //9,5, 35,25"重慶",			//5
-		2, //-2,-16,33,16 "敦煌",		//5
-		4, //7,-10, 23,10"拉萨",　夏が涼しい	//4	軽井沢 2,-9, 26,16
-		6, //15, 2, 24,16 "昆明",　夏が涼しい	//6 高千穂 9,-1, 30, 21
-		7, //18,10,33,25 "広州",				//7 那覇 20, 15, 32, 27
-		7, //21,15,33,25 "海口"					//7
- 	],
-
-								
-	// CO2 emittion factor
-	//	co2ElectCompanyUnit[elec_company]
-	//
-	//	elec_company
-	//		1:hokkaido electric power company.
-	//			.
-	//			.
-	//		9:okinawa electric power company.
-	//
-	co2ElectCompanyUnit : [ 0.55, 0.55, 0.55, 0.55, 0.55, 0.55
-										, 0.55, 0.55, 0.55, 0.55, 0.55 ],
-
-	//	electricity company code by prefecture
-	//
-	//	prefToEleArea[prefecture]
-	//
-	//都道府県の電力会社コード
-	// 0:北海道、1:東北電力 2:東京電力 3:中部電力 4:北陸電力 5:関西電力
-	// 6:中国電力 7:四国電力 8:九州電力 9:沖縄電力
-	prefToEleArea : [ 2,
-				2, 2, 2, 2, 2, 2, 2,
-				2, 2, 2, 2, 2, 2, 2,
-				1, 4, 4, 4, 2, 3, 3, 3, 3,
-				3, 5, 5, 5, 5, 5, 5,
-				6, 6, 6, 6, 6, 7, 7, 7, 7,
-				8, 8, 8, 8, 8, 8, 8, 9 ],
-
-	//electricity supply company price ratio
-	electCompanyPrice : [
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1,
-		1
-	],
-
-
-	//	electricity charge unit table
-	//
-	//	elecPrice[electicity_type][calc_type]
-	//
-	//	electicity_type
-	//		1:depend on consumption type A
-	//		2:depend on consumption type B
-	//		3:demand pricing 
-	//		4:low voltage 
-	//		5:integrated low voltage 
-	//		6:high voltage 
-	//	calc_type
-	//		1:peak time unit
-	//		2:average unit
-	//		3:price down unit
-	//		4:cut off
-	//		5:base charge to contract kW
-	//
-	//	
-	elecPrice : {
-		// 1:従量電灯A, 2:従量電灯B、3:時間帯別、4:低圧、5:低圧総合、6:高圧
-		// ピーク単価,標準単価,割引単価,切片,kW契約単価
-		1: [ 33.32, 33.32, 33.32, -1500, 0 ],
-		2: [ 33.32, 33.32, 33.32, -1500, 280 ],
-		3: [ 38.89, 27.32, 13.10, 2160, 0 ],
-		4: [ 17.98, 16.53, 16.53, 0, 1054 ],
-		5: [ 20.22, 18.56, 18.56, 64800, 0 ],
-		6: [ 22.58, 17.36, 13.08, 0, 1733 ]
-	},
-
-	//electricity supply company price
-	elecCompanyPrice : {
-	},
-
-
-	// meteorological annal average templature C
-	//
-	//		prefTemplature( prefecture )
-	//
-	//
-	//気象庁｢気象庁年報｣ 平成19年　各都道府県の平均気温
-	//数値は各都道府県の県庁所在地の気象官署の観測値。
-	//  （ただし、埼玉県は熊谷市、滋賀県は彦根市の気象官署の観測値)
-	// Unit.setArea()で　該当する地域について　averageTemplature　にコピーをして利用
-	//
-	prefTemplature : [
-
-		19, //8,1,32,25	'上海',
-		13, //-11,-23, 29, 18"長春",
-		20, //2,-10,31,22"北京",	
-		14, //3,-4, 28,23"青島",
-		21, //6,-5, 32,23 "鄭州",
-		19, //2, -11, 29, 16 "蘭州",
-		19, //8,1,32,25	'上海',
-		23, //9,5, 35,25"重慶",
-		21, //-2,-16,33,16 "敦煌",
-		16, //7,-10, 23,10"拉萨",
-		24, //15, 2, 24,16 "昆明",	//10
-		26, //18,10,33,25 "広州",
-		30, //21,15,33,25 "海口"
-	],
-
-	// solar factor
-	//
-	//		prefPVElectricity( prefecture )
-	//
-	// ex. JWA　monsola05
-	//  annual solar energy input at most provable direction kWh/m2/day
-	prefPVElectricity : [
-		4,4,4,4,4,4,4,4,4,4,4,4,4,4
-	],
-
-	// convert energy name to energy_type id
-	//
-	//	energyCode2id[energy_name]	: get energy code
-	//
-	energyCode2id : {
-		"electricity" : 0,
-		"gas" : 1,
-		"kerosene" : 2,
-		"coal" : 4,
-		"hotwater" : 5,
-		"car" : 3 
-	},
-
-	//convert season name to season id.
-	//
-	//	seasonCode2id[season_name]	: get season code
-	//
-	seasonCode2id : {
-		"winter" : 0,
-		"spring" : 1,
-		"summer" : 2
-	},
-
-	// months include to each season
-	//	seasonMonth[seasonName]
-	//	
-	//	seasonName
-	//		winter/spring/summer  , autumn include to spring
-	//
-	seasonMonth : { winter:4, spring:5, summer:3 },
-
-
-
-	// home original function/data set ==================================
-
-	// average energy fee per month
-	//		prefKakeiEnergy[prefecture][energy_type]
-	//
-	//		prefecture(0-47 in Japan)
-	//		energy_type
-	//			0:electicity
-	//			1:gas
-	//			2:kerosene
-	//			3:gasoline
-	//
-	//地域別平均光熱費 2人以上世帯（補正後）
-	//　中国の電力消費 2011年 413kWh/年・人　http://www.chinaero.com.cn/zxdt/djxx/ycwz/2014/05/146440.shtml
-	//　413×1元/kWh×3人÷12
-	prefKakeiEnergy : [ 
-		[ 200, 80, 0, 50, 5, 0 ],  //東京都区部
-		[ 150, 80, 0, 50, 5, 300 ],  //旭川市
-		[ 150, 80, 0, 50, 5, 250 ],  //札幌市
-		[ 150, 80, 0, 50, 5, 250 ],  //札幌市
-		[ 150, 80, 0, 50, 5, 200 ],  //宇都宮市
-		[ 150, 80, 0, 50, 5, 250 ],  //札幌市
-		[ 200, 80, 0, 50, 5, 0 ],  //東京都区部
-		[ 200, 80, 0, 50, 5, 200 ],  //東京都区部
-		[ 150, 80, 0, 50, 5, 250 ],  //札幌市
-		[ 150, 80, 0, 50, 5, 200 ],  //奈良市
-		[ 150, 80, 0, 50, 5, 200 ],  //奈良市
-		[ 200, 80, 0, 50, 5, 0 ],   //那覇市
-		[ 200, 80, 0, 50, 5, 0 ]   //那覇市
-
-	],
-
-	// Hot Water Supply by local government per m2 in Season
-	//
-	prefHotWaterPrice : [ 
-		0, //8,1,32,25	'上海',
-		31, //-11,-23, 29, 18"長春",
-		25, //2,-10,31,22"北京",	
-		25, //3,-4, 28,23"青島",
-		22, //6,-5, 32,23 "鄭州", 0.19*120
-		17, //2, -11, 29, 16 "蘭州", 4.2*4
-		0, //8,1,32,25	'上海',
-		24, //9,5, 35,25"重慶",		12元/m2 + 44元/GJ
-		20, //-2,-16,33,16 "敦煌",
-		20, //7,-10, 23,10"拉萨",
-		0, //15, 2, 24,16 "昆明",	//10
-		0, //18,10,33,25 "広州",
-		0, //21,15,33,25 "海口"
-	],
-
-	// seasonal energy fee factor to average
-	//
-	//	prefSeasonFactorArray[prefecture][season][energy_type]
-	//
-	//	prefecture:
-	//	season:
-	//		0:wihter
-	//		1:spring
-	//		2:summer
-	//	energy_type
-	//		0:electicity
-	//		1:gas
-	//		2:kerosene
-	//		3:gasoline
-	//
-	//季節別負荷係数
-	prefSeasonFactorArray : [
-
-	[ [ 1.1218, 1.3846, 2.4812, 1.0011 ], [ 0.8666, 0.9201, 0.393, 0.8726 ], [ 1.0599, 0.6203, 0.0368, 1.2109 ] ],   //tokyo
-	[ [ 1.149, 1.1094, 1.8254, 0.9243 ], [ 0.9482, 0.9876, 0.8169, 1.0159 ], [ 0.8876, 0.8749, 0.2047, 1.0743 ] ],   //sapporo
-	[ [ 1.149, 1.1094, 1.8254, 0.9243 ], [ 0.9482, 0.9876, 0.8169, 1.0159 ], [ 0.8876, 0.8749, 0.2047, 1.0743 ] ],   //sapporo
-	[ [ 1.149, 1.1094, 1.8254, 0.9243 ], [ 0.9482, 0.9876, 0.8169, 1.0159 ], [ 0.8876, 0.8749, 0.2047, 1.0743 ] ],   //sapporo
-	[ [ 1.1498, 1.2742, 1.934, 1.0276 ], [ 0.9069, 0.9497, 0.6857, 0.9587 ], [ 0.9555, 0.7183, 0.2786, 1.032 ] ],   //utsunomiya
-	[ [ 1.149, 1.1094, 1.8254, 0.9243 ], [ 0.9482, 0.9876, 0.8169, 1.0159 ], [ 0.8876, 0.8749, 0.2047, 1.0743 ] ],   //sapporo
-	[ [ 1.1218, 1.3846, 2.4812, 1.0011 ], [ 0.8666, 0.9201, 0.393, 0.8726 ], [ 1.0599, 0.6203, 0.0368, 1.2109 ] ],   //tokyo
-	[ [ 1.1218, 1.3846, 2.4812, 1.0011 ], [ 0.8666, 0.9201, 0.393, 0.8726 ], [ 1.0599, 0.6203, 0.0368, 1.2109 ] ],   //tokyo
-	[ [ 1.149, 1.1094, 1.8254, 0.9243 ], [ 0.9482, 0.9876, 0.8169, 1.0159 ], [ 0.8876, 0.8749, 0.2047, 1.0743 ] ],   //sapporo
-	[ [ 1.1301, 1.3407, 2.324, 0.9201 ], [ 0.8464, 0.9429, 0.4949, 0.9414 ], [ 1.0826, 0.6409, 0.0765, 1.2042 ] ],   //nara
-	[ [ 1.1301, 1.3407, 2.324, 0.9201 ], [ 0.8464, 0.9429, 0.4949, 0.9414 ], [ 1.0826, 0.6409, 0.0765, 1.2042 ] ],   //nara
-	[ [ 0.8457, 1.1222, 1.5081, 0.9201 ], [ 0.9351, 0.9941, 0.8528, 0.9802 ], [ 1.3139, 0.847, 0.5678, 1.1395 ] ],   //naha
-	[ [ 0.8457, 1.1222, 1.5081, 0.9201 ], [ 0.9351, 0.9941, 0.8528, 0.9802 ], [ 1.3139, 0.847, 0.5678, 1.1395 ] ]   //naha
-
-	],
-
-
-
-	//	factor to average fee
-	//		kakeiNumCoefficent[person_in_home][energy_type]
-	//
-	//		pserson_in_home
-	//			0: single home
-	//			1: 2 person in home
-	//			2: 3 person in home
-	//			3: 4 person in home
-	//			4: 5 person in home
-	//			5: more than 6 person in home
-	//		energy_type
-	//			0:electicity
-	//			1:gas
-	//			2:kerosene
-	//			3:gasoline
-	//
-	//世帯人数別の支出金額比率（標準値に対する割合:家計調査より）
-	//	[電気、ガス、灯油、ガソリン]
-	//	[1人世帯、2人世帯、3人世帯、4人世帯、5人世帯、6人以上世帯]
-	//　　出典について複数の環境家計簿からの集計値（確認：評価基礎情報ではない）
-	kakeiNumCoefficent:
-			  [ [ 0.47, 0.52,  0.37, 0.45, 0.4, 0.4 ],
-				[ 0.86, 0.83,  0.90, 0.79, 0.8, 0.8 ],
-				[ 0.99, 1.00,  0.90, 0.98, 1.0, 1.0 ],
-				[ 1.07, 1.10,  0.85, 1.16, 1.1, 1.1 ],
-				[ 1.24, 1.17,  1.10, 1.26, 1.3, 1.3 ],
-				[ 1.55, 1.19,  1.67, 1.33, 1.4, 1.4  ]
-	],
-
-	//	urban / ural area fee per month
-	//		urbanCostCoefficient[energy_type][area_type]
-	//
-	//		energy_type
-	//			0:electicity
-	//			1:gas
-	//			2:kerosene
-	//			3:gasoline
-	//		area_type
-	//			0:urban
-	//			1:ural
-	//
-	//郊外の場合の比率　家計調査より 2001～2007年
-	//　都市部：大都市と中都市の平均
-	//　郊外：小都市A、小都市B、町村の平均 
-	urbanCostCoefficient :
-			[ [ 8762, 9618 ],
-			  [ 6100, 5133 ],
-			  [ 828,  1898 ],
-			  [ 3415, 6228 ],
-			  [ 3,  20 ],
-			  [ 24,  5 ]
-	],
-} );
-
-
-﻿/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * unit.js 
- * 
- * any kind of unit related to energy type is defined here, change here
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/21 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- */
-
-//fix D6.Unit
-
-	// unit price   元(in China)/each unit
-D6.Unit.price = {
-		electricity:1,			// override in D6.area.setPersonArea by supplyer
-		nightelectricity:0.3,
-		sellelectricity:1,
-		nagas:10,
-		lpgas:30,
-		kerosene:7,
-		gasoline:8,
-		lightoil:7,
-		heavyoil:6,
-		coal:3,
-		biomass:0,
-		hotwater:0.036,
-		waste:0,
-		water:0,
-		gas:10,
-		car:8
-	};
-
-	// intercept price when consumption is zero
-D6.Unit.priceBase = {
-		electricity:0,
-		nightelectricity:0,
-		sellelectricity:0,
-		nagas:0,
-		lpgas:0,
-		kerosene:0,
-		gasoline:0,
-		lightoil:0,
-		heavyoil:0,
-		coal:0,
-		biomass:0,
-		hotwater:50,
-		waste:0,
-		water:0,
-		gas:0,
-		car:0
-	};
-	
-	// names ( dataset is now witten in Japanse )
-D6.Unit.name = {
-		electricity:"电力",
-		nightelectricity:"电力",
-		sellelectricity:"売電",
-		nagas:"都市ガス",
-		lpgas:"LPガス",
-		kerosene:"灯油",
-		gasoline:"ガソリン",
-		lightoil:"軽油",
-		heavyoil:"重油",
-		coal:"煤球",
-		biomass:0,
-		hotwater:"区供热",
-		waste:0,
-		water:0,
-		gas:"气",
-		car:"汽油"
-	};
-	
-	// unit discription text
-D6.Unit.unitChar = {
-		electricity:"kWh",
-		nightelectricity:"kWh",
-		sellelectricity:"kWh",
-		nagas:"m3",
-		lpgas:"m3",
-		kerosene:"L",
-		gasoline:"L",
-		lightoil:"L",
-		heavyoil:"L",
-		coal:"kg",
-		biomass:0,
-		hotwater:"MJ",
-		waste:0,
-		water:0,
-		gas:"m3",
-		car:"L"
-	};
-	
-	// second energy(end-use)  kcal/each unit
-D6.Unit.calorie = {
-		electricity:860,
-		nightelectricity:860,
-		sellelectricity:860,
-		nagas:11000,
-		lpgas:36000,
-		kerosene:8759,
-		gasoline:8258,
-		lightoil:9117,
-		heavyoil:9000,
-		coal:8000,
-		biomass:0,
-		hotwater:225,
-		waste:0,
-		water:0,
-		gas:11000,
-		car:8258
-	};
-
-	// primary energy  MJ/each unit
-D6.Unit.jules = {
-		electricity:9.6,
-		nightelectricity:9.6,
-		sellelectricity:9.6,
-		nagas:46,
-		lpgas:60,
-		kerosene:38,
-		gasoline:38,
-		lightoil:38,
-		heavyoil:38,
-		coal:32,
-		biomass:0,
-		hotwater:1,
-		waste:0,
-		water:0,
-		gas:45,
-		car:38
-	};
-	
-	
-	// costToCons( cost, energy_name, elecType, kw ) -----------------------------
-	//		estimate consumption from cost, per month
-	// parameters
-	//		cost: energy fee/cost per month
-	//		energy_name: energy code
-	//		elecType: type of electricity supply
-	//			1:従量電灯A, 2:従量電灯B、3:時間帯別、4:低圧、5:低圧総合、6:高圧 in Japan
-	//		kw:	contract demand
-	// return
-	//		cons: energy consumption per month
-D6.Unit.costToCons = function( cost, energy_name, elecType, kw )
-	{
-		var ret;
-		if ( cost == -1 || cost == "" ) {
-			ret = "";
-		}
-		if (energy_name != "electricity" || typeof(D6.area.elecPrice) == undefined ) {
-			// not electricity or no regional parameters
-			if ( cost < D6.Unit.priceBase[energy_name] * 2 ) {
-				// estimation in case of nealy intercept price
-				ret = cost / D6.Unit.price[energy_name] / 2;
-			} else {
-				// ordinal estimation
-				ret = ( cost - D6.Unit.priceBase[energy_name] ) / D6.Unit.price[energy_name];
-			}
-
-		} else {
-			//regional electricity
-			if ( elecType < 0 || !elecType ) {
-				if ( D6.consShow["TO"].allDenka ) {
-					elecType = 3;
-				} else {
-					elecType = 1;
-				}
-			}
-			var def = D6.area.elecPrice[elecType];
-			ret = ( cost - kw * def[4] - def[3] ) / (( def[1] + def[2] ) / 2);
-		}
-		return ret;
-	};
-	
-	
-	//consToCost( cons, energy_name, elecType, kw ) -----------------------
-	//		estimate cost from energy consumption
-	// parameters
-	//		cons: energy consumption per month
-	//		energy_name: energy code
-	//		elecType: type of electricity supply
-	//			1:従量電灯A, 2:従量電灯B、3:時間帯別、4:低圧、5:低圧総合、6:高圧 in Japan
-	//		kw:	contract demand
-	// return
-	//		cost: energy fee/cost per month, not include intercept price
-D6.Unit.consToCost = function( cons, energy_name, elecType, kw )
-	{
-		var ret;
-
-		if ( cons == -1 || cons == "" ) {
-			ret = "";
-		}
-//		if ( energy_name != "electricity" || typeof(D6.area.elecPrice) == undefined  ) {
-			// this is rough method, multify only unit price
-			// it will better to fix regionally
-			ret = cons * D6.Unit.price[energy_name];
-/*
-		} else {
-			// electricity
-			if ( elecType < 0 || !elecType ) {
-				if ( D6.consShow["TO"].allDenka ) {
-					elecType = 3;
-				} else {
-					elecType = 1;
-				}
-			}
-			var def = D6.area.elecPrice[elecType];
-			ret  = kw * def[4] + cons * ( def[1] + def[2] ) / 2;
-			if( ret > def[3] * 2 ) {
-				ret -= def[3];
-			} else {
-				ret /= 2;
-			}
-		}
-*/
-		return ret;
-	};
-	
-	// consToEnergy( cons, energy_name ) --------------------------------
-	//		calculate energy from energy consumption 
-	// parameters
-	//		cons: energy consumption per month
-	//		energy_name: energy code
-	// return
-	//		ret: energy MJ per month
-	consToEnergy = function( cons, energy_name )
-	{
-		var ret;
-
-		if ( cons == -1 || cons == "" ) {
-			ret = "";
-		}
-		//static function
-		ret = cons * D6.Unit.jules[energy_name]/1000000;
-
-		return ret;
-	};
-
-﻿/**
-* Home-Eco Diagnosis for JavaScript
-* 
-* ConsTotal
-*/
-
-DC = D6.consTotal;		//temporaly set as DC
-
-//initialize
-DC.init = function() {
-	//construction definition
-	this.title = "整体";
-	this.inputGuide = "有关地区和房子的基本信息";
-
-};
-DC.init();
-
-//Documentからの変換
-DC.paramSet = function() {
-	this.person =this.input( "i001", 3 );			//世帯人数
-
-	//solar
-	this.solarSet =this.input( "i051", 0 );					//太陽光発電の設置　あり=1
-	this.solarKw =this.input( "i052", this.solarSet * 3.5 );	//太陽光発電の設置容量(kW)
-	this.solarYear =this.input( "i053", 0 );				//太陽光発電の設置年
-	
-	//electricity
-	this.priceEle = this.input( "i061"
-			,D6.area.averageCostEnergy.electricity );	//月電気代
-	this.priceEleSpring = this.input( "i0912" ,-1 );
-	this.priceEleSummer = this.input( "i0913" ,-1 );
-	this.priceEleWinter = this.input( "i0911" ,-1 );
-
-	this.priceEleSell =this.input( "i062", 0 );		//月売電
-				
-	//gas
-	this.priceGas =this.input( "i063"
-			,D6.area.averageCostEnergy.gas );			//月ガス代
-	this.priceGasSpring =this.input( "i0932" ,-1 );
-	this.priceGasSummer =this.input( "i0933" ,-1 );
-	this.priceGasWinter =this.input( "i0931" ,-1 );
-
-	this.houseType =this.input( "i002", 2 );			//戸建て集合
-	this.houseSize =this.input( "i003", 
-			( this.person == 1 ? 60 : (80 + this.person * 10) ) );
-													//家の広さ
-
-	this.heatEquip =this.input( "i202", -1 );			//主な暖房機器
-
-	//coal
-	this.priceCoal = this.input( "i065" ,D6.area.averageCostEnergy.coal );
-	this.priceCoalSpring =this.input( "i0942" ,-1 );
-	this.priceCoalSummer =this.input( "i0943" ,-1 );
-	this.priceCoalWinter =this.input( "i0941" ,-1 );
-
-	this.priceHotWater = this.input( "i066" , 1 ) == 1 ? D6.area.averageCostEnergy.hotwater * this.houseSize / 100 : 0;
-
-	if( this.priceKerosWinter == -1 ) {
-		if (D6.area.averageCostEnergy.kerosene < 1000 ) {
-			this.priceKeros =this.input( "i064", 0 );		//冬の月灯油代0（円)
-		} else {
-			this.priceKeros =this.input( "i064"
-				,D6.area.averageCostEnergy.kerosene 
-				/ D6.area.seasonMonth.winter * 12 );	//月灯油代標準値（円)　入力は冬
-		}
-	}
-
-	this.priceCar =this.input( "i075"
-			,D6.area.averageCostEnergy.car );			//月車燃料代
-	this.equipHWType = this.input( "i101", 1 );			//給湯器の種類
-
-	this.generateEleUnit = D6.area.unitPVElectricity;	//地域別の値を読み込む
-		
-	//灯油・ガスが無記入の場合は、平均値としてガスに灯油分を加えておく
-	if (D6.area.averageCostEnergy.kerosene < 1000 ) {
-		if (this.input( "i063", -1 ) < 0 			//ガスの記入がない
-			&&this.input( "i0931", -1 ) < 0 
-			&&this.input( "i0932", -1 ) < 0 
-			&&this.input( "i0933", -1 ) < 0 
-		) {
-			//灯油分のエネルギーをガスに追加
-			this.keros2gas =D6.area.averageCostEnergy.kerosene
-					/D6.Unit.price.kerosene
-					*D6.Unit.calorie.kerosene
-					/D6.Unit.calorie.gas
-					*D6.Unit.price.gas;
-			this.priceGasSpring += this.keros2gas;
-			this.priceGasWinter += this.keros2gas;				
-		}
-	}
-
-	//季節別の光熱費の入力のパターン（初期値　-1:無記入）
-	this.seasonPrice =  {
-			electricity :	[ this.priceEleWinter, this.priceEleSpring, this.priceEleSummer ],		//電気
-			gas :			[ this.priceGasWinter, this.priceGasSpring, this.priceGasSummer ],		//ガス
-			kerosene:		[ this.priceKeros, this.priceKerosSpring,this.priceKerosSummer ], 		//灯油
-			coal :			[ -1, -1,-1 ], 
-			hotwater :		[ -1, -1,-1 ],
-			car :			[ -1, -1,-1 ] 		//ガソリン
-	};
-
-	//毎月の消費量の入力のパターン（初期値　-1：無記入）
-	this.monthlyPrice = {
-			electricity :	[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
-			gas :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
-			kerosene :		[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
-			coal :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
-			hotwater :		[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
-			car :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ] 
-	};
-};
-
-
-//消費量の計算
-DC.calc = function( ){
-
-	this.clear();			//結果の消去
-	var ret;					//return values
-
-	//入力値の読み込み
-	this.paramSet();
-
-	//季節係数の読込（全エネルギー）
-	var seasonConsPattern = D6.area.getSeasonParamCommon();
-
-	//電気の推計
-	ret = D6.calcMonthly( this.priceEle, this.seasonPrice["electricity"], this.monthlyPrice["electricity"], seasonConsPattern.electricity, "electricity" );
-	this.priceEle = ret.ave;
-	this.seasonPrice["electricity"] = ret.season;
-	this.monthlyPrice["electricity"] = ret.monthly;
-		//光熱費の記入がないときには、分野の単純積み上げとする
-	this.noConsData = ret.noConsData 
-					&& ( this.input( "i061", -1) == -1 );
-					//&& !D6.averageMode;
-		
-	//depend on hot water equipment
-	if ( this.equipHWType == 5 ) {
-		this.averagePriceElec = this.ratioNightHWElec *D6.Unit.price.nightelectricity 
-						+ ( 1 - this.ratioNightHWElec ) *D6.Unit.price.electricity;
-		this.allDenka = true;
-		
-	} else if (this.equipHWType == 6 ) {
-		this.averagePriceElec = this.ratioNightEcocute *D6.Unit.price.nightelectricity 
-						+ ( 1 - this.ratioNightEcocute ) *D6.Unit.price.electricity;
-		this.allDenka = true;
-		
-	} else {
-		this.averagePriceElec =D6.Unit.price.electricity;
-		this.allDenka = false;
-	}
-
-	//base price
-	var priceBase;
-	if ( this.allDenka ) {
-		priceBase = D6.Unit.price.nightelectricity;
-	} else {
-		priceBase = 0;
-	}
-
-	//solar generation
-	var generateEle = this.generateEleUnit * this.solarKw / 12;
-	
-	//solar sell price 
-	var pvSellUnitPrice = D6.Unit.price.sellelectricity;
-
-	//PV installed
-	if ( this.solarKw > 0 ) {
-		// gross = electricity consumed in home include self consumption amount
-		this.grossElectricity = ( 1 - this.solarSaleRatio ) * generateEle 
-					+ Math.max(0, ( this.priceEle 
-												-  this.priceEleSell
-												+ this.solarSaleRatio * generateEle * pvSellUnitPrice 
-												- priceBase ) 
-											) / this.averagePriceElec;
-		this.electricity = this.grossElectricity - generateEle;
-	} else {
-		//not installed
-		this.electricity = ( this.priceEle - priceBase ) / this.averagePriceElec;
-		this.grossElectricity = this.electricity;
-	}
-
-	//gas
-	ret = D6.calcMonthly( this.priceGas, this.seasonPrice["gas"], this.monthlyPrice["gas"], seasonConsPattern.gas, "gas" );
-	this.priceGas = ret.ave;
-	this.seasonPrice["gas"] = ret.season;
-	this.monthlyPrice["gas"] = ret.monthly;
-
-	this.gas = ( this.priceGas -D6.Unit.priceBase.gas ) 
-											/D6.Unit.price.gas;
-
-	//coal
-	ret = D6.calcMonthly( this.priceCoal, this.seasonPrice["coal"], this.monthlyPrice["coal"], seasonConsPattern.coal, "coal" );
-	this.priceCoal = ret.ave;
-	this.seasonPrice["coal"] = ret.season;
-	this.monthlyPrice["coal"] = ret.monthly;
-	
-	this.coal = this.priceCoal / D6.Unit.price.coal;
-
-	//hotwater
-	ret = D6.calcMonthly( this.priceHotWater, this.seasonPrice["hotwater"], this.monthlyPrice["hotwater"], seasonConsPattern.hotwater, "hotwater" );
-	this.priceHotWater = ret.ave;
-	this.hotwater = this.priceHotWater / D6.Unit.price.hotwater;
-	this.seasonPrice["hotwater"] = ret.season;
-	this.monthlyPrice["hotwater"] = ret.monthly;
-
-	//gasoline
-	ret = D6.calcMonthly( this.priceCar, this.seasonPrice["car"], this.monthlyPrice["car"], seasonConsPattern.car, "car" );
-	this.priceCar = ret.ave;
-	this.seasonPrice["car"] = ret.season;
-	this.monthlyPrice["car"] = ret.monthly;
-
-	this.car = this.priceCar / D6.Unit.price.car;
-	
-};
-
-
-//対策計算
-DC.calcMeasure = function( ) {
-	var mes;
-
-	var solar_reduceVisualize = this.reduceHEMSRatio;		//モニターによる消費電力削減率
-	var solar_sellPrice = 1;				//売電単価
-
-	//mTOsolar-----------------------------------------
-	mes = this.measures[ "mTOsolar" ];		//set mes
-	mes.copy( this );
-	
-	// not installed and ( stand alone or desired )
-	if ( this.solarKw == 0 
-		&& ( this.houseType != 2 || this.replace_solar ) 
-	) {
-		// monthly generate electricity
-		var solar_generate_kWh = this.generateEleUnit * this.standardSize / 12;
-
-		// saving by generation
-		var solar_priceDown = solar_generate_kWh * this.solarSaleRatio * solar_sellPrice 
-						+ solar_generate_kWh * ( 1 - this.solarSaleRatio ) *D6.Unit.price.electricity;
-
-		// saving by visualize display
-		var solar_priceVisualize = this.electricity * solar_reduceVisualize
-							*D6.Unit.price.electricity;
-		
-		//electricity and cost
-		mes.electricity = this.electricity * ( 1 - solar_reduceVisualize ) - solar_generate_kWh;
-		mes.costUnique = this.cost - solar_priceDown - solar_priceVisualize;	
-		
-		//initial cost 
-		mes.priceNew = this.standardSize * mes.priceOrg;	
-		//comment add to original definition
-		mes.advice = D6.scenario.defMeasures['mTOsolar']['advice'] 
-			+ "<br>　标准" + this.standardSize + "kW的是该类型的计算结果。";
-	}
-
-	//mTOhems HEMS-----------------------------------------
-	mes = this.measures[ "mTOhems" ];		//set mes
-	mes.copy( this );
-	
-	//pv system is not installed  --- pv system includes visualize display
-	if ( !this.isSelected( "mTOsolar" ) ) {
-		mes.electricity = this.electricity * ( 1 - this.reduceHEMSRatio );
-	}
-	
-	//mTOsolarSmall ベランダ太陽光------------------------------------------
-	mes = this.measures[ "mTOsolarSmall" ];		//set mes
-	mes.copy( this );
-	var watt_panel = 50;			// install panel size (W)
-	var eff = 0.3;						// effectiveness to roof 
-	mes.electricity -= watt_panel / 1000 * eff * this.generateEleUnit / 12 ;
-
-};
-
-﻿/**
-* Home-Eco Diagnosis for JavaScript
-* 
-* ConsHWsum
-*/
-
-DC = D6.consHWsum;		// short cut
-
-//initialize-------------------------------
-DC.init = function() {
-	this.title = "热水器";				//consumption title for person
-	this.inputGuide = "如何使用热水供应一般";		//guidance in question
-	
-};
-DC.init();	// initialize when this class is loaded
-
-
-//change Input data to local value 
-DC.paramSet = function() {
-	// use answers for calclation
-	this.person =this.input( "i001", 3 );				//世帯人数
-	this.housetype =this.input( "i002", 2 );			//戸建て集合 CN
-	this.tabDayWeek =this.input( "i103", 0 );			//浴槽にためる日数 CN
-	this.tabDayWeekSummer =this.input( "i104", 0 );		//浴槽にためる日数夏 CN
-	this.showerMinutes =this.input( "i105"
-			, this.showerWaterMinutes * this.person );	//シャワー時間（分）
-	this.showerMinutesSummer =this.input( "i106"
-			, this.showerWaterMinutes * this.person );	//シャワー時間（分）夏
-	this.savingShower =this.input( "i116", -1 );		//節水シャワーヘッド
-	this.tabKeepHeatingTime =this.input( "i108"
-			, (this.person > 1 ? 3 : 0 ) );				//保温時間
-	this.keepMethod =this.input( "i110", 5 );			//追い焚きの方法（割）
-	this.tabInsulation =this.input( "i117", -1 );		//断熱
-	this.tabHeight =this.input( "i107", 8 );			//お湯張りの高さ（割）
-	
-	this.equipType = this.input( "i101", -1 );			//給湯器の種類
-	this.priceGas = D6.consShow["TO"].priceGas;			//月ガス代
-	this.priceKeros = D6.consShow["TO"].priceKeros;		//冬の月灯油代
-
-	this.dresserMonth = this.input( "i114", 4 );		//洗面でのお湯を使う期間（月）
-	this.dishWashMonth = this.input( "i115", 4 );		//食器洗いでのお湯を使う期間（月）　99は食洗機
-	this.dishWashWater = this.input( "i113", 3 );		//食器洗いで水を使うようにしているか 1いつも、4していない
-	this.cookingFreq = this.input( "i802", 6 );			//調理の頻度（割）
-	
-	this.keepSeason =this.input( "i131", 4 );			//トイレ保温をしているか 1:通年、4していない CN
-};
-
-﻿/**
-* Home-Eco Diagnosis for JavaScript
-* 
-* ConsHTsum
-*/
-
-DC = D6.consHTsum;
-
-//initialize setting
-DC.init = function() {
-	this.title = "供暖";
-	this.inputGuide = "如何使用整个房子的供暖";
-	
-};
-DC.init();
-
-//change Input data to local value 
-DC.precalc = function() {
-	this.clear();			//clear data
-
-	//入力値の読み込み
-	this.prefecture =this.input( "i021", 6 );		//city, prefecture
-	this.heatArea = D6.area.getHeatingLevel(this.prefecture);
-
-	this.person =this.input( "i001", 3 );			//person
-	this.houseType =this.input( "i002", 2 );		//standalone / apartment CN
-	this.houseSize =D6.consShow["TO"].houseSize;	//home size 
-
-	this.priceHotWater = this.input( "i066" , 1 ) == 1 ? D6.area.averageCostEnergy.hotwater * this.houseSize / 100 : 0;
-
-	this.heatSpace  =this.input( "i201", this.heatArea < 5 ? 0.8 : 0.2 );	//part of heating CN
-	this.heatEquip =this.input( "i202", -1 );		//equipment for heating
-	this.heatTime  =this.input( "i204", this.heatArea < 5 ? 24 : 4 );		//heat time CN
-	this.heatTemp  =this.input( "i205", 21 );		//暖房設定温度
-	this.priceEleSpring =this.input( "i0912", -1 );	//電気料金（春秋）
-	this.priceEleWinter =this.input( "i0911", -1 );	//電気料金（冬）
-	this.priceGasWinter =this.input( "i0921", -1 );	//ガス料金（冬）
-	this.consKeros =this.input( "i064", -1 );		//灯油消費量
-
-	this.performanceWindow =this.input( "i041", -1 );	//窓の断熱性能
-	this.performanceWall =this.input( "i042", -1 );	//壁の断熱性能 グラスウール換算mm
-	this.reformWindow =this.input( "i043", -1 );	//窓の断熱リフォーム
-	this.reformfloor =this.input( "i044", -1 );		//天井・床の断熱リフォーム
-};
-
-DC.calc = function() {
-	//熱量計算
-	var heatKcal = this.calcHeatLoad();
-
-	//月平均値への換算
-	heatKcal *= D6.area.seasonMonth.winter / 12;
-	this.endEnergy = heatKcal;
-
-	//熱源の推計　記入がない場合にはガスか灯油
-	if ( this.heatEquip <= 0 ) {
-		if ( this.consKeros > 0 
-			||D6.area.averageCostEnergy.kerosene > 10 
-		) {
-			//灯油が標準10元以上もしくは記入がある
-			this.heatEquip = 4;
-		} else if ( this.priceGasWinter < 0 
-				|| this.priceGasWinter > 40 
-		) {
-			//ガス代が一定ある
-			this.heatEquip = 3;
-		} else {
-			//電気しか使っていない
-			this.heatEquip = 1;
-		}
-	}
-
-	//電気でまかないきれない分の計算
-	var elecOver = 0;
-	var coef = ( this.heatEquip == 1 ? this.apf : 1 );
-	if ( this.heatEquip == 1 || this.heatEquip == 2 ) {
-		if ( this.priceEleWinter > 0  ) {
-			var priceMaxCons = this.priceEleWinter * 0.7
-					/ D6.Unit.price.electricity 
-					* D6.Unit.seasonMonth.winter / 12;
-			if ( heatKcal / coef /D6.Unit.calorie.electricity > priceMaxCons ) {
-				//価格からの最大値を超えて電気が消費されている場合
-				var elecOver = heatKcal - priceMaxCons * coef *D6.Unit.calorie.electricity;
-				heatKcal -= elecOver;
-			}
-		}
-	}
-
-	//熱源の割り振り
-	this.calcACkwh = heatKcal / this.apf /D6.Unit.calorie.electricity;
-
-	if ( this.priceHotWater > 0 ) {
-		//熱供給 CN
-		this.mainSource = "hotwater";
-		this[this.mainSource] =  heatKcal /D6.Unit.calorie[this.mainSource];
-	} else if ( this.heatEquip == 1) {
-		//エアコン
-		//消費電力量　kWh/月
-		this.mainSource = "electricity";
-		this[this.mainSource] =  this.calcACkwh;
-
-	} else {
-		if ( this.heatEquip == 2 ) {
-			//電熱暖房 CN
-			//消費電力量　kWh/月
-			this.mainSource = "electricity";
-		} else if ( this.heatEquip == 3 ) {
-			//ガス暖房
-			//消費ガス量　m3/月
-			this.mainSource = "gas";
-		} else if ( this.heatEquip == 4 ) {
-			//灯油暖房
-			//消費灯油量　L/月
-			this.mainSource = "kerosene";
-		} else if ( this.heatEquip == 7 ) {
-			//温水供給
-			this.mainSource = "hotwater";
-		} else if ( this.heatEquip == 8 ) {
-			this.mainSource = "coal";	//CN
-		} else {
-			//温水供給
-			this.mainSource = "hotwater";
-		}
-		this[this.mainSource] =  heatKcal /D6.Unit.calorie[this.mainSource];
-	}
-	//電気で賄えない分を割りふる
-	if ( elecOver > 0 ) {
-		//寒い地域なら灯油
-		if (D6.Unit.areaHeating <= 4 && this.priceKeros > 0 ) {
-			this.kerosene =  elecOver /D6.Unit.calorie.kerosene;
-		} else {
-			this.gas =  elecOver /D6.Unit.calorie.gas;
-		}
-	}
-};
-
-//対策計算
-DC.calcMeasure = function() {
-	//断熱
-	if ( !this.isSelected( "mHTuchimadoAll" ) && !this.isSelected( "mHTloweAll" ) && this.houseType != 2){
-		this.measures["mHTdoubleGlassAll"].calcReduceRate( this.reduceRateDouble );
-	}
-	if (  !this.isSelected( "mHTloweAll" ) ){
-		this.measures["mHTuchimadoAll"].calcReduceRate( this.reduceRateUchimado );
-	}
-	if (  this.houseType != 2){
-		this.measures["mHTloweAll"].calcReduceRate( this.reduceRateLowe );
-	}
-};
 
 
 

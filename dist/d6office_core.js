@@ -1,4 +1,4 @@
-﻿/*  2017/12/10  version 1.0
+/*  2017/12/10  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -441,70 +441,8 @@ D6.workercalc = function( command, param ){
 	return result;
 };
 
-/*  2017/12/10  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * objectcreate.js 
- * 
- *  Object Create
- *		reference to http://blog.tojiru.net/article/199670885.html by Hiraku NAKANO
- *
- *	usage var newOBJ = D6.object(oldOBJ);
- */
 
-//resolve D6
-var D6 = D6||{};
-
-D6.object = function(obj) {
-	var func = D6.object.func;
-	func.prototype = obj;
-	var newo = new func;
-	var len=arguments.length;
-	for (var i=1; i<len; ++i) {
-		for (var prop in arguments[i]) {
-			newo[prop] = arguments[i][prop];
-		}
-	}
-	return newo;
-};
-D6.object.func = function(){};
-
-
-D6.patch = function( target, fix ) {
-	for ( var v in fix ) {
-		target[v] = fix[v];
-	}
-	return target;
-};
-
-
-
-
-/*  2017/12/10  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * base64.js 
- * 
- * define atob , btoa
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- * 								2016/04/12 original to JavaScript
- */
-
-// atob, btoa is defined in windows. it doesn't work in web worker 
-if ( typeof ( atob) =="undefined" ) {
-	function atob(str){
-		return str;
-	};
-	function btoa(str){
-		return str;
-	};
-};
-﻿/*  2017/12/16  version 1.0
+/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -574,7 +512,8 @@ D6.acadd = {
 	}
 
 };
-﻿/*  2017/12/16  version 1.0
+
+/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -635,7 +574,8 @@ factorPrefTimeMonth: [
 	}
 
 };
-﻿/*  2017/12/16  version 1.0
+
+/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -698,7 +638,8 @@ D6.acload = {
 	}
 
 };
-﻿/*  2017/12/16  version 1.0
+
+/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -1323,7 +1264,8 @@ D6.area = {
 };
 
 
-﻿/*  2017/12/16  version 1.0
+
+/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -1587,6 +1529,48 @@ D6.Unit = {
 	},
 };
 
+
+/*  2017/12/10  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * objectcreate.js 
+ * 
+ *  Object Create
+ *		reference to http://blog.tojiru.net/article/199670885.html by Hiraku NAKANO
+ *
+ *	usage var newOBJ = D6.object(oldOBJ);
+ */
+
+//resolve D6
+var D6 = D6||{};
+
+D6.object = function(obj) {
+	var func = D6.object.func;
+	func.prototype = obj;
+	var newo = new func;
+	var len=arguments.length;
+	for (var i=1; i<len; ++i) {
+		for (var prop in arguments[i]) {
+			newo[prop] = arguments[i][prop];
+		}
+	}
+	return newo;
+};
+D6.object.func = function(){};
+
+
+D6.patch = function( target, fix ) {
+	for ( var v in fix ) {
+		target[v] = fix[v];
+	}
+	return target;
+};
+
+
+
+
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -1602,6 +1586,8 @@ D6.Unit = {
  * 								2016/04/12 ported to JavaScript
  */
 
+//resolve D6
+var D6 = D6||{};
 
 D6.Energy = {
 	//value of each energy type
@@ -1754,7 +1740,8 @@ D6.Energy = {
 
 
 
-﻿/*  2017/12/10  version 1.0
+
+/*  2017/12/10  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -2106,6 +2093,7 @@ D6.ConsBase.init = function(){
 
 D6.ConsBase.init();
 
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -2370,6 +2358,7 @@ D6.MeasureBase.measureSumMonth = function( source, month ) {
 
 
 
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -2601,6 +2590,123 @@ D6.doc =
 		return mesSel;
 	}
 };
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * diagnosis.js 
+ * 
+ * D6 Main Class
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/17 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 
+ * need d6_construct, d6_calccons, d6_calcmeasures, d6_calcaverage, d6_setvalue, d6_tools
+ * 
+ * construct();
+ *   setscenario()					initialize diagnosis structure by scenario file
+ *   addMeasureEachCons()			add measure definition
+ *   addConsSetting()				add consumption definition 
+ 
+ * calcCons()					calculate consumption
+ * calcConsAdjust()				adjust consumption
+
+ * calcMeasures()				calculate measure
+ * calcMeasuresLifestyle()		calculate all measures and select lifestyle
+ * calcMeasuresNotLifestyle()	calculate all measures and select not lifestyle
+ * calcMeasuresOne()			calculate in temporal selection
+ * calcMaxMeasuresList()		automatic select max combination 
+
+ * calcAverage()				get avearage consumption
+ * rankIn100()					get rank				
+
+ * inSet()						input data setter
+ * measureAdd()					set select flag and not calculate 
+ * measureDelete()				clear select flag and not calculate 
+
+ * getGid()						get group id
+ * getCommonParameters()		result common parameters
+ * 
+ * toHalfWidth()
+ * ObjArraySort()
+ * 
+ * other D6 class
+ * 		D6.disp		disp.js, disp_input.js, disp_measure.js
+ * 		D6.senario	scenarioset.js
+ * 
+ */
+ 
+//resolve D6
+var D6 = D6||{};
+
+//instances
+D6.consList = [];					//consumption full list
+D6.consListByName = [];				//consumption list by consname
+D6.consShow = [];					//major consumption list by conscode
+D6.measureList = [];				//measure list
+D6.monthly = [];					//monthly energy
+D6.resMeasure = [];					//result of measures list
+
+D6.mesCount = 0;					//count of measures
+D6.consCount = 0;					//count of consumptions
+
+D6.average = { consList:""
+				};					//average of consumptions 
+	
+D6.isOriginal = true;					//in case of no measure is selected
+D6.sortTarget = "co2ChangeOriginal";	//by which measureas are sorted, changeable by input
+
+//view / Debug set. set in workercalc(start,*)
+D6.viewparam = {};
+D6.debugMode = false;
+
+
+//constructor 
+D6.constructor = function(a, b, c){
+	D6.setscenario(a, b, c);
+};
+
+//calculate
+D6.calculateAll = function(){
+	D6.calcCons();
+	D6.calcAverage();
+	D6.calcMeasures(-1);
+};
+
+	
+
+	
+	
+	
+/*  2017/12/10  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * base64.js 
+ * 
+ * define atob , btoa
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ * 								2016/04/12 original to JavaScript
+ */
+
+// atob, btoa is defined in windows. it doesn't work in web worker 
+if ( typeof ( atob) =="undefined" ) {
+	function atob(str){
+		return str;
+	};
+	function btoa(str){
+		return str;
+	};
+};
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -2733,7 +2839,8 @@ D6.calcMonthly = function( ave, season, monthly, seasonPatternP, energyCode ) {
 	ret.noConsData = noConsData;
 
 	return ret;
-};/*  2017/12/16  version 1.0
+};
+/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -3141,6 +3248,766 @@ D6.getCommonParameters = function(){
 
 
 
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * disp_input.js 
+ * 
+ * display data create add to D6.disp class
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ * 								2016/11/23 divided from js
+ * 
+ * getInputPage()		create html input pages
+ * createComboBox()		combo box component
+ * createTextArea()		textarea component
+ * 
+ * getFirstQues()		step by step question
+ * getNextQues()
+ * getPrevQues()
+ * getQues()
+ * getQuesList()
+ * isEndOfQues()
+ *
+ * escapeHtml()
+ */
+
+// getInputPage(consName,subName ) -----------------------------------------
+//		generate html components
+// parameters
+//		consName : 		consumption code
+//		subName:		sub consumption code
+// return 
+//		ret.group[] 		name of group
+//		ret.groupAddable[] 	countable consumption list such as rooms/equipments 
+//		ret.subgroup[] 		subgroup detail
+//		ret.subguide[] 		subgroup input guidance
+//		ret.combos[] 		input components html list
+//		ret.addlist[]		addable equipment/room list
+//
+D6.getInputPage = function( consName,subName ) {
+	var ret = [];
+	var group = [];			//group name
+	var groupAddable = [];		//countable consumption list such as rooms/equipments
+	var subgroup = [];			//name of subgroup
+	var subguide = [];			//guidance to input for subgroup
+	var combos = [];			//input combobox html
+	var definp;
+	var pagename;
+	var subid = 0;
+	var subcode = "";
+	var cons = "";
+	var addlist = [];
+
+	//create input data for smartphone 
+	for( var c in D6.scenario.defEasyQues ){
+		var q = D6.scenario.defEasyQues[c];
+		subcode = q.cname;
+		group[q.cname] = q.title;
+		groupAddable[q.cname] = [];
+		addlist[q.cname] = [];
+		subgroup[q.cname] = [];
+		subguide[q.cname] = [];
+		combos[q.cname] = [];
+		subguide[q.cname][subcode] = [];
+		combos[q.cname][subcode] = [];
+
+		//only same to consName
+		for( var i in q.ques ) {
+			definp = D6.scenario.defInput[q.ques[i]];
+			if ( !definp && D6.debugMode ) console.log( "defEasyQues error no " + q.ques[i] + " in scenarioset" );
+			subgroup[q.cname][subcode] = q.title;
+			if ( definp.varType == "String" ) {
+				combos[q.cname][subcode].push( this.createTextArea( q.ques[i] ) );
+			} else {
+				combos[q.cname][subcode].push( this.createComboBox( q.ques[i] ) );
+			}
+		}
+	}
+
+	//create input data for PC
+	for( var c in D6.consShow ) {
+		//check all consumption 
+		var cname = D6.consShow[c].consName;
+		group[cname] = D6.consShow[c].title;
+		groupAddable[cname] = [];
+		addlist[cname] = [];
+		subgroup[cname] = [];
+		subguide[cname] = [];
+		combos[cname] = {};
+
+		// all check in doc.data.defInput[]
+		for( var i in D6.doc.data ) {
+			definp = D6.scenario.defInput[i.substr(0,4)];
+			cons = D6.logicList[definp.cons];
+				
+			// condition to add this.cons 
+			if ( cons.consName == cname 
+				|| ( cons.sumConsName == cname 
+					&& cons.sumConsName != "consTotal"
+					)
+				|| ( cons.sumCons2Name == cname 
+					&& cons.sumCons2Name != "consTotal"
+					)
+				|| cons.inputDisp == cname
+			) {
+				if( i.length == 4 ) {	//consumption name is 4 or more length
+					//not countable 
+					subid = 0;
+					subcode = cons.consName;
+				} else {
+					//countable
+					subid = i.substr(4,2);
+					if ( subid == 0 ) continue;
+					subcode = cons.consName + subid;
+				}
+
+				//make subgroup 
+				if ( subgroup[cname][subcode] == undefined ) {
+					if( subid == 0) {
+						subgroup[cname][subcode] = cons.title;
+					} else {
+						if( D6.viewparam.countfix_pre_after == 1 ) {
+							subgroup[cname][subcode] = cons.countCall +( cons.titleList ? cons.titleList[subid] : subid );
+						} else {
+							subgroup[cname][subcode] = ( cons.titleList ? cons.titleList[subid] : subid ) + cons.countCall;
+						}
+					}
+					subguide[cname][subcode] = cons.inputGuide;
+					combos[cname][subcode] = [];
+				}
+				
+				// make addlist such as countable equipment or room  
+				if ( cons.addable ){
+					if ( addlist[cname].indexOf(cons.consName) < 0 ){
+						addlist[cname].push( cons.consName );
+						groupAddable[cname].push( 
+							{ "consName" : cons.consName,
+							"caption" : cons.addable } );
+					}
+				}
+
+				if ( consName != cname ) continue;
+		
+				//create combobox
+				if ( definp.varType == "String" ) {
+					combos[cname][subcode].push( this.createTextArea( i ) );
+				} else {
+					combos[cname][subcode].push( this.createComboBox( i ) );
+				}
+			}
+		}
+	}
+
+	//set return data
+	ret.group = group;
+	ret.groupAddable = groupAddable;
+	ret.subgroup = subgroup;
+	ret.subguide = subguide;
+	ret.combos = combos;
+	ret.consName = consName;
+	if ( !D6.logicList[consName] )consName = "consTotal";
+	ret.title = D6.logicList[consName].title;
+	ret.subName = subName;
+
+	return ret;
+};
+
+
+//createComboBox(inpId, onlyCombo) --------------------------------
+//		create combobox html
+// parameters
+//		inpId : input code "i" + number
+//		onlyCombo : create only combobox and not wrap table style
+// return
+//		disp : combobox html
+D6.createComboBox = function( inpId, onlyCombo )
+{
+	var disp = "";
+	var selid = "sel" + inpId.substr( 1,3 );
+	var inpIdDef = inpId.substr( 0,4 );
+	var svalue = D6.scenario.defSelectValue[selid];
+	var sdata = D6.scenario.defSelectData[selid];
+
+	if ( !sdata || sdata[0] == "" ) {
+		// in case of selection is not defined
+		return this.createTextArea( inpId, onlyCombo );
+	}
+	var smax = svalue.length;
+	var sel = D6.doc.data[inpId];
+	var selectedclass = ( sel != -1 ) ? " class='written' " : "";
+
+	var title = D6.scenario.defInput[inpIdDef].title;
+	// not to show defined in EXCEL
+	if ( title == "" || title.substr(0,1)=="#" ) return "";
+
+	if ( !onlyCombo ){
+		// create as table include question
+		disp += "<tr><td class='qtitle' width='50%'>";
+		disp += title;
+		disp += "<div class='tool-tips'>" + D6.scenario.defInput[inpIdDef].text 
+			+ (D6.debugMode ? " " + inpId : "" ) + "</div>";
+		disp += "</td><td>";
+	}
+		
+	//create combobox(select)
+	disp += "<select title='"+D6.scenario.defInput[inpIdDef].title+"' name='" + inpId + "' id='" + inpId + "'";
+	disp += " onchange='inchange(\"" + inpId + "\");'";
+	disp += selectedclass;
+	disp += " >";
+	for ( var i=0 ; i<smax ; i++ ){
+		if ( svalue[i] ) {
+			disp += "<option value='" + sdata[i] + "' ";
+			if ( sdata[i] == sel ) disp += "selected ";
+			disp += ">" + (D6.debugMode ? sdata[i] + " " : "" ) + svalue[i] + "</option>";
+		}
+	}
+	disp += "</select>";
+		
+	if ( !onlyCombo ){
+		disp += "</td></tr>";
+	}
+	return disp;
+};
+
+// createTextArea( inpId, onlyCombo ) -----------------------------------
+// 		create text input html
+// parameters
+//		inpId : input code "i" + number
+//		onlyCombo : create only textbox and not wrap table style
+// return
+//		disp : textbox html
+D6.createTextArea = function( inpId, onlyCombo )
+{
+	var disp = "";
+	var selid = "sel" + inpId.substr( 1,3 );
+	var inpIdDef = inpId.substr( 0,4 );
+	var val = D6.doc.data[inpId];
+	var selectedclass = ( val != "" && val != -1 ) ? " class='written' " : "";
+	var alignright = (D6.scenario.defInput[inpIdDef].varType == "Number");
+
+	if ( !onlyCombo ){
+		disp += "<tr><td class='qtitle'>";
+		disp += D6.scenario.defInput[inpIdDef].title;
+		disp += "<div class='tool-tips' >" + D6.scenario.defInput[inpIdDef].text  
+			+ (D6.debugMode ? " " + inpId : "" ) + "</div>";
+		disp += "</td><td>";
+	}
+
+	disp += "<input type='text' title='"+D6.scenario.defInput[inpIdDef].title+"' name='" + inpId + "' id='" + inpId + "' " + selectedclass 
+			+ ( alignright ? "style='text-align:right;'" : "") 
+			+ " onchange='inchange(\"" + inpId + "\");'"
+			+ (val && val!=-1 ? " value='" + this.escapeHtml(val) + "'" : "" )
+			+ ">";
+
+	if ( !onlyCombo ){
+		disp += D6.scenario.defInput[inpIdDef].unit + "</td></tr>";
+	}
+	return disp;
+};
+	
+
+// tfHandlerCombo( name ) ------------------------------------------------
+//		set data to Input[] from combobox
+D6.tfHandlerCombo = function( name ) {
+	return function( e ) {
+		Input[name] = e.target.value;
+    		e.target.removeEventListener( Event.ENTER_FRAME, arguments.callee );
+	}
+};
+
+	
+// parameters used in button view
+D6.nowQuesCode = 0;		//now question code "i" + num
+D6.nowQuesID = -1;			//now index in series of questions
+D6.quesOrder = [];			//question code list
+	
+//getFirstQues() --------------------------------------------
+//		return first question data, for smartphone
+D6.getFirstQues = function(consName, subName)
+{
+	var definp;
+	var cons;
+	quesOrder = [];
+	if ( consName == "easy01") {
+		if ( Array.isArray(subName) ) {
+			quesOrder = subName;
+		} else {
+			quesOrder = D6.scenario.defQuesOrder;
+		}
+	} else {
+		for( var i in D6.doc.data ) {
+			definp = D6.scenario.defInput[i.substr(0,4)];
+			if ( definp.cons == subName ) {
+				quesOrder.push( i );
+			}
+		}
+	}
+	nowQuesID = 0;
+	nowQuesCode =  quesOrder[nowQuesID];
+	return this.getQues(nowQuesCode);
+};
+
+
+//getNextQues() --------------------------------------------
+//		return next question data, for smartphone
+D6.getNextQues = function()
+{
+	nowQuesID++;
+	nowQuesCode =  quesOrder[nowQuesID];
+		return this.getQues(nowQuesCode);
+};
+
+//getPrevQues() --------------------------------------------
+//		return previous question data, for smartphone
+D6.getPrevQues = function()
+{
+	nowQuesID--;
+	if ( nowQuesID < 0) nowQuesID = 0;
+	nowQuesCode =  quesOrder[nowQuesID];
+
+	return this.getQues(nowQuesCode);
+};
+
+// getQues(id) ------------------------------------------------
+//		create one question data, for smartphone
+// parameters
+//		id: input code "i" + number
+// return
+//		ret.info	"continue" or "end"
+//		ret.id		input code
+//		ret.numques	number of series of question
+//		ret.nowques	now number of questions
+//		ret.title	question title
+//		ret.text	question detail
+//		ret.unit	unit of data
+//		ret.defSelectValue		list of selection caption
+//		ret.defSelectData		list of data
+//		ret.selected			selected value
+//		ret.consTitle			related consumption name
+D6.getQues = function( id ){
+	ret = {};
+	if ( this.isEndOfQues() ) {
+		ret.info = "end";
+	} else {
+		ret.info = "continue";
+		ret.id = id;
+		ret.numques = quesOrder.length;
+		ret.nowques = nowQuesID+1;
+			
+		var def = D6.scenario.defInput[id.substr(0,4)];
+		ret.title = def.title;
+		ret.text = def.text;
+		ret.unit = def.unit;
+			
+		var sel = def.inputType;
+		ret.defSelectValue = D6.scenario.defSelectValue[sel];
+		ret.defSelectData = D6.scenario.defSelectData[sel];
+		ret.selected = D6.doc.data[id];
+		ret.consTitle = D6.logicList[def.cons].title;
+	}
+	return ret;
+};
+
+// getQuesList( ) -----------------------------------------
+//		get question list and data
+// return 
+//		ret.queslist[] 		question list
+//
+D6.getQuesList = function() {
+	var ret = [];	
+	ret.queslist = D6.doc.data;
+	return ret;
+};
+
+// isEndOfQues() --------------------------------------------
+//		check if end of series of questions, for smartphone
+// return
+//		true: end of question 
+D6.isEndOfQues = function()
+{
+	var ret = false;
+	if ( nowQuesID+1 > quesOrder.length ) {
+		ret = true;
+	}
+	return ret;
+};
+
+// escapeHtml() ----------------------------------------------
+//		sanitize input
+//
+D6.escapeHtml = function (String) {
+	var escapeMap = {
+		'&': '&amp;',
+		"'": '&#x27;',
+		'`': '&#x60;',
+		'"': '&quot;',
+		'<': '&lt;',
+		'>': '&gt;'
+	};
+	var escapeReg = '[';
+	var reg;
+	for (var p in escapeMap) {
+		if (escapeMap.hasOwnProperty(p)) {
+			escapeReg += p;
+		}
+	}
+	escapeReg += ']';
+	reg = new RegExp(escapeReg, 'g');
+	return function escapeHtml (str) {
+		str = (str === null || str === undefined) ? '' : '' + str;
+		return str.replace(reg, function (match) {
+			return escapeMap[match];
+		});
+	};
+}(String);
+
+
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * disp_measure.js 
+ * 
+ * measure comment display data create add to D6.disp class
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ * 								2016/11/23 divided from js
+ *
+ * getMeasureDetail()
+ * tableMeasuresDetail()	for debug
+ * tableMeasuresSimple()
+ * getMeasureTable()
+ */
+
+// getMeasureDetail(mesid) ---------------------------------------
+//		detail data about measures
+// parameters
+//		mesid : measure sequence id
+// return
+//		ret: subset of measureBase class
+D6.getMeasureDetail= function( mesid ) {
+	var ret = [];
+	var mes = D6.measureList[mesid];
+		
+	ret.title = mes.title;
+	ret.titleShort = mes.titleShort;
+	ret.measureName = mes.measureName;
+	ret.mesID = mes.mesID;
+	ret.groupID = mes.groupID;
+	ret.consName = mes.cons.consName;
+	ret.figNum = mes.figNum;
+	ret.advice = mes.advice;
+	ret.joyfull = mes.joyfull;
+	ret.total = mes.cons.total;
+	ret.co2Total = D6.consShow["TO"].co2Original;
+	ret.selected = mes.selected;
+
+	ret.co2 = mes.co2;
+	ret.co2Change = mes.co2Change;
+	ret.co2ChangeOriginal = mes.co2ChangeOriginal;
+
+	ret.jules = mes.jules;
+
+	ret.cost = mes.cost;
+	ret.costChange = mes.costChange;
+	ret.costChangeOriginal = mes.costChangeOriginal;
+	ret.costTotalChange = mes.costTotalChange;
+	ret.costTotalChangeOriginal = mes.costTotalChangeOriginal;
+	ret.costUnique = mes.costUnique;
+	ret.priceOrg = mes.priceOrg;
+	ret.priceNew = mes.priceNew;
+	ret.payBackYear = mes.payBackYear;
+	ret.lifeTime = mes.lifeTime;
+
+	ret.electricity = mes.electricity;
+	ret.gas = mes.gas;
+	ret.coal = mes.coal;
+	ret.hotwater = mes.hotwater;
+	ret.car = mes.car;
+	ret.kerosene = mes.kerosene;
+	ret.water = mes.water;
+
+	return ret;
+};
+
+
+//get Measures data
+// consName
+// maxPrice		not show over than this price
+// notSelected 	1:only not select
+D6.getMeasure = function( consName, maxPrice, notSelected )
+{
+	//cannot set default in function for IE
+	if(typeof maxPrice === 'undefined') maxPrice = 100000000;
+	if(typeof notSelected === 'undefined') notSelected = 0;
+
+	var ret = [];
+	var i=0;
+	var mes;
+	var count = 0;
+	var mesidArray = [];
+	for ( var cid in D6.measureList ) {
+		mesidArray.push( D6.measureList[cid] );
+	}
+	D6.ObjArraySort( mesidArray, D6.sortTarget );
+
+	for ( var mid in mesidArray ) {
+		cid = mesidArray[mid].mesID;
+		mes = D6.measureList[cid];
+			
+		// not to show defined in EXCEL
+		if ( mes.title == "" || mes.title.substr(0,1)=="#" ) continue;
+			
+		var partc = D6.consListByName[consName][0].partCons;
+		var relation = false;
+		for( var pc in partc ){
+			if ( mes[partc[pc].consName] ) relation = true;
+		}
+
+		// directly defined in partCons
+		if ( mes[consName] ) relation = true;
+
+		// skip
+		if ( mes.selected && notSelected == 1 ) continue;
+		if ( mes.priceNew > maxPrice ) continue;
+
+		ret[i] = [];
+		ret[i].mesID = mes.mesID;
+		ret[i].title = mes.title;
+		ret[i].selected = mes.selected;
+		ret[i].consName = consName;
+		ret[i].groupID = mes.groupID;
+		ret[i].measureName = mes.measureName;
+		ret[i].consconsName = mes.cons.consName;
+		ret[i].conssumConsName = mes.cons.sumConsName;
+		ret[i].conssumCons2Name = mes.cons.sumCons2Name;
+		ret[i].co2Change = mes.co2Change;
+		ret[i].co2ChangeOriginal = mes.co2ChangeOriginal;
+		ret[i].costChangeOriginal = mes.costChangeOriginal;
+		ret[i].conssubID = mes.cons.subID;
+		ret[i].consmesTitlePrefix = mes.cons.mesTitlePrefix;
+		ret[i].relation = relation;
+		ret[i].payBackYear = mes.payBackYear;
+		ret[i].lifeTime = mes.lifeTime;
+		ret[i].lifestyle = mes.lifestyle;
+		if ( mes.cons.color || mes.cons.consName=="consTOTAL"){
+			ret[i].color = mes.cons.color;
+		} else {
+			ret[i].color = mes.cons.sumCons.color;
+		}
+			
+		i++;
+	}
+
+	return ret;
+};
+	
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * disp_demand.js 
+ * 
+ * demand input/graph add to D6.disp class
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ * 								2016/11/23 divided from disp.js
+ * 
+ * getDemandGraph()
+ * getInputDemandSumup()
+ * getInputDemandLog()
+ */
+
+///get data of Demand graph
+// getDemandGraph()-----------------------------------------------------
+//		demand graph of sumup and consumption log
+// return
+//		retall.log		log graph data
+//		retall.sumup	pile up graph data
+D6.getDemandGraph  = function ( ){
+	var work = {};
+	var retone = {};
+	var retall = {};
+	var clist = [];
+		
+	// pickup related concumption name "consName"
+	for( var c in D6.scenario.defInput ) {
+		if ( D6.scenario.defInput[c].demand > 0 ){
+			work[D6.scenario.defInput[c].cons]= [];
+		}
+	}
+
+	//make device data
+	for( var i in D6.doc.data ) {
+		//loop in doc.data and check in defInput
+		var definp = D6.scenario.defInput[i.substr(0,4)];
+		if ( work[definp.cons] ) {
+			//work[consName][ID][1-6]
+			var count = parseInt(i.substr(4,2));
+			if( !work[definp.cons][count] ) work[definp.cons][count] = [];
+			work[definp.cons][count][definp.demand] = D6.doc.data[i];
+		}
+	}
+		
+	var ret = [];
+	var ri = 0;
+	var ctitle = "";
+	var ctitle2 = "";
+	var watt = 0;
+	var num = 1;
+	var st = 0;
+	var ed = 24;
+	var colorcount = 0;
+	var seriescolor = "";
+
+	for ( c in work ){
+		colorcount++;
+		ctitle = D6.logicList[c].addable;
+		for ( i in work[c] ){
+			//input 
+			if ( work[c][i][4] ){
+				ctitle2 = work[c][i][4];
+			} else {
+				ctitle2 = i;
+			}
+			if ( work[c][i][1] && work[c][i][1] > 0 ){
+				watt = work[c][i][1];
+			} else if ( work[c][i][2] && work[c][i][2] > 0 ){
+				watt = work[c][i][2]/1000;
+			} else{
+				watt = 0;
+			}
+			if ( work[c][i][3] && work[c][i][3] > 0 ){
+				num = work[c][i][3];
+			} else {
+				num = 0;
+			}
+			if ( work[c][i][5] && work[c][i][5] >= 0 ){
+				st = work[c][i][5];
+			} else {
+				st = 0;
+			}
+			if ( work[c][i][6] && work[c][i][6] >= 0 ){
+				ed = work[c][i][6];
+			} else {
+				ed = 24;
+			}
+			if ( watt * num == 0 ) continue;
+			if ( st >= ed ) continue;
+			
+			seriescolor = graphColorSeries( colorcount );
+			//make graph data
+			for ( var t=0 ; t<24 ; t++ ){
+				ret[ri] = {};
+				ret[ri]["equip"] = ctitle + "-" + ( parseInt(ctitle2) ? i : ctitle2);
+				ret[ri]["time"] = t;
+				if ( t>= st && t < ed ) {
+					ret[ri]["electricity_kW"] = Math.round(watt * num * 10) / 10;
+				} else {
+					ret[ri]["electricity_kW"] = 0;
+				}
+				clist.push( { title:ret[ri]["equip"], 
+					target:"electricity_kW", 
+					color:seriescolor });
+				ri++;
+			}				
+		}
+	}
+	retall.sumup = ret;		//sumup data
+	retall.clist = clist;	//color list
+	//log data
+	var log = [];
+	for ( var t=0 ; t<24 ; t++ ){
+		log[t] = {};
+		log[t]["equip"] = "log";
+		log[t]["time"] = t;
+		log[t]["electricity_kW"] = D6.doc.data["i056"+(t+1)];
+	}
+	retall.log = log;		//log data
+	return retall;
+		
+	//set color by ID　"#0000ff";　.toString(16); 1-6 pattern
+	function graphColorSeries( colid ) {
+		var color;
+		var col = [100,100,100];
+		if ( colid <= 3 ) {
+			col[colid-1] = 255;
+		} else if ( colid <= 6 ){
+			col[colid-4] = 0;
+		}
+		
+		for ( var c in col ){
+			if ( col[c] == 100 ){
+				col[c] = Math.floor( Math.random() * 150 ) + 38;
+			}
+		}
+		color = "#" + (col[0] * 256 * 256 + col[1] * 256 + col[2]).toString(16);
+		return color;
+	}
+};
+	
+
+//create input dialog of demand
+D6.getInputDemandSumup = function() {
+	var work = {};
+	var ret = {};
+	var title = {};
+	var pdata = {};
+	var demandone= {};
+	var combos = [];
+
+	//pick up related consName
+	for( var c in D6.scenario.defInput ) {
+		if ( D6.scenario.defInput[c].demand > 0 ){
+			work[D6.scenario.defInput[c].cons]= true;
+			ret[D6.scenario.defInput[c].cons]= {};
+		}
+	}
+
+	//set data
+	var inhtml = "";
+	for( var i in D6.doc.data ) {
+		//loop in doc.data and check with defInput
+		var definp = D6.scenario.defInput[i.substr(0,4)];
+		if ( work[definp.cons] ) {
+			//in case of related class
+			inhtml = this.createComboBox( i, true );
+			//ret[consName][ID][1-6]
+			var count = parseInt(i.substr(4,2));
+			title[definp.cons] = D6.consListByName[definp.cons][0].addable;
+			if( !ret[definp.cons][count] ) ret[definp.cons][count] = [];
+			ret[definp.cons][count][definp.demand] = inhtml;
+		}
+	}
+		
+	pdata.data = ret;
+	pdata.title = title;
+		
+	return pdata;
+};
+
+//create input diakog 
+D6.getInputDemandLog = function() {
+	var ret = [];
+	for ( var t=0 ; t<24 ; t++ ){
+		ret[t] = this.createComboBox( "i056" + (t+1), true );
+	}
+	return ret;
+};
+	
+
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -3247,1610 +4114,8 @@ D6.getEvaluateAxisPoint = function( target,inpListDefCode ) {
 	return retall;
 };
 
-/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * disp_input.js 
- * 
- * display data create add to D6.disp class
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- * 								2016/11/23 divided from js
- * 
- * getInputPage()		create html input pages
- * createComboBox()		combo box component
- * createTextArea()		textarea component
- * 
- * getFirstQues()		step by step question
- * getNextQues()
- * getPrevQues()
- * getQues()
- * getQuesList()
- * isEndOfQues()
- *
- * escapeHtml()
- */
-
-// getInputPage(consName,subName ) -----------------------------------------
-//		generate html components
-// parameters
-//		consName : 		consumption code
-//		subName:		sub consumption code
-// return 
-//		ret.group[] 		name of group
-//		ret.groupAddable[] 	countable consumption list such as rooms/equipments 
-//		ret.subgroup[] 		subgroup detail
-//		ret.subguide[] 		subgroup input guidance
-//		ret.combos[] 		input components html list
-//		ret.addlist[]		addable equipment/room list
-//
-D6.getInputPage = function( consName,subName ) {
-	var ret = [];
-	var group = [];			//group name
-	var groupAddable = [];		//countable consumption list such as rooms/equipments
-	var subgroup = [];			//name of subgroup
-	var subguide = [];			//guidance to input for subgroup
-	var combos = [];			//input combobox html
-	var definp;
-	var pagename;
-	var subid = 0;
-	var subcode = "";
-	var cons = "";
-	var addlist = [];
-
-	//create input data for smartphone 
-	for( var c in D6.scenario.defEasyQues ){
-		var q = D6.scenario.defEasyQues[c];
-		subcode = q.cname;
-		group[q.cname] = q.title;
-		groupAddable[q.cname] = [];
-		addlist[q.cname] = [];
-		subgroup[q.cname] = [];
-		subguide[q.cname] = [];
-		combos[q.cname] = [];
-		subguide[q.cname][subcode] = [];
-		combos[q.cname][subcode] = [];
-
-		//only same to consName
-		for( var i in q.ques ) {
-			definp = D6.scenario.defInput[q.ques[i]];
-			if ( !definp && D6.debugMode ) console.log( "defEasyQues error no " + q.ques[i] + " in scenarioset" );
-			subgroup[q.cname][subcode] = q.title;
-			if ( definp.varType == "String" ) {
-				combos[q.cname][subcode].push( this.createTextArea( q.ques[i] ) );
-			} else {
-				combos[q.cname][subcode].push( this.createComboBox( q.ques[i] ) );
-			}
-		}
-	}
-
-	//create input data for PC
-	for( var c in D6.consShow ) {
-		//check all consumption 
-		var cname = D6.consShow[c].consName;
-		group[cname] = D6.consShow[c].title;
-		groupAddable[cname] = [];
-		addlist[cname] = [];
-		subgroup[cname] = [];
-		subguide[cname] = [];
-		combos[cname] = {};
-
-		// all check in doc.data.defInput[]
-		for( var i in D6.doc.data ) {
-			definp = D6.scenario.defInput[i.substr(0,4)];
-			cons = D6.logicList[definp.cons];
-				
-			// condition to add this.cons 
-			if ( cons.consName == cname 
-				|| ( cons.sumConsName == cname 
-					&& cons.sumConsName != "consTotal"
-					)
-				|| ( cons.sumCons2Name == cname 
-					&& cons.sumCons2Name != "consTotal"
-					)
-				|| cons.inputDisp == cname
-			) {
-				if( i.length == 4 ) {	//consumption name is 4 or more length
-					//not countable 
-					subid = 0;
-					subcode = cons.consName;
-				} else {
-					//countable
-					subid = i.substr(4,2);
-					if ( subid == 0 ) continue;
-					subcode = cons.consName + subid;
-				}
-
-				//make subgroup 
-				if ( subgroup[cname][subcode] == undefined ) {
-					if( subid == 0) {
-						subgroup[cname][subcode] = cons.title;
-					} else {
-						if( D6.viewparam.countfix_pre_after == 1 ) {
-							subgroup[cname][subcode] = cons.countCall +( cons.titleList ? cons.titleList[subid] : subid );
-						} else {
-							subgroup[cname][subcode] = ( cons.titleList ? cons.titleList[subid] : subid ) + cons.countCall;
-						}
-					}
-					subguide[cname][subcode] = cons.inputGuide;
-					combos[cname][subcode] = [];
-				}
-				
-				// make addlist such as countable equipment or room  
-				if ( cons.addable ){
-					if ( addlist[cname].indexOf(cons.consName) < 0 ){
-						addlist[cname].push( cons.consName );
-						groupAddable[cname].push( 
-							{ "consName" : cons.consName,
-							"caption" : cons.addable } );
-					}
-				}
-
-				if ( consName != cname ) continue;
-		
-				//create combobox
-				if ( definp.varType == "String" ) {
-					combos[cname][subcode].push( this.createTextArea( i ) );
-				} else {
-					combos[cname][subcode].push( this.createComboBox( i ) );
-				}
-			}
-		}
-	}
-
-	//set return data
-	ret.group = group;
-	ret.groupAddable = groupAddable;
-	ret.subgroup = subgroup;
-	ret.subguide = subguide;
-	ret.combos = combos;
-	ret.consName = consName;
-	if ( !D6.logicList[consName] )consName = "consTotal";
-	ret.title = D6.logicList[consName].title;
-	ret.subName = subName;
-
-	return ret;
-};
-
-
-//createComboBox(inpId, onlyCombo) --------------------------------
-//		create combobox html
-// parameters
-//		inpId : input code "i" + number
-//		onlyCombo : create only combobox and not wrap table style
-// return
-//		disp : combobox html
-D6.createComboBox = function( inpId, onlyCombo )
-{
-	var disp = "";
-	var selid = "sel" + inpId.substr( 1,3 );
-	var inpIdDef = inpId.substr( 0,4 );
-	var svalue = D6.scenario.defSelectValue[selid];
-	var sdata = D6.scenario.defSelectData[selid];
-
-	if ( !sdata || sdata[0] == "" ) {
-		// in case of selection is not defined
-		return this.createTextArea( inpId, onlyCombo );
-	}
-	var smax = svalue.length;
-	var sel = D6.doc.data[inpId];
-	var selectedclass = ( sel != -1 ) ? " class='written' " : "";
-
-	var title = D6.scenario.defInput[inpIdDef].title;
-	// not to show defined in EXCEL
-	if ( title == "" || title.substr(0,1)=="#" ) return "";
-
-	if ( !onlyCombo ){
-		// create as table include question
-		disp += "<tr><td class='qtitle' width='50%'>";
-		disp += title;
-		disp += "<div class='tool-tips'>" + D6.scenario.defInput[inpIdDef].text 
-			+ (D6.debugMode ? " " + inpId : "" ) + "</div>";
-		disp += "</td><td>";
-	}
-		
-	//create combobox(select)
-	disp += "<select title='"+D6.scenario.defInput[inpIdDef].title+"' name='" + inpId + "' id='" + inpId + "'";
-	disp += " onchange='inchange(\"" + inpId + "\");'";
-	disp += selectedclass;
-	disp += " >";
-	for ( var i=0 ; i<smax ; i++ ){
-		if ( svalue[i] ) {
-			disp += "<option value='" + sdata[i] + "' ";
-			if ( sdata[i] == sel ) disp += "selected ";
-			disp += ">" + (D6.debugMode ? sdata[i] + " " : "" ) + svalue[i] + "</option>";
-		}
-	}
-	disp += "</select>";
-		
-	if ( !onlyCombo ){
-		disp += "</td></tr>";
-	}
-	return disp;
-};
-
-// createTextArea( inpId, onlyCombo ) -----------------------------------
-// 		create text input html
-// parameters
-//		inpId : input code "i" + number
-//		onlyCombo : create only textbox and not wrap table style
-// return
-//		disp : textbox html
-D6.createTextArea = function( inpId, onlyCombo )
-{
-	var disp = "";
-	var selid = "sel" + inpId.substr( 1,3 );
-	var inpIdDef = inpId.substr( 0,4 );
-	var val = D6.doc.data[inpId];
-	var selectedclass = ( val != "" && val != -1 ) ? " class='written' " : "";
-	var alignright = (D6.scenario.defInput[inpIdDef].varType == "Number");
-
-	if ( !onlyCombo ){
-		disp += "<tr><td class='qtitle'>";
-		disp += D6.scenario.defInput[inpIdDef].title;
-		disp += "<div class='tool-tips' >" + D6.scenario.defInput[inpIdDef].text  
-			+ (D6.debugMode ? " " + inpId : "" ) + "</div>";
-		disp += "</td><td>";
-	}
-
-	disp += "<input type='text' title='"+D6.scenario.defInput[inpIdDef].title+"' name='" + inpId + "' id='" + inpId + "' " + selectedclass 
-			+ ( alignright ? "style='text-align:right;'" : "") 
-			+ " onchange='inchange(\"" + inpId + "\");'"
-			+ (val && val!=-1 ? " value='" + this.escapeHtml(val) + "'" : "" )
-			+ ">";
-
-	if ( !onlyCombo ){
-		disp += D6.scenario.defInput[inpIdDef].unit + "</td></tr>";
-	}
-	return disp;
-};
-	
-
-// tfHandlerCombo( name ) ------------------------------------------------
-//		set data to Input[] from combobox
-D6.tfHandlerCombo = function( name ) {
-	return function( e ) {
-		Input[name] = e.target.value;
-    		e.target.removeEventListener( Event.ENTER_FRAME, arguments.callee );
-	}
-};
-
-	
-// parameters used in button view
-D6.nowQuesCode = 0;		//now question code "i" + num
-D6.nowQuesID = -1;			//now index in series of questions
-D6.quesOrder = [];			//question code list
-	
-//getFirstQues() --------------------------------------------
-//		return first question data, for smartphone
-D6.getFirstQues = function(consName, subName)
-{
-	var definp;
-	var cons;
-	quesOrder = [];
-	if ( consName == "easy01") {
-		if ( Array.isArray(subName) ) {
-			quesOrder = subName;
-		} else {
-			quesOrder = D6.scenario.defQuesOrder;
-		}
-	} else {
-		for( var i in D6.doc.data ) {
-			definp = D6.scenario.defInput[i.substr(0,4)];
-			if ( definp.cons == subName ) {
-				quesOrder.push( i );
-			}
-		}
-	}
-	nowQuesID = 0;
-	nowQuesCode =  quesOrder[nowQuesID];
-	return this.getQues(nowQuesCode);
-};
-
-
-//getNextQues() --------------------------------------------
-//		return next question data, for smartphone
-D6.getNextQues = function()
-{
-	nowQuesID++;
-	nowQuesCode =  quesOrder[nowQuesID];
-		return this.getQues(nowQuesCode);
-};
-
-//getPrevQues() --------------------------------------------
-//		return previous question data, for smartphone
-D6.getPrevQues = function()
-{
-	nowQuesID--;
-	if ( nowQuesID < 0) nowQuesID = 0;
-	nowQuesCode =  quesOrder[nowQuesID];
-
-	return this.getQues(nowQuesCode);
-};
-
-// getQues(id) ------------------------------------------------
-//		create one question data, for smartphone
-// parameters
-//		id: input code "i" + number
-// return
-//		ret.info	"continue" or "end"
-//		ret.id		input code
-//		ret.numques	number of series of question
-//		ret.nowques	now number of questions
-//		ret.title	question title
-//		ret.text	question detail
-//		ret.unit	unit of data
-//		ret.defSelectValue		list of selection caption
-//		ret.defSelectData		list of data
-//		ret.selected			selected value
-//		ret.consTitle			related consumption name
-D6.getQues = function( id ){
-	ret = {};
-	if ( this.isEndOfQues() ) {
-		ret.info = "end";
-	} else {
-		ret.info = "continue";
-		ret.id = id;
-		ret.numques = quesOrder.length;
-		ret.nowques = nowQuesID+1;
-			
-		var def = D6.scenario.defInput[id.substr(0,4)];
-		ret.title = def.title;
-		ret.text = def.text;
-		ret.unit = def.unit;
-			
-		var sel = def.inputType;
-		ret.defSelectValue = D6.scenario.defSelectValue[sel];
-		ret.defSelectData = D6.scenario.defSelectData[sel];
-		ret.selected = D6.doc.data[id];
-		ret.consTitle = D6.logicList[def.cons].title;
-	}
-	return ret;
-};
-
-// getQuesList( ) -----------------------------------------
-//		get question list and data
-// return 
-//		ret.queslist[] 		question list
-//
-D6.getQuesList = function() {
-	var ret = [];	
-	ret.queslist = D6.doc.data;
-	return ret;
-};
-
-// isEndOfQues() --------------------------------------------
-//		check if end of series of questions, for smartphone
-// return
-//		true: end of question 
-D6.isEndOfQues = function()
-{
-	var ret = false;
-	if ( nowQuesID+1 > quesOrder.length ) {
-		ret = true;
-	}
-	return ret;
-};
-
-// escapeHtml() ----------------------------------------------
-//		sanitize input
-//
-D6.escapeHtml = function (String) {
-	var escapeMap = {
-		'&': '&amp;',
-		"'": '&#x27;',
-		'`': '&#x60;',
-		'"': '&quot;',
-		'<': '&lt;',
-		'>': '&gt;'
-	};
-	var escapeReg = '[';
-	var reg;
-	for (var p in escapeMap) {
-		if (escapeMap.hasOwnProperty(p)) {
-			escapeReg += p;
-		}
-	}
-	escapeReg += ']';
-	reg = new RegExp(escapeReg, 'g');
-	return function escapeHtml (str) {
-		str = (str === null || str === undefined) ? '' : '' + str;
-		return str.replace(reg, function (match) {
-			return escapeMap[match];
-		});
-	};
-}(String);
-
 
 /*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * disp_measure.js 
- * 
- * measure comment display data create add to D6.disp class
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- * 								2016/11/23 divided from js
- *
- * getMeasureDetail()
- * tableMeasuresDetail()	for debug
- * tableMeasuresSimple()
- * getMeasureTable()
- */
-
-// getMeasureDetail(mesid) ---------------------------------------
-//		detail data about measures
-// parameters
-//		mesid : measure sequence id
-// return
-//		ret: subset of measureBase class
-D6.getMeasureDetail= function( mesid ) {
-	var ret = [];
-	var mes = D6.measureList[mesid];
-		
-	ret.title = mes.title;
-	ret.titleShort = mes.titleShort;
-	ret.measureName = mes.measureName;
-	ret.mesID = mes.mesID;
-	ret.groupID = mes.groupID;
-	ret.consName = mes.cons.consName;
-	ret.figNum = mes.figNum;
-	ret.advice = mes.advice;
-	ret.joyfull = mes.joyfull;
-	ret.total = mes.cons.total;
-	ret.co2Total = D6.consShow["TO"].co2Original;
-	ret.selected = mes.selected;
-
-	ret.co2 = mes.co2;
-	ret.co2Change = mes.co2Change;
-	ret.co2ChangeOriginal = mes.co2ChangeOriginal;
-
-	ret.jules = mes.jules;
-
-	ret.cost = mes.cost;
-	ret.costChange = mes.costChange;
-	ret.costChangeOriginal = mes.costChangeOriginal;
-	ret.costTotalChange = mes.costTotalChange;
-	ret.costTotalChangeOriginal = mes.costTotalChangeOriginal;
-	ret.costUnique = mes.costUnique;
-	ret.priceOrg = mes.priceOrg;
-	ret.priceNew = mes.priceNew;
-	ret.payBackYear = mes.payBackYear;
-	ret.lifeTime = mes.lifeTime;
-
-	ret.electricity = mes.electricity;
-	ret.gas = mes.gas;
-	ret.coal = mes.coal;
-	ret.hotwater = mes.hotwater;
-	ret.car = mes.car;
-	ret.kerosene = mes.kerosene;
-	ret.water = mes.water;
-
-	return ret;
-};
-
-
-//get Measures data
-// consName
-// maxPrice		not show over than this price
-// notSelected 	1:only not select
-D6.getMeasure = function( consName, maxPrice, notSelected )
-{
-	//cannot set default in function for IE
-	if(typeof maxPrice === 'undefined') maxPrice = 100000000;
-	if(typeof notSelected === 'undefined') notSelected = 0;
-
-	var ret = [];
-	var i=0;
-	var mes;
-	var count = 0;
-	var mesidArray = [];
-	for ( var cid in D6.measureList ) {
-		mesidArray.push( D6.measureList[cid] );
-	}
-	D6.ObjArraySort( mesidArray, D6.sortTarget );
-
-	for ( var mid in mesidArray ) {
-		cid = mesidArray[mid].mesID;
-		mes = D6.measureList[cid];
-			
-		// not to show defined in EXCEL
-		if ( mes.title == "" || mes.title.substr(0,1)=="#" ) continue;
-			
-		var partc = D6.consListByName[consName][0].partCons;
-		var relation = false;
-		for( var pc in partc ){
-			if ( mes[partc[pc].consName] ) relation = true;
-		}
-
-		// directly defined in partCons
-		if ( mes[consName] ) relation = true;
-
-		// skip
-		if ( mes.selected && notSelected == 1 ) continue;
-		if ( mes.priceNew > maxPrice ) continue;
-
-		ret[i] = [];
-		ret[i].mesID = mes.mesID;
-		ret[i].title = mes.title;
-		ret[i].selected = mes.selected;
-		ret[i].consName = consName;
-		ret[i].groupID = mes.groupID;
-		ret[i].measureName = mes.measureName;
-		ret[i].consconsName = mes.cons.consName;
-		ret[i].conssumConsName = mes.cons.sumConsName;
-		ret[i].conssumCons2Name = mes.cons.sumCons2Name;
-		ret[i].co2Change = mes.co2Change;
-		ret[i].co2ChangeOriginal = mes.co2ChangeOriginal;
-		ret[i].costChangeOriginal = mes.costChangeOriginal;
-		ret[i].conssubID = mes.cons.subID;
-		ret[i].consmesTitlePrefix = mes.cons.mesTitlePrefix;
-		ret[i].relation = relation;
-		ret[i].payBackYear = mes.payBackYear;
-		ret[i].lifeTime = mes.lifeTime;
-		ret[i].lifestyle = mes.lifestyle;
-		if ( mes.cons.color || mes.cons.consName=="consTOTAL"){
-			ret[i].color = mes.cons.color;
-		} else {
-			ret[i].color = mes.cons.sumCons.color;
-		}
-			
-		i++;
-	}
-
-	return ret;
-};
-	
-/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * disp_demand.js 
- * 
- * demand input/graph add to D6.disp class
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- * 								2016/11/23 divided from disp.js
- * 
- * getDemandGraph()
- * getInputDemandSumup()
- * getInputDemandLog()
- */
-
-///get data of Demand graph
-// getDemandGraph()-----------------------------------------------------
-//		demand graph of sumup and consumption log
-// return
-//		retall.log		log graph data
-//		retall.sumup	pile up graph data
-D6.getDemandGraph  = function ( ){
-	var work = {};
-	var retone = {};
-	var retall = {};
-	var clist = [];
-		
-	// pickup related concumption name "consName"
-	for( var c in D6.scenario.defInput ) {
-		if ( D6.scenario.defInput[c].demand > 0 ){
-			work[D6.scenario.defInput[c].cons]= [];
-		}
-	}
-
-	//make device data
-	for( var i in D6.doc.data ) {
-		//loop in doc.data and check in defInput
-		var definp = D6.scenario.defInput[i.substr(0,4)];
-		if ( work[definp.cons] ) {
-			//work[consName][ID][1-6]
-			var count = parseInt(i.substr(4,2));
-			if( !work[definp.cons][count] ) work[definp.cons][count] = [];
-			work[definp.cons][count][definp.demand] = D6.doc.data[i];
-		}
-	}
-		
-	var ret = [];
-	var ri = 0;
-	var ctitle = "";
-	var ctitle2 = "";
-	var watt = 0;
-	var num = 1;
-	var st = 0;
-	var ed = 24;
-	var colorcount = 0;
-	var seriescolor = "";
-
-	for ( c in work ){
-		colorcount++;
-		ctitle = D6.logicList[c].addable;
-		for ( i in work[c] ){
-			//input 
-			if ( work[c][i][4] ){
-				ctitle2 = work[c][i][4];
-			} else {
-				ctitle2 = i;
-			}
-			if ( work[c][i][1] && work[c][i][1] > 0 ){
-				watt = work[c][i][1];
-			} else if ( work[c][i][2] && work[c][i][2] > 0 ){
-				watt = work[c][i][2]/1000;
-			} else{
-				watt = 0;
-			}
-			if ( work[c][i][3] && work[c][i][3] > 0 ){
-				num = work[c][i][3];
-			} else {
-				num = 0;
-			}
-			if ( work[c][i][5] && work[c][i][5] >= 0 ){
-				st = work[c][i][5];
-			} else {
-				st = 0;
-			}
-			if ( work[c][i][6] && work[c][i][6] >= 0 ){
-				ed = work[c][i][6];
-			} else {
-				ed = 24;
-			}
-			if ( watt * num == 0 ) continue;
-			if ( st >= ed ) continue;
-			
-			seriescolor = graphColorSeries( colorcount );
-			//make graph data
-			for ( var t=0 ; t<24 ; t++ ){
-				ret[ri] = {};
-				ret[ri]["equip"] = ctitle + "-" + ( parseInt(ctitle2) ? i : ctitle2);
-				ret[ri]["time"] = t;
-				if ( t>= st && t < ed ) {
-					ret[ri]["electricity_kW"] = Math.round(watt * num * 10) / 10;
-				} else {
-					ret[ri]["electricity_kW"] = 0;
-				}
-				clist.push( { title:ret[ri]["equip"], 
-					target:"electricity_kW", 
-					color:seriescolor });
-				ri++;
-			}				
-		}
-	}
-	retall.sumup = ret;		//sumup data
-	retall.clist = clist;	//color list
-	//log data
-	var log = [];
-	for ( var t=0 ; t<24 ; t++ ){
-		log[t] = {};
-		log[t]["equip"] = "log";
-		log[t]["time"] = t;
-		log[t]["electricity_kW"] = D6.doc.data["i056"+(t+1)];
-	}
-	retall.log = log;		//log data
-	return retall;
-		
-	//set color by ID　"#0000ff";　.toString(16); 1-6 pattern
-	function graphColorSeries( colid ) {
-		var color;
-		var col = [100,100,100];
-		if ( colid <= 3 ) {
-			col[colid-1] = 255;
-		} else if ( colid <= 6 ){
-			col[colid-4] = 0;
-		}
-		
-		for ( var c in col ){
-			if ( col[c] == 100 ){
-				col[c] = Math.floor( Math.random() * 150 ) + 38;
-			}
-		}
-		color = "#" + (col[0] * 256 * 256 + col[1] * 256 + col[2]).toString(16);
-		return color;
-	}
-};
-	
-
-//create input dialog of demand
-D6.getInputDemandSumup = function() {
-	var work = {};
-	var ret = {};
-	var title = {};
-	var pdata = {};
-	var demandone= {};
-	var combos = [];
-
-	//pick up related consName
-	for( var c in D6.scenario.defInput ) {
-		if ( D6.scenario.defInput[c].demand > 0 ){
-			work[D6.scenario.defInput[c].cons]= true;
-			ret[D6.scenario.defInput[c].cons]= {};
-		}
-	}
-
-	//set data
-	var inhtml = "";
-	for( var i in D6.doc.data ) {
-		//loop in doc.data and check with defInput
-		var definp = D6.scenario.defInput[i.substr(0,4)];
-		if ( work[definp.cons] ) {
-			//in case of related class
-			inhtml = this.createComboBox( i, true );
-			//ret[consName][ID][1-6]
-			var count = parseInt(i.substr(4,2));
-			title[definp.cons] = D6.consListByName[definp.cons][0].addable;
-			if( !ret[definp.cons][count] ) ret[definp.cons][count] = [];
-			ret[definp.cons][count][definp.demand] = inhtml;
-		}
-	}
-		
-	pdata.data = ret;
-	pdata.title = title;
-		
-	return pdata;
-};
-
-//create input diakog 
-D6.getInputDemandLog = function() {
-	var ret = [];
-	for ( var t=0 ; t<24 ; t++ ){
-		ret[t] = this.createComboBox( "i056" + (t+1), true );
-	}
-	return ret;
-};
-	
-
-/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * disp_input.js 
- * 
- * display data create add to D6.disp class
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- * 								2016/11/23 divided from js
- * 
- * getInputPage()		create html input pages
- * createComboBox()		combo box component
- * createTextArea()		textarea component
- * 
- * getFirstQues()		step by step question
- * getNextQues()
- * getPrevQues()
- * getQues()
- * getQuesList()
- * isEndOfQues()
- *
- * escapeHtml()
- */
-
-// getInputPage(consName,subName ) -----------------------------------------
-//		generate html components
-// parameters
-//		consName : 		consumption code
-//		subName:		sub consumption code
-// return 
-//		ret.group[] 		name of group
-//		ret.groupAddable[] 	countable consumption list such as rooms/equipments 
-//		ret.subgroup[] 		subgroup detail
-//		ret.subguide[] 		subgroup input guidance
-//		ret.combos[] 		input components html list
-//		ret.addlist[]		addable equipment/room list
-//
-D6.getInputPage = function( consName,subName ) {
-	var ret = [];
-	var group = [];			//group name
-	var groupAddable = [];		//countable consumption list such as rooms/equipments
-	var subgroup = [];			//name of subgroup
-	var subguide = [];			//guidance to input for subgroup
-	var combos = [];			//input combobox html
-	var definp;
-	var pagename;
-	var subid = 0;
-	var subcode = "";
-	var cons = "";
-	var addlist = [];
-
-	//create input data for smartphone 
-	for( var c in D6.scenario.defEasyQues ){
-		var q = D6.scenario.defEasyQues[c];
-		subcode = q.cname;
-		group[q.cname] = q.title;
-		groupAddable[q.cname] = [];
-		addlist[q.cname] = [];
-		subgroup[q.cname] = [];
-		subguide[q.cname] = [];
-		combos[q.cname] = [];
-		subguide[q.cname][subcode] = [];
-		combos[q.cname][subcode] = [];
-
-		//only same to consName
-		for( var i in q.ques ) {
-			definp = D6.scenario.defInput[q.ques[i]];
-			if ( !definp && D6.debugMode ) console.log( "defEasyQues error no " + q.ques[i] + " in scenarioset" );
-			subgroup[q.cname][subcode] = q.title;
-			if ( definp.varType == "String" ) {
-				combos[q.cname][subcode].push( this.createTextArea( q.ques[i] ) );
-			} else {
-				combos[q.cname][subcode].push( this.createComboBox( q.ques[i] ) );
-			}
-		}
-	}
-
-	//create input data for PC
-	for( var c in D6.consShow ) {
-		//check all consumption 
-		var cname = D6.consShow[c].consName;
-		group[cname] = D6.consShow[c].title;
-		groupAddable[cname] = [];
-		addlist[cname] = [];
-		subgroup[cname] = [];
-		subguide[cname] = [];
-		combos[cname] = {};
-
-		// all check in doc.data.defInput[]
-		for( var i in D6.doc.data ) {
-			definp = D6.scenario.defInput[i.substr(0,4)];
-			cons = D6.logicList[definp.cons];
-				
-			// condition to add this.cons 
-			if ( cons.consName == cname 
-				|| ( cons.sumConsName == cname 
-					&& cons.sumConsName != "consTotal"
-					)
-				|| ( cons.sumCons2Name == cname 
-					&& cons.sumCons2Name != "consTotal"
-					)
-				|| cons.inputDisp == cname
-			) {
-				if( i.length == 4 ) {	//consumption name is 4 or more length
-					//not countable 
-					subid = 0;
-					subcode = cons.consName;
-				} else {
-					//countable
-					subid = i.substr(4,2);
-					if ( subid == 0 ) continue;
-					subcode = cons.consName + subid;
-				}
-
-				//make subgroup 
-				if ( subgroup[cname][subcode] == undefined ) {
-					if( subid == 0) {
-						subgroup[cname][subcode] = cons.title;
-					} else {
-						if( D6.viewparam.countfix_pre_after == 1 ) {
-							subgroup[cname][subcode] = cons.countCall +( cons.titleList ? cons.titleList[subid] : subid );
-						} else {
-							subgroup[cname][subcode] = ( cons.titleList ? cons.titleList[subid] : subid ) + cons.countCall;
-						}
-					}
-					subguide[cname][subcode] = cons.inputGuide;
-					combos[cname][subcode] = [];
-				}
-				
-				// make addlist such as countable equipment or room  
-				if ( cons.addable ){
-					if ( addlist[cname].indexOf(cons.consName) < 0 ){
-						addlist[cname].push( cons.consName );
-						groupAddable[cname].push( 
-							{ "consName" : cons.consName,
-							"caption" : cons.addable } );
-					}
-				}
-
-				if ( consName != cname ) continue;
-		
-				//create combobox
-				if ( definp.varType == "String" ) {
-					combos[cname][subcode].push( this.createTextArea( i ) );
-				} else {
-					combos[cname][subcode].push( this.createComboBox( i ) );
-				}
-			}
-		}
-	}
-
-	//set return data
-	ret.group = group;
-	ret.groupAddable = groupAddable;
-	ret.subgroup = subgroup;
-	ret.subguide = subguide;
-	ret.combos = combos;
-	ret.consName = consName;
-	if ( !D6.logicList[consName] )consName = "consTotal";
-	ret.title = D6.logicList[consName].title;
-	ret.subName = subName;
-
-	return ret;
-};
-
-
-//createComboBox(inpId, onlyCombo) --------------------------------
-//		create combobox html
-// parameters
-//		inpId : input code "i" + number
-//		onlyCombo : create only combobox and not wrap table style
-// return
-//		disp : combobox html
-D6.createComboBox = function( inpId, onlyCombo )
-{
-	var disp = "";
-	var selid = "sel" + inpId.substr( 1,3 );
-	var inpIdDef = inpId.substr( 0,4 );
-	var svalue = D6.scenario.defSelectValue[selid];
-	var sdata = D6.scenario.defSelectData[selid];
-
-	if ( !sdata || sdata[0] == "" ) {
-		// in case of selection is not defined
-		return this.createTextArea( inpId, onlyCombo );
-	}
-	var smax = svalue.length;
-	var sel = D6.doc.data[inpId];
-	var selectedclass = ( sel != -1 ) ? " class='written' " : "";
-
-	var title = D6.scenario.defInput[inpIdDef].title;
-	// not to show defined in EXCEL
-	if ( title == "" || title.substr(0,1)=="#" ) return "";
-
-	if ( !onlyCombo ){
-		// create as table include question
-		disp += "<tr><td class='qtitle' width='50%'>";
-		disp += title;
-		disp += "<div class='tool-tips'>" + D6.scenario.defInput[inpIdDef].text 
-			+ (D6.debugMode ? " " + inpId : "" ) + "</div>";
-		disp += "</td><td>";
-	}
-		
-	//create combobox(select)
-	disp += "<select title='"+D6.scenario.defInput[inpIdDef].title+"' name='" + inpId + "' id='" + inpId + "'";
-	disp += " onchange='inchange(\"" + inpId + "\");'";
-	disp += selectedclass;
-	disp += " >";
-	for ( var i=0 ; i<smax ; i++ ){
-		if ( svalue[i] ) {
-			disp += "<option value='" + sdata[i] + "' ";
-			if ( sdata[i] == sel ) disp += "selected ";
-			disp += ">" + (D6.debugMode ? sdata[i] + " " : "" ) + svalue[i] + "</option>";
-		}
-	}
-	disp += "</select>";
-		
-	if ( !onlyCombo ){
-		disp += "</td></tr>";
-	}
-	return disp;
-};
-
-// createTextArea( inpId, onlyCombo ) -----------------------------------
-// 		create text input html
-// parameters
-//		inpId : input code "i" + number
-//		onlyCombo : create only textbox and not wrap table style
-// return
-//		disp : textbox html
-D6.createTextArea = function( inpId, onlyCombo )
-{
-	var disp = "";
-	var selid = "sel" + inpId.substr( 1,3 );
-	var inpIdDef = inpId.substr( 0,4 );
-	var val = D6.doc.data[inpId];
-	var selectedclass = ( val != "" && val != -1 ) ? " class='written' " : "";
-	var alignright = (D6.scenario.defInput[inpIdDef].varType == "Number");
-
-	if ( !onlyCombo ){
-		disp += "<tr><td class='qtitle'>";
-		disp += D6.scenario.defInput[inpIdDef].title;
-		disp += "<div class='tool-tips' >" + D6.scenario.defInput[inpIdDef].text  
-			+ (D6.debugMode ? " " + inpId : "" ) + "</div>";
-		disp += "</td><td>";
-	}
-
-	disp += "<input type='text' title='"+D6.scenario.defInput[inpIdDef].title+"' name='" + inpId + "' id='" + inpId + "' " + selectedclass 
-			+ ( alignright ? "style='text-align:right;'" : "") 
-			+ " onchange='inchange(\"" + inpId + "\");'"
-			+ (val && val!=-1 ? " value='" + this.escapeHtml(val) + "'" : "" )
-			+ ">";
-
-	if ( !onlyCombo ){
-		disp += D6.scenario.defInput[inpIdDef].unit + "</td></tr>";
-	}
-	return disp;
-};
-	
-
-// tfHandlerCombo( name ) ------------------------------------------------
-//		set data to Input[] from combobox
-D6.tfHandlerCombo = function( name ) {
-	return function( e ) {
-		Input[name] = e.target.value;
-    		e.target.removeEventListener( Event.ENTER_FRAME, arguments.callee );
-	}
-};
-
-	
-// parameters used in button view
-D6.nowQuesCode = 0;		//now question code "i" + num
-D6.nowQuesID = -1;			//now index in series of questions
-D6.quesOrder = [];			//question code list
-	
-//getFirstQues() --------------------------------------------
-//		return first question data, for smartphone
-D6.getFirstQues = function(consName, subName)
-{
-	var definp;
-	var cons;
-	quesOrder = [];
-	if ( consName == "easy01") {
-		if ( Array.isArray(subName) ) {
-			quesOrder = subName;
-		} else {
-			quesOrder = D6.scenario.defQuesOrder;
-		}
-	} else {
-		for( var i in D6.doc.data ) {
-			definp = D6.scenario.defInput[i.substr(0,4)];
-			if ( definp.cons == subName ) {
-				quesOrder.push( i );
-			}
-		}
-	}
-	nowQuesID = 0;
-	nowQuesCode =  quesOrder[nowQuesID];
-	return this.getQues(nowQuesCode);
-};
-
-
-//getNextQues() --------------------------------------------
-//		return next question data, for smartphone
-D6.getNextQues = function()
-{
-	nowQuesID++;
-	nowQuesCode =  quesOrder[nowQuesID];
-		return this.getQues(nowQuesCode);
-};
-
-//getPrevQues() --------------------------------------------
-//		return previous question data, for smartphone
-D6.getPrevQues = function()
-{
-	nowQuesID--;
-	if ( nowQuesID < 0) nowQuesID = 0;
-	nowQuesCode =  quesOrder[nowQuesID];
-
-	return this.getQues(nowQuesCode);
-};
-
-// getQues(id) ------------------------------------------------
-//		create one question data, for smartphone
-// parameters
-//		id: input code "i" + number
-// return
-//		ret.info	"continue" or "end"
-//		ret.id		input code
-//		ret.numques	number of series of question
-//		ret.nowques	now number of questions
-//		ret.title	question title
-//		ret.text	question detail
-//		ret.unit	unit of data
-//		ret.defSelectValue		list of selection caption
-//		ret.defSelectData		list of data
-//		ret.selected			selected value
-//		ret.consTitle			related consumption name
-D6.getQues = function( id ){
-	ret = {};
-	if ( this.isEndOfQues() ) {
-		ret.info = "end";
-	} else {
-		ret.info = "continue";
-		ret.id = id;
-		ret.numques = quesOrder.length;
-		ret.nowques = nowQuesID+1;
-			
-		var def = D6.scenario.defInput[id.substr(0,4)];
-		ret.title = def.title;
-		ret.text = def.text;
-		ret.unit = def.unit;
-			
-		var sel = def.inputType;
-		ret.defSelectValue = D6.scenario.defSelectValue[sel];
-		ret.defSelectData = D6.scenario.defSelectData[sel];
-		ret.selected = D6.doc.data[id];
-		ret.consTitle = D6.logicList[def.cons].title;
-	}
-	return ret;
-};
-
-// getQuesList( ) -----------------------------------------
-//		get question list and data
-// return 
-//		ret.queslist[] 		question list
-//
-D6.getQuesList = function() {
-	var ret = [];	
-	ret.queslist = D6.doc.data;
-	return ret;
-};
-
-// isEndOfQues() --------------------------------------------
-//		check if end of series of questions, for smartphone
-// return
-//		true: end of question 
-D6.isEndOfQues = function()
-{
-	var ret = false;
-	if ( nowQuesID+1 > quesOrder.length ) {
-		ret = true;
-	}
-	return ret;
-};
-
-// escapeHtml() ----------------------------------------------
-//		sanitize input
-//
-D6.escapeHtml = function (String) {
-	var escapeMap = {
-		'&': '&amp;',
-		"'": '&#x27;',
-		'`': '&#x60;',
-		'"': '&quot;',
-		'<': '&lt;',
-		'>': '&gt;'
-	};
-	var escapeReg = '[';
-	var reg;
-	for (var p in escapeMap) {
-		if (escapeMap.hasOwnProperty(p)) {
-			escapeReg += p;
-		}
-	}
-	escapeReg += ']';
-	reg = new RegExp(escapeReg, 'g');
-	return function escapeHtml (str) {
-		str = (str === null || str === undefined) ? '' : '' + str;
-		return str.replace(reg, function (match) {
-			return escapeMap[match];
-		});
-	};
-}(String);
-
-
-/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * disp_measure.js 
- * 
- * measure comment display data create add to D6.disp class
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- * 								2016/11/23 divided from js
- *
- * getMeasureDetail()
- * tableMeasuresDetail()	for debug
- * tableMeasuresSimple()
- * getMeasureTable()
- */
-
-// getMeasureDetail(mesid) ---------------------------------------
-//		detail data about measures
-// parameters
-//		mesid : measure sequence id
-// return
-//		ret: subset of measureBase class
-D6.getMeasureDetail= function( mesid ) {
-	var ret = [];
-	var mes = D6.measureList[mesid];
-		
-	ret.title = mes.title;
-	ret.titleShort = mes.titleShort;
-	ret.measureName = mes.measureName;
-	ret.mesID = mes.mesID;
-	ret.groupID = mes.groupID;
-	ret.consName = mes.cons.consName;
-	ret.figNum = mes.figNum;
-	ret.advice = mes.advice;
-	ret.joyfull = mes.joyfull;
-	ret.total = mes.cons.total;
-	ret.co2Total = D6.consShow["TO"].co2Original;
-	ret.selected = mes.selected;
-
-	ret.co2 = mes.co2;
-	ret.co2Change = mes.co2Change;
-	ret.co2ChangeOriginal = mes.co2ChangeOriginal;
-
-	ret.jules = mes.jules;
-
-	ret.cost = mes.cost;
-	ret.costChange = mes.costChange;
-	ret.costChangeOriginal = mes.costChangeOriginal;
-	ret.costTotalChange = mes.costTotalChange;
-	ret.costTotalChangeOriginal = mes.costTotalChangeOriginal;
-	ret.costUnique = mes.costUnique;
-	ret.priceOrg = mes.priceOrg;
-	ret.priceNew = mes.priceNew;
-	ret.payBackYear = mes.payBackYear;
-	ret.lifeTime = mes.lifeTime;
-
-	ret.electricity = mes.electricity;
-	ret.gas = mes.gas;
-	ret.coal = mes.coal;
-	ret.hotwater = mes.hotwater;
-	ret.car = mes.car;
-	ret.kerosene = mes.kerosene;
-	ret.water = mes.water;
-
-	return ret;
-};
-
-
-//get Measures data
-// consName
-// maxPrice		not show over than this price
-// notSelected 	1:only not select
-D6.getMeasure = function( consName, maxPrice, notSelected )
-{
-	//cannot set default in function for IE
-	if(typeof maxPrice === 'undefined') maxPrice = 100000000;
-	if(typeof notSelected === 'undefined') notSelected = 0;
-
-	var ret = [];
-	var i=0;
-	var mes;
-	var count = 0;
-	var mesidArray = [];
-	for ( var cid in D6.measureList ) {
-		mesidArray.push( D6.measureList[cid] );
-	}
-	D6.ObjArraySort( mesidArray, D6.sortTarget );
-
-	for ( var mid in mesidArray ) {
-		cid = mesidArray[mid].mesID;
-		mes = D6.measureList[cid];
-			
-		// not to show defined in EXCEL
-		if ( mes.title == "" || mes.title.substr(0,1)=="#" ) continue;
-			
-		var partc = D6.consListByName[consName][0].partCons;
-		var relation = false;
-		for( var pc in partc ){
-			if ( mes[partc[pc].consName] ) relation = true;
-		}
-
-		// directly defined in partCons
-		if ( mes[consName] ) relation = true;
-
-		// skip
-		if ( mes.selected && notSelected == 1 ) continue;
-		if ( mes.priceNew > maxPrice ) continue;
-
-		ret[i] = [];
-		ret[i].mesID = mes.mesID;
-		ret[i].title = mes.title;
-		ret[i].selected = mes.selected;
-		ret[i].consName = consName;
-		ret[i].groupID = mes.groupID;
-		ret[i].measureName = mes.measureName;
-		ret[i].consconsName = mes.cons.consName;
-		ret[i].conssumConsName = mes.cons.sumConsName;
-		ret[i].conssumCons2Name = mes.cons.sumCons2Name;
-		ret[i].co2Change = mes.co2Change;
-		ret[i].co2ChangeOriginal = mes.co2ChangeOriginal;
-		ret[i].costChangeOriginal = mes.costChangeOriginal;
-		ret[i].conssubID = mes.cons.subID;
-		ret[i].consmesTitlePrefix = mes.cons.mesTitlePrefix;
-		ret[i].relation = relation;
-		ret[i].payBackYear = mes.payBackYear;
-		ret[i].lifeTime = mes.lifeTime;
-		ret[i].lifestyle = mes.lifestyle;
-		if ( mes.cons.color || mes.cons.consName=="consTOTAL"){
-			ret[i].color = mes.cons.color;
-		} else {
-			ret[i].color = mes.cons.sumCons.color;
-		}
-			
-		i++;
-	}
-
-	return ret;
-};
-	
-/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * disp_demand.js 
- * 
- * demand input/graph add to D6.disp class
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- * 								2016/11/23 divided from disp.js
- * 
- * getDemandGraph()
- * getInputDemandSumup()
- * getInputDemandLog()
- */
-
-///get data of Demand graph
-// getDemandGraph()-----------------------------------------------------
-//		demand graph of sumup and consumption log
-// return
-//		retall.log		log graph data
-//		retall.sumup	pile up graph data
-D6.getDemandGraph  = function ( ){
-	var work = {};
-	var retone = {};
-	var retall = {};
-	var clist = [];
-		
-	// pickup related concumption name "consName"
-	for( var c in D6.scenario.defInput ) {
-		if ( D6.scenario.defInput[c].demand > 0 ){
-			work[D6.scenario.defInput[c].cons]= [];
-		}
-	}
-
-	//make device data
-	for( var i in D6.doc.data ) {
-		//loop in doc.data and check in defInput
-		var definp = D6.scenario.defInput[i.substr(0,4)];
-		if ( work[definp.cons] ) {
-			//work[consName][ID][1-6]
-			var count = parseInt(i.substr(4,2));
-			if( !work[definp.cons][count] ) work[definp.cons][count] = [];
-			work[definp.cons][count][definp.demand] = D6.doc.data[i];
-		}
-	}
-		
-	var ret = [];
-	var ri = 0;
-	var ctitle = "";
-	var ctitle2 = "";
-	var watt = 0;
-	var num = 1;
-	var st = 0;
-	var ed = 24;
-	var colorcount = 0;
-	var seriescolor = "";
-
-	for ( c in work ){
-		colorcount++;
-		ctitle = D6.logicList[c].addable;
-		for ( i in work[c] ){
-			//input 
-			if ( work[c][i][4] ){
-				ctitle2 = work[c][i][4];
-			} else {
-				ctitle2 = i;
-			}
-			if ( work[c][i][1] && work[c][i][1] > 0 ){
-				watt = work[c][i][1];
-			} else if ( work[c][i][2] && work[c][i][2] > 0 ){
-				watt = work[c][i][2]/1000;
-			} else{
-				watt = 0;
-			}
-			if ( work[c][i][3] && work[c][i][3] > 0 ){
-				num = work[c][i][3];
-			} else {
-				num = 0;
-			}
-			if ( work[c][i][5] && work[c][i][5] >= 0 ){
-				st = work[c][i][5];
-			} else {
-				st = 0;
-			}
-			if ( work[c][i][6] && work[c][i][6] >= 0 ){
-				ed = work[c][i][6];
-			} else {
-				ed = 24;
-			}
-			if ( watt * num == 0 ) continue;
-			if ( st >= ed ) continue;
-			
-			seriescolor = graphColorSeries( colorcount );
-			//make graph data
-			for ( var t=0 ; t<24 ; t++ ){
-				ret[ri] = {};
-				ret[ri]["equip"] = ctitle + "-" + ( parseInt(ctitle2) ? i : ctitle2);
-				ret[ri]["time"] = t;
-				if ( t>= st && t < ed ) {
-					ret[ri]["electricity_kW"] = Math.round(watt * num * 10) / 10;
-				} else {
-					ret[ri]["electricity_kW"] = 0;
-				}
-				clist.push( { title:ret[ri]["equip"], 
-					target:"electricity_kW", 
-					color:seriescolor });
-				ri++;
-			}				
-		}
-	}
-	retall.sumup = ret;		//sumup data
-	retall.clist = clist;	//color list
-	//log data
-	var log = [];
-	for ( var t=0 ; t<24 ; t++ ){
-		log[t] = {};
-		log[t]["equip"] = "log";
-		log[t]["time"] = t;
-		log[t]["electricity_kW"] = D6.doc.data["i056"+(t+1)];
-	}
-	retall.log = log;		//log data
-	return retall;
-		
-	//set color by ID　"#0000ff";　.toString(16); 1-6 pattern
-	function graphColorSeries( colid ) {
-		var color;
-		var col = [100,100,100];
-		if ( colid <= 3 ) {
-			col[colid-1] = 255;
-		} else if ( colid <= 6 ){
-			col[colid-4] = 0;
-		}
-		
-		for ( var c in col ){
-			if ( col[c] == 100 ){
-				col[c] = Math.floor( Math.random() * 150 ) + 38;
-			}
-		}
-		color = "#" + (col[0] * 256 * 256 + col[1] * 256 + col[2]).toString(16);
-		return color;
-	}
-};
-	
-
-//create input dialog of demand
-D6.getInputDemandSumup = function() {
-	var work = {};
-	var ret = {};
-	var title = {};
-	var pdata = {};
-	var demandone= {};
-	var combos = [];
-
-	//pick up related consName
-	for( var c in D6.scenario.defInput ) {
-		if ( D6.scenario.defInput[c].demand > 0 ){
-			work[D6.scenario.defInput[c].cons]= true;
-			ret[D6.scenario.defInput[c].cons]= {};
-		}
-	}
-
-	//set data
-	var inhtml = "";
-	for( var i in D6.doc.data ) {
-		//loop in doc.data and check with defInput
-		var definp = D6.scenario.defInput[i.substr(0,4)];
-		if ( work[definp.cons] ) {
-			//in case of related class
-			inhtml = this.createComboBox( i, true );
-			//ret[consName][ID][1-6]
-			var count = parseInt(i.substr(4,2));
-			title[definp.cons] = D6.consListByName[definp.cons][0].addable;
-			if( !ret[definp.cons][count] ) ret[definp.cons][count] = [];
-			ret[definp.cons][count][definp.demand] = inhtml;
-		}
-	}
-		
-	pdata.data = ret;
-	pdata.title = title;
-		
-	return pdata;
-};
-
-//create input diakog 
-D6.getInputDemandLog = function() {
-	var ret = [];
-	for ( var t=0 ; t<24 ; t++ ){
-		ret[t] = this.createComboBox( "i056" + (t+1), true );
-	}
-	return ret;
-};
-	
-
-/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * diagnosis.js 
- * 
- * D6 Main Class
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/17 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- * 
- * need d6_construct, d6_calccons, d6_calcmeasures, d6_calcaverage, d6_setvalue, d6_tools
- * 
- * construct();
- *   setscenario()					initialize diagnosis structure by scenario file
- *   addMeasureEachCons()			add measure definition
- *   addConsSetting()				add consumption definition 
- 
- * calcCons()					calculate consumption
- * calcConsAdjust()				adjust consumption
-
- * calcMeasures()				calculate measure
- * calcMeasuresLifestyle()		calculate all measures and select lifestyle
- * calcMeasuresNotLifestyle()	calculate all measures and select not lifestyle
- * calcMeasuresOne()			calculate in temporal selection
- * calcMaxMeasuresList()		automatic select max combination 
-
- * calcAverage()				get avearage consumption
- * rankIn100()					get rank				
-
- * inSet()						input data setter
- * measureAdd()					set select flag and not calculate 
- * measureDelete()				clear select flag and not calculate 
-
- * getGid()						get group id
- * getCommonParameters()		result common parameters
- * 
- * toHalfWidth()
- * ObjArraySort()
- * 
- * other D6 class
- * 		D6.disp		disp.js, disp_input.js, disp_measure.js
- * 		D6.senario	scenarioset.js
- * 
- */
- 
-//resolve D6
-var D6 = D6||{};
-
-//instances
-D6.consList = [];					//consumption full list
-D6.consListByName = [];				//consumption list by consname
-D6.consShow = [];					//major consumption list by conscode
-D6.measureList = [];				//measure list
-D6.monthly = [];					//monthly energy
-D6.resMeasure = [];					//result of measures list
-
-D6.mesCount = 0;					//count of measures
-D6.consCount = 0;					//count of consumptions
-
-D6.average = { consList:""
-				};					//average of consumptions 
-	
-D6.isOriginal = true;					//in case of no measure is selected
-D6.sortTarget = "co2ChangeOriginal";	//by which measureas are sorted, changeable by input
-
-//view / Debug set. set in workercalc(start,*)
-D6.viewparam = {};
-D6.debugMode = false;
-
-
-//constructor 
-D6.constructor = function(a, b, c){
-	D6.setscenario(a, b, c);
-};
-
-//calculate
-D6.calculateAll = function(){
-	D6.calcCons();
-	D6.calcAverage();
-	D6.calcMeasures(-1);
-};
-
-	
-
-	
-	
-	/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -5194,6 +4459,7 @@ D6.addConsSetting = function(consName) {
 	}
 };
 	
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -5446,6 +4712,7 @@ D6.getCommonParameters = function(){
 
 
 
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -5530,6 +4797,7 @@ D6.rankIn100 = function( ratio ){
 };
 
 	
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -5831,6 +5099,7 @@ D6.calcMaxMeasuresList = function( gid, count )
 
 
 
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -5914,6 +5183,7 @@ D6.measureDelete = function( mesId ) {
 	return ret;
 };
 
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -5985,7 +5255,8 @@ D6.ObjArraySort = function(ary, key, order) {
     });
 };
 
-﻿/**
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
 * D6.scenario: シナリオ設定 Class
@@ -6579,49 +5850,47 @@ D6.scenario =
 
 
 
-﻿/**
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
-* consRM
-* 部屋設定
+* consEnergy
+* 全体エネルギー概要入力設定
 * 
 * @author Yasufumi SUZUKI 	2016/06/09
 */
 
-D6.consRM = D6.object( D6.ConsBase );
-DC = D6.consRM;
+D6.consEnergy = D6.object( D6.ConsBase );
+DC = D6.consEnergy;
 
 //初期設定値
 DC.init = function() {
+
 	//構造設定
-	this.consName = "consRM";			//分野コード
+	this.consName = "consEnergy";			//分野コード
 	this.consCode = "";						//うちわけ表示のときのアクセス変数
-	this.title = "";						//分野名として表示される名前
-	this.orgCopyNum = 1;					//初期複製数（consCodeがない場合にコピー作成）
-	this.addable = "エリア";		//追加可能
+	this.title = "全般エネルギー設定";				//分野名として表示される名前
+	this.orgCopyNum = 0;					//初期複製数（consCodeがない場合にコピー作成）
 	this.sumConsName = "";					//集約先の分野コード
-	this.sumCons2Name = "consTotal";		//関連の分野コード
-	this.inputDisp = "consTotal";			//入力欄を表示する分野コード
-	this.groupID = "2";						//うちわけ番号
+	this.sumCons2Name = "";					//関連の分野コード
+	this.inputDisp = "consTotal";			//入力欄を表示する分野コード(入力欄としてのみ使用)
+	this.groupID = "0";						//うちわけ番号
 	this.color = "#ff0000";				//表示の色
-	this.countCall = "エリア目";			//呼び方
-	this.inputGuide = "部屋・エリアの名前について。冷暖房のエリア名としても使われます。";		//入力欄でのガイド
+	this.countCall = "";					//呼び方
+	this.inputGuide = "エネルギーの基本設定の使い方について";		//入力欄でのガイド
 
 	this.measureName = [
 	];
-	this.consAddSet = [
-		"consHT",
-		"consCO"
+	this.partConsName = [		//	このクラスを増加させたときに、あわせて増加するクラス
 	];
 };
 DC.init();
 
 
-//暖房消費量計算
+//消費量計算
 //
 DC.calc = function() {
 	this.clear();			//結果の消去
-
 };
 
 
@@ -6632,7 +5901,112 @@ DC.calcMeasure = function() {
 
 
 
-﻿/**
+
+/**
+* Home-Eco Diagnosis for JavaScript
+* 
+* consMonth
+* 月・シーズン設定
+* 
+* @author Yasufumi SUZUKI 	2016/06/09
+*/
+
+D6.consMonth = D6.object( D6.ConsBase );
+DC = D6.consMonth;
+
+//初期設定値
+DC.init = function() {
+	//構造設定
+	this.consName = "consMonth";			//分野コード
+	this.consCode = "";						//うちわけ表示のときのアクセス変数
+	this.title = "";						//分野名として表示される名前
+	this.orgCopyNum = 12;					//初期複製数（consCodeがない場合にコピー作成）
+		//1-12月
+	this.sumConsName = "";					//集約先の分野コード
+	this.sumCons2Name = "consTotal";		//関連の分野コード
+	this.inputDisp = "consTotal";			//入力欄を表示する分野コード
+	this.groupID = "2";						//うちわけ番号
+	this.color = "#ff0000";				//表示の色
+	this.countCall = "月";					//呼び方
+	this.inputGuide = "月ごとのエネルギー消費量と光熱費";		//入力欄でのガイド
+
+	this.measureName = [
+	];
+	this.partConsName = [
+	];
+};
+DC.init();
+
+
+//暖房消費量計算
+//
+DC.calc = function() {
+	this.clear();			//結果の消去
+	this.title = this.subID + "月";
+};
+
+
+//対策計算
+DC.calcMeasure = function() {
+};
+
+
+
+
+
+/**
+* Home-Eco Diagnosis for JavaScript
+* 
+* consSeason
+* シーズン設定
+* 
+* @author Yasufumi SUZUKI 	2016/06/09
+*/
+
+D6.consSeason = D6.object( D6.ConsBase );
+DC = D6.consSeason;
+
+//初期設定値
+DC.init = function() {
+	this.titleList = ["","冬","春秋","夏"];
+
+	//構造設定
+	this.consName = "consSeason";			//分野コード
+	this.consCode = "";						//うちわけ表示のときのアクセス変数
+	this.title = "";						//分野名として表示される名前
+	this.orgCopyNum = 3;					//初期複製数（consCodeがない場合にコピー作成）
+	this.sumConsName = "";					//集約先の分野コード
+	this.sumCons2Name = "consTotal";		//関連の分野コード
+	this.inputDisp = "consTotal";			//入力欄を表示する分野コード
+	this.groupID = "2";						//うちわけ番号
+	this.color = "#ff0000";				//表示の色
+	this.countCall = "";					//呼び方
+	this.inputGuide = "季節ごとのエネルギーの使い方、1ヶ月あたりの光熱費。";		//入力欄でのガイド
+
+	this.measureName = [
+	];
+	this.partConsName = [
+	];
+};
+DC.init();
+
+
+//消費量計算
+//
+DC.calc = function() {
+	this.clear();			//結果の消去
+};
+
+
+//対策計算
+DC.calcMeasure = function() {
+};
+
+
+
+
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
 * ConsTotal
@@ -6879,138 +6253,40 @@ DC.priceandcons = function( consid, priceid, target ){
 	return price;
 };
 
-﻿/**
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
-* consEnergy
-* 全体エネルギー概要入力設定
+* consRM
+* 部屋設定
 * 
 * @author Yasufumi SUZUKI 	2016/06/09
 */
 
-D6.consEnergy = D6.object( D6.ConsBase );
-DC = D6.consEnergy;
+D6.consRM = D6.object( D6.ConsBase );
+DC = D6.consRM;
 
 //初期設定値
 DC.init = function() {
-
 	//構造設定
-	this.consName = "consEnergy";			//分野コード
-	this.consCode = "";						//うちわけ表示のときのアクセス変数
-	this.title = "全般エネルギー設定";				//分野名として表示される名前
-	this.orgCopyNum = 0;					//初期複製数（consCodeがない場合にコピー作成）
-	this.sumConsName = "";					//集約先の分野コード
-	this.sumCons2Name = "";					//関連の分野コード
-	this.inputDisp = "consTotal";			//入力欄を表示する分野コード(入力欄としてのみ使用)
-	this.groupID = "0";						//うちわけ番号
-	this.color = "#ff0000";				//表示の色
-	this.countCall = "";					//呼び方
-	this.inputGuide = "エネルギーの基本設定の使い方について";		//入力欄でのガイド
-
-	this.measureName = [
-	];
-	this.partConsName = [		//	このクラスを増加させたときに、あわせて増加するクラス
-	];
-};
-DC.init();
-
-
-//消費量計算
-//
-DC.calc = function() {
-	this.clear();			//結果の消去
-};
-
-
-//対策計算
-DC.calcMeasure = function() {
-};
-
-
-
-
-﻿/**
-* Home-Eco Diagnosis for JavaScript
-* 
-* consSeason
-* シーズン設定
-* 
-* @author Yasufumi SUZUKI 	2016/06/09
-*/
-
-D6.consSeason = D6.object( D6.ConsBase );
-DC = D6.consSeason;
-
-//初期設定値
-DC.init = function() {
-	this.titleList = ["","冬","春秋","夏"];
-
-	//構造設定
-	this.consName = "consSeason";			//分野コード
+	this.consName = "consRM";			//分野コード
 	this.consCode = "";						//うちわけ表示のときのアクセス変数
 	this.title = "";						//分野名として表示される名前
-	this.orgCopyNum = 3;					//初期複製数（consCodeがない場合にコピー作成）
+	this.orgCopyNum = 1;					//初期複製数（consCodeがない場合にコピー作成）
+	this.addable = "エリア";		//追加可能
 	this.sumConsName = "";					//集約先の分野コード
 	this.sumCons2Name = "consTotal";		//関連の分野コード
 	this.inputDisp = "consTotal";			//入力欄を表示する分野コード
 	this.groupID = "2";						//うちわけ番号
 	this.color = "#ff0000";				//表示の色
-	this.countCall = "";					//呼び方
-	this.inputGuide = "季節ごとのエネルギーの使い方、1ヶ月あたりの光熱費。";		//入力欄でのガイド
+	this.countCall = "エリア目";			//呼び方
+	this.inputGuide = "部屋・エリアの名前について。冷暖房のエリア名としても使われます。";		//入力欄でのガイド
 
 	this.measureName = [
 	];
-	this.partConsName = [
-	];
-};
-DC.init();
-
-
-//消費量計算
-//
-DC.calc = function() {
-	this.clear();			//結果の消去
-};
-
-
-//対策計算
-DC.calcMeasure = function() {
-};
-
-
-
-
-﻿/**
-* Home-Eco Diagnosis for JavaScript
-* 
-* consMonth
-* 月・シーズン設定
-* 
-* @author Yasufumi SUZUKI 	2016/06/09
-*/
-
-D6.consMonth = D6.object( D6.ConsBase );
-DC = D6.consMonth;
-
-//初期設定値
-DC.init = function() {
-	//構造設定
-	this.consName = "consMonth";			//分野コード
-	this.consCode = "";						//うちわけ表示のときのアクセス変数
-	this.title = "";						//分野名として表示される名前
-	this.orgCopyNum = 12;					//初期複製数（consCodeがない場合にコピー作成）
-		//1-12月
-	this.sumConsName = "";					//集約先の分野コード
-	this.sumCons2Name = "consTotal";		//関連の分野コード
-	this.inputDisp = "consTotal";			//入力欄を表示する分野コード
-	this.groupID = "2";						//うちわけ番号
-	this.color = "#ff0000";				//表示の色
-	this.countCall = "月";					//呼び方
-	this.inputGuide = "月ごとのエネルギー消費量と光熱費";		//入力欄でのガイド
-
-	this.measureName = [
-	];
-	this.partConsName = [
+	this.consAddSet = [
+		"consHT",
+		"consCO"
 	];
 };
 DC.init();
@@ -7020,7 +6296,7 @@ DC.init();
 //
 DC.calc = function() {
 	this.clear();			//結果の消去
-	this.title = this.subID + "月";
+
 };
 
 
@@ -7031,7 +6307,8 @@ DC.calcMeasure = function() {
 
 
 
-﻿/**
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
 * ConsHWsum
@@ -7218,7 +6495,8 @@ DC.calcAdjustStrategy = function( energyAdj ){
 	this.endEnergy *= energyAdj[this.mainSource];
 };
 
-﻿/**
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
 * D6.ConsCOsum
@@ -7340,7 +6618,8 @@ DC.calcCoolLoad = function()
 
 };
 
-﻿/**
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
 * D6.ConsCO
@@ -7440,7 +6719,8 @@ DC.calcMeasure = function() {
 };
 
 
-﻿/**
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
 * ConsHTsum
@@ -7594,7 +6874,8 @@ DC.calcAdjustStrategy = function( energyAdj ){
 
 
 
-﻿/**
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
 * consHT
@@ -7752,7 +7033,8 @@ DC.calcAdjustStrategy = function( energyAdj ){
 
 
 
-﻿/**
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
 * consAC
@@ -7857,7 +7139,8 @@ DC.calcMeasure = function() {
 
 
 
-﻿/**
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
 * consAC
@@ -7985,7 +7268,8 @@ DC.calcMeasure = function() {
 
 
 
-﻿/**
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
 * ConsRFsum
@@ -8118,7 +7402,8 @@ DC.calcMeasure = function( ) {
 
 
 
-﻿/**
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
 * ConsRFsum
@@ -8187,63 +7472,8 @@ DC.calcMeasure = function( ) {
 
 
 
-﻿/**
-* Home-Eco Diagnosis for JavaScript
-* 
-* D6.consCKsum
-* 調理全体消費量
-* 
-* @author Yasufumi SUZUKI 	2011/11/04 diagnosis5
-*/
 
-D6.consCKsum = D6.object( D6.ConsBase );
-DC = D6.consCKsum;
-
-//初期設定値
-DC.init = function() {
-
-	//構造設定
-	this.consName = "consCKsum";		//分野コード
-	this.consCode = "CK";				//うちわけ表示のときのアクセス変数
-	this.title = "調理";				//分野名として表示される名前
-	this.orgCopyNum = 0;				//初期複製数（consCodeがない場合にはこの分のコピーが作成）
-	this.sumConsName = "consTotal";		//集約先の分野コード
-	this.sumCons2Name = "";				//関連の分野コード
-	this.groupID = "4";					//うちわけ番号
-	this.color = "#ffe4b5";				//表示の色
-	this.residueCalc = "no";			//残余の計算
-	this.inputGuide = "調理について";		//入力欄でのガイド
-
-	this.measureName = [];
-
-};
-DC.init();
-
-
-//調理消費量計算
-DC.calc = function() {
-	this.clear();			//結果の消去
-
-	this.business = D6.consShow["TO"].business;			//業種
-	this.floor = D6.consShow["TO"].floor;				//床面積 m2
-
-	this.seat =this.input( "i009", 
-			(this.business == 5 ? Math.round(this.floor / 5 ) + 1 : 0 ) );	
-			//座席数
-	if ( D6.consShow["TO"].gas > 0 ) {
-		this.gas = this.seat * 0.5 * 30;
-	} else {
-		this.electricity = this.seat * 5 * 30;
-	}
-};
-
-
-//対策計算
-DC.calcMeasure = function() {
-};
-
-
-﻿/**
+/**
 * Home-Eco Diagnosis for ActionScript3
 * 
 * ConsLIsum: ConsLIsum Class
@@ -8319,7 +7549,8 @@ DC.calcMeasure = function() {
 };
 
 
-﻿/**
+
+/**
 * Home-Eco Diagnosis for ActionScript3
 * 
 * consLI: consLI Class
@@ -8416,121 +7647,8 @@ DC.calcMeasure = function() {
 };
 
 
-﻿/**
-* Home-Eco Diagnosis for ActionScript3
-* 
-* ConsOTsum: ConsOTsum Class
-* その他機器消費量
-* 
-* @author Yasufumi SUZUKI 	2011/01/21 diagnosis5
-*								2011/05/06 actionscript3
-*								2011/08/23 strategyとして整理
-*								2011/10/21 照明簡易計算を実装
-*/
 
-D6.consOTsum = D6.object( D6.ConsBase );
-DC = D6.consOTsum;
-
-
-//初期設定値
-DC.init =function() {
-	this.lightTime = 6;					//標準照明時間6時間
-	this.performanceLED = 100;			//LED  lm/W
-	this.performanceHF = 80;			//HF  lm/W
-	this.performanceFlueciend = 60;		//蛍光灯  lm/W
-	this.preformanceBulb = 15;			//電球 lm/W
-
-	this.outdoorWatt = 150;				//センサー屋外式の消費電力(W)
-	this.outdoorTime = 0.5;				//センサー屋外式の時間（時間）
-	this.sensorWatt = 2;				//センサーの消費電力（W)
-	
-	//構造設定
-	this.consName = "consOTsum";		//分野コード
-	this.consCode = "OT";				//うちわけ表示のときのアクセス変数
-	this.title = "機器";				//分野名として表示される名前
-	this.orgCopyNum = 0;				//初期複製数（consCodeがない場合にはこの分のコピーが作成）
-	this.sumConsName = "consTotal";		//集約先の分野コード
-	this.sumCons2Name = "";				//関連の分野コード
-	this.groupID = "6";					//うちわけ番号
-	this.color = "#ffff00";				//表示の色
-	this.residueCalc = "no";			//残余の計算
-	this.inputGuide = "その他機器の使い方について";		//入力欄でのガイド
-	
-	this.measureName = [ 
-	];
-};
-DC.init();
-
-//機器消費量計算
-DC.calc = function( ) {
-	this.clear();			//結果の消去
-
-};
-
-//対策計算
-DC.calcMeasure = function() {
-
-};
-
-
-﻿/**
-* Home-Eco Diagnosis for ActionScript3
-* 
-* consOT: consOT Class
-* その他機器消費量
-* 
-* @author Yasufumi SUZUKI 	2011/01/21 diagnosis5
-*								2011/05/06 actionscript3
-*								2011/08/23 strategyとして整理
-*								2011/10/21 照明簡易計算を実装
-*/
-
-D6.consOT = D6.object( D6.consOTsum );
-DC = D6.consOT;
-
-//初期設定値
-DC.init =function() {
-	
-	//構造設定
-	this.consName = "consOT";		//分野コード
-	this.consCode = "";				//うちわけ表示のときのアクセス変数
-	this.title = "";				//分野名として表示される名前
-	this.orgCopyNum = 1;			//初期複製数（consCodeがない場合にはこの分のコピーが作成）
-	this.addable = "その他機器";		//追加可能
-	this.sumConsName = "consOTsum";		//集約先の分野コード
-	this.sumCons2Name = "";				//関連の分野コード
-	this.groupID = "6";					//うちわけ番号
-	this.color = "#ffff00";				//表示の色
-	this.countCall = "機種目";			//呼び方
-	this.inputGuide = "機器ごとの使い方について";		//入力欄でのガイド
-	
-	this.measureName = [ 
-	];
-};
-DC.init();
-
-//照明消費量計算
-DC.calc = function( ) {
-	this.clear();			//結果の消去
-
-	//入力値の読み込み
-	this.kw = this.input('i899'+this.subID,0);	//'定格消費電力(kW)',
-	this.num = this.input('i812'+this.subID,1);	//'台数',
-	this.time = this.input('i813'+this.subID,0);	//'使用時の1日使用時間',
-	this.useinyear = this.input('i814'+this.subID,0);	//'使用頻度',
-
-	//月の消費電力量　kWh/月
-	this.electricity = this.kw * this.num * this.time * this.useinyear / 12;
-};
-
-
-//対策計算
-DC.calcMeasure = function() {
-
-};
-
-
-﻿/**
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
 * ConsOAsum
@@ -8629,7 +7747,124 @@ DC.calcMeasure = function( ) {
 
 
 
-﻿/**
+
+/**
+* Home-Eco Diagnosis for ActionScript3
+* 
+* ConsOTsum: ConsOTsum Class
+* その他機器消費量
+* 
+* @author Yasufumi SUZUKI 	2011/01/21 diagnosis5
+*								2011/05/06 actionscript3
+*								2011/08/23 strategyとして整理
+*								2011/10/21 照明簡易計算を実装
+*/
+
+D6.consOTsum = D6.object( D6.ConsBase );
+DC = D6.consOTsum;
+
+
+//初期設定値
+DC.init =function() {
+	this.lightTime = 6;					//標準照明時間6時間
+	this.performanceLED = 100;			//LED  lm/W
+	this.performanceHF = 80;			//HF  lm/W
+	this.performanceFlueciend = 60;		//蛍光灯  lm/W
+	this.preformanceBulb = 15;			//電球 lm/W
+
+	this.outdoorWatt = 150;				//センサー屋外式の消費電力(W)
+	this.outdoorTime = 0.5;				//センサー屋外式の時間（時間）
+	this.sensorWatt = 2;				//センサーの消費電力（W)
+	
+	//構造設定
+	this.consName = "consOTsum";		//分野コード
+	this.consCode = "OT";				//うちわけ表示のときのアクセス変数
+	this.title = "機器";				//分野名として表示される名前
+	this.orgCopyNum = 0;				//初期複製数（consCodeがない場合にはこの分のコピーが作成）
+	this.sumConsName = "consTotal";		//集約先の分野コード
+	this.sumCons2Name = "";				//関連の分野コード
+	this.groupID = "6";					//うちわけ番号
+	this.color = "#ffff00";				//表示の色
+	this.residueCalc = "no";			//残余の計算
+	this.inputGuide = "その他機器の使い方について";		//入力欄でのガイド
+	
+	this.measureName = [ 
+	];
+};
+DC.init();
+
+//機器消費量計算
+DC.calc = function( ) {
+	this.clear();			//結果の消去
+
+};
+
+//対策計算
+DC.calcMeasure = function() {
+
+};
+
+
+
+/**
+* Home-Eco Diagnosis for ActionScript3
+* 
+* consOT: consOT Class
+* その他機器消費量
+* 
+* @author Yasufumi SUZUKI 	2011/01/21 diagnosis5
+*								2011/05/06 actionscript3
+*								2011/08/23 strategyとして整理
+*								2011/10/21 照明簡易計算を実装
+*/
+
+D6.consOT = D6.object( D6.consOTsum );
+DC = D6.consOT;
+
+//初期設定値
+DC.init =function() {
+	
+	//構造設定
+	this.consName = "consOT";		//分野コード
+	this.consCode = "";				//うちわけ表示のときのアクセス変数
+	this.title = "";				//分野名として表示される名前
+	this.orgCopyNum = 1;			//初期複製数（consCodeがない場合にはこの分のコピーが作成）
+	this.addable = "その他機器";		//追加可能
+	this.sumConsName = "consOTsum";		//集約先の分野コード
+	this.sumCons2Name = "";				//関連の分野コード
+	this.groupID = "6";					//うちわけ番号
+	this.color = "#ffff00";				//表示の色
+	this.countCall = "機種目";			//呼び方
+	this.inputGuide = "機器ごとの使い方について";		//入力欄でのガイド
+	
+	this.measureName = [ 
+	];
+};
+DC.init();
+
+//照明消費量計算
+DC.calc = function( ) {
+	this.clear();			//結果の消去
+
+	//入力値の読み込み
+	this.kw = this.input('i899'+this.subID,0);	//'定格消費電力(kW)',
+	this.num = this.input('i812'+this.subID,1);	//'台数',
+	this.time = this.input('i813'+this.subID,0);	//'使用時の1日使用時間',
+	this.useinyear = this.input('i814'+this.subID,0);	//'使用頻度',
+
+	//月の消費電力量　kWh/月
+	this.electricity = this.kw * this.num * this.time * this.useinyear / 12;
+};
+
+
+//対策計算
+DC.calcMeasure = function() {
+
+};
+
+
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
 * ConsCR
@@ -8698,7 +7933,8 @@ DC.calcMeasure = function() {
 
 };
 
-﻿/**
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
 * ConsCR
@@ -8793,7 +8029,8 @@ DC.calcMeasure = function() {
 
 };
 
-﻿/**
+
+/**
 * Home-Eco Diagnosis for JavaScript
 * 
 * consCRtrip
@@ -8873,95 +8110,60 @@ DC.calc2nd = function( ) {
 DC.calcMeasure = function( ){
 };
 
-/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * diagnosis.js 
- * 
- * D6 Main Class
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/17 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- * 
- * need d6_construct, d6_calccons, d6_calcmeasures, d6_calcaverage, d6_setvalue, d6_tools
- * 
- * construct();
- *   setscenario()					initialize diagnosis structure by scenario file
- *   addMeasureEachCons()			add measure definition
- *   addConsSetting()				add consumption definition 
- 
- * calcCons()					calculate consumption
- * calcConsAdjust()				adjust consumption
 
- * calcMeasures()				calculate measure
- * calcMeasuresLifestyle()		calculate all measures and select lifestyle
- * calcMeasuresNotLifestyle()	calculate all measures and select not lifestyle
- * calcMeasuresOne()			calculate in temporal selection
- * calcMaxMeasuresList()		automatic select max combination 
+/**
+* Home-Eco Diagnosis for JavaScript
+* 
+* D6.consCKsum
+* 調理全体消費量
+* 
+* @author Yasufumi SUZUKI 	2011/11/04 diagnosis5
+*/
 
- * calcAverage()				get avearage consumption
- * rankIn100()					get rank				
+D6.consCKsum = D6.object( D6.ConsBase );
+DC = D6.consCKsum;
 
- * inSet()						input data setter
- * measureAdd()					set select flag and not calculate 
- * measureDelete()				clear select flag and not calculate 
+//初期設定値
+DC.init = function() {
 
- * getGid()						get group id
- * getCommonParameters()		result common parameters
- * 
- * toHalfWidth()
- * ObjArraySort()
- * 
- * other D6 class
- * 		D6.disp		disp.js, disp_input.js, disp_measure.js
- * 		D6.senario	scenarioset.js
- * 
- */
- 
-//resolve D6
-var D6 = D6||{};
+	//構造設定
+	this.consName = "consCKsum";		//分野コード
+	this.consCode = "CK";				//うちわけ表示のときのアクセス変数
+	this.title = "調理";				//分野名として表示される名前
+	this.orgCopyNum = 0;				//初期複製数（consCodeがない場合にはこの分のコピーが作成）
+	this.sumConsName = "consTotal";		//集約先の分野コード
+	this.sumCons2Name = "";				//関連の分野コード
+	this.groupID = "4";					//うちわけ番号
+	this.color = "#ffe4b5";				//表示の色
+	this.residueCalc = "no";			//残余の計算
+	this.inputGuide = "調理について";		//入力欄でのガイド
 
-//instances
-D6.consList = [];					//consumption full list
-D6.consListByName = [];				//consumption list by consname
-D6.consShow = [];					//major consumption list by conscode
-D6.measureList = [];				//measure list
-D6.monthly = [];					//monthly energy
-D6.resMeasure = [];					//result of measures list
+	this.measureName = [];
 
-D6.mesCount = 0;					//count of measures
-D6.consCount = 0;					//count of consumptions
-
-D6.average = { consList:""
-				};					//average of consumptions 
-	
-D6.isOriginal = true;					//in case of no measure is selected
-D6.sortTarget = "co2ChangeOriginal";	//by which measureas are sorted, changeable by input
-
-//view / Debug set. set in workercalc(start,*)
-D6.viewparam = {};
-D6.debugMode = false;
+};
+DC.init();
 
 
-//constructor 
-D6.constructor = function(a, b, c){
-	D6.setscenario(a, b, c);
+//調理消費量計算
+DC.calc = function() {
+	this.clear();			//結果の消去
+
+	this.business = D6.consShow["TO"].business;			//業種
+	this.floor = D6.consShow["TO"].floor;				//床面積 m2
+
+	this.seat =this.input( "i009", 
+			(this.business == 5 ? Math.round(this.floor / 5 ) + 1 : 0 ) );	
+			//座席数
+	if ( D6.consShow["TO"].gas > 0 ) {
+		this.gas = this.seat * 0.5 * 30;
+	} else {
+		this.electricity = this.seat * 5 * 30;
+	}
 };
 
-//calculate
-D6.calculateAll = function(){
-	D6.calcCons();
-	D6.calcAverage();
-	D6.calcMeasures(-1);
+
+//対策計算
+DC.calcMeasure = function() {
 };
 
-	
 
-	
-	
-	

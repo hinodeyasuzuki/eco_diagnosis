@@ -1,4 +1,4 @@
-﻿/*  2017/12/10  version 1.0
+/*  2017/12/10  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -441,70 +441,8 @@ D6.workercalc = function( command, param ){
 	return result;
 };
 
-/*  2017/12/10  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * objectcreate.js 
- * 
- *  Object Create
- *		reference to http://blog.tojiru.net/article/199670885.html by Hiraku NAKANO
- *
- *	usage var newOBJ = D6.object(oldOBJ);
- */
 
-//resolve D6
-var D6 = D6||{};
-
-D6.object = function(obj) {
-	var func = D6.object.func;
-	func.prototype = obj;
-	var newo = new func;
-	var len=arguments.length;
-	for (var i=1; i<len; ++i) {
-		for (var prop in arguments[i]) {
-			newo[prop] = arguments[i][prop];
-		}
-	}
-	return newo;
-};
-D6.object.func = function(){};
-
-
-D6.patch = function( target, fix ) {
-	for ( var v in fix ) {
-		target[v] = fix[v];
-	}
-	return target;
-};
-
-
-
-
-/*  2017/12/10  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * base64.js 
- * 
- * define atob , btoa
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- * 								2016/04/12 original to JavaScript
- */
-
-// atob, btoa is defined in windows. it doesn't work in web worker 
-if ( typeof ( atob) =="undefined" ) {
-	function atob(str){
-		return str;
-	};
-	function btoa(str){
-		return str;
-	};
-};
-﻿/*  2017/12/16  version 1.0
+/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -574,7 +512,8 @@ D6.acadd = {
 	}
 
 };
-﻿/*  2017/12/16  version 1.0
+
+/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -635,7 +574,8 @@ factorPrefTimeMonth: [
 	}
 
 };
-﻿/*  2017/12/16  version 1.0
+
+/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -698,7 +638,8 @@ D6.acload = {
 	}
 
 };
-﻿/*  2017/12/16  version 1.0
+
+/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -1323,7 +1264,8 @@ D6.area = {
 };
 
 
-﻿/*  2017/12/16  version 1.0
+
+/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -1587,6 +1529,48 @@ D6.Unit = {
 	},
 };
 
+
+/*  2017/12/10  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * objectcreate.js 
+ * 
+ *  Object Create
+ *		reference to http://blog.tojiru.net/article/199670885.html by Hiraku NAKANO
+ *
+ *	usage var newOBJ = D6.object(oldOBJ);
+ */
+
+//resolve D6
+var D6 = D6||{};
+
+D6.object = function(obj) {
+	var func = D6.object.func;
+	func.prototype = obj;
+	var newo = new func;
+	var len=arguments.length;
+	for (var i=1; i<len; ++i) {
+		for (var prop in arguments[i]) {
+			newo[prop] = arguments[i][prop];
+		}
+	}
+	return newo;
+};
+D6.object.func = function(){};
+
+
+D6.patch = function( target, fix ) {
+	for ( var v in fix ) {
+		target[v] = fix[v];
+	}
+	return target;
+};
+
+
+
+
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -1602,6 +1586,8 @@ D6.Unit = {
  * 								2016/04/12 ported to JavaScript
  */
 
+//resolve D6
+var D6 = D6||{};
 
 D6.Energy = {
 	//value of each energy type
@@ -1754,7 +1740,8 @@ D6.Energy = {
 
 
 
-﻿/*  2017/12/10  version 1.0
+
+/*  2017/12/10  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -2106,6 +2093,7 @@ D6.ConsBase.init = function(){
 
 D6.ConsBase.init();
 
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -2370,6 +2358,7 @@ D6.MeasureBase.measureSumMonth = function( source, month ) {
 
 
 
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -2601,6 +2590,123 @@ D6.doc =
 		return mesSel;
 	}
 };
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * diagnosis.js 
+ * 
+ * D6 Main Class
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/17 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 
+ * need d6_construct, d6_calccons, d6_calcmeasures, d6_calcaverage, d6_setvalue, d6_tools
+ * 
+ * construct();
+ *   setscenario()					initialize diagnosis structure by scenario file
+ *   addMeasureEachCons()			add measure definition
+ *   addConsSetting()				add consumption definition 
+ 
+ * calcCons()					calculate consumption
+ * calcConsAdjust()				adjust consumption
+
+ * calcMeasures()				calculate measure
+ * calcMeasuresLifestyle()		calculate all measures and select lifestyle
+ * calcMeasuresNotLifestyle()	calculate all measures and select not lifestyle
+ * calcMeasuresOne()			calculate in temporal selection
+ * calcMaxMeasuresList()		automatic select max combination 
+
+ * calcAverage()				get avearage consumption
+ * rankIn100()					get rank				
+
+ * inSet()						input data setter
+ * measureAdd()					set select flag and not calculate 
+ * measureDelete()				clear select flag and not calculate 
+
+ * getGid()						get group id
+ * getCommonParameters()		result common parameters
+ * 
+ * toHalfWidth()
+ * ObjArraySort()
+ * 
+ * other D6 class
+ * 		D6.disp		disp.js, disp_input.js, disp_measure.js
+ * 		D6.senario	scenarioset.js
+ * 
+ */
+ 
+//resolve D6
+var D6 = D6||{};
+
+//instances
+D6.consList = [];					//consumption full list
+D6.consListByName = [];				//consumption list by consname
+D6.consShow = [];					//major consumption list by conscode
+D6.measureList = [];				//measure list
+D6.monthly = [];					//monthly energy
+D6.resMeasure = [];					//result of measures list
+
+D6.mesCount = 0;					//count of measures
+D6.consCount = 0;					//count of consumptions
+
+D6.average = { consList:""
+				};					//average of consumptions 
+	
+D6.isOriginal = true;					//in case of no measure is selected
+D6.sortTarget = "co2ChangeOriginal";	//by which measureas are sorted, changeable by input
+
+//view / Debug set. set in workercalc(start,*)
+D6.viewparam = {};
+D6.debugMode = false;
+
+
+//constructor 
+D6.constructor = function(a, b, c){
+	D6.setscenario(a, b, c);
+};
+
+//calculate
+D6.calculateAll = function(){
+	D6.calcCons();
+	D6.calcAverage();
+	D6.calcMeasures(-1);
+};
+
+	
+
+	
+	
+	
+/*  2017/12/10  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * base64.js 
+ * 
+ * define atob , btoa
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ * 								2016/04/12 original to JavaScript
+ */
+
+// atob, btoa is defined in windows. it doesn't work in web worker 
+if ( typeof ( atob) =="undefined" ) {
+	function atob(str){
+		return str;
+	};
+	function btoa(str){
+		return str;
+	};
+};
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -2733,7 +2839,8 @@ D6.calcMonthly = function( ave, season, monthly, seasonPatternP, energyCode ) {
 	ret.noConsData = noConsData;
 
 	return ret;
-};/*  2017/12/16  version 1.0
+};
+/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -3141,111 +3248,6 @@ D6.getCommonParameters = function(){
 
 
 
-/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * evaluateaxis.js 
- * 
- * evaluate multi dimension Class
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2017/11/06 original ActionScript3
- */
-
-
-//resolve D6
-var D6 = D6||{};
-
-// getEvaluateAxisPoint()
-//
-// parameters
-// 		target : dummy
-//		inpListDefCode: evaluate target Input List
-// return
-//		 [0-2][point, max, min ]
-//
-// value base is  D6.doc.data[inName]
-// weight is defined in D6.scenario.defInput[inName]
-//
-D6.getEvaluateAxisPoint = function( target,inpListDefCode ) {
-	//calc environmental load, performance, action points
-	var retall = {};
-	retall[0] = [0,"",""];
-	retall[1] = [0,"",""];
-	retall[2] = [0,"",""];
-
-	var def = [];
-	for( var d in D6.scenario.defEasyQues ) {
-		if ( D6.scenario.defEasyQues[d].cname == inpListDefCode ) {
-			def = D6.scenario.defEasyQues[d].ques;
-			break;
-		}
-	}
-	if ( def == "" ) return retall;
-
-	//calculate point of 3 axis
-	for ( var i=0 ; i<3 ; i++ ) {
-		var pointfull = 0;
-		var point = 0;
-		var maxpoint = 0;
-		var maxname = "";
-		var minpoint = 0;
-		var minname = "";
-		var tmax = 0;
-		var defaultvalue = 0;
-		var thispoint = 0;
-
-		for( var incode in def ) {
-			//incode : input code
-			var weight = D6.scenario.defInput[def[incode]];
-			var ans = D6.doc.data[def[incode]];
-			var weightone = weight["d"+(i+1)+"w"];
-			if ( weightone == "" ) continue;
-
-			defaultvalue = weight["d"+(i+1)+"d"] * weightone ;
-
-			//no answer
-			if ( ans == weight.defaultValue || ans === undefined ) {
-				//point += defaultvalue;
-				continue;
-			}
-
-			//evaluate total point
-			pointfull += weightone * 2;
-
-			//point
-			if ( ans >= weight["d"+(i+1)+"1t"] ) {
-				thispoint = weight["d"+(i+1)+"1p"] * weightone;
-
-			} else if( weight["d"+(i+1)+"2t"] != ""  && ans >= weight["d"+(i+1)+"2t"] ) {
-				thispoint = weight["d"+(i+1)+"2p"] * weightone;
-
-			} else if( weight["d"+(i+1)+"3t"] != ""  && ans >= weight["d"+(i+1)+"3t"] ) {
-				thispoint = weight["d"+(i+1)+"3p"] * weightone;
-
-			} else {
-				thispoint = 0;
-			}
-			
-			if ( maxpoint <thispoint ) {
-				maxpoint = thispoint;
-				maxname = weight.title;
-			}
-			if ( minpoint > thispoint - weightone * 2 ) {
-				minpoint = thispoint - weightone * 2;
-				minname = weight.title;
-			}
-			point += thispoint;
-		}
-		retall[i][0] = point / (pointfull==0 ? 1 :pointfull) * 100;
-		retall[i][1] = maxname;
-		retall[i][2] = minname;
-	}
-	return retall;
-};
 
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
@@ -3665,6 +3667,7 @@ D6.escapeHtml = function (String) {
 }(String);
 
 
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -3807,6 +3810,7 @@ D6.getMeasure = function( consName, maxPrice, notSelected )
 	return ret;
 };
 	
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -4003,7 +4007,1256 @@ D6.getInputDemandLog = function() {
 };
 	
 
-﻿/*  2017/12/16  version 1.0
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * evaluateaxis.js 
+ * 
+ * evaluate multi dimension Class
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2017/11/06 original ActionScript3
+ */
+
+
+//resolve D6
+var D6 = D6||{};
+
+// getEvaluateAxisPoint()
+//
+// parameters
+// 		target : dummy
+//		inpListDefCode: evaluate target Input List
+// return
+//		 [0-2][point, max, min ]
+//
+// value base is  D6.doc.data[inName]
+// weight is defined in D6.scenario.defInput[inName]
+//
+D6.getEvaluateAxisPoint = function( target,inpListDefCode ) {
+	//calc environmental load, performance, action points
+	var retall = {};
+	retall[0] = [0,"",""];
+	retall[1] = [0,"",""];
+	retall[2] = [0,"",""];
+
+	var def = [];
+	for( var d in D6.scenario.defEasyQues ) {
+		if ( D6.scenario.defEasyQues[d].cname == inpListDefCode ) {
+			def = D6.scenario.defEasyQues[d].ques;
+			break;
+		}
+	}
+	if ( def == "" ) return retall;
+
+	//calculate point of 3 axis
+	for ( var i=0 ; i<3 ; i++ ) {
+		var pointfull = 0;
+		var point = 0;
+		var maxpoint = 0;
+		var maxname = "";
+		var minpoint = 0;
+		var minname = "";
+		var tmax = 0;
+		var defaultvalue = 0;
+		var thispoint = 0;
+
+		for( var incode in def ) {
+			//incode : input code
+			var weight = D6.scenario.defInput[def[incode]];
+			var ans = D6.doc.data[def[incode]];
+			var weightone = weight["d"+(i+1)+"w"];
+			if ( weightone == "" ) continue;
+
+			defaultvalue = weight["d"+(i+1)+"d"] * weightone ;
+
+			//no answer
+			if ( ans == weight.defaultValue || ans === undefined ) {
+				//point += defaultvalue;
+				continue;
+			}
+
+			//evaluate total point
+			pointfull += weightone * 2;
+
+			//point
+			if ( ans >= weight["d"+(i+1)+"1t"] ) {
+				thispoint = weight["d"+(i+1)+"1p"] * weightone;
+
+			} else if( weight["d"+(i+1)+"2t"] != ""  && ans >= weight["d"+(i+1)+"2t"] ) {
+				thispoint = weight["d"+(i+1)+"2p"] * weightone;
+
+			} else if( weight["d"+(i+1)+"3t"] != ""  && ans >= weight["d"+(i+1)+"3t"] ) {
+				thispoint = weight["d"+(i+1)+"3p"] * weightone;
+
+			} else {
+				thispoint = 0;
+			}
+			
+			if ( maxpoint <thispoint ) {
+				maxpoint = thispoint;
+				maxname = weight.title;
+			}
+			if ( minpoint > thispoint - weightone * 2 ) {
+				minpoint = thispoint - weightone * 2;
+				minname = weight.title;
+			}
+			point += thispoint;
+		}
+		retall[i][0] = point / (pointfull==0 ? 1 :pointfull) * 100;
+		retall[i][1] = maxname;
+		retall[i][2] = minname;
+	}
+	return retall;
+};
+
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * diagnosis.js 
+ * 
+ * D6 Constructor Class
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/17 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 								2018/03/04 divided only constructor functions
+ * 
+ * setscenario()				initialize diagnosis structure by scenario file
+ * addMeasureEachCons()			add measure definition
+ * addConsSetting()				add consumption definition 
+ */
+ 
+//resolve D6
+var D6 = D6||{};
+
+
+/* setscenario -------------------------------------------------------------
+ * 		set scenario by definition and create logic structure
+ * parameters:
+ *		prohibitQuestions		array of prohibitQuestions or "add" code for not initialize
+ *		allowedQuestions
+ *		defInput
+ * return:
+ *		none
+ * set:
+ *		-create new consumption instance in logicList
+ *		-link to consList, consListByName, consShow
+ *		-each consumption instance include measures, sumCons, subCons etc.
+ */
+D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
+	var i,j,k;
+	var notinit = false;
+
+	if ( prohibitQuestions == "add"){
+		notinit = true;
+	}
+	if ( !prohibitQuestions ) {
+		prohibitQuestions =[];
+	}
+	if ( !allowedQuestions ) {
+		allowedQuestions =[];
+	}
+
+	// step 1 : implementation of logics ------------------------
+	if ( !notinit ) {
+		D6.scenario.setDefs();		//set questions and measures
+		D6.scenario.areafix();		//fix by area
+		for ( var d in defInput ) {
+			if ( defInput[d][2]) {
+				D6.scenario.defInput[defInput[d][0]][defInput[d][1]] = defInput[d][2];
+			}
+		}
+		D6.logicList = D6.scenario.getLogicList();
+	}
+	var consList = D6.consList;
+	var cname;
+
+	// step 2 : Implementation of consumption class -----------
+	//
+	D6.consCount = 0;	//counter for consList
+	var logic;
+	var tlogic;
+
+	//create consumption class by logic, children of consTotal
+	for( logic in D6.logicList ) {
+		tlogic = D6.logicList[logic];
+		D6.consListByName[tlogic.consName] = [];	//list by consName
+
+		if ( tlogic.sumConsName == "consTotal" || tlogic.consName == "consTotal" ) {
+				
+			//fisrt set to consList
+			consList[ D6.consCount ] = tlogic;
+				
+			//set another access path
+			D6.consShow[ tlogic.consCode ] = consList[ D6.consCount ];
+			D6.consListByName[tlogic.consName].push( consList[ D6.consCount ] );
+			D6.consCount++;
+		}
+	}
+
+	//create consumption class,  grandson of consTotal
+	//  create grandson after children
+	for( logic in D6.logicList ) {
+		tlogic = D6.logicList[logic];								//shortcut
+
+		//not direct connect to consTotal
+		//implement by each equips/rooms
+		if ( tlogic.sumConsName != "consTotal" && tlogic.consName != "consTotal" ) {
+			if ( tlogic.orgCopyNum == 0 ) {
+				consList[D6.consCount] = tlogic;
+				D6.consListByName[tlogic.consName].push( consList[ D6.consCount ] );
+				D6.consCount++;
+			} else {
+				for ( j = 0 ; j <= tlogic.orgCopyNum ; j++ ) {		// #0 is residue			
+					//implementation in consList
+					consList[D6.consCount] = D6.object( tlogic );	// set copy
+					consList[D6.consCount].setsubID( j );
+					
+					//another access path
+					D6.consListByName[tlogic.consName].push( consList[ D6.consCount ] );
+					D6.consCount++;
+				}
+			}
+		}
+	}
+
+	// step 3 : resolve relation between consumption classes -------------
+	var cons;
+	var partconsTemp;
+	var partCons;		//partition side classes to this class
+	var partCons2nd;	//2nd partition side classes to this class
+
+	for ( i=0 ; i< consList.length ; i++ ){
+		//create relation by each cons in consList
+		cons = consList[i];
+		cons.measures = [];
+		cons.partCons = [];
+
+		//get instance of sum side class
+		cons.sumCons = this.getTargetConsList( cons.sumConsName );
+		cons.sumCons2 = this.getTargetConsList( cons.sumCons2Name );
+
+		//get instance of part side class
+		//    part side is not defined in this class definition, so check each
+		//    part side class of which sumCons is related to this cons
+		partCons = [];
+		partCons2nd = [];
+
+		for ( j=0 ; j<consList.length ; j++ ) {
+			//check each cons in consList which is part side
+			partconsTemp = consList[j];
+
+			// if sum part is defined as this class
+			if ( partconsTemp.sumConsName === cons.consName ) {
+
+				//countable rooms/equips or not
+				if ( partconsTemp.orgCopyNum >= 1 ) {
+				
+					if ( cons.orgCopyNum >= 1 ) {
+						//if this cons is countable, add only same id
+						if ( cons.subID == partconsTemp.subID ){
+							cons.partConsName = partconsTemp.consName;
+							partCons.push( partconsTemp );
+						}
+						
+					} else {
+						//this cons is not countable add each cons as partcons
+						cons.partConsName = partconsTemp.consName;
+						partCons.push( partconsTemp );
+					}
+					
+				} else {
+					//not countable add first cons as partCons
+					partCons.push( partconsTemp );
+				}
+			}
+
+			// if second sum part is defined as this class
+			if ( partconsTemp.sumCons2Name == cons.consName ) {
+
+				//countable rooms/equips or not
+				if ( partconsTemp.orgCopyNum >= 1 ) {
+
+					//if this cons is countable, add only same id
+					if ( cons.orgCopyNum >= 1 ) {
+						if ( cons.subID == partconsTemp.subID ){
+							cons.partCons2Name = partconsTemp.consName;
+							partCons2nd.push( partconsTemp );
+						}
+							
+					} else {
+						cons.partCons2Name = partconsTemp.consName;
+						partCons2nd.push( partconsTemp );
+					}
+					
+				} else {
+					//not countable add first cons as partCons
+					partCons2nd.push( partconsTemp );
+				}
+			}
+		}
+
+		//set to this cons 
+		if ( partCons.length >= 1 ) {
+			cons.partCons = partCons;
+		} else {
+			cons.partCons = "";
+		}
+		if ( partCons2nd.length >= 1 ) {
+			cons.partCons2 = partCons2nd;
+		} else {
+			cons.partCons2 = "";
+		}
+	}
+
+	// step 4 : Implementation of measures -----------------------
+	this.mesCount = 0;			//counter of measures 
+
+	//add measures to each cons class
+	for ( i in consList ){
+		this.addMeasureEachCons( consList[i] );
+	}
+
+	// in case of calculate by months, questions should be divided to months
+	//	and need dataset of temperature, solar, average consumptions etc.
+
+	// step 5 : set questions/inputs --------------------------
+	
+	//function to check is prohibited
+	var isProhivitedQuestion = function( iname ) {
+		// definition in EXCEL
+		if ( iname["cons"] == "" ) return true;
+
+		if ( prohibitQuestions.length <= 0 ) {
+			if ( allowedQuestions.length <= 0 ) {
+				return false;
+			} else {
+				if ( allowedQuestions.indexOf(iname) >= 0 ) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+		} else {
+			if ( prohibitQuestions.indexOf(iname) >= 0 ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	};
+
+	var iname;
+
+	// loop each input definition
+	for ( iname in D6.scenario.defInput ) {
+		//check is prohibited
+		if ( isProhivitedQuestion( iname ) ) continue;
+
+		var defInp = D6.scenario.defInput[iname];
+		logic = D6.logicList[defInp.cons];
+
+		// if input has relation to consumption
+		if ( logic ) {
+			if ( logic.orgCopyNum > 0 ) {
+				//in case of countable consumption 
+				for ( j=0 ; j<logic.orgCopyNum ; j++ ) {
+					//create one question as "iname + [1-n]"
+					D6.inSet( iname+(j+1),defInp.defaultValue );
+				}
+			} else {
+				//create one question
+				D6.inSet( iname, defInp.defaultValue);
+			}
+		}
+	}
+		
+	//set easy question list
+	var ilist = [];
+	if ( D6.scenario.defEasyQues ) {
+		for( var i in D6.scenario.defEasyQues[0].ques ) {
+			if ( isProhivitedQuestion( D6.scenario.defEasyQues[0].ques[i] ) ) continue;
+			ilist.push( D6.scenario.defEasyQues[0].ques[i] );
+		}
+		D6.scenario.defEasyQues[0].ques = [];
+		for ( i in ilist ) {
+			D6.scenario.defEasyQues[0].ques.push( ilist[i] );
+		}
+	}
+
+};
+
+
+// addMeasureEachCons(cons)-----------------------------
+//		add measures related to one consumption
+//		it works not only initialize but also after
+// params
+//		cons :  target consumption instance
+// return
+//		none
+// set
+//		set new measures to cons.measures
+D6.addMeasureEachCons = function( cons ) {
+	for ( var mesname in D6.scenario.defMeasures ) {
+		if ( cons.consName != D6.scenario.defMeasures[mesname].refCons ) continue;
+		this.measureList[this.mesCount] = D6.object(D6.MeasureBase);
+		this.measureList[this.mesCount].Constructor( cons, D6.scenario.defMeasures[mesname], this.mesCount );
+		cons.measures[mesname] = this.measureList[this.mesCount];
+		this.mesCount++;
+	}
+};
+
+
+
+// addConsSetting( consName ) ------------------------------------------------
+//		add consumption instance of countable rooms/equipments
+//		this function only increment setting number, so after that reconstruct all consumptions
+// parameter
+//		consName : consumption code(string)
+// return
+//		none
+// set
+//		increment the number of consumption setting
+//		also increment part side of consumption
+D6.addConsSetting = function(consName) {
+	var cons = "";
+	var pname = "";
+
+	//check consAddSet in each logicList[]
+	var rend = false;
+	for ( cons in D6.logicList ){
+		// same target is listed in consAddSet
+		// for example rooms, both heating and cooling has relationship
+		// see also consAC.js
+		pname = D6.logicList[cons].consAddSet;
+
+		for ( var t in pname ){
+			if ( pname[t] == consName || cons == consName ){
+				D6.logicList[cons].orgCopyNum = D6.logicList[cons].orgCopyNum + 1;
+				for ( var s in pname ){
+					D6.logicList[pname[s]].orgCopyNum = D6.logicList[pname[s]].orgCopyNum + 1;
+				}
+				rend = true;
+				break;
+			}
+		}
+		if ( rend ) break;
+	}
+
+	if ( !rend ){
+		// no consAddSet, ordinal addition
+		D6.logicList[consName].orgCopyNum = D6.logicList[consName].orgCopyNum + 1;
+	}
+};
+	
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * diagnosis.js 
+ * 
+ * D6 calc Cons Class
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/17 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 								2018/03/04 divide consumption calculation functions 
+ * 
+ * calcCons()					calculate consumption
+ * calcConsAdjust()				adjust consumption
+ * getTargetConsList()			get Cons by name
+ * getGid()						get group id
+ */
+ 
+//resolve D6
+var D6 = D6||{};
+
+
+// calcCons() -------------------------------------------------------
+//		calculate consumption in consumption instance
+// 
+D6.calcCons = function() {
+	var i,j;
+	var ci;
+
+	//area parameters set
+	this.area.setCalcBaseParams();
+
+	//pre calculation such as common parameters setting
+	for ( i=0 ; i<D6.consList.length ; i++ ) {
+		this.consList[i].precalc();
+	}
+		
+	//calculate each consumption at first time
+	for ( i=0 ; i<D6.consList.length ; i++ ) {
+		this.consList[i].calc();
+		this.consList[i].calcCO2();
+	}
+
+	//calculate 2nd step 
+	for ( i=0 ; i<this.consList.length ; i++ ) {
+		this.consList[i].calc2nd();
+		this.consList[i].calcCO2();	
+	}
+
+	//adjust among each consumption
+	this.calcConsAdjust();
+
+	//calculate cost and energy
+	for ( i=0 ; i<this.consList.length ; i++ ) {
+		this.consList[i].calcCost();
+		this.consList[i].calcJules();
+		//set as original value, which is in case of no selection
+		if ( this.isOriginal ) {
+			this.consList[i].co2Original = this.consList[i].co2;
+			this.consList[i].costOriginal = this.consList[i].cost;
+			this.consList[i].julesOriginal = this.consList[i].jules;
+		}
+	}
+};
+	
+
+//calcConsAdjust() --------------------------------------------------
+//		adjust among each consumption
+//		called from calcCons()
+D6.calcConsAdjust = function() {		
+	var ci, i, j;
+	var consNum;
+	var consSum;
+	var energySum = D6.object( D6.Energy );
+	D6.energyAdj = D6.object(D6.Energy);	//adjust parameters by energy
+	var singleArray = true;
+	var lastname = "";
+		
+	// calculate sum of part side consumptions of each consumption exclude total one
+	for ( ci in this.consShow ) {
+		consSum = this.consShow[ci];
+
+		if ( consSum.consName != "consTotal" ) {
+			energySum.clear();
+				
+			if ( consSum.partCons.length >= 1 ) {
+				// countable consumption
+				lastname = consSum.partCons[0].consName;
+				for ( i=1 ; i<consSum.partCons.length ; i++ ) {
+					// sum from 1 not 0. #0 is residue
+					energySum.add( consSum.partCons[i] );
+
+					//check if different consName. true:different, false:same
+					if ( lastname != consSum.partCons[i].consName) {
+						singleArray = false;
+					}
+				}
+				energySum.calcCO2();
+
+				if ( consSum.residueCalc == "no") {
+					// refrigerator pattern : each consumption is important
+					consSum.copy( energySum );
+					consSum.add( consSum.partCons[0] );
+					consSum.calcCO2();
+				} else {
+					// top down pattern : group consumption is important 
+					if ( energySum.co2 > consSum.co2 ) {
+						//in case of sumup is bigger than sumCons divide each cons
+						for ( i=1 ; i<=consNum ; i++ ) {
+							consSum.partCons[i].multiply( consSum.co2 / energySum.co2 );
+						}
+						consSum.partCons[0].clear();
+					} else {
+						//calculate residue
+						if ( singleArray ) {
+							//set residue to partCons[0]
+							energySum.sub( consSum );
+							energySum.multiply( -1 );
+							consSum.partCons[0].copy( energySum );
+						} else {
+							//not to set partCons[0], because #0 is not residue 
+							consSum.copy( energySum );
+							consSum.add( consSum.partCons[0] );
+							consSum.calcCO2();
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// adjust total balance by energy type
+	//		if sum of electricity/gas or etc. is over total consumption one, 
+	//		adjust each consumption not over total.
+	energySum.clear();
+
+	//sum of consumptions to home total
+	for ( ci in this.consShow ){
+		if ( ci != "TO" ) {
+			for ( j in D6.Unit.co2 ){
+				energySum[j] += this.consShow[ci][j];
+			}
+		}
+	}
+
+	//parameters existence of extinct total data
+	var nodataTotal = this.consShow["TO"].noConsData;
+		
+	//residue is more than 10% of electricity
+	energySum.electricity += this.consShow["TO"].electricity * 0.1;
+		
+	//execute adjust
+	energyAdj = [];
+	if ( !nodataTotal ) {
+		//in case of exist in total consumption
+		for ( j in D6.Unit.co2 ){
+			if ( energySum[j] == 0 ) {
+				this.energyAdj[j] = 1;
+			} else {
+				// adjust is less than triple and more than 0.3 times
+				this.energyAdj[j] = Math.max( 0.3, Math.min( 3, this.consShow["TO"][j] / energySum[j] ) );
+			}
+		}
+
+		//execute adjust
+		for ( ci in this.consList ){
+			if ( this.consList[ci].consName != "consTotal" ) {
+				this.consList[ci].calcAdjust( this.energyAdj );
+			}
+		}
+
+	} else {
+		//no total value
+		for ( j in D6.Unit.co2 ){
+			if ( j == "electricity" ){
+				if( this.consShow["TO"][j] < energySum[j] ) {
+					this.consShow["TO"][j] = energySum[j];
+				}
+			} else {
+				this.consShow["TO"][j] = energySum[j];
+			}
+		}
+		this.consShow["TO"].calcCO2();
+	}
+};
+
+
+// getTargetConsList(consName)  getter consumption object ------------------
+//
+// parameters
+//		consName	consumption name
+// retrun
+//		consumption object / object array
+//
+D6.getTargetConsList  = function( consName )
+{
+	var i,c=0;
+	var target = new Array();
+	var ret;
+
+	if ( consName != "" ) {
+		for ( i=0 ; i<this.consList.length ; i++ ) {
+			if ( this.consList[i].consName == consName ) {
+				target[c++] = this.consList[i];
+			}
+		}
+		if ( target.length == 1 ) {
+			//in case of single
+			ret = target[0];
+		} else {
+			//in case of array
+			ret = target;
+		}
+	}
+	return ret;
+};
+
+// getGid(consName)  getter group id of consumption ------------------
+//
+// parameters
+//		consName	consumption name
+// retrun
+//		groupID		0-9
+//
+D6.getGid  = function( consName ) {
+	return D6.logicList[consName].groupID;
+};
+	
+
+	
+// getCommonParameters()  getter common result parameters such as co2 ------------------
+//
+// retrun
+//		co2,cost
+//
+D6.getCommonParameters = function(){
+	var ret = [];
+	ret.co2Original = D6.consListByName["consTotal"][0].co2Original;
+	ret.co2 = D6.consListByName["consTotal"][0].co2;
+	ret.costOriginal = D6.consListByName["consTotal"][0].costOriginal;
+	ret.cost = D6.consListByName["consTotal"][0].cost;
+		
+	return ret;
+};
+
+
+
+
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * diagnosis.js 
+ * 
+ * D6 Main Class calc average functions
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/17 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 								2018/03/04 divided as average functions
+ * 
+ * calcAverage()				get avearage consumption
+ * rankIn100()					get rank				
+ * 
+ */
+ 
+//resolve D6
+var D6 = D6||{};
+
+
+// calcAverage()  get avearage consumption ------------------
+//
+// parameters
+//		none
+// return
+//		none
+//
+// set D6.average.consList[]
+//
+D6.calcAverage = function(){
+	D6.averageMode = true;			//not use input parameters
+	this.calcCons();				//and calculate, then get average
+
+	this.average.consList = {};
+	for( var c in this.consShow ) {
+		this.average.consList[c] = {};
+		this.average.consList[c].co2 = this.consShow[c].co2;
+		this.average.consList[c].cost = this.consShow[c].cost;
+		this.average.consList[c].jules = this.consShow[c].jules;
+		this.average.consList[c].title = this.consShow[c].title;
+	}
+	D6.averageMode = false;	
+};
+
+	
+
+// rankIn100(ratio)  calculate rank by ratio to average ------------------
+//
+// parameters
+//		ratio	ratio to average
+// return
+//		rank 	number 1-100 in 100 
+//
+D6.rankIn100 = function( ratio ){
+	var ret;
+	var lognum;
+
+	var width = 0.5;		// set diffusion parameter
+
+	if ( ratio <= 0 ) {
+		//in case of minus
+		ratio = 0.1;
+	}
+	lognum = Math.log( ratio );
+
+	if ( lognum < -width ) {
+		// rank 1-10
+		ret = Math.max( 1, Math.round( ( lognum + 1 ) / width * 10 ) );
+	} else if ( lognum < width ) {
+		// rank 11-90
+		ret = Math.round(( lognum + width ) / ( width * 2) * 80 + 10 );
+	} else {
+		// rank 91-100
+		ret = Math.min( 100, Math.round( ( lognum - width ) / ( width * 2) * 10 ) + 90 );
+	}
+	return ret;
+};
+
+	
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * diagnosis.js 
+ * 
+ * D6 Class calc measures functions
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/17 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 
+ * calcMeasures()				calculate measure
+ * calcMeasuresLifestyle()		calculate all measures and select lifestyle
+ * calcMeasuresNotLifestyle()	calculate all measures and select not lifestyle
+ * calcMeasuresOne()			calculate in temporal selection
+ * calcMaxMeasuresList()		automatic select max combination 
+ */
+ 
+//resolve D6
+var D6 = D6||{};
+
+
+// calcMeasures(gid)  calculate all measures -----------------------------
+//
+// parameters
+//		gid		groupid, -1 is total
+// return
+//		measure array defined in calcMeasuresOne
+//
+// once clear selected measures, and set select and calculate one by one
+//
+D6.calcMeasures = function( gid ) {
+	var ret;
+	var calcfg = false;
+	var i;
+	var mid, mlistid, mes;
+
+	var selList = [];	//selected measures' ID
+
+	//save selected measures id
+	for( mes in this.measureList ) {
+		selList[this.measureList[mes].mesID] =this.measureList[mes].selected;
+	}
+
+	//clear selection and calculate
+	ret = this.clearSelectedMeasures( gid );
+
+	//set select one by one
+	for ( i = 0 ; i < ret.length ; i++ ) {
+		mid = ret[i].mesID;
+		mlistid = mid;
+		mes = this.measureList[mlistid];
+
+		if ( selList[mid] && !mes.selected ) {
+			mes.selected = true;
+			this.isOriginal = false;
+
+			if ( mes.co2Change < 0 ) {
+				//set select in case of useful measures
+				mes.co2ChangeSumup = mes.co2Change;
+				mes.costChangeSumup = mes.costChange;
+				mes.costTotalChangeSumup = mes.costTotalChange;
+
+				mes.addReduction();					//set reduction
+				ret = this.calcMeasuresOne( -1 );	//main calculation for next step
+			} else {
+				mes.co2ChangeSumup = 0;
+				mes.costChangeSumup = 0;
+				mes.costTotalChangeSumup = 0;
+			}
+		}
+	}
+
+	//set selection property include not useful
+	for ( mlistid in this.measureList ) {
+		mes = this.measureList[mlistid];
+		mes.selected = selList[mes.mesID];
+		if ( mes.selected ) {
+			this.isOriginal = false;
+		}
+	}
+	var ret2 = [];
+	for ( i=0 ; i<ret.length ; i++ ) {
+		if ( ret[i].groupID == gid || gid == -1 ) {
+			ret2.push( ret[i] );
+		}
+	}
+	this.resMeasure = ret2;
+	if ( D6.debugMode ) {
+		console.log( "measure calculate in d6.js calcMeasures() --- " );
+		console.log( ret2 );
+	}
+	return ret2;
+};
+
+
+// calcMeasuresLifestyle(gid)  
+//		calculate all measures and select lifestyle --------
+//
+// parameters
+//		gid		groupid, -1 is total
+// return
+//		measure array defined in calcMeasuresOne
+//
+D6.calcMeasuresLifestyle = function( gid ) {
+	var onemes;
+	var retLife = new Array();
+	var ret = D6.calcMeasures( gid );
+		
+	// select only related to lifestyle 
+	for( onemes in ret ) {
+		if ( ret[onemes].lifestyle == 1 ) {
+			retLife.push( ret[onemes] );
+		}
+	}
+	return retLife;
+};
+	
+
+// calcMeasuresNotLifestyle(gid)  
+//		calculate all measures and select not lifestyle --------
+//
+// parameters
+//		gid		groupid, -1 is total
+// return
+//		measure array defined in calcMeasuresOne
+//
+D6.calcMeasuresNotLifestyle = function( gid ) {
+	var onemes;
+	var retLife = [];
+	var ret = D6.calcMeasures( gid );
+		
+	// select only not related to lifestyle 
+	for( onemes in ret ) {
+		if ( ret[onemes].lifestyle != 1 ) {
+			retLife.push( ret[onemes] );
+		}
+	}
+	return retLife;
+};
+
+
+// calcMeasuresOne(gid)  
+//		calculate all measures in temporal selection --------
+//
+// parameters
+//		gid		groupid, -1 is total
+// return
+//		measure array include mesID,groupID and lifestyle
+//
+// called by calcMeasures
+//
+D6.calcMeasuresOne = function( gid ) {
+	var ret;								//return
+	var topList;							//list of measures id
+	var selectList;							//list of selected measures id
+	var i;
+
+	var sortTarget = this.sortTarget;		//sort target
+	ret = new Array();
+	topList = new Array();
+	selectList = new Array();
+
+	//each measures defined in cons object
+	for ( i in this.consList ) {
+		//target group
+		if ( gid == -1 || this.consList[i].groupID == gid ) {
+			this.consList[i].calcMeasureInit();
+			this.consList[i].calcMeasure();
+				
+			//in case of equipment/room number is defined and selected #0
+			//not evaluate after #1
+			if ( this.consList[i].subID >= 1 ){
+				var cons0 = this.consListByName[this.consList[i].consName][0];
+				for ( var m in cons0.measures ){
+					if ( cons0.measures[m].selected ){
+						this.consList[i].measures[m].copy( cons0 );
+					}
+				}
+			}
+		}
+	}
+	i=0;
+	
+	//format return measure data
+	for( var mescode in this.measureList ) {
+		var mes = this.measureList[mescode];
+		mes.calcSave();
+		ret[i] = {};
+		ret[i][sortTarget] =mes[sortTarget];
+		ret[i].mesID =mes.mesID;
+		ret[i].groupID =mes.groupID;
+		ret[i].lifestyle =mes.lifestyle;
+		i++;
+	}
+	this.ObjArraySort( ret, sortTarget );	//sort
+	return ret;
+};
+
+
+
+// clearSelectedMeasures(gid)  clear all selection and calculate all --------
+//
+// parameters
+//		gid		groupid, -1 is total
+// return
+//		measure array defined in calcMeasuresOne
+//
+D6.clearSelectedMeasures = function( gid ) {
+	var ret;
+
+	this.isOriginal = true;
+	ret = this.calcCons();			//calcurate original state consumption
+		
+	//remove selection
+	for ( var i = 0 ; i < D6.measureList.length ; i++ ) {
+		if ( this.measureList[i].groupID == gid || gid < 0 ) {
+			this.measureList[i].selected = false;
+		}
+	}
+		
+	//calculate
+	ret = this.calcMeasuresOne( gid );
+		
+	return ret;
+};
+
+	
+// calcMaxMeasuresList(gid)
+//		automatic select max combination measures --------
+//
+// parameters
+//		gid		groupid, -1 is total
+//		count	max selected number
+// return
+//		measure array defined in calcMeasuresOne
+//
+D6.calcMaxMeasuresList = function( gid, count )
+{
+	var resultCalc;
+	var ret;
+	var pt = 0;
+	var maxCO2 = 0;
+	var cost = 0;
+	var i, j;
+	var mes;
+	var targetmes;
+	var sumCO2 = 0;
+	var sumCOST = 0;
+		
+	if( typeof(gid) == "undefined" ) gid = -1;
+	if( typeof(count) == "undefined" || count<1 ) count = 15;
+		
+	//clear all selection
+	resultCalc = this.clearSelectedMeasures( gid );
+		
+	//search max reduction measure for "count" times
+	for ( i = 0 ; i < count ; i++  ) {
+		pt = -1;
+		maxCO2 = 0;
+		for ( j = 0 ; j < this.measureList.length ; j++ ) {
+			//max reduction in measureList
+			mes = this.measureList[j];
+			if ( mes.groupID == gid || gid < 0 ) {
+				if ( measureList[j].selected != true 		//skip already selected
+					|| !isFinite(mes.co2Change) 
+					|| isNaN(mes.co2Change)) 				//useful
+				{
+					//select max measure
+					if ( maxCO2 > mes.co2Change ) {
+						maxCO2 = mes.co2Change;
+						cost = mes.costChange;
+						pt = mes.mesID;
+						targetmes = mes;
+					}
+				}
+			}
+		}
+		if ( pt == -1 ) {
+			//end in case of no measures suitable
+			break;
+		}
+		sumCO2 += maxCO2;
+		sumCOST += cost;
+		resultCalc = this.measureAdd( pt );			//select set to property
+		targetmes.addReduction();					//set reduction
+		resultCalc = this.calcMeasuresOne( -1 );	//main calculation for next step
+	}
+	ret = calcMeasures(gid);
+	ret.sumCO2 = sumCO2;
+	ret.sumCOST = sumCOST;
+
+	return ret;
+};
+
+
+
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * diagnosis.js 
+ * 
+ * D6 Main Class
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/17 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 
+ * inSet()						input data setter
+ * measureAdd()					set select flag and not calculate 
+ * measureDelete()				clear select flag and not calculate 
+ */
+ 
+//resolve D6
+var D6 = D6||{};
+
+	
+// inSet(id, val)  input data setter ------------------
+//
+// parameters
+//		id		input id, permit include equip/room code 'ixxxyy'
+//		val		input value
+//
+D6.inSet = function ( id, val ){
+	var inpIdDef = id.substr( 0,4 );
+	if ( D6.scenario.defInput[inpIdDef].varType == "String" || 
+		D6.scenario.defInput[inpIdDef].varType == "Boolean"
+	) {	
+		//set data
+		D6.doc.data[id] = val;
+	} else {
+		//string data set
+		val = D6.toHalfWidth(val);
+		D6.doc.data[id] = parseFloat( val ) ? parseFloat( val ) : 0;
+	}
+};
+
+	
+// measureAdd(mesId) set select flag and not calculate --------
+//
+// parameters
+//		mesId		measure id which you select
+// return
+//		none
+//
+D6.measureAdd = function( mesId ) {
+	var gid;
+	var ret = "";
+		
+	gid = this.measureList[mesId].groupID;
+	this.measureList[mesId].selected = true;
+	this.isOriginal = false;
+	//ret = this.calcMeasures( gid );	//recalc -> not calc
+
+	return ret;
+};
+
+
+// measureDelete(mesId) remove select flag and not calculate--------
+//
+// parameters
+//		mesId		measure id which you select
+// return
+//		none
+//
+D6.measureDelete = function( mesId ) {
+	var gid;
+	var ret ="";
+
+	this.measureList[mesId].selected = false;
+	gid = this.measureList[mesId].groupID;
+	//ret = this.calcMeasures( gid );	//recalc 
+
+	return ret;
+};
+
+
+/*  2017/12/16  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * diagnosis.js 
+ * 
+ * D6 Main Class as tools
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/17 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 								2018/03/04 divide as tools
+ * 
+ * toHalfWidth()
+ * ObjArraySort()
+ * 
+ * 
+ */
+ 
+//resolve D6
+var D6 = D6||{};
+
+	
+	
+// toHalfWidth(strVal)  change double width charactor------------------
+//
+// parameters
+//		strVal	original value
+// return
+//		halfVal replaced value
+//
+D6.toHalfWidth = function(strVal){
+	if ( !strVal ) return strVal;
+	var halfVal = strVal.replace(/[！-～]/g,
+		function( tmpStr ) {
+		// shift charactor code
+			return String.fromCharCode( tmpStr.charCodeAt(0) - 0xFEE0 );
+		}
+	);
+	return halfVal;
+};
+
+	
+// ObjArraySort(ary, key, order )  object sort ------------------
+//
+// parameters
+//		ary		array/object
+//		key		sort target
+//		order	incr/desc
+// retrun
+//		none
+//
+//	set "ary" sorted
+//
+D6.ObjArraySort = function(ary, key, order) {
+    var reverse = 1;
+    if(order && order.toLowerCase() == "desc") 
+        reverse = -1;
+    ary.sort(function(a, b) {
+	        if(a[key] < b[key])
+	        return -1 * reverse;
+        else if(a[key] == b[key])
+	            return 0;
+        else
+            return 1 * reverse;
+    });
+};
+
+
+/*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -4217,6 +5470,131 @@ D6.scenario =
 
 	}
 };
+
+
+
+
+/* 2017/12/14  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * consEnergy.js 
+ * 
+ * calculate consumption and measures related to total energy
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/21 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ *								2016/06/09 divided from consBase
+ * 								2017/12/14 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
+ * 
+ * init()			initialize, set parameters when construction
+ * precalc()		called just before calc(), input data treatment and clear consumption data
+ * calc()			main formula to calculate consumption
+ * calc2nd()		called just after calc(), in case of need to use other consumption data
+ * calcMeasure()	main formula to calculate measures
+ * 
+ */
+ 
+//Inherited class of D6.consCRsum
+D6.consEnergy = D6.object( D6.ConsBase );
+
+D6.consEnergy.init = function() {
+	//construction setting
+	this.consName = "consEnergy";    	//code name of this consumption 
+	this.consCode = "";            		//short code to access consumption, only set main consumption user for itemize
+    this.title = "General Energy Setting";	//consumption title name
+	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
+	this.groupID = "0";					//number code in items
+	this.color = "#ff0000";				//color definition in graph
+	this.countCall = "";				//how to point n-th equipment
+
+    this.sumConsName = "consTotal";		//code name of consumption sum up include this
+	this.sumCons2Name = "";				//code name of consumption related to this
+
+	//guide message in input page
+	this.inputGuide = "the use of energy of the whole house, monthly bills";
+
+	// add instance combined to this class
+	this.partConsName = [		
+	];
+};
+D6.consEnergy.init();
+
+
+D6.consEnergy.calc = function() {
+	this.clear();
+};
+
+D6.consEnergy.calcMeasure = function() {
+};
+
+
+
+
+
+/*  2017/12/15  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * consSeason.js 
+ * 
+ * calculate seasonal consumption
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ * 								2016/06/09 original JavaScript
+ * 								2017/12/15 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
+ * 
+ * init()			initialize, set parameters when construction
+ * precalc()		called just before calc(), input data treatment and clear consumption data
+ * calc()			main formula to calculate consumption
+ * calc2nd()		called just after calc(), in case of need to use other consumption data
+ * calcMeasure()	main formula to calculate measures
+ * 
+ */
+ 
+//Inherited class of D6.ConsBase
+D6.consSeason = D6.object( D6.ConsBase );
+
+D6.consSeason.init = function() {
+	this.titleList = ["","winter","spring/fall","summer"];	//season name
+
+	//construction setting
+	this.consName = "consSeason";   	//code name of this consumption 
+	this.consCode = "";            		//short code to access consumption, only set main consumption user for itemize
+    this.title = "";					//consumption title name
+	this.orgCopyNum = 3;                //original copy number in case of countable consumption, other case set 0
+	this.groupID = "2";					//number code in items
+	this.color = "#ff0000";				//color definition in graph
+	this.countCall = "";				//how to point n-th equipment
+	this.residueCalc = "sumup";			//calculate method	no/sumup/yes
+
+    this.sumConsName = "";				//code name of consumption sum up include this
+	this.sumCons2Name = "consTotal";	//code name of consumption related to this
+
+	//guide message in input page
+	this.inputDisp = "consTotal";		//question display group
+	this.inputGuide = "For monthly water and electricity charges per season. Please fill in the approximate value.";
+
+};
+D6.consSeason.init();
+
+
+D6.consSeason.calc = function() {
+	this.clear();
+};
+
+D6.consSeason.calcMeasure = function() {
+};
+
+
 
 
 
@@ -4574,129 +5952,8 @@ D6.consTotal.calcMeasure = function( ) {
 
 };
 
-﻿/* 2017/12/14  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * consEnergy.js 
- * 
- * calculate consumption and measures related to total energy
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/21 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- *								2016/06/09 divided from consBase
- * 								2017/12/14 ver.1.0 set functions
- * 								2018/03/14 			global setting fix
- * 
- * init()			initialize, set parameters when construction
- * precalc()		called just before calc(), input data treatment and clear consumption data
- * calc()			main formula to calculate consumption
- * calc2nd()		called just after calc(), in case of need to use other consumption data
- * calcMeasure()	main formula to calculate measures
- * 
- */
- 
-//Inherited class of D6.consCRsum
-D6.consEnergy = D6.object( D6.ConsBase );
 
-D6.consEnergy.init = function() {
-	//construction setting
-	this.consName = "consEnergy";    	//code name of this consumption 
-	this.consCode = "";            		//short code to access consumption, only set main consumption user for itemize
-    this.title = "General Energy Setting";	//consumption title name
-	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
-	this.groupID = "0";					//number code in items
-	this.color = "#ff0000";				//color definition in graph
-	this.countCall = "";				//how to point n-th equipment
-
-    this.sumConsName = "consTotal";		//code name of consumption sum up include this
-	this.sumCons2Name = "";				//code name of consumption related to this
-
-	//guide message in input page
-	this.inputGuide = "the use of energy of the whole house, monthly bills";
-
-	// add instance combined to this class
-	this.partConsName = [		
-	];
-};
-D6.consEnergy.init();
-
-
-D6.consEnergy.calc = function() {
-	this.clear();
-};
-
-D6.consEnergy.calcMeasure = function() {
-};
-
-
-
-
-﻿/*  2017/12/15  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * consSeason.js 
- * 
- * calculate seasonal consumption
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- * 								2016/06/09 original JavaScript
- * 								2017/12/15 ver.1.0 set functions
- * 								2018/03/14 			global setting fix
- * 
- * init()			initialize, set parameters when construction
- * precalc()		called just before calc(), input data treatment and clear consumption data
- * calc()			main formula to calculate consumption
- * calc2nd()		called just after calc(), in case of need to use other consumption data
- * calcMeasure()	main formula to calculate measures
- * 
- */
- 
-//Inherited class of D6.ConsBase
-D6.consSeason = D6.object( D6.ConsBase );
-
-D6.consSeason.init = function() {
-	this.titleList = ["","winter","spring/fall","summer"];	//season name
-
-	//construction setting
-	this.consName = "consSeason";   	//code name of this consumption 
-	this.consCode = "";            		//short code to access consumption, only set main consumption user for itemize
-    this.title = "";					//consumption title name
-	this.orgCopyNum = 3;                //original copy number in case of countable consumption, other case set 0
-	this.groupID = "2";					//number code in items
-	this.color = "#ff0000";				//color definition in graph
-	this.countCall = "";				//how to point n-th equipment
-	this.residueCalc = "sumup";			//calculate method	no/sumup/yes
-
-    this.sumConsName = "";				//code name of consumption sum up include this
-	this.sumCons2Name = "consTotal";	//code name of consumption related to this
-
-	//guide message in input page
-	this.inputDisp = "consTotal";		//question display group
-	this.inputGuide = "For monthly water and electricity charges per season. Please fill in the approximate value.";
-
-};
-D6.consSeason.init();
-
-
-D6.consSeason.calc = function() {
-	this.clear();
-};
-
-D6.consSeason.calcMeasure = function() {
-};
-
-
-
-
-﻿/*  2017/12/15  version 1.0
+/*  2017/12/15  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -5048,7 +6305,8 @@ D6.consHWsum.calcAdjustStrategy = function( energyAdj ){
 	this.hwEnergy *= energyAdj[this.mainSource];
 };
 
-﻿/* 2017/12/15  version 1.0
+
+/* 2017/12/15  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -5118,7 +6376,8 @@ D6.consHWshower.calcMeasure = function( ) {
 	this.measures[ "mHWshowerTime30" ].calcReduceRate(  0.3 );	
 };
 
-﻿/* 2017/12/15  version 1.0
+
+/* 2017/12/15  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -5189,7 +6448,8 @@ D6.consHWtub.calcMeasure = function() {
 };
 
 
-﻿/* 2017/12/15  version 1.0
+
+/* 2017/12/15  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -5243,7 +6503,8 @@ D6.consHWdresser.calc = function( ) {
 D6.consHWdresser.calcMeasure = function( ) {
 };
 
-﻿/* 2017/12/14  version 1.0
+
+/* 2017/12/14  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -5312,7 +6573,8 @@ D6.consHWdishwash.calcMeasure = function( ) {
 		this.measures[ "mHWdishWater" ].calcReduceRate( this.reduceRateWashNotSummer );
 	}
 };
-﻿/* 2017/12/15  version 1.0
+
+/* 2017/12/15  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -5400,6 +6662,7 @@ D6.consHWtoilet.calcMeasure = function() {
 	}
 
 };
+
 
 
 /* 2017/12/14  version 1.0
@@ -5526,6 +6789,7 @@ D6.consCOsum.calcCoolLoad = function()
 
 };
 
+
 /* 2017/12/10  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -5626,7 +6890,8 @@ D6.consACcool.calcMeasure = function() {
 
 
 
-﻿/* 2017/12/14  version 1.0
+
+/* 2017/12/14  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -6021,7 +7286,8 @@ D6.consHTsum.calcMeasure = function() {
 
 
 
-﻿/* 2017/12/14  version 1.0
+
+/* 2017/12/14  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -6076,6 +7342,7 @@ D6.consHTcold.calc = function() {
 
 D6.consHTcold.calcMeasure = function() {
 };
+
 
 
 
@@ -6272,6 +7539,7 @@ D6.consACheat.calcMeasure = function() {
 };
 
 
+
 /* 2017/12/10  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -6465,7 +7733,8 @@ D6.consAC.calcMeasure = function() {
 
 
 
-﻿/* 2017/12/10  version 1.0
+
+/* 2017/12/10  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -6577,7 +7846,8 @@ D6.consRFsum.equip = function( year, size ) {
 
 
 
-﻿/* 2017/12/10  version 1.0
+
+/* 2017/12/10  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -6722,7 +7992,8 @@ D6.consRF.calcMeasure = function( ) {
 
 
 
-﻿/* 2017/12/15  version 1.0
+
+/* 2017/12/15  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -6842,7 +8113,8 @@ D6.consLIsum.calcMeasure = function() {
 };
 
 
-﻿/* 2017/12/15  version 1.0
+
+/* 2017/12/15  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -6988,7 +8260,8 @@ D6.consLI.calcMeasure = function() {
 	}
 };
 
-﻿/* 2017/12/16  version 1.0
+
+/* 2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -7141,7 +8414,8 @@ D6.consTVsum.calcMeasure = function( ) {
 
 
 
-﻿/* 2017/12/16  version 1.0
+
+/* 2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -7247,7 +8521,8 @@ D6.consTV.calcMeasure = function( ) {
 };
 
 
-﻿/* 2017/12/14  version 1.0
+
+/* 2017/12/14  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -7326,7 +8601,8 @@ D6.consDRsum.calcMeasure = function() {
 };
 
 
-﻿/* 2017/12/14  version 1.0
+
+/* 2017/12/14  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -7401,7 +8677,8 @@ D6.consCRsum.calcMeasure = function( ){
 
 };
 
-﻿/* 2017/12/14  version 1.0
+
+/* 2017/12/14  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -7505,7 +8782,8 @@ D6.consCR.calcMeasure = function() {
 
 };
 
-﻿/* 2017/12/14  version 1.0
+
+/* 2017/12/14  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
@@ -7602,6 +8880,64 @@ D6.consCRtrip.calcMeasure = function( ){
 
 };
 
+
+/* 2017/12/14  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * consCKpot.js 
+ * 
+ * calculate consumption and measures related to pot
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/21 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 								2017/12/14 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
+ * 
+ * init()			initialize, set parameters when construction
+ * precalc()		called just before calc(), input data treatment and clear consumption data
+ * calc()			main formula to calculate consumption
+ * calc2nd()		called just after calc(), in case of need to use other consumption data
+ * calcMeasure()	main formula to calculate measures
+ * 
+ */
+
+//Inherited class of D6.ConsBase
+D6.consCKsum = D6.object( D6.ConsBase );
+
+D6.consCKsum.init = function() {
+	//construction setting
+	this.consName = "consCKsum";    	//code name of this consumption 
+	this.consCode = "CK";            	//short code to access consumption, only set main consumption user for itemize
+    this.title = "Cooking";				//consumption title name
+	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
+	this.groupID = "4";					//number code in items
+	this.color = "#ffe4b5";				//color definition in graph
+	this.countCall = "";				//how to point n-th equipment
+
+    this.sumConsName = "consTotal";		//code name of consumption sum up include this
+	this.sumCons2Name = "";				//code name of consumption related to this
+	this.residueCalc = "no";			//calculate residue
+
+	//guide message in input page
+	this.inputGuide = "How to use cooking equipments";
+};
+D6.consCKsum.init();
+
+
+D6.consCKsum.calc = function() {
+	this.clear();
+};
+
+D6.consCKsum.calcMeasure = function() {
+};
+
+
+
 /* 2017/12/14  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -7668,6 +9004,77 @@ D6.consCKpot.calc = function() {
 
 D6.consCKpot.calcMeasure = function() {
 };
+
+
+
+/* 2017/12/14  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * consCKrice.js 
+ * 
+ * calculate consumption and measures related to rice cooker
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/21 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 								2017/12/14 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
+ * 
+ * init()			initialize, set parameters when construction
+ * precalc()		called just before calc(), input data treatment and clear consumption data
+ * calc()			main formula to calculate consumption
+ * calc2nd()		called just after calc(), in case of need to use other consumption data
+ * calcMeasure()	main formula to calculate measures
+ * 
+ */
+
+//Inherited class of D6.ConsBase
+D6.consCKrice = D6.object( D6.ConsBase );
+
+
+//initialize
+D6.consCKrice.init = function() {
+	this.wattOrdinal = 30;				//electricity for keep hot（W)
+	
+	//construction setting
+	this.consName = "consCKrice";    	//code name of this consumption 
+	this.consCode = "CK";            	//short code to access consumption, only set main consumption user for itemize
+    this.title = "rice cooker";			//consumption title name
+	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
+	this.groupID = "4";					//number code in items
+	this.color = "#ffe4b5";				//color definition in graph
+	this.countCall = "";				//how to point n-th equipment
+
+    this.sumConsName = "consCKsum";		//code name of consumption sum up include this
+	this.sumCons2Name = "";				//code name of consumption related to this
+
+	//guide message in input page
+	this.inputGuide = "how to use rice cooker";
+};
+D6.consCKrice.init();
+
+
+D6.consCKrice.precalc = function() {
+	this.clear();
+
+	//prepare input value
+	this.person = this.input( "i001", 3 );			//person number
+	this.frequency = this.input( "i802", 5 );		//frequency of cooking
+	this.time = this.input( "i820", 6 );			//keep hot time
+};
+
+D6.consCKrice.calc = function() {
+	//monthly electricity consumption　kWh/month
+	this.electricity = this.wattOrdinal * this.time * 30 / 1000;
+};
+
+D6.consCKrice.calcMeasure = function() {
+};
+
 
 
 /* 2017/12/10  version 1.0
@@ -7761,1355 +9168,4 @@ D6.consCKcook.calc = function() {
 D6.consCKcook.calcMeasure = function() {
 };
 
-
-/* 2017/12/14  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * consCKrice.js 
- * 
- * calculate consumption and measures related to rice cooker
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/21 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- * 								2017/12/14 ver.1.0 set functions
- * 								2018/03/14 			global setting fix
- * 
- * init()			initialize, set parameters when construction
- * precalc()		called just before calc(), input data treatment and clear consumption data
- * calc()			main formula to calculate consumption
- * calc2nd()		called just after calc(), in case of need to use other consumption data
- * calcMeasure()	main formula to calculate measures
- * 
- */
-
-//Inherited class of D6.ConsBase
-D6.consCKrice = D6.object( D6.ConsBase );
-
-
-//initialize
-D6.consCKrice.init = function() {
-	this.wattOrdinal = 30;				//electricity for keep hot（W)
-	
-	//construction setting
-	this.consName = "consCKrice";    	//code name of this consumption 
-	this.consCode = "CK";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "rice cooker";			//consumption title name
-	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
-	this.groupID = "4";					//number code in items
-	this.color = "#ffe4b5";				//color definition in graph
-	this.countCall = "";				//how to point n-th equipment
-
-    this.sumConsName = "consCKsum";		//code name of consumption sum up include this
-	this.sumCons2Name = "";				//code name of consumption related to this
-
-	//guide message in input page
-	this.inputGuide = "how to use rice cooker";
-};
-D6.consCKrice.init();
-
-
-D6.consCKrice.precalc = function() {
-	this.clear();
-
-	//prepare input value
-	this.person = this.input( "i001", 3 );			//person number
-	this.frequency = this.input( "i802", 5 );		//frequency of cooking
-	this.time = this.input( "i820", 6 );			//keep hot time
-};
-
-D6.consCKrice.calc = function() {
-	//monthly electricity consumption　kWh/month
-	this.electricity = this.wattOrdinal * this.time * 30 / 1000;
-};
-
-D6.consCKrice.calcMeasure = function() {
-};
-
-
-/* 2017/12/14  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * consCKpot.js 
- * 
- * calculate consumption and measures related to pot
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/21 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- * 								2017/12/14 ver.1.0 set functions
- * 								2018/03/14 			global setting fix
- * 
- * init()			initialize, set parameters when construction
- * precalc()		called just before calc(), input data treatment and clear consumption data
- * calc()			main formula to calculate consumption
- * calc2nd()		called just after calc(), in case of need to use other consumption data
- * calcMeasure()	main formula to calculate measures
- * 
- */
-
-//Inherited class of D6.ConsBase
-D6.consCKsum = D6.object( D6.ConsBase );
-
-D6.consCKsum.init = function() {
-	//construction setting
-	this.consName = "consCKsum";    	//code name of this consumption 
-	this.consCode = "CK";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "Cooking";				//consumption title name
-	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
-	this.groupID = "4";					//number code in items
-	this.color = "#ffe4b5";				//color definition in graph
-	this.countCall = "";				//how to point n-th equipment
-
-    this.sumConsName = "consTotal";		//code name of consumption sum up include this
-	this.sumCons2Name = "";				//code name of consumption related to this
-	this.residueCalc = "no";			//calculate residue
-
-	//guide message in input page
-	this.inputGuide = "How to use cooking equipments";
-};
-D6.consCKsum.init();
-
-
-D6.consCKsum.calc = function() {
-	this.clear();
-};
-
-D6.consCKsum.calcMeasure = function() {
-};
-
-
-/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * diagnosis.js 
- * 
- * D6 Main Class
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/17 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- * 
- * need d6_construct, d6_calccons, d6_calcmeasures, d6_calcaverage, d6_setvalue, d6_tools
- * 
- * construct();
- *   setscenario()					initialize diagnosis structure by scenario file
- *   addMeasureEachCons()			add measure definition
- *   addConsSetting()				add consumption definition 
- 
- * calcCons()					calculate consumption
- * calcConsAdjust()				adjust consumption
-
- * calcMeasures()				calculate measure
- * calcMeasuresLifestyle()		calculate all measures and select lifestyle
- * calcMeasuresNotLifestyle()	calculate all measures and select not lifestyle
- * calcMeasuresOne()			calculate in temporal selection
- * calcMaxMeasuresList()		automatic select max combination 
-
- * calcAverage()				get avearage consumption
- * rankIn100()					get rank				
-
- * inSet()						input data setter
- * measureAdd()					set select flag and not calculate 
- * measureDelete()				clear select flag and not calculate 
-
- * getGid()						get group id
- * getCommonParameters()		result common parameters
- * 
- * toHalfWidth()
- * ObjArraySort()
- * 
- * other D6 class
- * 		D6.disp		disp.js, disp_input.js, disp_measure.js
- * 		D6.senario	scenarioset.js
- * 
- */
- 
-//resolve D6
-var D6 = D6||{};
-
-//instances
-D6.consList = [];					//consumption full list
-D6.consListByName = [];				//consumption list by consname
-D6.consShow = [];					//major consumption list by conscode
-D6.measureList = [];				//measure list
-D6.monthly = [];					//monthly energy
-D6.resMeasure = [];					//result of measures list
-
-D6.mesCount = 0;					//count of measures
-D6.consCount = 0;					//count of consumptions
-
-D6.average = { consList:""
-				};					//average of consumptions 
-	
-D6.isOriginal = true;					//in case of no measure is selected
-D6.sortTarget = "co2ChangeOriginal";	//by which measureas are sorted, changeable by input
-
-//view / Debug set. set in workercalc(start,*)
-D6.viewparam = {};
-D6.debugMode = false;
-
-
-//constructor 
-D6.constructor = function(a, b, c){
-	D6.setscenario(a, b, c);
-};
-
-//calculate
-D6.calculateAll = function(){
-	D6.calcCons();
-	D6.calcAverage();
-	D6.calcMeasures(-1);
-};
-
-	
-
-	
-	
-	/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * diagnosis.js 
- * 
- * D6 Constructor Class
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/17 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- * 								2018/03/04 divided only constructor functions
- * 
- * setscenario()				initialize diagnosis structure by scenario file
- * addMeasureEachCons()			add measure definition
- * addConsSetting()				add consumption definition 
- */
- 
-//resolve D6
-var D6 = D6||{};
-
-
-/* setscenario -------------------------------------------------------------
- * 		set scenario by definition and create logic structure
- * parameters:
- *		prohibitQuestions		array of prohibitQuestions or "add" code for not initialize
- *		allowedQuestions
- *		defInput
- * return:
- *		none
- * set:
- *		-create new consumption instance in logicList
- *		-link to consList, consListByName, consShow
- *		-each consumption instance include measures, sumCons, subCons etc.
- */
-D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
-	var i,j,k;
-	var notinit = false;
-
-	if ( prohibitQuestions == "add"){
-		notinit = true;
-	}
-	if ( !prohibitQuestions ) {
-		prohibitQuestions =[];
-	}
-	if ( !allowedQuestions ) {
-		allowedQuestions =[];
-	}
-
-	// step 1 : implementation of logics ------------------------
-	if ( !notinit ) {
-		D6.scenario.setDefs();		//set questions and measures
-		D6.scenario.areafix();		//fix by area
-		for ( var d in defInput ) {
-			if ( defInput[d][2]) {
-				D6.scenario.defInput[defInput[d][0]][defInput[d][1]] = defInput[d][2];
-			}
-		}
-		D6.logicList = D6.scenario.getLogicList();
-	}
-	var consList = D6.consList;
-	var cname;
-
-	// step 2 : Implementation of consumption class -----------
-	//
-	D6.consCount = 0;	//counter for consList
-	var logic;
-	var tlogic;
-
-	//create consumption class by logic, children of consTotal
-	for( logic in D6.logicList ) {
-		tlogic = D6.logicList[logic];
-		D6.consListByName[tlogic.consName] = [];	//list by consName
-
-		if ( tlogic.sumConsName == "consTotal" || tlogic.consName == "consTotal" ) {
-				
-			//fisrt set to consList
-			consList[ D6.consCount ] = tlogic;
-				
-			//set another access path
-			D6.consShow[ tlogic.consCode ] = consList[ D6.consCount ];
-			D6.consListByName[tlogic.consName].push( consList[ D6.consCount ] );
-			D6.consCount++;
-		}
-	}
-
-	//create consumption class,  grandson of consTotal
-	//  create grandson after children
-	for( logic in D6.logicList ) {
-		tlogic = D6.logicList[logic];								//shortcut
-
-		//not direct connect to consTotal
-		//implement by each equips/rooms
-		if ( tlogic.sumConsName != "consTotal" && tlogic.consName != "consTotal" ) {
-			if ( tlogic.orgCopyNum == 0 ) {
-				consList[D6.consCount] = tlogic;
-				D6.consListByName[tlogic.consName].push( consList[ D6.consCount ] );
-				D6.consCount++;
-			} else {
-				for ( j = 0 ; j <= tlogic.orgCopyNum ; j++ ) {		// #0 is residue			
-					//implementation in consList
-					consList[D6.consCount] = D6.object( tlogic );	// set copy
-					consList[D6.consCount].setsubID( j );
-					
-					//another access path
-					D6.consListByName[tlogic.consName].push( consList[ D6.consCount ] );
-					D6.consCount++;
-				}
-			}
-		}
-	}
-
-	// step 3 : resolve relation between consumption classes -------------
-	var cons;
-	var partconsTemp;
-	var partCons;		//partition side classes to this class
-	var partCons2nd;	//2nd partition side classes to this class
-
-	for ( i=0 ; i< consList.length ; i++ ){
-		//create relation by each cons in consList
-		cons = consList[i];
-		cons.measures = [];
-		cons.partCons = [];
-
-		//get instance of sum side class
-		cons.sumCons = this.getTargetConsList( cons.sumConsName );
-		cons.sumCons2 = this.getTargetConsList( cons.sumCons2Name );
-
-		//get instance of part side class
-		//    part side is not defined in this class definition, so check each
-		//    part side class of which sumCons is related to this cons
-		partCons = [];
-		partCons2nd = [];
-
-		for ( j=0 ; j<consList.length ; j++ ) {
-			//check each cons in consList which is part side
-			partconsTemp = consList[j];
-
-			// if sum part is defined as this class
-			if ( partconsTemp.sumConsName === cons.consName ) {
-
-				//countable rooms/equips or not
-				if ( partconsTemp.orgCopyNum >= 1 ) {
-				
-					if ( cons.orgCopyNum >= 1 ) {
-						//if this cons is countable, add only same id
-						if ( cons.subID == partconsTemp.subID ){
-							cons.partConsName = partconsTemp.consName;
-							partCons.push( partconsTemp );
-						}
-						
-					} else {
-						//this cons is not countable add each cons as partcons
-						cons.partConsName = partconsTemp.consName;
-						partCons.push( partconsTemp );
-					}
-					
-				} else {
-					//not countable add first cons as partCons
-					partCons.push( partconsTemp );
-				}
-			}
-
-			// if second sum part is defined as this class
-			if ( partconsTemp.sumCons2Name == cons.consName ) {
-
-				//countable rooms/equips or not
-				if ( partconsTemp.orgCopyNum >= 1 ) {
-
-					//if this cons is countable, add only same id
-					if ( cons.orgCopyNum >= 1 ) {
-						if ( cons.subID == partconsTemp.subID ){
-							cons.partCons2Name = partconsTemp.consName;
-							partCons2nd.push( partconsTemp );
-						}
-							
-					} else {
-						cons.partCons2Name = partconsTemp.consName;
-						partCons2nd.push( partconsTemp );
-					}
-					
-				} else {
-					//not countable add first cons as partCons
-					partCons2nd.push( partconsTemp );
-				}
-			}
-		}
-
-		//set to this cons 
-		if ( partCons.length >= 1 ) {
-			cons.partCons = partCons;
-		} else {
-			cons.partCons = "";
-		}
-		if ( partCons2nd.length >= 1 ) {
-			cons.partCons2 = partCons2nd;
-		} else {
-			cons.partCons2 = "";
-		}
-	}
-
-	// step 4 : Implementation of measures -----------------------
-	this.mesCount = 0;			//counter of measures 
-
-	//add measures to each cons class
-	for ( i in consList ){
-		this.addMeasureEachCons( consList[i] );
-	}
-
-	// in case of calculate by months, questions should be divided to months
-	//	and need dataset of temperature, solar, average consumptions etc.
-
-	// step 5 : set questions/inputs --------------------------
-	
-	//function to check is prohibited
-	var isProhivitedQuestion = function( iname ) {
-		// definition in EXCEL
-		if ( iname["cons"] == "" ) return true;
-
-		if ( prohibitQuestions.length <= 0 ) {
-			if ( allowedQuestions.length <= 0 ) {
-				return false;
-			} else {
-				if ( allowedQuestions.indexOf(iname) >= 0 ) {
-					return false;
-				} else {
-					return true;
-				}
-			}
-		} else {
-			if ( prohibitQuestions.indexOf(iname) >= 0 ) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-	};
-
-	var iname;
-
-	// loop each input definition
-	for ( iname in D6.scenario.defInput ) {
-		//check is prohibited
-		if ( isProhivitedQuestion( iname ) ) continue;
-
-		var defInp = D6.scenario.defInput[iname];
-		logic = D6.logicList[defInp.cons];
-
-		// if input has relation to consumption
-		if ( logic ) {
-			if ( logic.orgCopyNum > 0 ) {
-				//in case of countable consumption 
-				for ( j=0 ; j<logic.orgCopyNum ; j++ ) {
-					//create one question as "iname + [1-n]"
-					D6.inSet( iname+(j+1),defInp.defaultValue );
-				}
-			} else {
-				//create one question
-				D6.inSet( iname, defInp.defaultValue);
-			}
-		}
-	}
-		
-	//set easy question list
-	var ilist = [];
-	if ( D6.scenario.defEasyQues ) {
-		for( var i in D6.scenario.defEasyQues[0].ques ) {
-			if ( isProhivitedQuestion( D6.scenario.defEasyQues[0].ques[i] ) ) continue;
-			ilist.push( D6.scenario.defEasyQues[0].ques[i] );
-		}
-		D6.scenario.defEasyQues[0].ques = [];
-		for ( i in ilist ) {
-			D6.scenario.defEasyQues[0].ques.push( ilist[i] );
-		}
-	}
-
-};
-
-
-// addMeasureEachCons(cons)-----------------------------
-//		add measures related to one consumption
-//		it works not only initialize but also after
-// params
-//		cons :  target consumption instance
-// return
-//		none
-// set
-//		set new measures to cons.measures
-D6.addMeasureEachCons = function( cons ) {
-	for ( var mesname in D6.scenario.defMeasures ) {
-		if ( cons.consName != D6.scenario.defMeasures[mesname].refCons ) continue;
-		this.measureList[this.mesCount] = D6.object(D6.MeasureBase);
-		this.measureList[this.mesCount].Constructor( cons, D6.scenario.defMeasures[mesname], this.mesCount );
-		cons.measures[mesname] = this.measureList[this.mesCount];
-		this.mesCount++;
-	}
-};
-
-
-
-// addConsSetting( consName ) ------------------------------------------------
-//		add consumption instance of countable rooms/equipments
-//		this function only increment setting number, so after that reconstruct all consumptions
-// parameter
-//		consName : consumption code(string)
-// return
-//		none
-// set
-//		increment the number of consumption setting
-//		also increment part side of consumption
-D6.addConsSetting = function(consName) {
-	var cons = "";
-	var pname = "";
-
-	//check consAddSet in each logicList[]
-	var rend = false;
-	for ( cons in D6.logicList ){
-		// same target is listed in consAddSet
-		// for example rooms, both heating and cooling has relationship
-		// see also consAC.js
-		pname = D6.logicList[cons].consAddSet;
-
-		for ( var t in pname ){
-			if ( pname[t] == consName || cons == consName ){
-				D6.logicList[cons].orgCopyNum = D6.logicList[cons].orgCopyNum + 1;
-				for ( var s in pname ){
-					D6.logicList[pname[s]].orgCopyNum = D6.logicList[pname[s]].orgCopyNum + 1;
-				}
-				rend = true;
-				break;
-			}
-		}
-		if ( rend ) break;
-	}
-
-	if ( !rend ){
-		// no consAddSet, ordinal addition
-		D6.logicList[consName].orgCopyNum = D6.logicList[consName].orgCopyNum + 1;
-	}
-};
-	
-/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * diagnosis.js 
- * 
- * D6 calc Cons Class
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/17 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- * 								2018/03/04 divide consumption calculation functions 
- * 
- * calcCons()					calculate consumption
- * calcConsAdjust()				adjust consumption
- * getTargetConsList()			get Cons by name
- * getGid()						get group id
- */
- 
-//resolve D6
-var D6 = D6||{};
-
-
-// calcCons() -------------------------------------------------------
-//		calculate consumption in consumption instance
-// 
-D6.calcCons = function() {
-	var i,j;
-	var ci;
-
-	//area parameters set
-	this.area.setCalcBaseParams();
-
-	//pre calculation such as common parameters setting
-	for ( i=0 ; i<D6.consList.length ; i++ ) {
-		this.consList[i].precalc();
-	}
-		
-	//calculate each consumption at first time
-	for ( i=0 ; i<D6.consList.length ; i++ ) {
-		this.consList[i].calc();
-		this.consList[i].calcCO2();
-	}
-
-	//calculate 2nd step 
-	for ( i=0 ; i<this.consList.length ; i++ ) {
-		this.consList[i].calc2nd();
-		this.consList[i].calcCO2();	
-	}
-
-	//adjust among each consumption
-	this.calcConsAdjust();
-
-	//calculate cost and energy
-	for ( i=0 ; i<this.consList.length ; i++ ) {
-		this.consList[i].calcCost();
-		this.consList[i].calcJules();
-		//set as original value, which is in case of no selection
-		if ( this.isOriginal ) {
-			this.consList[i].co2Original = this.consList[i].co2;
-			this.consList[i].costOriginal = this.consList[i].cost;
-			this.consList[i].julesOriginal = this.consList[i].jules;
-		}
-	}
-};
-	
-
-//calcConsAdjust() --------------------------------------------------
-//		adjust among each consumption
-//		called from calcCons()
-D6.calcConsAdjust = function() {		
-	var ci, i, j;
-	var consNum;
-	var consSum;
-	var energySum = D6.object( D6.Energy );
-	D6.energyAdj = D6.object(D6.Energy);	//adjust parameters by energy
-	var singleArray = true;
-	var lastname = "";
-		
-	// calculate sum of part side consumptions of each consumption exclude total one
-	for ( ci in this.consShow ) {
-		consSum = this.consShow[ci];
-
-		if ( consSum.consName != "consTotal" ) {
-			energySum.clear();
-				
-			if ( consSum.partCons.length >= 1 ) {
-				// countable consumption
-				lastname = consSum.partCons[0].consName;
-				for ( i=1 ; i<consSum.partCons.length ; i++ ) {
-					// sum from 1 not 0. #0 is residue
-					energySum.add( consSum.partCons[i] );
-
-					//check if different consName. true:different, false:same
-					if ( lastname != consSum.partCons[i].consName) {
-						singleArray = false;
-					}
-				}
-				energySum.calcCO2();
-
-				if ( consSum.residueCalc == "no") {
-					// refrigerator pattern : each consumption is important
-					consSum.copy( energySum );
-					consSum.add( consSum.partCons[0] );
-					consSum.calcCO2();
-				} else {
-					// top down pattern : group consumption is important 
-					if ( energySum.co2 > consSum.co2 ) {
-						//in case of sumup is bigger than sumCons divide each cons
-						for ( i=1 ; i<=consNum ; i++ ) {
-							consSum.partCons[i].multiply( consSum.co2 / energySum.co2 );
-						}
-						consSum.partCons[0].clear();
-					} else {
-						//calculate residue
-						if ( singleArray ) {
-							//set residue to partCons[0]
-							energySum.sub( consSum );
-							energySum.multiply( -1 );
-							consSum.partCons[0].copy( energySum );
-						} else {
-							//not to set partCons[0], because #0 is not residue 
-							consSum.copy( energySum );
-							consSum.add( consSum.partCons[0] );
-							consSum.calcCO2();
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// adjust total balance by energy type
-	//		if sum of electricity/gas or etc. is over total consumption one, 
-	//		adjust each consumption not over total.
-	energySum.clear();
-
-	//sum of consumptions to home total
-	for ( ci in this.consShow ){
-		if ( ci != "TO" ) {
-			for ( j in D6.Unit.co2 ){
-				energySum[j] += this.consShow[ci][j];
-			}
-		}
-	}
-
-	//parameters existence of extinct total data
-	var nodataTotal = this.consShow["TO"].noConsData;
-		
-	//residue is more than 10% of electricity
-	energySum.electricity += this.consShow["TO"].electricity * 0.1;
-		
-	//execute adjust
-	energyAdj = [];
-	if ( !nodataTotal ) {
-		//in case of exist in total consumption
-		for ( j in D6.Unit.co2 ){
-			if ( energySum[j] == 0 ) {
-				this.energyAdj[j] = 1;
-			} else {
-				// adjust is less than triple and more than 0.3 times
-				this.energyAdj[j] = Math.max( 0.3, Math.min( 3, this.consShow["TO"][j] / energySum[j] ) );
-			}
-		}
-
-		//execute adjust
-		for ( ci in this.consList ){
-			if ( this.consList[ci].consName != "consTotal" ) {
-				this.consList[ci].calcAdjust( this.energyAdj );
-			}
-		}
-
-	} else {
-		//no total value
-		for ( j in D6.Unit.co2 ){
-			if ( j == "electricity" ){
-				if( this.consShow["TO"][j] < energySum[j] ) {
-					this.consShow["TO"][j] = energySum[j];
-				}
-			} else {
-				this.consShow["TO"][j] = energySum[j];
-			}
-		}
-		this.consShow["TO"].calcCO2();
-	}
-};
-
-
-// getTargetConsList(consName)  getter consumption object ------------------
-//
-// parameters
-//		consName	consumption name
-// retrun
-//		consumption object / object array
-//
-D6.getTargetConsList  = function( consName )
-{
-	var i,c=0;
-	var target = new Array();
-	var ret;
-
-	if ( consName != "" ) {
-		for ( i=0 ; i<this.consList.length ; i++ ) {
-			if ( this.consList[i].consName == consName ) {
-				target[c++] = this.consList[i];
-			}
-		}
-		if ( target.length == 1 ) {
-			//in case of single
-			ret = target[0];
-		} else {
-			//in case of array
-			ret = target;
-		}
-	}
-	return ret;
-};
-
-// getGid(consName)  getter group id of consumption ------------------
-//
-// parameters
-//		consName	consumption name
-// retrun
-//		groupID		0-9
-//
-D6.getGid  = function( consName ) {
-	return D6.logicList[consName].groupID;
-};
-	
-
-	
-// getCommonParameters()  getter common result parameters such as co2 ------------------
-//
-// retrun
-//		co2,cost
-//
-D6.getCommonParameters = function(){
-	var ret = [];
-	ret.co2Original = D6.consListByName["consTotal"][0].co2Original;
-	ret.co2 = D6.consListByName["consTotal"][0].co2;
-	ret.costOriginal = D6.consListByName["consTotal"][0].costOriginal;
-	ret.cost = D6.consListByName["consTotal"][0].cost;
-		
-	return ret;
-};
-
-
-
-
-/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * diagnosis.js 
- * 
- * D6 Main Class calc average functions
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/17 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- * 								2018/03/04 divided as average functions
- * 
- * calcAverage()				get avearage consumption
- * rankIn100()					get rank				
- * 
- */
- 
-//resolve D6
-var D6 = D6||{};
-
-
-// calcAverage()  get avearage consumption ------------------
-//
-// parameters
-//		none
-// return
-//		none
-//
-// set D6.average.consList[]
-//
-D6.calcAverage = function(){
-	D6.averageMode = true;			//not use input parameters
-	this.calcCons();				//and calculate, then get average
-
-	this.average.consList = {};
-	for( var c in this.consShow ) {
-		this.average.consList[c] = {};
-		this.average.consList[c].co2 = this.consShow[c].co2;
-		this.average.consList[c].cost = this.consShow[c].cost;
-		this.average.consList[c].jules = this.consShow[c].jules;
-		this.average.consList[c].title = this.consShow[c].title;
-	}
-	D6.averageMode = false;	
-};
-
-	
-
-// rankIn100(ratio)  calculate rank by ratio to average ------------------
-//
-// parameters
-//		ratio	ratio to average
-// return
-//		rank 	number 1-100 in 100 
-//
-D6.rankIn100 = function( ratio ){
-	var ret;
-	var lognum;
-
-	var width = 0.5;		// set diffusion parameter
-
-	if ( ratio <= 0 ) {
-		//in case of minus
-		ratio = 0.1;
-	}
-	lognum = Math.log( ratio );
-
-	if ( lognum < -width ) {
-		// rank 1-10
-		ret = Math.max( 1, Math.round( ( lognum + 1 ) / width * 10 ) );
-	} else if ( lognum < width ) {
-		// rank 11-90
-		ret = Math.round(( lognum + width ) / ( width * 2) * 80 + 10 );
-	} else {
-		// rank 91-100
-		ret = Math.min( 100, Math.round( ( lognum - width ) / ( width * 2) * 10 ) + 90 );
-	}
-	return ret;
-};
-
-	
-/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * diagnosis.js 
- * 
- * D6 Class calc measures functions
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/17 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- * 
- * calcMeasures()				calculate measure
- * calcMeasuresLifestyle()		calculate all measures and select lifestyle
- * calcMeasuresNotLifestyle()	calculate all measures and select not lifestyle
- * calcMeasuresOne()			calculate in temporal selection
- * calcMaxMeasuresList()		automatic select max combination 
- */
- 
-//resolve D6
-var D6 = D6||{};
-
-
-// calcMeasures(gid)  calculate all measures -----------------------------
-//
-// parameters
-//		gid		groupid, -1 is total
-// return
-//		measure array defined in calcMeasuresOne
-//
-// once clear selected measures, and set select and calculate one by one
-//
-D6.calcMeasures = function( gid ) {
-	var ret;
-	var calcfg = false;
-	var i;
-	var mid, mlistid, mes;
-
-	var selList = [];	//selected measures' ID
-
-	//save selected measures id
-	for( mes in this.measureList ) {
-		selList[this.measureList[mes].mesID] =this.measureList[mes].selected;
-	}
-
-	//clear selection and calculate
-	ret = this.clearSelectedMeasures( gid );
-
-	//set select one by one
-	for ( i = 0 ; i < ret.length ; i++ ) {
-		mid = ret[i].mesID;
-		mlistid = mid;
-		mes = this.measureList[mlistid];
-
-		if ( selList[mid] && !mes.selected ) {
-			mes.selected = true;
-			this.isOriginal = false;
-
-			if ( mes.co2Change < 0 ) {
-				//set select in case of useful measures
-				mes.co2ChangeSumup = mes.co2Change;
-				mes.costChangeSumup = mes.costChange;
-				mes.costTotalChangeSumup = mes.costTotalChange;
-
-				mes.addReduction();					//set reduction
-				ret = this.calcMeasuresOne( -1 );	//main calculation for next step
-			} else {
-				mes.co2ChangeSumup = 0;
-				mes.costChangeSumup = 0;
-				mes.costTotalChangeSumup = 0;
-			}
-		}
-	}
-
-	//set selection property include not useful
-	for ( mlistid in this.measureList ) {
-		mes = this.measureList[mlistid];
-		mes.selected = selList[mes.mesID];
-		if ( mes.selected ) {
-			this.isOriginal = false;
-		}
-	}
-	var ret2 = [];
-	for ( i=0 ; i<ret.length ; i++ ) {
-		if ( ret[i].groupID == gid || gid == -1 ) {
-			ret2.push( ret[i] );
-		}
-	}
-	this.resMeasure = ret2;
-	if ( D6.debugMode ) {
-		console.log( "measure calculate in d6.js calcMeasures() --- " );
-		console.log( ret2 );
-	}
-	return ret2;
-};
-
-
-// calcMeasuresLifestyle(gid)  
-//		calculate all measures and select lifestyle --------
-//
-// parameters
-//		gid		groupid, -1 is total
-// return
-//		measure array defined in calcMeasuresOne
-//
-D6.calcMeasuresLifestyle = function( gid ) {
-	var onemes;
-	var retLife = new Array();
-	var ret = D6.calcMeasures( gid );
-		
-	// select only related to lifestyle 
-	for( onemes in ret ) {
-		if ( ret[onemes].lifestyle == 1 ) {
-			retLife.push( ret[onemes] );
-		}
-	}
-	return retLife;
-};
-	
-
-// calcMeasuresNotLifestyle(gid)  
-//		calculate all measures and select not lifestyle --------
-//
-// parameters
-//		gid		groupid, -1 is total
-// return
-//		measure array defined in calcMeasuresOne
-//
-D6.calcMeasuresNotLifestyle = function( gid ) {
-	var onemes;
-	var retLife = [];
-	var ret = D6.calcMeasures( gid );
-		
-	// select only not related to lifestyle 
-	for( onemes in ret ) {
-		if ( ret[onemes].lifestyle != 1 ) {
-			retLife.push( ret[onemes] );
-		}
-	}
-	return retLife;
-};
-
-
-// calcMeasuresOne(gid)  
-//		calculate all measures in temporal selection --------
-//
-// parameters
-//		gid		groupid, -1 is total
-// return
-//		measure array include mesID,groupID and lifestyle
-//
-// called by calcMeasures
-//
-D6.calcMeasuresOne = function( gid ) {
-	var ret;								//return
-	var topList;							//list of measures id
-	var selectList;							//list of selected measures id
-	var i;
-
-	var sortTarget = this.sortTarget;		//sort target
-	ret = new Array();
-	topList = new Array();
-	selectList = new Array();
-
-	//each measures defined in cons object
-	for ( i in this.consList ) {
-		//target group
-		if ( gid == -1 || this.consList[i].groupID == gid ) {
-			this.consList[i].calcMeasureInit();
-			this.consList[i].calcMeasure();
-				
-			//in case of equipment/room number is defined and selected #0
-			//not evaluate after #1
-			if ( this.consList[i].subID >= 1 ){
-				var cons0 = this.consListByName[this.consList[i].consName][0];
-				for ( var m in cons0.measures ){
-					if ( cons0.measures[m].selected ){
-						this.consList[i].measures[m].copy( cons0 );
-					}
-				}
-			}
-		}
-	}
-	i=0;
-	
-	//format return measure data
-	for( var mescode in this.measureList ) {
-		var mes = this.measureList[mescode];
-		mes.calcSave();
-		ret[i] = {};
-		ret[i][sortTarget] =mes[sortTarget];
-		ret[i].mesID =mes.mesID;
-		ret[i].groupID =mes.groupID;
-		ret[i].lifestyle =mes.lifestyle;
-		i++;
-	}
-	this.ObjArraySort( ret, sortTarget );	//sort
-	return ret;
-};
-
-
-
-// clearSelectedMeasures(gid)  clear all selection and calculate all --------
-//
-// parameters
-//		gid		groupid, -1 is total
-// return
-//		measure array defined in calcMeasuresOne
-//
-D6.clearSelectedMeasures = function( gid ) {
-	var ret;
-
-	this.isOriginal = true;
-	ret = this.calcCons();			//calcurate original state consumption
-		
-	//remove selection
-	for ( var i = 0 ; i < D6.measureList.length ; i++ ) {
-		if ( this.measureList[i].groupID == gid || gid < 0 ) {
-			this.measureList[i].selected = false;
-		}
-	}
-		
-	//calculate
-	ret = this.calcMeasuresOne( gid );
-		
-	return ret;
-};
-
-	
-// calcMaxMeasuresList(gid)
-//		automatic select max combination measures --------
-//
-// parameters
-//		gid		groupid, -1 is total
-//		count	max selected number
-// return
-//		measure array defined in calcMeasuresOne
-//
-D6.calcMaxMeasuresList = function( gid, count )
-{
-	var resultCalc;
-	var ret;
-	var pt = 0;
-	var maxCO2 = 0;
-	var cost = 0;
-	var i, j;
-	var mes;
-	var targetmes;
-	var sumCO2 = 0;
-	var sumCOST = 0;
-		
-	if( typeof(gid) == "undefined" ) gid = -1;
-	if( typeof(count) == "undefined" || count<1 ) count = 15;
-		
-	//clear all selection
-	resultCalc = this.clearSelectedMeasures( gid );
-		
-	//search max reduction measure for "count" times
-	for ( i = 0 ; i < count ; i++  ) {
-		pt = -1;
-		maxCO2 = 0;
-		for ( j = 0 ; j < this.measureList.length ; j++ ) {
-			//max reduction in measureList
-			mes = this.measureList[j];
-			if ( mes.groupID == gid || gid < 0 ) {
-				if ( measureList[j].selected != true 		//skip already selected
-					|| !isFinite(mes.co2Change) 
-					|| isNaN(mes.co2Change)) 				//useful
-				{
-					//select max measure
-					if ( maxCO2 > mes.co2Change ) {
-						maxCO2 = mes.co2Change;
-						cost = mes.costChange;
-						pt = mes.mesID;
-						targetmes = mes;
-					}
-				}
-			}
-		}
-		if ( pt == -1 ) {
-			//end in case of no measures suitable
-			break;
-		}
-		sumCO2 += maxCO2;
-		sumCOST += cost;
-		resultCalc = this.measureAdd( pt );			//select set to property
-		targetmes.addReduction();					//set reduction
-		resultCalc = this.calcMeasuresOne( -1 );	//main calculation for next step
-	}
-	ret = calcMeasures(gid);
-	ret.sumCO2 = sumCO2;
-	ret.sumCOST = sumCOST;
-
-	return ret;
-};
-
-
-
-/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * diagnosis.js 
- * 
- * D6 Main Class
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/17 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- * 
- * inSet()						input data setter
- * measureAdd()					set select flag and not calculate 
- * measureDelete()				clear select flag and not calculate 
- */
- 
-//resolve D6
-var D6 = D6||{};
-
-	
-// inSet(id, val)  input data setter ------------------
-//
-// parameters
-//		id		input id, permit include equip/room code 'ixxxyy'
-//		val		input value
-//
-D6.inSet = function ( id, val ){
-	var inpIdDef = id.substr( 0,4 );
-	if ( D6.scenario.defInput[inpIdDef].varType == "String" || 
-		D6.scenario.defInput[inpIdDef].varType == "Boolean"
-	) {	
-		//set data
-		D6.doc.data[id] = val;
-	} else {
-		//string data set
-		val = D6.toHalfWidth(val);
-		D6.doc.data[id] = parseFloat( val ) ? parseFloat( val ) : 0;
-	}
-};
-
-	
-// measureAdd(mesId) set select flag and not calculate --------
-//
-// parameters
-//		mesId		measure id which you select
-// return
-//		none
-//
-D6.measureAdd = function( mesId ) {
-	var gid;
-	var ret = "";
-		
-	gid = this.measureList[mesId].groupID;
-	this.measureList[mesId].selected = true;
-	this.isOriginal = false;
-	//ret = this.calcMeasures( gid );	//recalc -> not calc
-
-	return ret;
-};
-
-
-// measureDelete(mesId) remove select flag and not calculate--------
-//
-// parameters
-//		mesId		measure id which you select
-// return
-//		none
-//
-D6.measureDelete = function( mesId ) {
-	var gid;
-	var ret ="";
-
-	this.measureList[mesId].selected = false;
-	gid = this.measureList[mesId].groupID;
-	//ret = this.calcMeasures( gid );	//recalc 
-
-	return ret;
-};
-
-/*  2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * diagnosis.js 
- * 
- * D6 Main Class as tools
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/17 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- * 								2018/03/04 divide as tools
- * 
- * toHalfWidth()
- * ObjArraySort()
- * 
- * 
- */
- 
-//resolve D6
-var D6 = D6||{};
-
-	
-	
-// toHalfWidth(strVal)  change double width charactor------------------
-//
-// parameters
-//		strVal	original value
-// return
-//		halfVal replaced value
-//
-D6.toHalfWidth = function(strVal){
-	if ( !strVal ) return strVal;
-	var halfVal = strVal.replace(/[！-～]/g,
-		function( tmpStr ) {
-		// shift charactor code
-			return String.fromCharCode( tmpStr.charCodeAt(0) - 0xFEE0 );
-		}
-	);
-	return halfVal;
-};
-
-	
-// ObjArraySort(ary, key, order )  object sort ------------------
-//
-// parameters
-//		ary		array/object
-//		key		sort target
-//		order	incr/desc
-// retrun
-//		none
-//
-//	set "ary" sorted
-//
-D6.ObjArraySort = function(ary, key, order) {
-    var reverse = 1;
-    if(order && order.toLowerCase() == "desc") 
-        reverse = -1;
-    ary.sort(function(a, b) {
-	        if(a[key] < b[key])
-	        return -1 * reverse;
-        else if(a[key] == b[key])
-	            return 0;
-        else
-            return 1 * reverse;
-    });
-};
 

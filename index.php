@@ -14,7 +14,6 @@
 //develop mode parameters  =======================================================
 session_start();
 date_default_timezone_set("Asia/Tokyo");
-$jqueryVersion = "2.2.4";
 $forceMode = 5;		//can be over rided 1:debug, 3:worker test, 4:packer test, 5;release
 
 /*
@@ -138,18 +137,19 @@ $scripts = "";
 
 //base D6 scripts (common) in case useCode==1
 $include_common  ='
-	<script src="d6/base/base64.js" type="text/javascript"></script>
-	<script src="d6/base/d6_get.js" type="text/javascript"></script>
-	<script src="d6/base/d6_getinput.js" type="text/javascript"></script>
-	<script src="d6/base/d6_getmeasure.js" type="text/javascript"></script>
-	<script src="d6/base/d6_getdemand.js" type="text/javascript"></script>
+	<script src="d6/d6facade.js" type="text/javascript"></script>
 	<script src="d6/base/objectcreate.js" type="text/javascript"></script>
 	<script src="d6/base/energy.js" type="text/javascript"></script>
 	<script src="d6/base/consbase.js" type="text/javascript"></script>
 	<script src="d6/base/measurebase.js" type="text/javascript"></script>
 	<script src="d6/base/doc.js" type="text/javascript"></script>
-	<script src="d6/base/d6_calcmonthly.js" type="text/javascript"></script>
 	<script src="d6/base/d6.js" type="text/javascript"></script>
+	<script src="d6/base/d6_calcmonthly.js" type="text/javascript"></script>
+	<script src="d6/base/base64.js" type="text/javascript"></script>
+	<script src="d6/base/d6_get.js" type="text/javascript"></script>
+	<script src="d6/base/d6_getinput.js" type="text/javascript"></script>
+	<script src="d6/base/d6_getmeasure.js" type="text/javascript"></script>
+	<script src="d6/base/d6_getdemand.js" type="text/javascript"></script>
 	<script src="d6/base/d6_getevaluateaxis.js" type="text/javascript"></script>
 	<script src="d6/base/d6_construct.js" type="text/javascript"></script>
 	<script src="d6/base/d6_calccons.js" type="text/javascript"></script>
@@ -157,7 +157,6 @@ $include_common  ='
 	<script src="d6/base/d6_calcmeasures.js" type="text/javascript"></script>
 	<script src="d6/base/d6_setvalue.js" type="text/javascript"></script>
 	<script src="d6/base/d6_tools.js" type="text/javascript"></script>
-	<script src="d6/d6facade.js" type="text/javascript"></script>
 	
 ';
 
@@ -235,13 +234,14 @@ if ( $lang["pageLanguage"] == "zh-CN" || strcmp($_SERVER['HTTP_HOST'] , 'localho
 
 //design base scripts -----------------------------------------
 $scripts  .='
-	<script src="view/jstools/jquery.leanModal.min.js" type="text/javascript"></script>
-	<script src="view/jstools/jquery.cookie.js" type="text/javascript"></script>
+	<script src="view/lib/jquery/jquery.min.js" type="text/javascript"></script>
+	<script src="view/lib/leanModal/jquery.leanModal.min.js" type="text/javascript"></script>
+	<script src="view/lib/jquery.cookie/jquery.cookie.js" type="text/javascript"></script>
 	<script src="view/main.js" type="text/javascript"></script>
 	<script src="view/createpage.js" type="text/javascript"></script>
 	<script src="view/graph.js" type="text/javascript"></script>
-	<script src="http://d3js.org/d3.v4.min.js"></script>
-	<script src="http://dimplejs.org/dist/dimple.v2.3.0.min.js"></script>
+	<script src="view/lib/d3/d3.v3.4.8.min.js"></script>
+	<script src="view/lib/dimple-js/dimple.v2.1.4.min.js"></script>
 	<!--[if lte IE 10]><script>alert("Sorry, this page does not work under IE8, and too slow under IE10.\n Please use IE11 up, chrome, Edge, Firefox or safari.");</script><![endif]-->';
 
 
@@ -255,7 +255,7 @@ $scripts .= "<script src='" . $lang["d6folder"] . "/view/" . $countryMode . "_" 
 if ( $useCode==1 ) {
 	$scripts .= $includeeachjs;
 } else if ( $useCode==2 && $useWorker =="false" ) {
-	$scripts .= "<script src='" .$includemincorejs . "' type='text/javascript'></script>";
+	$scripts .= "<script src='" .$includesumcorejs . "' type='text/javascript'></script>";
 	$scripts .= "<script src='" .$includesumjs_direct . "' type='text/javascript'></script>";
 } else if ( $useCode==3 && $useWorker =="false") {
 	$scripts .= "<script src='" .$includemincorejs . "' type='text/javascript'></script>";
@@ -268,8 +268,8 @@ if ( $useCode==1 ) {
 if ( $introMode == 1 ) {
 	//show tutorial
 	$scripts .="\n
-	<link href='view/jstools/introjs.min.css' rel='stylesheet' type='text/css' />\n
-	<script src='view/jstools/intro.min.js' type='text/javascript'></script>\n
+	<link href='view/lib/intro.js/introjs.min.css' rel='stylesheet' type='text/css' />\n
+	<script src='view/lib/intro.js/intro.min.js' type='text/javascript'></script>\n
 	<script>
 	$(function(){
 		introJs().start();

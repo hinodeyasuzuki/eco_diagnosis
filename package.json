@@ -1,0 +1,24 @@
+{
+  "name": "eco-diagnosis",
+  "version": "1.0.0",
+  "description": "diagnosis to show low carbon measures for home/office.",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yasufumi Suzuki",
+  "license": "MIT",
+  "dependencies": {
+    "dimple-js": "^2.1.4",
+    "i18n": "^0.8.3",
+    "intro.js": "^2.8.0-alpha.1",
+    "jquery": "^3.3.1",
+    "jquery-m1k": "^0.9.0",
+    "jquery.cookie": "github:carhartl/jquery-cookie"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.2",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-uglify": "^3.3.0"
+  }
+}
