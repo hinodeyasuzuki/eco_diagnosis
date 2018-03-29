@@ -1,2 +1,2 @@
-importScripts('./d6home_core.js');
-importScripts('./d6home_CN.js');
+importScripts('./d6home_core.min.js');
+importScripts('./d6home_CN.min.js');

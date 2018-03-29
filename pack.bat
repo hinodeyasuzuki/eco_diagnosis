@@ -16,5 +16,5 @@ copy /b d6home_1.js  + .\localize_%1\home\consTotal.js +  .\localize_%1\home\con
 del d6home_1.js
 
 php .\php-packer\shorthome.php > .\dist\d6home_%1.min.js
-copy /b d6home.js .\dist\d6home_%1.js
+copy /b d6home.js .\dist_develop\d6home_%1.js
 del d6home.js

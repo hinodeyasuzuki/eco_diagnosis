@@ -46,11 +46,11 @@ function getlogiclistoffice( $area )  {
 
 
 	//2,3 packed js for worker : execute shortoffice.bat to make this file 
-	$includesumjs_worker  = 'dist/workeroffice_' . $lang["localizeCode"] . '.js';
-	$includesumjs_direct  = 'dist/d6office_' . $lang["localizeCode"] . '.js';
+	$includesumjs_worker  = 'dist_develop/workeroffice_' . $lang["localizeCode"] . '.js';
+	$includesumjs_direct  = 'dist_develop/d6office_' . $lang["localizeCode"] . '.js';
 
 	//4,5 compressed for worker : execute http://dean.edwards.name/packer/ 
-	$includeminjs_worker  = 'dist/workeroffice_' . $lang["localizeCode"] . '_min.js';
+	$includeminjs_worker  = 'dist/workeroffice_' . $lang["localizeCode"] . '.js';
 	$includeminjs_direct  = 'dist/d6office_' . $lang["localizeCode"] . '.min.js';
 
 	//2,4 compressed common logic : execute http://dean.edwards.name/packer/ 

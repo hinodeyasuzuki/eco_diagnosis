@@ -57,11 +57,11 @@ $include_logic .= getlogiclist( $lang["d6folder"] );
 $includeeachjs = $include_common . $include_logic;
 
 //3 packed js for worker : execute short.bat to make this file 
-$includesumjs_worker  = 'dist/worker_' . $lang["localizeCode"] . '.js';
-$includesumjs_direct  = 'dist/d6home_' . $lang["localizeCode"] . '.js';
+$includesumjs_worker  = 'dist_develop/worker_' . $lang["localizeCode"] . '.js';
+$includesumjs_direct  = 'dist_develop/d6home_' . $lang["localizeCode"] . '.js';
 
 //5 compressed for worker : execute http://dean.edwards.name/packer/ 
-$includeminjs_worker  = 'dist/worker_' . $lang["localizeCode"] . '_min.js';
+$includeminjs_worker  = 'dist/worker_' . $lang["localizeCode"] . '.js';
 $includeminjs_direct  = 'dist/d6home_' . $lang["localizeCode"] . '.min.js';
 	
 //2,4 compressed common logic : execute http://dean.edwards.name/packer/ 
