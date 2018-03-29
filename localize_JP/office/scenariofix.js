@@ -21,23 +21,5 @@
 // D6.scenario.areafix
 // called by diagnosis.js  just after create scenario
 D6.scenario.areafix = function() {
-	D6.Unit.name = {
-		electricity:"電気",
-		nightelectricity:"夜間電気",
-		sellelectricity:"売電",
-		nagas:"都市ガス",
-		lpgas:"LPガス",
-		kerosene:"灯油",
-		gasoline:"ガソリン",
-		lightoil:"軽油",
-		heavyoil:"重油",
-		coal:0,
-		biomass:0,
-		hotwater:0,
-		waste:0,
-		water:0,
-		gas:"都市ガス",
-		car:"ガソリン"
-	};
 
 };
