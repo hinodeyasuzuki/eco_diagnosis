@@ -13,16 +13,7 @@
 	<meta name="viewport" content="target-densitydpi=device-dpi, width=320, initial-scale=1.0, user-scalable=yes">
 	<link href="view/common.css" rel="stylesheet" type="text/css" />
 	<link href="view/view_maintenance/layout-maintenance.css" rel="stylesheet" type="text/css" />
-<?php
-	if ( !$oneAreaRelease ) {
-?>
-	<link rel="alternate" hreflang="ja" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=ja&v=5<?php echo ( $targetMode==2 ? '&t=2' : '' );?>" />
-	<link rel="alternate" hreflang="en" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=en&v=5<?php echo ( $targetMode==2 ? '&t=2' : '' ); ?>" />
-	<link rel="alternate" hreflang="zh" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=zh&v=5<?php echo ( $targetMode==2 ? '&t=2' : '' ); ?>" />
-	<link rel="alternate" hreflang="fr" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=fr&v=5<?php echo ( $targetMode==2 ? '&t=2' : '' ); ?>" />
-<?php
-	}
-?>
+	<?php echo $alternate ?>
 	<title><?php echo $title;?></title>
 
   </head>
@@ -52,11 +43,11 @@
 			<div id="mescontents">
 			</div>
 			<div align="center" style="padding-top:20px;clear:both;">
-				<span class="button large" onclick="showList();"><?php echo $lang['button_showall']; ?></span>
+				<span class="button large" onclick="showList();" onkeypress="showList();" tabindex=0><?php echo $lang['button_showall']; ?></span>
 			</div>
 		</div>
 
-		<div align="right">
+		<div id="footer">
 			<p>
 				<?php echo $opendate;?>
 				<a href="http://www.hinodeya-ecolife.com/">Hinodeya Institute for Ecolife co.ltd.</a>

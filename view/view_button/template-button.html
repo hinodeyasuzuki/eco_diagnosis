@@ -13,163 +13,157 @@
 	<meta name="viewport" content="target-densitydpi=device-dpi, width=320, initial-scale=1.0, user-scalable=yes">
 	<link href="view/common.css" rel="stylesheet" type="text/css" />
 	<link href="view/view_button/layout-button.css" rel="stylesheet" type="text/css" />
-<?php
-	if ( !$oneAreaRelease ) {
-?>
-	<link rel="alternate" hreflang="ja" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=ja&v=1" />
-	<link rel="alternate" hreflang="en" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=en&v=1" />
-	<link rel="alternate" hreflang="zh" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=zh&v=1" />
-	<link rel="alternate" hreflang="fr" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=fr&v=1" />
-<?php
-	}
-?>
-
+	<?php echo $alternate ?>
 	<title><?php echo $title;?></title>
 
   </head>
 
   <body>
+  
+	<div id="leanModalDialog" style="float:left;">
+		<input type="button" class="modal_close" value="<?php echo $lang['button_back'];?>" tabindex=0>
+		<div id="modal-contents"></div>
+	</div>
+		
 	<div class="contents">
 
 		<div id="header">
 			<h1><?php echo $title;?></h1>
 
 		　　<div style="text-align:right;position:relative;top:-20px;legt:20px;line-height:5px;">
-				<span class="menubutton" onclick="menuopen();"><?php echo $lang["button_menu"];?></span>
+				<span class="menubutton" onclick="menuopen();" onkeypress="menuopen();" tabindex=0><?php echo $lang["button_menu"];?></span>
 		　　</div>
 
 		　　<div class="menu" style="display:none;position:relative;top:-20px;">
-				<span class="selected" id="m1" onclick="modeChange('m1');"><?php echo $lang["button_top"];?></span>
-				<span id="m2" onclick="modeChange('m4');"><?php echo $lang["button_input"];?></span>
-				<span id="m3" onclick="modeChange('m3');"><?php echo $lang["button_measures"];?></span>
-<!--				<span id="m5" onclick="modeChange('m5');"><?php echo $lang["home_button_selectcategory"];?></span>-->
+				<span class="selected" id="m1" onclick="modeChange('m1');" onkeypress="modeChange('m1');" tabindex=0><?php echo $lang["button_top"];?></span>
+				<span id="m2" onclick="modeChange('m4');" onkeypress="modeChange('m4');" tabindex=0><?php echo $lang["button_input"];?></span>
+				<span id="m3" onclick="modeChange('m3');" onkeypress="modeChange('m3');" tabindex=0><?php echo $lang["button_measures"];?></span>
 			<?php if ( $targetMode == 2 ){ 
 				//this is only for business
 			?>
-				<span id='m6' onclick="modeChange('m6');">デマンド機種</span>
-				<span id='m7' onclick="modeChange('m7');">デマンド1日分</span>
-				<span id='m8' onclick="modeChange('m8');">デマンド積上げ</span>
-				<span id='m9' onclick="modeChange('m9');">デマンド日変化</span>
+				<span id='m6' onclick="modeChange('m6');" onkeypress="modeChange('m6');" tabindex=0>デマンド機種</span>
+				<span id='m7' onclick="modeChange('m7');" onkeypress="modeChange('m7');" tabindex=0>デマンド1日分</span>
+				<span id='m8' onclick="modeChange('m8');" onkeypress="modeChange('m8');" tabindex=0>デマンド積上げ</span>
+				<span id='m9' onclick="modeChange('m9');" onkeypress="modeChange('m9');" tabindex=0>デマンド日変化</span>
 			<?php } ?>
-				<span id="btnsave" onclick="dataSave();"><?php echo $lang["button_save"];?></span>
-				<span id="btnclear" onclick="dataClear();"><?php echo $lang["button_clear"];?></span>
-				<span id="m10" onclick="modeChange('m10');"><?php echo $lang["button_about"];?></span>
+				<span id="btnsave" onclick="dataSave();" onkeypress="dataSave();" tabindex=0><?php echo $lang["button_save"];?></span>
+				<span id="btnclear" onclick="dataClear();" onkeypress="dataClear();" tabindex=0><?php echo $lang["button_clear"];?></span>
+				<span id="m10" onclick="modeChange('m10');" onkeypress="modeChange('m10');" tabindex=0><?php echo $lang["button_about"];?></span>
 		　　</div>
 		</div>
 
-		<div id="leanModalDialog" style="float:left;">
-			<input type="button" class="modal_close" value="<?php echo $lang['button_back'];?>">
-			<div id="modal-contents"></div>
-		</div>
-		
 		<div class="preloader">
 			<p>now loading diagnosis system</p>
 		</div>
 	
 		<div class="contents" style="display:none;">
-		<div class="page" id="p1" >						
-		<p><?php echo $lang["home_button_intro1"];?></p>
-		<p><?php echo $lang["home_button_intro2"];?></p>
-			<span class="next" onclick="modeChange('m4');"><?php echo $lang["home_button_startdiagnosis"];?></span>
-			<span class="next"><a href="./?lang=<?php echo $languageMode; ?>&v=4" target="_blank"><?php echo $lang["home_button_about"];?></a></span>
-		</div>
-
-		<div class="page" id="p2">
-			<h2 class="constitle"></h2>
-			<span class="next" onclick="modeChange('m3');"><?php echo $lang["home_button_result"];?></span>
-			<span class="next" onclick="modeChange('m4');"><?php echo $lang["home_button_retry"];?></span>
-			<ul id='tabcontents'></ul>
-			<span class="next" onclick="modeChange('m3');"><?php echo $lang["home_button_result"];?></span>
-			<span class="next" onclick="modeChange('m4');"><?php echo $lang["home_button_retry"];?></span>
-		</div>
-
-		<div class="page" id="p3">
-			<h2 class="constitle"></h2>
-			<div class="menuresult" id="result">
-				<span class="next" id="mr1" onclick="resultChange('r1');"><?php echo $lang["home_button_average"];?></span>
-				<span class="next" id="mr3" onclick="resultChange('r3');"><?php echo $lang["home_button_monthly"];?></span>
-				<span class="next" id="mr5" onclick="resultChange('r5');"><?php echo $lang["home_button_measure"];?></span>
-			</div>
-		  
-			<div class="result" id="r1">
-				<p><?php echo $lang["home_button_resultmessage"];?></p>
-				<select id="graphChange" onchange="graphChange();">
-					<option value="co2"><?php echo $lang["button_co2emission"];?></option>
-					<option value="energy"><?php echo $lang["button_firstenergy"];?></option>
-					<option value="money"><?php echo $lang["button_energyfee"];?></option>
-				</select>
-				<div id="graph"></div>
-				<div id="average"></div>
-			</div>
-			<div class="result" id="r2">
-			</div>
-			<div class="result" id="r3">
-				<div id="graphMonthly"></div>
-			</div>
-			<div class="result" id="r4">
-				<div id="cons"></div>
+			<div class="page" id="p1" >						
+				<p><?php echo $lang["home_button_intro1"];?></p>
+				<p><?php echo $lang["home_button_intro2"];?></p>
+				<span class="next" onclick="modeChange('m4');" onkeypress="modeChange('m4');" tabindex=0><?php echo $lang["home_button_startdiagnosis"];?></span>
+				<span class="next"><a href="./?lang=<?php echo $languageMode; ?>&v=4" target="_blank"><?php echo $lang["home_button_about"];?></a></span>
 			</div>
 
-			<div class="result" id="r5">
-				<p><?php echo $lang["home_button_measuremessage"];?></p>
-				<div id="measure"></div>
-				<div style="text-align:right;">
-					<span style='color:blue;cursor:pointer;' onclick="over15show();">[<?php echo $lang["button_showall"];?>]</span>
+			<div class="page" id="p2">
+				<h2 class="constitle"></h2>
+				<span class="next" onclick="modeChange('m3');" onkeypress="modeChange('m3');" tabindex=0><?php echo $lang["home_button_result"];?></span>
+				<span class="next" onclick="modeChange('m4');" onkeypress="modeChange('m4');" tabindex=0><?php echo $lang["home_button_retry"];?></span>
+				<ul id='tabcontents'></ul>
+				<span class="next" onclick="modeChange('m3');" onkeypress="modeChange('m3');" tabindex=0><?php echo $lang["home_button_result"];?></span>
+				<span class="next" onclick="modeChange('m4');" onkeypress="modeChange('m4');" tabindex=0><?php echo $lang["home_button_retry"];?></span>
+			</div>
+
+			<div class="page" id="p3">
+				<h2 class="constitle"></h2>
+				<div class="menuresult" id="result">
+					<span class="next" id="mr1" onclick="resultChange('r1');" onkeypress="modeChange('r1');" tabindex=0><?php echo $lang["home_button_average"];?></span>
+					<span class="next" id="mr3" onclick="resultChange('r3');" onkeypress="modeChange('r3');" tabindex=0><?php echo $lang["home_button_monthly"];?></span>
+					<span class="next" id="mr5" onclick="resultChange('r5');" onkeypress="modeChange('r5');" tabindex=0><?php echo $lang["home_button_measure"];?></span>
 				</div>
-			</div>
-				<span class="next" id="mr1" onclick="resultChange('r1');"><?php echo $lang["home_button_average"];?></span>
-				<span class="next" id="mr3" onclick="resultChange('r3');"><?php echo $lang["home_button_monthly"];?></span>
-				<span class="next" id="mr5" onclick="resultChange('r5');"><?php echo $lang["home_button_measure"];?></span>
-		</div>
-		
-		<div class="page" id="p4">
-			<h2 class="constitle"></h2>
-			<div id="quescontents" ></div>
-			<hr>
-			<span class="next" onclick="quesone_prev();"><?php echo $lang["button_prev"];?></span>
-			<span class="next" onclick="quesone_next();"><?php echo $lang["button_next"];?></span>
-			<span class="next" onclick="modeChange('m2');"><?php echo $lang["button_queslist"];?></span>
-			<span class="next" onclick="modeChange('m3');"><?php echo $lang["button_calcresult"];?></span>
-		</div>
+			  
+				<div class="result" id="r1">
+					<p><?php echo $lang["home_button_resultmessage"];?></p>
+					<select id="graphChange" onchange="graphChange();">
+						<option value="co2"><?php echo $lang["button_co2emission"];?></option>
+						<option value="energy"><?php echo $lang["button_firstenergy"];?></option>
+						<option value="money"><?php echo $lang["button_energyfee"];?></option>
+					</select>
+					<div id="graph"></div>
+					<div id="average"></div>
+				</div>
+				
+				<div class="result" id="r2">
+				</div>
 
-		<div class="page" id="p5">
-			<p><?php echo $lang["button_pagemessage"];?></p>
-			<div id="pagelist">
+				<div class="result" id="r3">
+					<div id="graphMonthly"></div>
+				</div>
+				
+				<div class="result" id="r4">
+					<div id="cons"></div>
+				</div>
+
+				<div class="result" id="r5">
+					<p><?php echo $lang["home_button_measuremessage"];?></p>
+					<div id="measure"></div>
+					<div style="text-align:right;">
+						<span style='color:blue;cursor:pointer;' onclick="over15show();" onkeypress="over15show();" tabindex=0>[<?php echo $lang["button_showall"];?>]</span>
+					</div>
+				</div>
+				
+				<span class="next" id="mr1" onclick="resultChange('r1');" onkeypress="resultChange('r1');" tabindex=0><?php echo $lang["home_button_average"];?></span>
+				<span class="next" id="mr3" onclick="resultChange('r3');" onkeypress="resultChange('r3');" tabindex=0><?php echo $lang["home_button_monthly"];?></span>
+				<span class="next" id="mr5" onclick="resultChange('r5');" onkeypress="resultChange('r5');" tabindex=0><?php echo $lang["home_button_measure"];?></span>
 			</div>
-			<span class="next" onclick="modeChange('m4');"><?php echo $lang["button_input"];?></span>
-			<span class="next" onclick="modeChange('m2');"><?php echo $lang["button_queslist"];?></span>
-			<span class="next" onclick="modeChange('m3');"><?php echo $lang["button_calcresult"];?></span>
-		</div>
-		
-		<div class="page" id="p6">
-			<div id="inDemandSumup"></div>
-			<span class="next" onclick="modeChange('m8');">デマンド結果をみる</span>
-		</div>
-		
-		<div class="page" id="p7">
-			<div id="inDemandLog"></div>
-			<span class="next" onclick="modeChange('m9');">デマンドグラフをみる</span>
-		</div>
-		
-		<div class="page" id="p8">
-			<div id="graphDemandSumup"></div>
-			<span class="next" onclick="modeChange('m6');">機器入力</span>
-			<span class="next" onclick="modeChange('m7');">デマンド入力</span>
-		</div>
-		
-		<div class="page" id="p9">
-			<div id="graphDemandLog"></div>
-			<span class="next" onclick="modeChange('m6');">機器入力</span>
-			<span class="next" onclick="modeChange('m7');">デマンド入力</span>
-		</div>
-		
-		<div class="page" id="p10">
-			<p><?php echo $opendate;?></p>
-			<?php
-			include "language/" .$languageMode . "_about.html";
-			?>
-			<span class="next" onclick="modeChange('m2'); return false;"><?php echo $lang["button_back"];?></span>
-		</div>
+			
+			<div class="page" id="p4">
+				<h2 class="constitle"></h2>
+				<div id="quescontents" ></div>
+				<hr>
+				<span class="next" onclick="quesone_prev();" onkeypress="quesone_prev();" tabindex=0><?php echo $lang["button_prev"];?></span>
+				<span class="next" onclick="quesone_next();" onkeypress="quesone_next();" tabindex=0><?php echo $lang["button_next"];?></span>
+				<span class="next" onclick="modeChange('m2');" onkeypress="modeChange('m2');" tabindex=0><?php echo $lang["button_queslist"];?></span>
+				<span class="next" onclick="modeChange('m3');" onkeypress="modeChange('m3');" tabindex=0><?php echo $lang["button_calcresult"];?></span>
+			</div>
+
+			<div class="page" id="p5">
+				<p><?php echo $lang["button_pagemessage"];?></p>
+				<div id="pagelist">
+				</div>
+				<span class="next" onclick="modeChange('m4');" onkeypress="modeChange('m4');" tabindex=0><?php echo $lang["button_input"];?></span>
+				<span class="next" onclick="modeChange('m2');" onkeypress="modeChange('m2');" tabindex=0><?php echo $lang["button_queslist"];?></span>
+				<span class="next" onclick="modeChange('m3');" onkeypress="modeChange('m3');" tabindex=0><?php echo $lang["button_calcresult"];?></span>
+			</div>
+			
+			<div class="page" id="p6">
+				<div id="inDemandSumup"></div>
+				<span class="next" onclick="modeChange('m8');" onkeypress="modeChange('m8');" tabindex=0>デマンド結果をみる</span>
+			</div>
+			
+			<div class="page" id="p7">
+				<div id="inDemandLog"></div>
+				<span class="next" onclick="modeChange('m9');" onkeypress="modeChange('m9');" tabindex=0>デマンドグラフをみる</span>
+			</div>
+			
+			<div class="page" id="p8">
+				<div id="graphDemandSumup"></div>
+				<span class="next" onclick="modeChange('m6');" onkeypress="modeChange('m6');" tabindex=0>機器入力</span>
+				<span class="next" onclick="modeChange('m7');" onkeypress="modeChange('m7');" tabindex=0>デマンド入力</span>
+			</div>
+			
+			<div class="page" id="p9">
+				<div id="graphDemandLog"></div>
+				<span class="next" onclick="modeChange('m6');" onkeypress="modeChange('m6');" tabindex=0>機器入力</span>
+				<span class="next" onclick="modeChange('m7');" onkeypress="modeChange('m7');" tabindex=0>デマンド入力</span>
+			</div>
+			
+			<div class="page" id="p10">
+				<p><?php echo $opendate;?></p>
+				<?php
+				include $lang["d6folder"]. "/view/" .$languageMode . "_about.html";
+				?>
+				<span class="next" onclick="modeChange('m2'); return false;" onkeypress="modeChange('m2'); return false;" tabindex=0><?php echo $lang["button_back"];?></span>
+			</div>
 				
 		</div>
 	</div>

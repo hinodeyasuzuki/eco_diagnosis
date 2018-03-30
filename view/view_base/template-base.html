@@ -14,18 +14,8 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link href="view/common.css" rel="stylesheet" type="text/css" />
 	<link href="view/view_base/layout-base.css" rel="stylesheet" type="text/css" />
-<?php
-	if ( !$oneAreaRelease ) {
-?>
-	<link rel="alternate" hreflang="ja" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=ja&v=0" />
-	<link rel="alternate" hreflang="en" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=en&v=0" />
-	<link rel="alternate" hreflang="zh" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=zh&v=0" />
-	<link rel="alternate" hreflang="fr" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=fr&v=0" />
-<?php
-	}
-?>
+	<?php echo $alternate ?>
 	<title><?php echo $title;?></title>
-
   </head>
 
   <body>
@@ -58,21 +48,24 @@
 -->
 		</div>
 
-		
-		<div style="text-align:right;">
-			<p>
-				<?php echo $opendate;?>
-				<a href="http://www.hinodeya-ecolife.com/">Hinodeya Institute for Ecolife co.ltd.</a>
-				<?php echo $lang['header_attension'];?>
-			</p>
+			<div id="header_attension">
+				<p>
+					<?php echo $opendate;?>
+					<a href="http://www.hinodeya-ecolife.com/">Hinodeya Institute for Ecolife co.ltd.</a>
+					<?php echo $lang['header_attension'];?>
+				</p>
+			</div>
 		</div>
 
 		
 		<div class="preloader">
 			<p>now loading diagnosis system</p>
 		</div>
-	
-	
+		
+		<div id="top" style="display:none">
+			<?php include $lang["d6folder"]. "/view/" .$languageMode . "_top.html";?>
+		</div>
+		
 		<div id="divco2">
 			<ul id="tab">
 			</ul>
@@ -98,8 +91,9 @@
 				<div style="text-align:right;">
 					<span style='color:blue;cursor:pointer;' onclick="over15show();">[<?php echo $lang["button_showall"];?>]</span>
 				</div>
-			<p id="totalReduceComment"></p>
+				<p id="totalReduceComment"></p>
 			</div>	
+			
 		</div>
 
 		
