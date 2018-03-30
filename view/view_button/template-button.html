@@ -13,17 +13,7 @@
 	<meta name="viewport" content="target-densitydpi=device-dpi, width=320, initial-scale=1.0, user-scalable=yes">
 	<link href="view/common.css" rel="stylesheet" type="text/css" />
 	<link href="view/view_button/layout-button.css" rel="stylesheet" type="text/css" />
-<?php
-	if ( !$oneAreaRelease ) {
-?>
-	<link rel="alternate" hreflang="ja" href="./?lang=ja&v=1" />
-	<link rel="alternate" hreflang="en" href="./?lang=en&v=1" />
-	<link rel="alternate" hreflang="zh" href="./?lang=zh&v=1" />
-	<link rel="alternate" hreflang="fr" href="./?lang=fr&v=1" />
-<?php
-	}
-?>
-
+	<?php echo $alternate ?>
 	<title><?php echo $title;?></title>
 
   </head>

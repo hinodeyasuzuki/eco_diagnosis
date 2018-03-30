@@ -12,18 +12,8 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="target-densitydpi=device-dpi, width=320, initial-scale=1.0, user-scalable=yes">
 	<link href="view/common.css" rel="stylesheet" type="text/css" />
-<?php
-	if ( !$oneAreaRelease ) {
-?>
-	<link rel="alternate" hreflang="ja" href="./?lang=ja&v=4" />
-	<link rel="alternate" hreflang="en" href="./?lang=en&v=4" />
-	<link rel="alternate" hreflang="zh" href="./?lang=zh&v=4" />
-	<link rel="alternate" hreflang="fr" href="./?lang=fr&v=4" />
-<?php
-	}
-?>
+	<?php echo $alternate ?>
 	<title><?php echo $title . $lang['home_easy_top_button_about'];?></title>
-
   </head>
 
   <body>
@@ -36,12 +26,9 @@
 		
 
 		<div id="about">
-			<?php
-			include $lang["d6folder"]. "/view/" .$languageMode . "_about.html";
-			?>
+			<?php include $lang["d6folder"]. "/view/" .$languageMode . "_about.html"; ?>
 			<div align="right"><span class="button" onclick="window.open('about:blank','_self').close()" onkeypress="window.open('about:blank','_self').close();" tabindex=0><?php echo $lang['button_close']; ?></span></div>
 		</div>
-
 		
 		<div id="footer">
 			<p>
@@ -49,9 +36,8 @@
 				<a href="http://www.hinodeya-ecolife.com/">Hinodeya Institute for Ecolife co.ltd.</a>
 			</p>
 		</div>
-<?php
-	echo $jsgoogle_analytics;
-?>
+
+<?php echo $jsgoogle_analytics; ?>
 
   </body>
 </html>

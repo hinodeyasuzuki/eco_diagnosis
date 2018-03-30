@@ -393,6 +393,14 @@ div#modal-contents img {
 }
 
 
+.dimple-axis-y .dimple-custom-gridline, .dimple-axis-y .dimple-custom-axis-line{
+  display: none ;
+}
+
+.dimple-axis-y{
+	transform:translate(65,0) !important;
+}
+
 /* printer */
 @media only print {
 	span.button {

@@ -11,25 +11,15 @@
 ?><!DOCTYPE html>
 <html lang="<?php echo $languageMode; ?>">
   <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<link href="view/common.css" rel="stylesheet" type="text/css" />
 	<link href="view/view_focus/layout-focus.css" rel="stylesheet" type="text/css" />
-<?php
-	if ( !$oneAreaRelease ) {
-?>
-	<link rel="alternate" hreflang="ja" href="./?lang=ja&v=2" />
-	<link rel="alternate" hreflang="en" href="./?lang=en&v=2" />
-	<link rel="alternate" hreflang="zh" href="./?lang=zh&v=2" />
-	<link rel="alternate" hreflang="fr" href="./?lang=fr&v=2" />
-<?php
-	}
-?>
+	<?php echo $alternate ?>
 	<title><?php echo $title;?></title>
 
   </head>
 
   <body>
-	<span id="header"></span>
 	<div id="leanModalDialog">
 		<input type="button" class="modal_close" value="<?php echo $lang['button_back'];?>">
 		<div id="modal-contents"></div>
@@ -37,9 +27,12 @@
 	
 	<div class="contents">
 
-		<div data-intro="<?php echo $lang['intro1'];?>" data-step="1">
-		<h1><?php echo $title;?>　<?php echo $lang['home_focus_title_after'];?></h1>
-
+		<div id="header">
+			<div data-intro="<?php echo $lang['intro1'];?>" data-step="1">
+				<h1><?php echo $title;?>　<?php echo $lang['home_focus_title_after'];?></h1>
+			</div>
+		</div>
+		
 		<div id="headerMenu">
 			<span class="button inmode selected" id="m2" onclick="modeChange('m2');" onkeypress="modeChange('m2');" tabindex=0><?php echo $lang['button_diagnosis'];?></span>
 			<span class="button" id="btnsave" onclick="dataSave();" onkeypress="dataSave();" tabindex=0 data-intro="<?php echo $lang['intro7'];?>" data-step="7"><?php echo $lang['button_save'];?></span>
@@ -48,9 +41,8 @@
 			<a class="button inmode" href="./?lang=<?php echo $languageMode; ?>&v=4" target="_blank"><?php echo $lang['button_about'];?></a>
 			<span class="button inmode" onclick="saveandgo();" onkeypress="saveandgo();" tabindex=0 data-intro="<?php echo $lang['intro8'];?>" data-step="8"><?php echo $lang['button_fullversion'];?></span>
 		</div>
-		</div>
 
-		<div style="text-align:right;">
+		<div id="header_attension">
 			<p>
 				<?php echo $opendate;?>
 				<a href="http://www.hinodeya-ecolife.com">Hinodeya Institute for Ecolife co.ltd.</a>

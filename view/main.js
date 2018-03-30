@@ -97,6 +97,14 @@ onloadStartParamsSet = function(param){
 	return param;
 };
 
+// enable to use worker in local environment
+var newWorker = function(relativePath) {
+  try {
+    return newWorkerViaBlob(relativePath);
+  } catch (e) {
+    return new Worker(relativePath);
+  }
+};
 
 // initialize after html and scripts are loaded ========================================
 $(document).ready(function(){
@@ -108,19 +116,38 @@ $(document).ready(function(){
 	
 	//language setting. function defined in createpage.js
 	languageset();	
-	
+
 	// check web-worker
 	if ( useWorker && window.Worker) {
-		worker = new Worker( includejs );
+		try {
+			worker = new newWorker( includejs );
 
-		// call back by web-worker
-		worker.onmessage = function (event) {
-			getCalcResult( event.data.command, event.data.result );
-		};
+			// call back by web-worker
+			worker.onmessage = function (event) {
+				getCalcResult( event.data.command, event.data.result );
+			};
 
-		worker.addEventListener=("error",function(event){
-			_output.textContent = event.data;
-		},false);
+			worker.addEventListener=("error",function(event){
+				_output.textContent = event.data;
+			},false);
+			
+		} catch(e) {
+			//no web-worker, in case of local environment
+			useWorker = false;
+			includejs = " [use each js] ";
+			
+			var script = document.createElement('script');
+			script.type = 'text/javascript';
+			script.src = includemincore;
+			document.getElementsByTagName('head')[0].appendChild(script);
+			
+			var script2 = document.createElement('script');
+			script2.type = 'text/javascript';
+			script2.src = includeminlocalize;
+			window.setTimeout( function() {document.getElementsByTagName('head')[0].appendChild(script2); }, 100 );
+			
+			window.setTimeout( function() { startCalc( "start", param ) }, 1000 );
+		}
 
 	} else {
 		//no web-worker
@@ -155,7 +182,9 @@ $(document).ready(function(){
 	if (debugMode) console.log(param);
 	
 	//initialize d6
-	startCalc( "start", param );
+	if ( useWorker || typeof(D6) !="undefined") {
+		startCalc( "start", param );
+	}
 
 });
 

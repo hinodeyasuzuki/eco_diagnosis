@@ -87,7 +87,6 @@ $countryList["cn"] = "CN";
 $countryList["zh"] = "CN";
 $countryList["en"] = "JP";
 $countryList["fr"] = "FR";
-$countryList["zz"] = "ZZ";
 
 if (! isset($countryList[$languageMode]) ) {
 	//default setting
@@ -123,6 +122,15 @@ $lang["energyunitperyear"] = $lang['energyunit'] .'/' . $lang['yearunit'];
 $lang["energyunitpermonth"] = $lang['energyunit'] .'/' . $lang['monthunit'];
 
 
+//alternate
+$alternate = "";
+if ( !$oneAreaRelease ) {
+	foreach ( $countryList as $code => $val  ){
+		$alternate .= "\t<link rel='alternate' hreflang='".$code."' href='./?lang=".$code.
+				"&v=".$dispMode.
+				( $targetMode==2 ? "&t=2" : "" ) . "' />\n";
+	}
+}
 
 /*
 //pickup javascripts ==============================================================
@@ -182,6 +190,8 @@ $jssets = "<script>var targetMode=" . $targetMode
 			. ";var hidePrice='" . $hidePrice . "'" 
 			. ";var includeminjs='" . $includeminjs_worker . "'"
 			. ";var includesumjs='" . $includesumjs_worker . "'"
+			. ";var includemincore='" . $includemincorejs . "'"
+			. ";var includeminlocalize='" . $includeminjs_direct . "'"
 			. ";var lang={};\n" ;
 foreach ( $lang as $param => $value ) {
 	//copy Language set to javascript with easy encode

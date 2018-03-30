@@ -79,6 +79,7 @@ function graphItemizeCommon( ret, targetname ) {
 		delete ret.data[c][ret.yaxis];
 	}
 	var chart = new dimple.chart(svg, ret.data);
+	chart.customClassList.axisLine = 'dimple-custom-gridline';
 	var xAxis = chart.addCategoryAxis("x", captionCompare);
 	xAxis.fontSize = "13px";
 	xAxis.title = "";
@@ -99,10 +100,11 @@ function graphItemizeCommon( ret, targetname ) {
 
 	var yAxis = chart.addMeasureAxis("y",titles[ret.yaxis]);
 	yAxis.tickFormat = "";
-	yAxis.fontSize = "15px";
+	yAxis.textAlign = "left";
+	yAxis.fontSize = "12px";
 
 	//legend
-	var myLegend = chart.addLegend(wid-80, 10, 80, hei-40);
+	var myLegend = chart.addLegend(wid-100, 10, 90, hei-40);
 	myLegend.fontSize = "12px";
 	
 	// reverse regend: first, store a copy of the original _getEntries method.
@@ -114,7 +116,7 @@ function graphItemizeCommon( ret, targetname ) {
 	}
 
 	//graph size setting
-	chart.setBounds(80, 10, wid-170, hei-70);	//left margin, top margin, width, height
+	chart.setBounds(60, 10, wid-180, hei-70);	//left margin, top margin, width, height
 	var barAxis = chart.addSeries(captionItem, dimple.plot.bar);
 
 	for ( var cid in ret.clist ) {
@@ -187,7 +189,7 @@ function graphEnergy( averageData ) {
 	//y axis
 	var yAxis = chart.addMeasureAxis("y",lang.fee);
 	yAxis.tickFormat = "";
-	yAxis.fontSize = "15px";
+	yAxis.fontSize = "12px";
 	yAxis.title = "光熱費（円/月）";
 	
 	//legend
@@ -198,7 +200,7 @@ function graphEnergy( averageData ) {
 	chart.assignColor(lang.youcall, "orange");
 	chart.assignColor(lang.average, "green");
 
-	chart.setBounds(80, 10, wid-150, hei-70); //left padding, top padding, graph width, graph height
+	chart.setBounds(60, 10, wid-160, hei-70); //left padding, top padding, graph width, graph height
 	
     chart.addSeries("user", dimple.plot.bar);
     chart.draw();
@@ -240,7 +242,7 @@ function graphCO2averageCommon( averageData, target ) {
 	//y axis
 	var yAxis = chart.addMeasureAxis("y","CO2");
 	yAxis.tickFormat = "";
-	yAxis.fontSize = "15px";
+	yAxis.fontSize = "12px";
 	yAxis.title = "CO2排出量（kg/年）";
 	
 	//set color
@@ -310,13 +312,13 @@ function graphMonthly( ret ) {
 	
 	var yAxis = chart.addMeasureAxis("y",titles[ret.yaxis]);
 	yAxis.tickFormat = "";
-	yAxis.fontSize = "15px";
+	yAxis.fontSize = "12px";
 
 	//legend
-	var myLegend = chart.addLegend(wid-60, 10, 60, hei-40);
+	var myLegend = chart.addLegend(wid-70, 10, 70, hei-40);
 	myLegend.fontSize = "12px";
 
-	chart.setBounds(80, 10, wid-150, hei-70); //left padding, top padding, graph width, graph height
+	chart.setBounds(70, 10, wid-160, hei-70); //left padding, top padding, graph width, graph height
 	var barAxis = chart.addSeries(captionEnergy, dimple.plot.bar);
 
 	//color
