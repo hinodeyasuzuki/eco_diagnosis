@@ -62,7 +62,7 @@ base,disp		d6共通  ※dispの言語依存を除く
 				cn	
 
 
-■言語ファイルを分ける
+■言語ファイルを分ける OK 180330
 
 d6
   home_common.min.js
@@ -78,9 +78,19 @@ location_JP
   office.min.js
 
 
-■開発環境をnpm にする
+■開発環境をnpm にする  OK 180330
 　node-module 以外は作成。これだけgitの対象外とする。
 　php-packerは webpackで実行（nodeからインストール）
-  vue.jsによる開発とする。
 　jqueryは別途読み込み（パッケージ指定）。
+
+■複雑な処理ロジックを、main側にもつ
+
+
+■vueの採用　TODO
+　全部やると大変
+　language, 表示を指定してvueか？
+
+■i18nの使用
+　国際言語設定
+
 

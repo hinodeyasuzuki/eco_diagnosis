@@ -27,19 +27,6 @@ a.button {
 }
 
 
-#contents {
-	margin: 0 auto;
-	display:table;
-	width: 100%;
-
-}
-
-#footer {
-	margin: 0 0 0 0;
-	background: #0f5298;
-	height:40px;
-}
-
 
 /* ============= 左右 ===================== */
 div.leftmenu {
@@ -72,20 +59,6 @@ div#measure {
 
 
 /***ボタン*******/
-.button {
-	padding:2px;
-	padding-left:6px;
-	padding-right:6px;
-	margin:0px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	font-weight:600;
-	cursor: pointer;
-	color:#000;
-	background:#cbf8ff;
-	white-space: nowrap;
-	box-shadow:2px 2px 2px #555;
-}
 
 .large {
 	display:inline-block;

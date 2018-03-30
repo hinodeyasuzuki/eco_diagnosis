@@ -52,11 +52,27 @@ div.page {
 	top:-10px;
 }
 
+span.next a{
+	text-decoration:none;
+	color:#000;
+}
+
 .menubutton, span.next{
 	padding-top:2px;
 	padding-bottom:2px;
 	line-height:1.6em;	
 	background-color:#8bffc8;
+}
+
+.menubutton:hover,.menubutton:focus,
+span.next:hover,span.next:focus{
+	color:#fafafa;
+	background:#009800!important;
+}
+
+
+span.next:hover a,span.next:focus a{
+	color:#fff;
 }
 
 .large {

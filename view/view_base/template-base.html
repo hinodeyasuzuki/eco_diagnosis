@@ -17,10 +17,10 @@
 <?php
 	if ( !$oneAreaRelease ) {
 ?>
-	<link rel="alternate" hreflang="ja" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=ja&v=0" />
-	<link rel="alternate" hreflang="en" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=en&v=0" />
-	<link rel="alternate" hreflang="zh" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=zh&v=0" />
-	<link rel="alternate" hreflang="fr" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=fr&v=0" />
+	<link rel="alternate" hreflang="ja" href="./?lang=ja&v=0" />
+	<link rel="alternate" hreflang="en" href="./?lang=en&v=0" />
+	<link rel="alternate" hreflang="zh" href="./?lang=zh&v=0" />
+	<link rel="alternate" hreflang="fr" href="./?lang=fr&v=0" />
 <?php
 	}
 ?>
@@ -30,50 +30,56 @@
   </head>
 
   <body>
-	<span id="header"></span>
+	
 	<div id="leanModalDialog">
-		<input type="button" class="modal_close" value="<?php echo $lang["button_back"];?>">
+		<input type="button" class="modal_close" value="<?php echo $lang["button_back"];?>" tabindex=0>
 		<div id="modal-contents"></div>
 	</div>
 	
 	<div class="contents">
 
-		<h1><?php echo $title;?></h1>
+		<div id="header">
+			<h1><?php echo $title;?></h1>
+		</span>
 
 		<div id="headerMenu">
-			<span class="button inmode selected" id="m1" onclick="modeChange('m1');"><?php echo $lang["button_input"];?></span>
-			<span class="button inmode" id="m2" onclick="modeChange('m2');"><?php echo $lang["button_measures"];?></span>
+			<span class="button inmode selected" id="m1" onclick="modeChange('m1');" onkeypress="modeChange('m1');" tabindex=0><?php echo $lang["button_input"];?></span>
+			<span class="button inmode" id="m2" onclick="modeChange('m2');" onkeypress="modeChange('m2');" tabindex=0><?php echo $lang["button_measures"];?></span>
 			
-			<?php if ( $targetMode == 2 ){ ?>
-				<span class='button inmode' id='m3' onclick="modeChange('m3');"><?php echo $lang["button_demand"];?></span>
-			<?php } ?>
+		<?php if ( $targetMode == 2 ){ ?>
+			<span class='button inmode' id='m3' onclick="modeChange('m3');" onkeypress="modeChange('m3');" tabindex=0><?php echo $lang["button_demand"];?></span>
+		<?php } ?>
 			&nbsp;&nbsp;
 			
-			<span class="button" id="btnsave" onclick="dataSave();"><?php echo $lang["button_save"];?></span>
-			<span class="button" id="btnclear" onclick="dataClear();"><?php echo $lang["button_clear"];?></span>
+			<span class="button" id="btnsave"  onclick="dataSave();"  onkeypress="dataSave();"  tabindex=0><?php echo $lang["button_save"];?></span>
+			<span class="button" id="btnclear" onclick="dataClear();" onkeypress="dataClear();" tabindex=0><?php echo $lang["button_clear"];?></span>
 			&nbsp;
-			<a class="button inmode" href="./?lang=<?php echo $languageMode; ?>&v=4" target="_blank"><?php echo $lang['button_about'];?></a>
+			<a class="button inmode" href="./?lang=<?php echo $languageMode; ?>&v=4" target="_blank" tabindex=0><?php echo $lang['button_about'];?></a>
 <!--
 			<span class="button" id="btnsavenew"><?php echo $lang["button_savenew"];?></span>
 			<span class="button" id="btnopen"><?php echo $lang["button_open"];?></span>
 -->
 		</div>
 
-		
-		<div style="text-align:right;">
+		<div id="header_attension">
 			<p>
 				<?php echo $opendate;?>
 				<a href="http://www.hinodeya-ecolife.com/">Hinodeya Institute for Ecolife co.ltd.</a>
 				<?php echo $lang['header_attension'];?>
 			</p>
 		</div>
-
 		
+
 		<div class="preloader">
 			<p>now loading diagnosis system</p>
 		</div>
-	
-	
+		
+		<div id="top" style="display:none">
+			<?php
+			include $lang["d6folder"]. "/view/" .$languageMode . "_top.html";
+			?>
+		</div>
+		
 		<div id="divco2">
 			<ul id="tab">
 			</ul>
@@ -97,7 +103,7 @@
 			<div class="mesmenu" style="display:none">
 				<div id="measure"></div>
 				<div style="text-align:right;">
-					<span style='color:blue;cursor:pointer;' onclick="over15show();">[<?php echo $lang["button_showall"];?>]</span>
+					<span style='color:blue;cursor:pointer;' onclick="over15show();" onkeydown="over15show();" tabindex=0>[<?php echo $lang["button_showall"];?>]</span>
 				</div>
 			<p id="totalReduceComment"></p>
 			</div>	
@@ -114,13 +120,7 @@
 				<div id="graphDemandLog"></div>
 			</div>
 		</div>
-
 		
-		<div id="top" style="display:none">
-			<?php
-			include $lang["d6folder"]. "/view/" .$languageMode . "_top.html";
-			?>
-		</div>
 	</div>
 
 	<?php

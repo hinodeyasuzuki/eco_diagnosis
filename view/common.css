@@ -17,22 +17,8 @@ body {
 	margin:1px;
 }
 
-p{
-	line-height:1.2em;
-	margin:8px;
-}
 
-.info p {
-	line-height:16px;
-}
-
-a:visited{
-	color:#00f;
-}
-
-a.button {
-	color:#000;
-	text-decoration: none;
+#header{
 }
 
 #headerMenu{
@@ -40,18 +26,21 @@ a.button {
 	text-align:right;
 }
 
+#header_attension{
+	text-align:right;
+}
+
 #contents {
 	margin: 0 auto;
 	display:table;
 	width: 100%;
-
 }
 
 #footer {
-	margin: 0 0 0 0;
-	background: #0f5298;
-	height:40px;
+	background: #fff;
+	text-align:right;
 }
+
 
 div.preloader{
 	text-align:center;
@@ -63,6 +52,13 @@ div.preloader p{
 	font-size:1.5em;
 }
 
+div.topmessage{
+	margin-left:5%;
+	margin-right:5%;
+	padding:10px;
+	font-size:1.4em;
+	background-color:LightCyan;
+}
 /*--common----------------------------------------------------------*/
 h1 {
 	margin:0px;
@@ -88,6 +84,15 @@ h3 {
 	background-color:#ecffec;
 	border-left: 6px solid #afa;
 
+}
+
+p{
+	line-height:1.2em;
+	margin:8px;
+}
+
+.info p {
+	line-height:16px;
 }
 
 table {
@@ -122,6 +127,19 @@ div.subtitle {
 
 
 /*** buttons *******/
+a:visited{
+	color:#00f;
+}
+
+a:hover,a:focus {
+	color:#5a9aba;
+}
+
+a.button {
+	color:#000;
+	text-decoration: none;
+}
+
 .button {
 	padding:2px;
 	padding-left:6px;
@@ -147,8 +165,16 @@ div.subtitle {
 	font-size:20px;
 }
 
-
-.button:hover {
+.button_top {
+	width:60%;
+	margin:20px 20%;
+	text-align:center;
+	height:60px;
+	background-color:SpringGreen;
+	padding:20px;
+	font-size:1.8em;
+}
+.button:hover,.button:focus {
 	color:#fafafa;
 	background:#009800!important;
 }
@@ -159,9 +185,6 @@ div.subtitle {
 
 .colorback {
 	background-color:#f8fbcf;
-}
-a:hover {
-	color:#5a9aba;
 }
 
 span.selected {

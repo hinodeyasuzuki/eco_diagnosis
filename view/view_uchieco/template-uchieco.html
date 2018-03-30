@@ -16,10 +16,10 @@
 <?php
 	if ( !$oneAreaRelease ) {
 ?>
-	<link rel="alternate" hreflang="ja" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=ja&v=8" />
-	<link rel="alternate" hreflang="en" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=en&v=8" />
-	<link rel="alternate" hreflang="zh" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=zh&v=8" />
-	<link rel="alternate" hreflang="fr" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=fr&v=8" />
+	<link rel="alternate" hreflang="ja" href="./?lang=ja&v=8" />
+	<link rel="alternate" hreflang="en" href="./?lang=en&v=8" />
+	<link rel="alternate" hreflang="zh" href="./?lang=zh&v=8" />
+	<link rel="alternate" hreflang="fr" href="./?lang=fr&v=8" />
 <?php
 	}
 ?>
@@ -35,11 +35,11 @@
 			<h1><?php echo $lang["home_uchieco_title"];?></h1>
 
 			<div align="center" class="step">
-				<span id="s4" onclick="modeChange('m4');" tabindex=0>1質問</span>>
-				<span id="s5" onclick="modeChange('m5');" tabindex=0>2比較</span>>
-				<span id="s6" onclick="modeChange('m6');" tabindex=0>3目標</span>>
-				<span id="s7" onclick="modeChange('m7');" tabindex=0>4内訳</span>
-				<span id="s8" onclick="modeChange('m8');" tabindex=0>5対策</span>
+				<span id="s4" onclick="modeChange('m4');" onkeypress="modeChange('m4');" tabindex=0>1質問</span>>
+				<span id="s5" onclick="modeChange('m5');" onkeypress="modeChange('m4');" tabindex=0>2比較</span>>
+				<span id="s6" onclick="modeChange('m6');" onkeypress="modeChange('m4');" tabindex=0>3目標</span>>
+				<span id="s7" onclick="modeChange('m7');" onkeypress="modeChange('m4');" tabindex=0>4内訳</span>
+				<span id="s8" onclick="modeChange('m8');" onkeypress="modeChange('m4');" tabindex=0>5対策</span>
 			</div>
 
 			<div id="leanModalDialog" style="float:left;">
@@ -56,15 +56,15 @@
 		<div class="page" id="p1" >						
 			<h2>ようこそ、うちエコキッズWEB簡易チェックへ</h2>
 			<p>家の「どこから」「どれだけ」CO2が出ているかを調べることで、効果的な削減プランを明らかにします。</p>
-			<span class="next" onclick="modeChange('m2');" tabindex=0>はじめる</span>
-			<span class="next" onclick="modeChange('m10');" tabindex=0>診断の流れをみる</span>
+			<span class="next" onclick="modeChange('m2');" onkeypress="modeChange('m4');" tabindex=0>はじめる</span>
+			<span class="next" onclick="modeChange('m10');" onkeypress="modeChange('m4');" tabindex=0>診断の流れをみる</span>
 		</div>
 
 		<div class="page" id="p2" >						
 			<h2>回答のしかた</h2>
 			<p>これから家族の人数・光熱費・家電の使用状況・ライフスタイルなど、24項目の質問をします。もっともあてはまる選択肢のボタンを押して、回答してください。わからない場合には、質問を飛ばしても構いません。</p>
 			<p>ご回答後、診断結果が表示されます。</p>
-			<span class="next" onclick="modeChange('m3');"  tabindex=0>質問に進む</span>
+			<span class="next" onclick="modeChange('m3');" onkeypress="modeChange('m4');"  tabindex=0>質問に進む</span>
 		</div>
 
 		<div class="page" id="p3">
@@ -72,19 +72,19 @@
 			<h2 class="constitle"></h2>
 			<div id="quescontents" ></div>
 			<hr>
-			<span class="next" onclick="quesone_prev();" tabindex=0><?php echo $lang["button_prev"];?></span>
-			<span class="next" onclick="quesone_next();" tabindex=0><?php echo $lang["button_next"];?></span>
-			<span class="next" onclick="modeChange('m4');" tabindex=0><?php echo $lang["button_queslist"];?></span>
+			<span class="next" onclick="quesone_prev();" onkeypress="quesone_prev();" tabindex=0><?php echo $lang["button_prev"];?></span>
+			<span class="next" onclick="quesone_next();" onkeypress="quesone_next();" tabindex=0><?php echo $lang["button_next"];?></span>
+			<span class="next" onclick="modeChange('m4');" onkeypress="modeChange('m4');" tabindex=0><?php echo $lang["button_queslist"];?></span>
 		</div>
 
 		<div class="page" id="p4">
 			<!--質問一覧-->
 			<h2 class="constitle"></h2>
 			<p>これらの質問に回答することで、家庭の詳しい分析ができます。</p>
-			<span class="next" onclick="modeChange('m3');" tabindex=0>前へ（個別質問）</span>
-			<span class="next" onclick="modeChange('m5');" tabindex=0>次へ（平均比較）</span>
+			<span class="next" onclick="modeChange('m3');" onkeypress="modeChange('m3');" tabindex=0>前へ（個別質問）</span>
+			<span class="next" onclick="modeChange('m5');" onkeypress="modeChange('m3');" tabindex=0>次へ（平均比較）</span>
 			<ul id='tabcontents'></ul>
-			<span class="next" onclick="modeChange('m5');" tabindex=0>次へ（平均比較）</span>
+			<span class="next" onclick="modeChange('m5');" onkeypress="modeChange('m3');" tabindex=0>次へ（平均比較）</span>
 		</div>
 			
 		<div class="page" id="p5">
@@ -92,7 +92,7 @@
 			<p>光熱費とCO2排出量を平均値と比較してみましょう。何が多い/少ないでしょうか。光熱費は1ヶ月の平均金額（円）、CO2排出量は年間の量（kg）です。</p>
 			<div class="sm100" style="width:65%;float:left;"><div id="graphEnergy"></div></div>
 			<div class="sm100" style="width:30%;float:left;"><div id="graphCO2average"></div></div>
-			<span class="next" onclick="modeChange('m6');">CO2削減目標</span>
+			<span class="next" onclick="modeChange('m6');" onkeypress="modeChange('m3');">CO2削減目標</span>
 			<div style="clear:both"></div>
 		</div>
 		
@@ -110,22 +110,22 @@
 				<td>CO2排出量</td><td>あなたの現状からの削減</td>
 			</tr>
 			<tr>
-				<td><span class="next" onclick="modeChange('m7');" tabindex=0>2015年レベル</span><br>2015年レベルでは地球温暖化を止めることはできません</td>
+				<td><span class="next" onclick="modeChange('m7');" onkeypress="modeChange('m3');" tabindex=0>2015年レベル</span><br>2015年レベルでは地球温暖化を止めることはできません</td>
 				<td><span class="bold" id="co2-0"></span>kg</td>
 				<td><span class="red" id="co2-0rate"></span></td>
 			</tr>
 			<tr>
-				<td><span class="next" onclick="modeChange('m7');" tabindex=0>26%減</span><br>日本の2020年の削減目標です</td>
+				<td><span class="next" onclick="modeChange('m7');" onclick="modeChange('m3');" tabindex=0>26%減</span><br>日本の2020年の削減目標です</td>
 				<td><span class="bold" id="co2-26"></span>kg</td>
 				<td><span class="red" id="co2-26rate"></span></td>
 			</tr>
 			<tr>
-				<td><span class="next" onclick="modeChange('m7');" tabindex=0>40%減</span><br>日本の2030年の削減目標です</td>
+				<td><span class="next" onclick="modeChange('m7');" onclick="modeChange('m3');" tabindex=0>40%減</span><br>日本の2030年の削減目標です</td>
 				<td><span class="bold" id="co2-40"></span>kg</td>
 				<td><span class="red" id="co2-40rate"></span></td>
 			</tr>
 			<tr>
-				<td><span class="next" onclick="modeChange('m7');" tabindex=0>80%減</span><br>日本の2050年の削減目標です</td>
+				<td><span class="next" onclick="modeChange('m7');" onkeypress="modeChange('m3');" tabindex=0>80%減</span><br>日本の2050年の削減目標です</td>
 				<td><span class="bold" id="co2-80"></span>kg</td>
 				<td><span class="red" id="co2-80rate"></span></td>
 			</tr>
@@ -143,7 +143,7 @@
 				<div id="graph2comment"></div>
 			</div>
 			<div class="sm100"  style="width:50%;float:left;"><div id="graph2"></div></div>
-			<span class="next" onclick="modeChange('m8');" tabindex=0>CO2削減対策と効果</span>
+			<span class="next" onclick="modeChange('m8');" onkeypress="modeChange('m3');" tabindex=0>CO2削減対策と効果</span>
 			<div style="clear:both"></div>
 		</div>
 
@@ -155,12 +155,12 @@
 
 			<div class="sm100" style="width:55%;float:left;">
 				<div class="life" style="text-align:left;">
-					<span id="L1" class="selected" onclick="changeLifeStyle('1');" tabindex=0>ライフスタイル</span>
-					<span id="L0" onclick="changeLifeStyle('0');" tabindex=0>機器導入</span>
+					<span id="L1" class="selected" onclick="changeLifeStyle('1');" onkeypress="changeLifeStyle('1');" tabindex=0>ライフスタイル</span>
+					<span id="L0" onclick="changeLifeStyle('0');" onkeypress="changeLifeStyle('0');" tabindex=0>機器導入</span>
 				</div>
 				<div id="measure"></div>
 			</div>
-			<span class="next" onclick="modeChange('m9');" tabindex=0>診断を終了</span>
+			<span class="next" onclick="modeChange('m9');" onkeypress="modeChange('m9');" tabindex=0>診断を終了</span>
 			<div style="clear:both"></div>
 		</div>
 		
@@ -178,7 +178,7 @@
 			<p>STEP5　CO2削減対策と効果</p>
 			<p>　CO2削減対策が示され、削減効果・対策支援情報を確認できます。</p>
 			</div>
-			<span class="next" onclick="modeChange('m1'); return false;" tabindex=0><?php echo $lang["button_back"];?></span>
+			<span class="next" onclick="modeChange('m1'); return false;" onkeypress="modeChange('m1'); return false;" tabindex=0><?php echo $lang["button_back"];?></span>
 		</div>
 				
 		</div>

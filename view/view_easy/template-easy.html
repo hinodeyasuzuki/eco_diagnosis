@@ -16,10 +16,10 @@
 <?php
 	if ( !$oneAreaRelease ) {
 ?>
-	<link rel="alternate" hreflang="ja" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=ja&v=3" />
-	<link rel="alternate" hreflang="en" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=en&v=3" />
-	<link rel="alternate" hreflang="zh" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=zh&v=3" />
-	<link rel="alternate" hreflang="fr" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=fr&v=3" />
+	<link rel="alternate" hreflang="ja" href="./?lang=ja&v=3" />
+	<link rel="alternate" hreflang="en" href="./?lang=en&v=3" />
+	<link rel="alternate" hreflang="zh" href="./?lang=zh&v=3" />
+	<link rel="alternate" hreflang="fr" href="./?lang=fr&v=3" />
 <?php
 	}
 ?>
@@ -30,7 +30,7 @@
 
   <body>
 	<div id="leanModalDialog" style="float:left;">
-		<input type="button" class="modal_close" value="<?php echo $lang['button_back'];?>">
+		<input type="button" class="modal_close" value="<?php echo $lang['button_back'];?>" tabindex=0>
 		<div id="modal-contents"></div>
 	</div>
 	
@@ -39,10 +39,10 @@
 		<div id="header">
 			<h1><?php echo $lang["home_easy_title"];?></h1>
 			<div align="center" id="step">
-				<span id="s1" onclick="modeChange('m5');">1<?php echo $lang['home_easy_step1'];?></span>>
-				<span id="s2" onclick="modeChange('m2');">2<?php echo $lang['home_easy_step2'];?></span>>
-				<span id="s3" onclick="modeChange('m3');">3<?php echo $lang['home_easy_step3'];?></span>>
-				<span id="s4" onclick="modeChange('m4');">4<?php echo $lang['home_easy_step4'];?></span>
+				<span id="s1" onclick="modeChange('m5');" onkeypress="modeChange('m5');" tabindex=0>1<?php echo $lang['home_easy_step1'];?></span>>
+				<span id="s2" onclick="modeChange('m2');" onkeypress="modeChange('m2');" tabindex=0>2<?php echo $lang['home_easy_step2'];?></span>>
+				<span id="s3" onclick="modeChange('m3');" onkeypress="modeChange('m3');" tabindex=0>3<?php echo $lang['home_easy_step3'];?></span>>
+				<span id="s4" onclick="modeChange('m4');" onkeypress="modeChange('m4');" tabindex=0>4<?php echo $lang['home_easy_step4'];?></span>
 			</div>
 		</div>
 
@@ -59,7 +59,7 @@
 
 			<p style="text-align:right;font-size:80%"><?php echo $lang['home_easy_top3sm'];?></p>
 			<div class="center">
-				<span class="next button large" onclick="modeChange('m5');"><?php echo $lang['home_easy_top_button_start'];?></span>
+				<span class="next button large" onclick="modeChange('m5');" onkeypress="modeChange('m5');" tabindex=0><?php echo $lang['home_easy_top_button_start'];?></span>
 			<a class="button inmode" href="./?lang=<?php echo $languageMode; ?>&v=4" target="_blank"><?php echo $lang['button_about'];?></a>
 			</div>
 		</div>
@@ -74,7 +74,7 @@
 			</div>
 
 			<div class="center">
-				<span class="next button large" onclick="modeChange('m2');">
+				<span class="next button large" onclick="modeChange('m2');" onkeypress="modeChange('m2');" tabindex=0>
 					<?php echo $lang['home_easy_p5_button_next'];?>
 				</span>
 			</div>
@@ -88,7 +88,7 @@
 			</div>
 
 			<div class="center">
-				<span class="next button large" onclick="modeChange('m3');">
+				<span class="next button large" onclick="modeChange('m3');" onkeypress="modeChange('m3');" tabindex=0>
 					<?php echo $lang['home_easy_p2_button_next'];?>
 				</span>
 			</div>
@@ -107,7 +107,7 @@
 			<p id="graphcomment"></p>
 
 			<div class="center" style="clear:both;">
-				<span class="next button large" onclick="modeChange('m4');">
+				<span class="next button large" onclick="modeChange('m4');"  onkeypress="modeChange('m4');" tabindex=0>
 					<?php echo $lang['home_easy_p3_button_next'];?>
 				</span>
 			</div>
@@ -121,7 +121,7 @@
 			</div>
 			
 			<div class="center">
-				<span id="mesnextbtn" class="next button large" onclick="measurenext();">
+				<span id="mesnextbtn" class="next button large" onclick="measurenext();" onkeypress="measurenext();" tabindex=0>
 					<?php echo $lang['home_easy_p4_button_next'];?>
 				</span><br>
 			</div>
@@ -137,17 +137,17 @@
 			<div id="lastbtns" class="center" style="display:none">
 			
 				<?php if ( isset($_GET["event"] )){ ?>
-					<span class="next button large" onclick="dataClear();modeChange('m5');">
+					<span class="next button large" onclick="dataClear();modeChange('m5');" onkeypress="dataClear();modeChange('m5');" tabindex=0>
 						<?php echo $lang['button_clear'] . " & " . $lang['button_back'];?>
 					</span><br>
 					
 				<?php } else { ?>
-					<span class="next button large" onclick="saveandgo();">
+					<span class="next button large" onclick="saveandgo();" onkeypress="saveandgo();" tabindex=0>
 						<?php echo $lang['home_easy_p4_button_next2'];?>
 					</span><br>
 					
 					<?php if ( $lang['home_easy_p4_button_next3'] != "" ) { ?>
-						<span class="next button large" onclick="location.href='http://label.eek.jp'">
+						<span class="next button large" onclick="location.href='http://label.eek.jp'" onkeypress="location.href='http://label.eek.jp'" tabindex=0>
 							<?php echo $lang['home_easy_p4_button_next3'];?>
 						</span>
 					<?php } ?>
@@ -157,7 +157,7 @@
 		</div>
 		
 		
-		<div align="right">
+		<div id="footer">
 			<p>
 				<?php echo $opendate;?>
 				<a href="http://www.hinodeya-ecolife.com/">Hinodeya Institute for Ecolife co.ltd.</a>

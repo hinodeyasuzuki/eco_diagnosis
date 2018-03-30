@@ -16,10 +16,10 @@
 <?php
 	if ( !$oneAreaRelease ) {
 ?>
-	<link rel="alternate" hreflang="ja" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=ja&v=5<?php echo ( $targetMode==2 ? '&t=2' : '' );?>" />
-	<link rel="alternate" hreflang="en" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=en&v=5<?php echo ( $targetMode==2 ? '&t=2' : '' ); ?>" />
-	<link rel="alternate" hreflang="zh" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=zh&v=5<?php echo ( $targetMode==2 ? '&t=2' : '' ); ?>" />
-	<link rel="alternate" hreflang="fr" href="http://www.hinodeya-ecolife.com/diagnosis/?lang=fr&v=5<?php echo ( $targetMode==2 ? '&t=2' : '' ); ?>" />
+	<link rel="alternate" hreflang="ja" href="./?lang=ja&v=5<?php echo ( $targetMode==2 ? '&t=2' : '' );?>" />
+	<link rel="alternate" hreflang="en" href="./?lang=en&v=5<?php echo ( $targetMode==2 ? '&t=2' : '' ); ?>" />
+	<link rel="alternate" hreflang="zh" href="./?lang=zh&v=5<?php echo ( $targetMode==2 ? '&t=2' : '' ); ?>" />
+	<link rel="alternate" hreflang="fr" href="./?lang=fr&v=5<?php echo ( $targetMode==2 ? '&t=2' : '' ); ?>" />
 <?php
 	}
 ?>
@@ -52,7 +52,7 @@
 			<div id="mescontents">
 			</div>
 			<div align="center" style="padding-top:20px;clear:both;">
-				<span class="button large" onclick="showList();"><?php echo $lang['button_showall']; ?></span>
+				<span class="button large" onclick="showList();" onkeypress="showList();" tabindex=0><?php echo $lang['button_showall']; ?></span>
 			</div>
 		</div>
 
