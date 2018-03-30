@@ -12,7 +12,6 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="target-densitydpi=device-dpi, width=320, initial-scale=1.0, user-scalable=yes">
 	<link href="view/common.css" rel="stylesheet" type="text/css" />
-<<<<<<< HEAD
 <?php
 	if ( !$oneAreaRelease ) {
 ?>
@@ -23,9 +22,7 @@
 <?php
 	}
 ?>
-=======
 	<?php echo $alternate ?>
->>>>>>> 8ae249d... template simplify
 	<title><?php echo $title . $lang['home_easy_top_button_about'];?></title>
   </head>
 
@@ -38,21 +35,11 @@
 		<div align="right"><span class="button" onclick="window.open('about:blank','_self').close();"><?php echo $lang['button_close']; ?></span></div>
 
 		<div id="about">
-<<<<<<< HEAD
-			<?php
-			include $lang["d6folder"]. "/view/" .$languageMode . "_about.html";
-			?>
-		</div>
-		<div align="right"><span class="button" onclick="window.open('about:blank','_self').close();"><?php echo $lang['button_close']; ?></span></div>
-
-		<div align="right">
-=======
 			<?php include $lang["d6folder"]. "/view/" .$languageMode . "_about.html"; ?>
 			<div align="right"><span class="button" onclick="window.open('about:blank','_self').close()" onkeypress="window.open('about:blank','_self').close();" tabindex=0><?php echo $lang['button_close']; ?></span></div>
 		</div>
 		
 		<div id="footer">
->>>>>>> 8ae249d... template simplify
 			<p>
 				<?php echo $opendate;?>
 				<a href="http://www.hinodeya-ecolife.com/">Hinodeya Institute for Ecolife co.ltd.</a>
