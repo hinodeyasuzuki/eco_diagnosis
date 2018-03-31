@@ -340,7 +340,7 @@ menuopen = function() {
 //modalclose() --------------------------------------------------
 //		close detail result of measure
 modalclose = function(){
-	$("#p3").show();
+	//$("#p3").show();
 	$("div#modal").hide();
 };
 

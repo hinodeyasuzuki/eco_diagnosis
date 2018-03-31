@@ -34,12 +34,12 @@
 		</div>
 		
 		<div id="headerMenu">
-			<span class="button inmode selected" id="m2" onclick="modeChange('m2');" onkeypress="modeChange('m2');" tabindex=0><?php echo $lang['button_diagnosis'];?></span>
-			<span class="button" id="btnsave" onclick="dataSave();" onkeypress="dataSave();" tabindex=0 data-intro="<?php echo $lang['intro7'];?>" data-step="7"><?php echo $lang['button_save'];?></span>
-			<span class="button" id="btnclear" onclick="dataClear();" onkeypress="dataClear();" tabindex=0><?php echo $lang['button_clear'];?></span>
+			<button class="button inmode selected" id="m2" onclick="modeChange('m2');" ><?php echo $lang['button_diagnosis'];?></button>
+			<button class="button" id="btnsave" onclick="dataSave();" data-intro="<?php echo $lang['intro7'];?>" data-step="7"><?php echo $lang['button_save'];?></button>
+			<button class="button" id="btnclear" onclick="dataClear();"><?php echo $lang['button_clear'];?></button>
 			&nbsp;
 			<a class="button inmode" href="./?lang=<?php echo $languageMode; ?>&v=4" target="_blank"><?php echo $lang['button_about'];?></a>
-			<span class="button inmode" onclick="saveandgo();" onkeypress="saveandgo();" tabindex=0 data-intro="<?php echo $lang['intro8'];?>" data-step="8"><?php echo $lang['button_fullversion'];?></span>
+			<button class="button inmode" onclick="saveandgo();" data-intro="<?php echo $lang['intro8'];?>" data-step="8"><?php echo $lang['button_fullversion'];?></button>
 		</div>
 
 		<div id="header_attension">
@@ -69,7 +69,7 @@
 			<div class="mesmenu">
 				<div id="measure" data-intro="<?php echo $lang['intro6'];?>" data-step="6"  data-position="left"></div>
 				<div style="text-align:right;">
-					<span style='color:blue;cursor:pointer;' onclick="over15show();" onkeypress="over15show();" tabindex=0>[<?php echo $lang['button_showall'];?>]</span>
+					<button style='color:blue;' onclick="over15show();">[<?php echo $lang['button_showall'];?>]</button>
 				</div>
 				<p id="totalReduceComment"></p>
 			</div>

@@ -25,16 +25,19 @@ div.page {
 
 
 /***ボタン*******/
-.menu span{
+.menu {
+	text-align:right;
+}
+.menu button{
 	display: block;
 	cursor: pointer;
-	text-align: right;
 	background-color:#eeeeee;
 	font-size:130%;
+	width:120px;
 	line-height:1.5em;
 }
 
-.menubutton, .button, span.next{
+.menubutton, button, button.next{
 	font-size:140%;
 	padding:6px;
 	padding-left:15px;
@@ -48,15 +51,30 @@ div.page {
 	background:#cbf8ff;
 	white-space: nowrap;
 	box-shadow:2px 2px 2px #555;
-	line-height:2.7em;
 	top:-10px;
 }
 
-.menubutton, span.next{
+button.next a{
+	text-decoration:none;
+	color:#000;
+}
+
+.menubutton, button.next{
 	padding-top:2px;
 	padding-bottom:2px;
 	line-height:1.6em;	
 	background-color:#8bffc8;
+}
+
+.menubutton:hover,.menubutton:focus,
+button.next:hover,button.next:focus{
+	color:#fafafa;
+	background:#009800!important;
+}
+
+
+span.next:hover a,span.next:focus a{
+	color:#fff;
 }
 
 .large {

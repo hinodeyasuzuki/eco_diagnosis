@@ -32,12 +32,10 @@
 				<p>　<?php echo $lang['home_easy_top3sm']; ?></p>
 			</div>
 
-			<div class="button" 
-				onclick="<?php echo "location.href='./?lang=$languageMode" . ( $targetMode==2 ? "&v=2&t=2" : "&v=3" ); ?>';" 
-				onkeypress="<?php echo "location.href='./?lang=$languageMode" . ( $targetMode==2 ? "&v=2&t=2" : "&v=3" ); ?>';" 
-				tabindex=0>
+			<button class="button" 
+				onclick="<?php echo "location.href='./?lang=$languageMode" . ( $targetMode==2 ? "&v=2&t=2" : "&v=3" ); ?>';" >
 				<p style="font-size:25px;"><?php echo $lang['home_easy_top_button_start']; ?></p>
-			</div>
+			</button>
 
 			<h2><?php echo $lang['home_list_message']; ?></h2>
 			<ul style="padding-left:30px;" id="measures">
@@ -78,8 +76,8 @@
 			</div>
 			
 			<div align="center" style="padding-top:20px;clear:both;">
-				<span class="button large" onclick="goshowall();" onkeypress="goshowall();" tabindex=0><?php echo $lang['button_showall']; ?></span>
-				<span class="button large" onclick="gostart();" onkeypress="gostart();" tabindex=0><?php echo $lang['home_easy_top_button_start']; ?></span>
+				<button class="button large" onclick="goshowall();"><?php echo $lang['button_showall']; ?></button>
+				<button class="button large" onclick="gostart();"><?php echo $lang['home_easy_top_button_start']; ?></button>
 			</div>
 		</div>
 

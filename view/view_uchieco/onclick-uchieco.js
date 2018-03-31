@@ -400,12 +400,12 @@ modeChange = function( id ){
 	param.subName = tabSubNowName;
 
 	modechangeid = id;
-	$(".menu span").removeClass("selected");
+	$(".menu button").removeClass("selected");
 	$("#"+id).addClass('selected');
 	$(".menu").hide();
 	$(".page").hide();
 	$( "#p" + id.substr(1,10) ).show();	
-	$(".step span").removeClass("selected");
+	$(".step button").removeClass("selected");
 
 	switch( id ) {
 		case "m2":

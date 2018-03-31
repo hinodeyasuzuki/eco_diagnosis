@@ -267,6 +267,13 @@ getCalcResult = function( command, res ) {
 				var consname = $(this).prop( "id" );
 				tabclick(index, consname);
 			});			
+			$('#tab li').keypress(function(e) {
+				if ( e.keyCode != 9 ){ 
+					var index = $('#tab li').index(this);
+					var consname = $(this).prop( "id" );
+					tabclick(index, consname);
+				}
+			});			
 			tabset(tabNow);	
 
 			if ( showOver15 ) {
@@ -424,6 +431,13 @@ getCalcResult = function( command, res ) {
 
 //after worker result function. depend on view function. override in each view
 afterworker = function(res){
+};
+
+//top page button click to start
+function top2start(){
+	$('#top').hide();
+	$('#divco2').show();
+	startCalc( 'graphchange', param );
 };
 
 
