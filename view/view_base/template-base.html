@@ -31,21 +31,21 @@
 			<h1><?php echo $title;?></h1>
 
 			<div id="headerMenu">
-				<span class="button inmode selected" id="m1" onclick="modeChange('m1');" onkeypress="modeChange('m1');" tabindex=0><?php echo $lang["button_input"];?></span>
-				<span class="button inmode" id="m2" onclick="modeChange('m2');" onkeypress="modeChange('m2');" tabindex=0><?php echo $lang["button_measures"];?></span>
+				<button class="button inmode selected" id="m1" onclick="modeChange('m1');"><?php echo $lang["button_input"];?></button>
+				<button class="button inmode" id="m2" onclick="modeChange('m2');" ><?php echo $lang["button_measures"];?></button>
 				
 			<?php if ( $targetMode == 2 ){ ?>
-				<span class='button inmode' id='m3' onclick="modeChange('m3');" onkeypress="modeChange('m3');" tabindex=0><?php echo $lang["button_demand"];?></span>
+				<button class='button inmode' id='m3' onclick="modeChange('m3');" ><?php echo $lang["button_demand"];?></button>
 			<?php } ?>
 				&nbsp;&nbsp;
 				
-				<span class="button" id="btnsave"  onclick="dataSave();"  onkeypress="dataSave();"  tabindex=0><?php echo $lang["button_save"];?></span>
-				<span class="button" id="btnclear" onclick="dataClear();" onkeypress="dataClear();" tabindex=0><?php echo $lang["button_clear"];?></span>
+				<button class="button" id="btnsave"  onclick="dataSave();"><?php echo $lang["button_save"];?></button>
+				<button class="button" id="btnclear" onclick="dataClear();"><?php echo $lang["button_clear"];?></button>
 				&nbsp;
 				<a class="button inmode" href="./?lang=<?php echo $languageMode; ?>&v=4" target="_blank" tabindex=0><?php echo $lang['button_about'];?></a>
 	<!--
-				<span class="button" id="btnsavenew"><?php echo $lang["button_savenew"];?></span>
-				<span class="button" id="btnopen"><?php echo $lang["button_open"];?></span>
+				<button class="button" id="btnsavenew"><?php echo $lang["button_savenew"];?></button>
+				<button class="button" id="btnopen"><?php echo $lang["button_open"];?></button>
 	-->
 			</div>
 
@@ -90,7 +90,7 @@
 			<div class="mesmenu" style="display:none">
 				<div id="measure"></div>
 				<div style="text-align:right;">
-					<span style='color:blue;cursor:pointer;' onclick="over15show();" onkeydown="over15show();" tabindex=0>[<?php echo $lang["button_showall"];?>]</span>
+					<button style='color:blue;cursor:pointer;'>[<?php echo $lang["button_showall"];?>]</button>
 				</div>
 				<p id="totalReduceComment"></p>
 			</div>	

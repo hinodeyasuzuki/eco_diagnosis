@@ -27,7 +27,7 @@ div.page {
 
 
 /***ボタン*******/
-.menu span{
+.menu span, .menu button{
 	display: block;
 	cursor: pointer;
 	text-align: right;
@@ -36,7 +36,7 @@ div.page {
 	line-height:1.5em;
 }
 
-.menubutton, .button, span.next{
+.menubutton, button, .button{
 	font-size:140%;
 	padding:6px;
 	padding-left:15px;
@@ -49,17 +49,25 @@ div.page {
 	color:#000;
 	white-space: nowrap;
 	box-shadow:2px 2px 2px #555;
-	line-height:2.7em;
 	top:-10px;
 }
 
-.button{
-	background:#cbf8ff;
+.step button{
+	padding:3px;
+	margin:5px;
+	padding-left:25px;
+	padding-right:25px;
+	background-color:#FF8;
+	line-height:1.2em;
+	font-weight:500;
+	font-size:1.2em;
+	box-shadow:none;
 }
-.menubutton, span.next{
+
+
+.menubutton, button.next{
 	padding-top:2px;
 	padding-bottom:2px;
-	line-height:2em;	
 	background-color:#8bffc8;
 }
 
@@ -88,14 +96,6 @@ h2.constitle{
 	padding-left:30px;
 }
 
-.step span{
-	cursor: pointer;
-	padding:3px;
-	margin:5px;
-	padding-left:25px;
-	padding-right:25px;
-	background-color:#FF8;
-}
 .life span{
 	cursor: pointer;
 	padding:3px;
@@ -110,8 +110,8 @@ h2.constitle{
 	background:#009800;
 }
 
-.button:hover, .menu span:hover, span.next:hover,
-.button:focus, .menu span:focus, span.next:focus {
+.button:hover, .menu span:hover, button.next:hover,
+.button:focus, .menu span:focus, button.next:focus {
 	color:#fafafa;
 	background:#009800;
 }
@@ -127,7 +127,7 @@ a:hover {
 	background:#009800!important;
 }
 */
-span.selected {
+button.selected {
 	background:#1a5a9a;
 	color:#fff;
 }
@@ -166,7 +166,7 @@ div.column2 {
 	div.sm100,div.column2 {
 		width:100% !important;
 	}
-	.step span{
+	.step button{
 		padding-left:5px;
 		padding-right:5px;
 	}

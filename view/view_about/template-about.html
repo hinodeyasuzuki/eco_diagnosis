@@ -21,13 +21,13 @@
 
 		<div id="header">
 			<h1><?php echo $title . $lang['home_easy_top_button_about'];?></h1>
-			<div align="right"><span class="button" onclick="window.open('about:blank','_self').close();" onkeypress="window.open('about:blank','_self').close();" tabindex=0><?php echo $lang['button_close']; ?></span></div>
+			<div align="right"><button class="button" onclick="window.open('about:blank','_self').close();"><?php echo $lang['button_close']; ?></button></div>
 		</div>
 		
 
 		<div id="about">
 			<?php include $lang["d6folder"]. "/view/" .$languageMode . "_about.html"; ?>
-			<div align="right"><span class="button" onclick="window.open('about:blank','_self').close()" onkeypress="window.open('about:blank','_self').close();" tabindex=0><?php echo $lang['button_close']; ?></span></div>
+			<div align="right"><button class="button" onclick="window.open('about:blank','_self').close()"><?php echo $lang['button_close']; ?></button></div>
 		</div>
 		
 		<div id="footer">

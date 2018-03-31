@@ -267,10 +267,12 @@ getCalcResult = function( command, res ) {
 				var consname = $(this).prop( "id" );
 				tabclick(index, consname);
 			});			
-			$('#tab li').keypress(function() {
-				var index = $('#tab li').index(this);
-				var consname = $(this).prop( "id" );
-				tabclick(index, consname);
+			$('#tab li').keypress(function(e) {
+				if ( e.keyCode != 9 ){ 
+					var index = $('#tab li').index(this);
+					var consname = $(this).prop( "id" );
+					tabclick(index, consname);
+				}
 			});			
 			tabset(tabNow);	
 

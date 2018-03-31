@@ -140,7 +140,7 @@ a.button {
 	text-decoration: none;
 }
 
-.button {
+button, .button {
 	padding:2px;
 	padding-left:6px;
 	padding-right:6px;
@@ -160,7 +160,7 @@ a.button {
 	text-align:center;
 	vertical-align:middle;
 	width:200px;
-	height:40px;
+/*	height:40px;*/
 	line-height: 1.3em;
 	font-size:20px;
 }
@@ -174,7 +174,7 @@ a.button {
 	padding:20px;
 	font-size:1.8em;
 }
-.button:hover,.button:focus {
+button:hover {
 	color:#fafafa;
 	background:#009800!important;
 }
@@ -403,7 +403,7 @@ div#modal-contents img {
 
 /* printer */
 @media only print {
-	span.button {
+	span.button, button {
 		display:none;
 	}
 }
@@ -457,7 +457,7 @@ table{
 	padding:3px;
 }
 
-#step span{
+#step span,#step button{
 	padding-left:5px;
 	padding-right:5px;
 }

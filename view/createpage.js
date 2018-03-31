@@ -48,9 +48,9 @@ createInputPage = function (res) {
 		ad = "";
 		for( var a in res.groupAddable[c] ){
 			if ( res.groupAddable[c][a] ){
-				ad +=  "<span style='cursor:pointer;color:blue;' " +
+				ad +=  "<button style='color:blue;' " +
 					"onclick='addroom(\"" + res.groupAddable[c][a].consName + "\");'" + 
-					"onkeypress='addroom(\"" + res.groupAddable[c][a].consName + "\");' tabindex=0>" + res.groupAddable[c][a].caption + lang.add + "</span>　";
+					">" + res.groupAddable[c][a].caption + lang.add + "</span>　";
 			}
 		}
 		if ( ad  ){
@@ -61,7 +61,7 @@ createInputPage = function (res) {
 		combo += "<ul class='submenu'>";
 		count = 0;
 		for ( var d in res.subgroup[c] ) {
-			combo += "<li id='"+c+"-"+d+"' onclick='subtabclick(\"" + c +"\",\"" + d +"\");' onkeypress='subtabclick(\"" + c +"\",\"" + d +"\");' tabindex=0 ";
+			combo += "<li role='button' id='"+c+"-"+d+"' onclick='subtabclick(\"" + c +"\",\"" + d +"\");' tabindex=0 ";
 			if( count == 0 ) {
 				combo += "class='select' ";
 				tabSubNowName = d;
@@ -133,15 +133,12 @@ createInputButtonPageOne = function (res) {
 		for ( var i in res.defSelectValue ){
 			if( res.defSelectData[i] == -1 ) continue;
 			if ( res.defSelectValue[i] ) {
-				page += "<span class='button qbutton " 
+				page += "<button class='button qbutton " 
 				page += ( res.selected == res.defSelectData[i] ? "selected" : "" ) 
 				page += "' id='s" + res.defSelectData[i];
 				page += "' onclick='quesone_set(\"" + res.id + "\", \"" ;
-				page += res.defSelectData[i] + "\");' " ;
-				page += "' onkeypress='quesone_set(\"" + res.id + "\", \"" ;
-				page += res.defSelectData[i] + "\");' " ;
-				page += "tabindex=0>";
-				page += res.defSelectValue[i] + "</span>\n" ;
+				page += res.defSelectData[i] + "\");' >" ;
+				page += res.defSelectValue[i] + "</button>\n" ;
 			}
 		}
 		page += "</p><br>";

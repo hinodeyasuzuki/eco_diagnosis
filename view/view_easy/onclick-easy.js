@@ -119,7 +119,7 @@ modeChange = function( id ){
 			//result page table
 			param.id = "i001";
 			param.val = escapeHtml($("#i001" ).val());
-			$("#step span").removeClass("already");
+			$("#step button").removeClass("already");
 			$("#s2").addClass("already");
 			startCalc( "inchange", param );
 			break;
@@ -127,7 +127,7 @@ modeChange = function( id ){
 			//result page graph
 			param.consName = tabNowName;
 			param.subName = tabSubNowName;
-			$("#step span").removeClass("already");
+			$("#step button").removeClass("already");
 			$("#s3").addClass("already");
 			startCalc( "tabclick", param );
 			break;
@@ -136,7 +136,7 @@ modeChange = function( id ){
 			param.id = "i010";
 			param.val = "4";
 			measuredisp = 0;
-			$("#step span").removeClass("already");
+			$("#step button").removeClass("already");
 			$("#s4").addClass("already");
 			$("#totalReduceComment").hide();
 			$(".show7").hide();
@@ -148,7 +148,7 @@ modeChange = function( id ){
 			break;
 		case "m5":
 			// consumption list to select and add
-			$("#step span").removeClass("already");
+			$("#step button").removeClass("already");
 			$("#s1").addClass("already");
 			break;
 		case "m6":
