@@ -1,6 +1,5 @@
 # eco_diagnosis
 
-<<<<<<< HEAD
 エネルギー消費に関する簡単なアンケート入力をもとに、CO2排出量の分析を行い、約60項目のCO2排出削減対策の中から効果的なものを計算して提案するソフトです。
 基本は家庭向けですが、小規模事業者の診断にも対応しています。
 言語設定と地域用ロジックを変更することで、多言語・他地域の診断ソフトとして作ることができます。言語管理には、EXCELシートを利用しており、ソースコードが出力されます。
@@ -77,21 +76,4 @@ Copyright 2011－2018（C） Yasufumi Suzuki, Hinodeya Insititute for Ecolife co
 Released under the MIT license
 
 
-=======
-> A Vue.js project
 
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-```
-
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
->>>>>>> 8ae249d... template simplify
