@@ -62,6 +62,7 @@ D6.consRF.precalc = function() {
 	this.templature = this.input( "i714" + this.subID, 4 );	//setting of temprature
 	this.full = this.input( "i715" + this.subID, 4 );		//stuffing too much
 	this.space = this.input( "i716" + this.subID, 3 );		//space beteween wall and refragerator
+	this.performance = this.input( "i721", 2 );				//performance
 	
 	var d = new Date();
 	this.nowEquip = this.equip(d.getFullYear() - this.year, this.size);
@@ -109,10 +110,13 @@ D6.consRF.calc = function( ) {
 	this.electricity = this.electricity 
 				* ( this.space ==1 ? 0.95 : ( this.space==2 ? 1.05 : 1 ) );
 
-	//fix by templature
+	//fix by temperature
 	this.electricity = this.electricity 
 				* ( this.templature ==1 ? 1.1 : ( this.templature==3 ? 0.95 : 1 ) );
 	
+	//fix by performance
+	this.electricity = this.electricity 
+				* ( this.performance ==1 ? 0.8 : ( this.performance==3 ? 1.2 : 1 ) );
 };
 
 

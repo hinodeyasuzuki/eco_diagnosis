@@ -43,7 +43,7 @@ D6.getAllResult = function(consName){
 			this.nowConsPageName = consName;
 		}
 		consName = this.nowConsPageName;
-		
+
 		//get consCode
 		var consCode = D6.consListByName[consName][0].consCode;
 

@@ -158,6 +158,11 @@ $(document).ready(function(){
 	//clear measures number limit
 	localStorage.removeItem('sindanOver15');
 
+	startInit();
+});
+
+//D6 initialize
+function startInit(){
 	//default setting
 	var param = {};
 	if ( typeof(paramdata) !="undefined" && paramdata ) {
@@ -185,8 +190,7 @@ $(document).ready(function(){
 	if ( useWorker || typeof(D6) !="undefined") {
 		startCalc( "start", param );
 	}
-
-});
+}
 
 
 // startCalc( command, param )  ---------------------------------------

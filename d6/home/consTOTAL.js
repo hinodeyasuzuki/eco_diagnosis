@@ -42,7 +42,9 @@ D6.consTotal.init = function() {
 
 	//guide message in input page
 	this.inputGuide = "Basic information about the area and house";
-
+	
+	//no price Data set 1 if nodata
+	this.noPriceData = {};
 
 	//parameters related to solar and nitght time electricity usage
 	this.ratioNightEcocute = 0.4;		//night consumption rate of heat pump
@@ -80,6 +82,11 @@ D6.consTotal.precalc = function() {
 	this.priceEleSpring = this.input( "i0912" ,-1 );
 	this.priceEleSummer = this.input( "i0913" ,-1 );
 	this.priceEleWinter = this.input( "i0911" ,-1 );
+	this.noPriceData.electricity = 
+			this.input( "i061",-1) == -1
+			& this.priceEleSpring == -1
+			& this.priceEleSummer == -1
+			& this.priceEleWinter == -1;
 
 	this.priceEleSell =this.input( "i062", 0 );					//sell electricity
 				
@@ -89,6 +96,11 @@ D6.consTotal.precalc = function() {
 	this.priceGasSpring =this.input( "i0932" ,-1 );
 	this.priceGasSummer =this.input( "i0933" ,-1 );
 	this.priceGasWinter =this.input( "i0931" ,-1 );
+	this.noPriceData.gas = 
+			this.input( "i063",-1) == -1
+			& this.priceGasSpring == -1
+			& this.priceGasSummer == -1
+			& this.priceGasWinter == -1;
 
 	this.houseType =this.input( "i002", -1 );					//type of house
 	this.houseSize =this.input( "i003", 
@@ -101,6 +113,10 @@ D6.consTotal.precalc = function() {
 	this.priceKerosSpring =this.input( "i0942" ,-1 );
 	this.priceKerosSummer =this.input( "i0943" ,-1 );
 	this.priceKerosWinter =this.input( "i0941" ,-1 );
+	this.noPriceData.kerosene = 
+			  this.priceKerosSpring == -1
+			& this.priceKerosSummer == -1
+			& this.priceKerosWinter == -1;
 	
 
 	if( this.priceKerosWinter == -1 ) {
@@ -115,6 +131,7 @@ D6.consTotal.precalc = function() {
 
 	this.priceCar =this.input( "i075"
 			,D6.area.averageCostEnergy.car );					//gasoline
+	this.noPriceData.car = (this.input( "i075",-1) == -1);
 
 	this.equipHWType = this.input( "i101", 1 );					//type of heater
 
@@ -174,7 +191,10 @@ D6.consTotal.calc = function( ){
 	
 	//in case of no fee input, use sum of all consumption
 	this.noConsData = ret.noConsData 
-					&& ( this.input( "i061", -1) == -1 );
+					&& ( this.input( "i061", -1) == -1 )
+					&& this.noPriceData.gas
+					&& this.noPriceData.car
+					&& this.noPriceData.kerosene;
 					//&& !D6.averageMode;
 
 	//depend on hot water equipment
@@ -236,14 +256,17 @@ D6.consTotal.calc = function( ){
 		} else {
 			pvSellUnitPrice = 31;
 		}
-	} else if ( this.solarYear >= 2017 &&   this.solarYear  < 2100) {
+	} else if ( this.solarYear >= 2017 &&   this.solarYear  < 2020) {
 		if ( this.pvRestrict == 1 ) {
 			pvSellUnitPrice = 30;
 		} else {
 			pvSellUnitPrice = 28;
 		}
+	} else if ( this.solarYear  < 2100) {
+		//estimate
+		pvSellUnitPrice = 20;
 	}
-
+	
 	//PV installed
 	if ( this.solarKw > 0 ) {
 		// gross = electricity consumed in home include self consumption amount

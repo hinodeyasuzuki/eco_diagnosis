@@ -541,23 +541,23 @@ D6.area = {
 		//month of heating / cooling
 		switch( this.heatingLevel ) {
 			case 1:
-				seasonMonth = [ 8, 3, 1 ];
+				seasonMonth = { winter:8, spring:3, summer:1 };
 				break;
 			case 2:
-				seasonMonth = [ 6, 4, 2 ];
+				seasonMonth = { winter:6, spring:4, summer:2 };
 				break;
 			case 3:
-				seasonMonth = [ 5, 5, 2 ];
+				seasonMonth = { winter:5, spring:5, summer:2 };
 				break;
 			case 5:
-				seasonMonth = [ 3, 5, 4 ];
+				seasonMonth = { winter:3, spring:5, summer:4 };
 				break;
 			case 6:
-				seasonMonth = [ 2, 5, 5 ];
+				seasonMonth = { winter:2, spring:5, summer:5 };
 				break;
 			case 4:
 			default:
-				seasonMonth = [ 4, 5, 3 ];
+				seasonMonth = { winter:4, spring:5, summer:3 };
 				break;
 		}
 		

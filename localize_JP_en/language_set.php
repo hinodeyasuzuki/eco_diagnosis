@@ -53,7 +53,7 @@ $lang["savetobrowser"]='It saved in the browser.';
 $lang["savedataisshown"]='The saved values ​​are as follows.';
 
 //--question page-----------------
-$lang["QuestionNumber"]='function(numques, nowques) {return  "（" + nowques + "th in " + numques + " questions）"};';
+$lang["QuestionNumber"]='function(numques, nowques) {return  "(" + nowques + "th in " + numques + " questions）"};';
 
 
 //--compare-----------------

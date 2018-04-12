@@ -60,6 +60,7 @@ D6.consCR.precalc = function() {
 };
 
 D6.consCR.calc = function() {
+	//calculated in consCRtrip
 };
 
 D6.consCR.calc2nd = function( ) {

@@ -4,6 +4,9 @@ D6 button type design
 
 /*--layout----------------------------------------------------------*/
 
+body{
+	font-size:100%;
+}
 
 p{
 	line-height:1.2em;
@@ -25,6 +28,15 @@ div.page {
 	text-align:center;
 }
 
+div.measure{
+	font-size:1em;
+}
+
+div.box{
+	border:1px solid;
+	margin:10px;
+	padding:5px;
+}
 
 /***ボタン*******/
 .menu span, .menu button{
@@ -64,6 +76,13 @@ div.page {
 	box-shadow:none;
 }
 
+button.tab{
+	line-height:1.2em;
+	font-weight:500;
+	font-size:1.2em;
+	box-shadow:none;
+	margin:0px;
+}
 
 .menubutton, button.next{
 	padding-top:2px;
@@ -160,6 +179,9 @@ div.column2 {
 
 
 @media screen and (max-width: 640px) {
+body{
+	font-size:80%;
+}
 	div.page {
 		text-align:left;
 	}

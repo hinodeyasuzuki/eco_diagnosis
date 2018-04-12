@@ -326,6 +326,60 @@ getMeasureComment = function( mes ) {
 	return ret;
 };
 
+createEnergyAverage = function( ave ) {
+	var good = "";
+	var goodcount = 0;
+	var bad = "";
+	var badcount = 0;
+	var comment = "";
+	
+	if ( ave.co2[0].electricity > ave.co2[1].electricity * 1.2 ) {
+		bad += lang.electricitytitle + ", ";
+		badcount++;
+	} else if ( ave.co2[0].electricity < ave.co2[1].electricity * 0.9 ) {
+		good += lang.electricitytitle + ", ";
+		goodcount++;
+	}
+	if ( ave.co2[0].gas > ave.co2[1].gas * 1.2 ) {
+		bad += lang.gastitle + ", ";
+		badcount++;
+	} else if ( ave.co2[0].gas < ave.co2[1].gas * 0.9 ) {
+		good += lang.gastitle + ", ";
+		goodcount++;
+	}
+	if ( ave.co2[0].kerosene > ave.co2[1].kerosene * 1.2 ) {
+		bad += lang.kerosenetitle + ", ";
+		badcount++;
+	} else if ( ave.co2[0].kerosene < ave.co2[1].kerosene * 0.9 ) {
+		good += lang.kerosenetitle + ", ";
+		goodcount++;
+	}
+	if ( ave.co2[0].car > ave.co2[1].car * 1.2 ) {
+		bad += lang.gasolinetitle + ", ";
+		badcount++;
+	} else if ( ave.co2[0].car < ave.co2[1].car * 0.9 ) {
+		good += lang.gasolinetitle + ", ";
+		goodcount++;
+	}
+	console.log( lang.kerosenetitle );
+	if ( goodcount==4 ){
+		comment = good.slice(0,-2) + "のいずれも平均より少ないです。";
+	} else if ( goodcount > 0 ) {
+		if ( badcount==0 ){
+			comment = good.slice(0,-2) + "が平均より少ないです。";
+		} else {
+			comment = bad.slice(0,-2) + "が平均より多いですが、"
+					+ good.slice(0,-2) + "が平均より少ないです。";
+		}
+	} else {
+		if ( badcount==0 ){
+			comment = "いずれも、平均的です。";
+		} else {
+			comment = bad.slice(0,-2) + "が平均より多いです。";
+		}
+	}
+	return comment;
+}
 
 // showAverageTable(dat) ---------------------------------------------
 // parameters
@@ -378,8 +432,27 @@ showAverageTable = function(dat) {
 	ret += "</table>";
 	
 	//compare avearage CO2 
-	var rel = dat.you/dat.av;
-	ret += lang.co2ratio( Math.round( rel*10)/10 );
+	ret += createCompareComment( same, dat.you, dat.av, dat.consCode );
+		
+	return ret;
+};
+
+
+//createCompareComment( you, av, target )
+//
+createCompareComment = function( same, you, av, target, rank100 ) {
+	var youcount;
+	if ( targetMode == 1 ){
+		//home
+		youcount = lang.youcount;
+	} else {
+		//office
+		youcount = lang.officecount;
+	}
+
+	//compare avearage CO2 
+	var rel = you/av;
+	var ret = lang.co2ratio( Math.round( rel*10)/10 );
 	if ( rel <0.7 ) {
 		ret += lang.co2compare06;
 	} else if ( rel <0.93 ) {
@@ -392,12 +465,13 @@ showAverageTable = function(dat) {
 		ret += lang.co2compare14;
 	}
 
-	if ( dat.consCode == "TO" ){
-		ret += lang.rankcomment( same ,youcount, dat.rank100 );
+	if ( target == "TO" ){
+		ret += lang.rankcomment( same ,youcount, rank100 );
 	}
 		
 	return ret;
 };
+
 
 //showItemizeTable(target) ------------------------------------------------- 
 //		itemized table

@@ -21,14 +21,14 @@
 	<div class="contents">
 
 		<div id="header">
-			<h1><?php echo $lang["home_uchieco_title"];?></h1>
+			<h1><?php echo $lang["home_uchieco_title"];?>　<span id="titleadd"></span></h1>
 
 			<div align="center" class="step">
 				<button id="s4" onclick="modeChange('m4');">1質問</button>>
 				<button id="s5" onclick="modeChange('m5');">2比較</button>>
-				<button id="s6" onclick="modeChange('m6');">3目標</button>>
-				<button id="s7" onclick="modeChange('m7');">4内訳</button>>
-				<button id="s8" onclick="modeChange('m8');">5対策</button>
+<!--				<button id="s6" onclick="modeChange('m6');">3目標</button>>-->
+				<button id="s7" onclick="modeChange('m7');">3内訳</button>>
+				<button id="s8" onclick="modeChange('m8');">4対策</button>
 			</div>
 
 			<div id="leanModalDialog" style="float:left;">
@@ -46,14 +46,14 @@
 			<div class="page" id="p1" >						
 				<h2>ようこそ、うちエコキッズWEB簡易チェックへ</h2>
 				<p>家の「どこから」「どれだけ」CO2が出ているかを調べることで、効果的な削減プランを明らかにします。</p>
-				<button class="next" onclick="modeChange('m2');">はじめる</button>
-				<button class="next" onclick="modeChange('m10');">診断の流れをみる</button>
+				<button class="next" id="newstart" onclick="modeChange('m2a');">新たにはじめる</button>
+				<button class="next" id="previousstart" onclick="modeChange('m2');" style="display:none;">以前のデータを使う</button>
+				<button class="next" onclick="modeChange('ma');">診断の流れをみる</button>
 			</div>
 
 			<div class="page" id="p2" >						
 				<h2>回答のしかた</h2>
-				<p>これから家族の人数・光熱費・家電の使用状況・ライフスタイルなど、24項目の質問をします。もっともあてはまる選択肢のボタンを押して、回答してください。わからない場合には、質問を飛ばしても構いません。</p>
-				<p>ご回答後、診断結果が表示されます。</p>
+				<p>これから家族の人数・光熱費・家電の使用状況・ライフスタイルなど、22項目の質問をします。もっともあてはまる選択肢のボタンを押して、回答してください。わからない場合には、質問を飛ばしても構いません。ご回答後、診断結果が表示されます。</p>
 				<button class="next" onclick="modeChange('m3');">質問に進む</button>
 			</div>
 
@@ -78,29 +78,36 @@
 			</div>
 				
 			<div class="page" id="p5">
-				<h2>平均比較</h2>
+<!--				<h2>平均比較</h2>-->
 				<p>光熱費とCO2排出量を平均値と比較してみましょう。何が多い/少ないでしょうか。光熱費は1ヶ月の平均金額（円）、CO2排出量は年間の量（kg）です。</p>
-				<div class="sm100" style="width:65%;float:left;"><div id="graphEnergy"></div></div>
-				<div class="sm100" style="width:30%;float:left;"><div id="graphCO2average"></div></div>
-				<span class="next" onclick="modeChange('m6');">CO2削減目標</span>
+				<div class="sm100" style="width:65%;float:left;">
+					<div id="graphEnergy"></div>
+					<p id="energyComment"></p>
+				</div>
+				<div class="sm100" style="width:30%;float:left;">
+					<div id="graphCO2average"></div>
+					<p id="co2Comment"></p>
+				</div>
+<!--				<span class="next" onclick="modeChange('m6');">CO2削減目標</span>-->
+				<button class="next" onclick="modeChange('m7');">どこからCO2がでている？</button>
 				<div style="clear:both"></div>
 			</div>
 			
 			<div class="page" id="p6">
-				<h2>CO2削減目標</h2>
+<!--				<h2>CO2削減目標</h2>-->
 				<p>将来的に大幅にCO2を削減する必要があります。どこまで減らすことにチャレンジしますか？</p>
 				<div class="sm100" style="width:30%;float:left;"><div id="graphCO2average2"></div></div>
 				<div class="sm100" style="width:65%;float:left;">
 				<p>下のボタンを選んで進んでください。</p>
 				<table style="border:none;">
 				<tr>
-					<td rowspan="2">平均（2015年）比較の削減目標</td><td colspan="2" style="text-align:right">あなたの現状　<span id="co2younow" class="bold"></span>kg</td>
+					<td rowspan="2">平均（2013年）比較の削減目標</td><td colspan="2" style="text-align:right">あなたの現状　<span id="co2younow" class="bold"></span>kg</td>
 				</tr>
 				<tr>
 					<td>CO2排出量</td><td>あなたの現状からの削減</td>
 				</tr>
 				<tr>
-					<td><button class="next" onclick="modeChange('m7');">2015年レベル</button><br>2015年レベルでは地球温暖化を止めることはできません</td>
+					<td><button class="next" onclick="modeChange('m7');">2015年レベル</button><br>2013年レベルでは地球温暖化を止めることはできません</td>
 					<td><span class="bold" id="co2-0"></span>kg</td>
 					<td><span class="red" id="co2-0rate"></span></td>
 				</tr>
@@ -125,7 +132,7 @@
 			</div>
 
 			<div class="page" id="p7">
-				<h2>CO2排出の内訳　～どこからCO2が出ている？～</h2>
+				<h2>～どこからCO2が出ている？～</h2>
 				<div class="sm100" style="width:50%;float:left;text-align:left;">
 					<p>グラフは自宅のどの分野からどの程度CO2が排出されているかという内訳を示したものです。</p>
 					<p>CO2がより多く排出される分野を集中的に改善することで、大きな削減効果が得られます。</p>
@@ -138,35 +145,53 @@
 			</div>
 
 			<div class="page" id="p8">
-				<h2>CO2削減対策と効果</h2>
+<!--				<h2>CO2削減対策と効果</h2>-->
 				<p>あなたの家庭においてCO2削減効果が大きい対策を示してます。年間の数値です。</p>
 				<p>取り組めそうな対策の「選択」をクリックしてください。複数選ぶことができ、その組み合わせでの削減量を検討できます。</p>
 				<div class="sm100"  style="width:40%;float:left;"><div id="graph"></div><div id="totalReduceComment" style="text-align:left;"></div></div>
 
 				<div class="sm100" style="width:55%;float:left;">
 					<div class="life" style="text-align:left;">
-						<button id="L1" class="selected" onclick="changeLifeStyle('1');">ライフスタイル</button>
-						<button id="L0" onclick="changeLifeStyle('0');>機器導入</button>
+						<button class="tab selected" id="L2" onclick="changeLifeStyle('2');">すべて</button>
+						<button class="tab" id="L1" onclick="changeLifeStyle('1');">工夫</button>
+						<button class="tab" id="L0" onclick="changeLifeStyle('0');">機器導入</button>
 					</div>
 					<div id="measure"></div>
+					<div style="text-align:right;"><button id="moreMeasure" class="tab" onclick="changeLength()">もっと表示する</button></div>
 				</div>
 				<button class="next" onclick="modeChange('m9');">診断を終了</button>
 				<div style="clear:both"></div>
 			</div>
+
+			<div class="page" id="p9">
+				<h2>ありがとうございました</h2>
+				<p>あなたのパソコンに一時的に保存がされていますので、次回始めるときには、この結果を呼び出すことができます。</p>
+				<p>削除して新たに診断をする場合には、<button class="next" onclick="dataClear();">新たに診断をはじめる</button>を押してください。</p>
+			</div>
 			
-			<div class="page" id="p10">
+			<div class="page" id="pa">
 				<h2>診断の流れ</h2>
 				<div style="text-align:left">
-				<p>STEP1　質問項目に答える</p>
-				<p>　設問には選択項目をクリックすることで答えていきます。わからない設問はとばし、結果をみることもできます。</p>
-				<p>STEP2　平均値との比較</p>
-				<p>　自宅と平均のCO2排出量を比較して見ることで、自分の立ち位置を把握します。</p>
-				<p>STEP3　CO2削減目標の決定</p>
-				<p>　将来達成すべきCO2削減量を把握し、自宅での削減目標を決定します。</p>
-				<p>STEP4　CO2排出の内訳</p>
-				<p>　CO2が「どこから」「どれだけ」出ているのかが分かる内訳グラフが示されます。</p>
-				<p>STEP5　CO2削減対策と効果</p>
-				<p>　CO2削減対策が示され、削減効果・対策支援情報を確認できます。</p>
+				<div class="box">
+					<p>STEP1　質問項目に答える</p>
+					<p>　設問には選択項目をクリックすることで答えていきます。わからない設問はとばし、結果をみることもできます。</p>
+				</div>
+				<div class="box">
+					<p>STEP2　平均値との比較</p>
+					<p>　自宅と平均のCO2排出量を比較して見ることで、自分の立ち位置を把握します。</p>
+	<!--
+					<p>STEP3　CO2削減目標の決定</p>
+					<p>　将来達成すべきCO2削減量を把握し、自宅での削減目標を決定します。</p>
+	-->
+				</div>
+				<div class="box">
+					<p>STEP3　CO2排出の内訳</p>
+					<p>　CO2が「どこから」「どれだけ」出ているのかが分かる内訳グラフが示されます。</p>
+				</div>
+				<div class="box">
+					<p>STEP4　CO2削減対策と効果</p>
+					<p>　CO2削減対策が示され、削減効果・対策支援情報を確認できます。</p>
+				</div>
 				</div>
 				<button class="next" onclick="modeChange('m1'); return false;"><?php echo $lang["button_back"];?></button>
 			</div>

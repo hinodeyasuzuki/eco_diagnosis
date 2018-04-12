@@ -29,7 +29,7 @@ D6.consLIsum = D6.object( D6.ConsBase );
 D6.consLIsum.init =function() {
 	//construction setting
 	this.consName = "consLIsum";   		//code name of this consumption 
-	this.consCode = "";            		//short code to access consumption, only set main consumption user for itemize
+	this.consCode = "LI";            	//short code to access consumption, only set main consumption user for itemize
     this.title = "light";				//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "6";					//number code in items

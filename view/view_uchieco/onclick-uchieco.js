@@ -34,10 +34,12 @@ var modechangeid = "";
 
 // change display lifestyle or invest 
 var displifestyle  = true;
-showLifestyle = function(){
+var maxshow = 10;		//max show
+var dispLifestylePage = 2;
+showLifestyle = function(m){
 	var c = 0;
-	var maxshow = 12;		//max show
-	if ( displifestyle ) {
+	if ( m==1 ) {
+		//工夫（ライフスタイル）
 		$("tr").each(function(){
 			if( $(this).hasClass("invest") ) $(this).hide();
 			if( $(this).hasClass("lifestyle") ){
@@ -49,7 +51,20 @@ showLifestyle = function(){
 				}
 			}
 		});
+	} else if ( m==2 ) {
+		//すべて
+		$("tr").each(function(){
+			if( $(this).hasClass("invest") || $(this).hasClass("lifestyle") ){
+				c++;
+				if ( c>=maxshow ) { 
+					$(this).hide();
+				} else {
+					$(this).show();
+				}
+			}
+		});
 	} else {
+		//機器導入
 		$("tr").each(function(){
 			if( $(this).hasClass("lifestyle") ) $(this).hide();
 			if( $(this).hasClass("invest") ){
@@ -68,16 +83,24 @@ changeLifeStyle = function(m){
 	if ( (displifestyle && m==0) || ( !displifestyle && m==1) ) {
 		displifestyle = !displifestyle;
 	}
-	showLifestyle();
-	if ( m==0 ){
-		$("#L0").addClass("selected");
-		$("#L1").removeClass("selected");
-	} else {
-		$("#L0").removeClass("selected");
-		$("#L1").addClass("selected");
-	}
+	dispLifestylePage = m;
+	showLifestyle(m);
+	$("#L0").removeClass("selected");
+	$("#L1").removeClass("selected");
+	$("#L2").removeClass("selected");
+	$("#L" + m).addClass("selected");
 };
 
+changeLength = function(){
+	if ( maxshow == 10 ) {
+		maxshow = 30;
+		$("#moreMeasure").text("短く表示する");
+	} else {
+		maxshow = 10;
+		$("#moreMeasure").text("もっと表示する");
+	}
+	changeLifeStyle(dispLifestylePage);
+};
 // getCalcResult( command, res ) --------------------------------------
 //		callback by web-worker, override to main.js
 //		display calculation result
@@ -101,39 +124,58 @@ getCalcResult = function( command, res ) {
 				$("#quescontents").html( createInputButtonPageOne(res.quesone) );
 			}
 			$('#tabcontents').html( inputHtml.combo );
-//			$("#cons").html(showItemizeTableSort(res.itemize));
 			$("#measure").html(showMeasureTable(res.measure));
 			leanModalSet();
 			$('#itemize').removeClass("limit");
-			showLifestyle();
+			showLifestyle(2);
 
-			//itemize graph
+			//itemize graph for m7/m8
 			if ( itemizeGraphTarget !="" ) {
+				//m7
 				graphItemizeCommon( res.itemize_graph, itemizeGraphTarget );
 			} else {
+				//m8
 				graphItemize( res.itemize_graph );
 			}
 			$("#totalReduceComment").html( showMeasureTotalMessage( res.common ) );
 
-			//energy compare to average graph
-			graphEnergy(res.average_graph);
-			if ( graphCO2averageTarget !="" ) {
-				graphCO2averageCommon(res.average_graph, graphCO2averageTarget);
-			} else {
+			//energy compare to average graph m5
+			if ( modechangeid == "m5" ) {
+				graphEnergy(res.average_graph);
+				var comment = createEnergyAverage( res.average_graph );
+				$("#energyComment").text( comment );
+				
+				//graphCO2averageCommon(res.average_graph, graphCO2averageTarget);
 				graphCO2average(res.average_graph);
+				var comment = createCompareComment( "同じ世帯人数の家族", res.average_graph.co2[0].total, res.average_graph.co2[1].total, "TO", res.average.rank100 );
+				$("#co2Comment").html( comment );
 			}
+
+			//トップページの場合
+			if ( modechangeid == "" ) {
+				if ( localStorage.getItem('sindan' + languageMode+ targetMode ) ) {
+					$("#previousstart").show();
+				}
+			}
+
+			
+			if ( modechangeid == "m6" ) {
+				//m6
+				graphCO2average(res.average_graph);
+				//target set
+				uchiecoTargetSet( res.average_graph );
+			}
+			
 			if( debugMode ) {
 				console.log( "return value from d6 worker----" );
 				console.log( res );
-			}
-			if ( modechangeid == "m6" ) {
-				uchiecoTargetSet( res.average_graph );
 			}
 			break;
 		
 		case "inchange_only":
 			break;
 
+		case "tabclick":
 		case "quesone_set":
 		case "quesone_next":
 		case "quesone_prev":
@@ -154,7 +196,7 @@ getCalcResult = function( command, res ) {
 			graphItemize( res.itemize_graph );
 			graphMonthly( res.graphMonthly );
 			$("#totalReduceComment").html( showMeasureTotalMessage( res.common ) );
-			showLifestyle();
+			showLifestyle(dispLifestylePage);
 			break;
 
 		case "graphchange":
@@ -162,8 +204,11 @@ getCalcResult = function( command, res ) {
 			break;
 		
 		case "save":
+		case "save_noalert":
 			localStorage.setItem('sindan'+ languageMode+ targetMode, res);
-			alert( lang.savetobrowser );
+			if ( command == "save" ) {
+				alert( lang.savetobrowser );
+			}
 			break;
 			
 		case "modal":
@@ -343,10 +388,8 @@ dataSave = function(){
 //dataClear() ------------------------------------------
 //		clear saved data after confirm
 dataClear = function(){
-	if ( confirm( lang.dataClear ) ) {
-		localStorage.removeItem('sindan'+ targetMode);
-		location.reload();
-	}
+	localStorage.removeItem('sindan'+ languageMode+ targetMode);
+	location.reload();
 };
 
 //menuopen() ---------------------------------------------------
@@ -404,17 +447,23 @@ modeChange = function( id ){
 	$("#"+id).addClass('selected');
 	$(".menu").hide();
 	$(".page").hide();
-	$( "#p" + id.substr(1,10) ).show();	
+	$( "#p" + id.substr(1,1) ).show();	
 	$(".step button").removeClass("selected");
 
 	switch( id ) {
 		case "m2":
+		case "m2a":
 			//guide
+			if ( id=="m2a" ){
+				localStorage.removeItem('sindan'+ languageMode+ targetMode);
+				startInit();
+			}
 			$("#s4").addClass("selected");
-			break;
+			$("#titleadd").text("");
 		case "m3":
 			//　question
 			$("#s4").addClass("selected");
+			$("#titleadd").text("質問");
 			/* //in case of question list change
 			param.subName = [
 			'i010',
@@ -431,24 +480,28 @@ modeChange = function( id ){
 		case "m4":
 			// question list
 			$("#s4").addClass("selected");
+			$("#titleadd").text("質問一覧");
 			startCalc( "recalc", param );
 			break;
 		case "m5":
 			// 
 			$("#s5").addClass("selected");
+			$("#titleadd").text("平均比較");
 			startCalc( "recalc", param );
 			break;
 		case "m6":
 			graphCO2averageTarget = "graphCO2average2";
 			$("#s6").addClass("selected");
+			$("#titleadd").text("CO2削減目標");
 			startCalc( "recalc", param );
 			break;
 		case "m7":
-			pageMode = "m1";
 			hideAverage = 1;
+			pageMode = "m1";
 			itemizeGraphTarget = "graph2";
 			graphCO2averageTarget = "";
 			$("#s7").addClass("selected");
+			$("#titleadd").text("CO2排出の内訳");
 			startCalc( "recalc", param );
 			break;
 		case "m8":
@@ -456,11 +509,13 @@ modeChange = function( id ){
 			pageMode = "m2";
 			itemizeGraphTarget = "";
 			$("#s8").addClass("selected");
+			$("#titleadd").text("CO2削減対策と効果");
 			startCalc( "recalc", param );
 			break;
 		case "m9":
+			startCalc( "save_noalert", param );
 			break;
-		case "m10":
+		case "ma":
 			//about this system
 			break;
 		default:

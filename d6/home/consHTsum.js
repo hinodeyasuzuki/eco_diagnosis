@@ -79,19 +79,19 @@ D6.consHTsum.precalc = function() {
 			this.heatArea == 3 ? 0.25 : 0.2
 		);											//heating area m2
 		
-	this.heatEquip =this.input( "i202", -1 );		//heagin equipment
+	this.heatEquip =this.input( "i202", -1 );		//heating equipment
 	this.heatTime  =this.input( "i204", 
 			this.heatArea == 1 ? 24 :
 			this.heatArea == 2 ? 10 :
 			this.heatArea == 3 ? 6 : 6
 		);											//heating time
-	this.heatTemp  =this.input( "i205", 21 );		//heating templature setting
+	this.heatTemp  =this.input( "i205", 21 );		//heating temperature setting
 	this.priceEleSpring =this.input( "i0912", -1 );	//electricity charge in spring/fall
-	this.priceEleWinter =this.input( "i0911", -1 );	//elecuricity charge in winter
-	this.priceGasSpring =this.input( "i0922", -1 );	//gas chage in spring/fall
-	this.priceGasWinter =this.input( "i0921", -1 );	//gas chage in winter
+	this.priceEleWinter =this.input( "i0911", -1 );	//electricity charge in winter
+	this.priceGasSpring =this.input( "i0922", -1 );	//gas charge in spring/fall
+	this.priceGasWinter =this.input( "i0921", -1 );	//gas charge in winter
 	this.consKeros =this.input( "i064", -1 );		//consumption of kerosene
-	this.hotwaterEquipType = this.input( "i101", -1 );	//hot water templature
+	this.hotwaterEquipType = this.input( "i101", -1 );	//hot water temperature
 
 	this.performanceWindow =this.input( "i041", -1 );	//performance of window
 	this.performanceWall =this.input( "i042", -1 );	//performance of wall insulation
@@ -104,7 +104,7 @@ D6.consHTsum.calc = function() {
 	//calculate heat energy
 	var heatKcal = this.calcHeatLoad();
 
-	//covert to montly by seasonal data
+	//covert to monthly by seasonal data
 	heatKcal *= D6.area.seasonMonth.winter / 12;
 	this.endEnergy = heatKcal;
 
@@ -113,7 +113,7 @@ D6.consHTsum.calc = function() {
 		if ( this.consKeros > 0 
 			||D6.area.averageCostEnergy.kerosene > 1000 
 		) {
-			//kersene 
+			//kerosene 
 			this.heatEquip = 4;
 		} else if ( this.priceGasWinter < 0 
 				|| this.priceGasWinter > 4000 
@@ -141,7 +141,6 @@ D6.consHTsum.calc = function() {
 			}
 		}
 	}
-
 
 	//estimate of heat source
 	if ( this.heatEquip == 1 || this.heatEquip == 2 ) {

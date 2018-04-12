@@ -85,6 +85,7 @@ D6.consHWsum.precalc = function() {
 	this.person =this.input( "i001", 3 );				//person number
 	this.housetype =this.input( "i002", 1 );			//structure of house
 	this.prefecture =this.input( "i021", 13 );			//prefecture
+	this.solarHeater =this.input( "i102", 3 );			//solar heater
 	this.heatArea = D6.area.getHeatingLevel(this.prefecture);	//heating level
 	this.tabDayWeek =this.input( "i103", 
 		( this.heatArea == 1 || this.heatArea == 6 ? 2 : 6 )
@@ -108,6 +109,7 @@ D6.consHWsum.precalc = function() {
 	this.dresserMonth = this.input( "i114", 4 );		//months of use hot water for dresser month
 	this.dishWashMonth = this.input( "i115", 4 );		//months of use hot water for dish wash month / 99 is machine
 	this.dishWashWater = this.input( "i113", 3 );		//use cold water for dish wash 1every day - 4 not
+	this.heaterPerformance = this.input( "i121", 2 );	//performance of heater 1good  3bad
 	this.cookingFreq = this.input( "i802", 6 );			//frequency of cooking 0-10
 	
 	this.keepSeason =this.input( "i131", 2 );			//use keep toilet seat hot 1:everyday - 4not use
@@ -127,9 +129,25 @@ D6.consHWsum.calc = function() {
 			this.equipType = 1;
 		}
 	}
+	
+	//good type
+	if ( this.equipType == 1 && this.heaterPerformance == 1 ) {
+		this.equipType == 2;
+	}
+	if ( this.equipType == 5 && this.heaterPerformance == 1 ) {
+		this.equipType == 6;
+	}
+	//bad type
+	if ( this.equipType == 2 && this.heaterPerformance == 3 ) {
+		this.equipType == 1;
+	}
 
 	// estimate templature of tap water
 	this.waterTemp = D6.area.getWaterTemplature();
+
+	//adjust by solar heater
+	this.waterTemp = ( this.solarHeater == 1 ? 0.4 * this.hotWaterTemp + 0.6 * this.waterTemp : 
+						( this.solarHeater == 2 ? 0.15 * this.hotWaterTemp + 0.85 * this.waterTemp : this.waterTemp ) );
 
 	// estimate amount of hot water used as shower litter/day
 	this.showerWaterLitter = 

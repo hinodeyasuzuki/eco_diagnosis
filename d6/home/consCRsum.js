@@ -59,7 +59,12 @@ D6.consCRsum.precalc = function() {
 
 	this.priceCar = D6.consShow["TO"].priceCar;		//car charge
 	this.carNum = this.input( "i901", -1 );			//number of cars
-	this.car =  this.priceCar /D6.Unit.price.car;	//monthly gasoline　L/month
+	if ( this.carNum == 0 && D6.consShow["TO"].noPriceData.car ) {
+		this.car = 0;
+		D6.consShow["TO"].priceCar = 0;
+	} else {
+		this.car =  this.priceCar /D6.Unit.price.car;	//monthly gasoline　L/month
+	}
 };
 
 

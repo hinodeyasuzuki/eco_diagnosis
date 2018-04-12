@@ -94,7 +94,7 @@ $lang["itemizecomment"]='function(main3,sum) {return main3+"の割合が大き�
 
 //--result-----------------
 $lang["effectivemeasures"]='効果的な対策';
-$lang["comment_combined_reduce"]='function(percent,fee,co2) {return "　組み合わせると" + percent+"%、年間" + ( hidePrice != 1  ? fee +"円の光熱費と、":"") + co2+"kgのCO2が削減できます。すでに取り組んでいる場合、これだけの成果があがるエコ生活ができていることを意味しています。"};';
+$lang["comment_combined_reduce"]='function(percent,fee,co2) {return co2==0 ?  "対策をすることでCO2排出をへらすことができます。" : "　組み合わせると" + percent+"%、年間" + ( hidePrice != 1  ? fee +"円の光熱費と、":"") + co2+"kgのCO2が削減できます。" };';
 
 
 
@@ -195,7 +195,7 @@ $lang['home_button_pagemessage']='　分野を指定して詳しく回答しな�
 //---------- 2 focus mode page -----------------------------------------------
 $lang['home_focus_title_after']='　一覧モード';
 
-$lang['intro1']='ようこそ新省エネ診断ソフト(D6)へ。いまのエネルギーの使い方を入力することで、有効な省エネ対策を計算して提案できます。';
+$lang['intro1']='ようこそ新省エネ診断ソフトへ。いまのエネルギーの使い方を入力することで、有効な省エネ対策を計算して提案できます。';
 $lang['intro2']='わかる範囲で、今のエネルギーの使い方を選んでください。おおよそでも構いませんし、わからない質問は飛ばしてください。';
 $lang['intro3']='入力に応じた分析結果が随時表示されます。';
 $lang['intro4']='CO2排出量を用途別に分析した推計結果です。左があなたの現状です。右が比較として、同様の家庭（事業者）を示しています。中央は、対策を選択したときの削減成果が示されます。';

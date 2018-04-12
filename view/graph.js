@@ -116,7 +116,7 @@ function graphItemizeCommon( ret, targetname ) {
 	}
 
 	//graph size setting
-	chart.setBounds(60, 10, wid-180, hei-70);	//left margin, top margin, width, height
+	chart.setBounds(70, 10, wid-180, hei-70);	//left margin, top margin, width, height
 	var barAxis = chart.addSeries(captionItem, dimple.plot.bar);
 
 	for ( var cid in ret.clist ) {
@@ -200,7 +200,7 @@ function graphEnergy( averageData ) {
 	chart.assignColor(lang.youcall, "orange");
 	chart.assignColor(lang.average, "green");
 
-	chart.setBounds(60, 10, wid-160, hei-70); //left padding, top padding, graph width, graph height
+	chart.setBounds(70, 10, wid-150, hei-70); //left padding, top padding, graph width, graph height
 	
     chart.addSeries("user", dimple.plot.bar);
     chart.draw();
