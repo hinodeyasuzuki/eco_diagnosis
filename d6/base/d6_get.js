@@ -204,6 +204,7 @@ D6.getItemizeGraph = function ( consCode, sort ){
 				//in case of Total consumption
 				for ( var cid in target ) {
 					if ( cid == "TO" ) continue;
+					if ( cid == "" ) continue;		//180413
 					data[di] = {};
 					data[di]["compare"] = scenario;
 					data[di]["ratio"] = Math.round(target[cid][sorttarget]/target[consCode][sorttarget]*1000)/10;

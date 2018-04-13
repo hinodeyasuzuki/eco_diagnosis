@@ -1182,23 +1182,23 @@ D6.area = {
 		//month of heating / cooling
 		switch( this.heatingLevel ) {
 			case 1:
-				seasonMonth = [ 8, 3, 1 ];
+				seasonMonth = { winter:8, spring:3, summer:1 };
 				break;
 			case 2:
-				seasonMonth = [ 6, 4, 2 ];
+				seasonMonth = { winter:6, spring:4, summer:2 };
 				break;
 			case 3:
-				seasonMonth = [ 5, 5, 2 ];
+				seasonMonth = { winter:5, spring:5, summer:2 };
 				break;
 			case 5:
-				seasonMonth = [ 3, 5, 4 ];
+				seasonMonth = { winter:3, spring:5, summer:4 };
 				break;
 			case 6:
-				seasonMonth = [ 2, 5, 5 ];
+				seasonMonth = { winter:2, spring:5, summer:5 };
 				break;
 			case 4:
 			default:
-				seasonMonth = [ 4, 5, 3 ];
+				seasonMonth = { winter:4, spring:5, summer:3 };
 				break;
 		}
 		
@@ -2885,7 +2885,7 @@ D6.getAllResult = function(consName){
 			this.nowConsPageName = consName;
 		}
 		consName = this.nowConsPageName;
-		
+
 		//get consCode
 		var consCode = D6.consListByName[consName][0].consCode;
 
@@ -3046,6 +3046,7 @@ D6.getItemizeGraph = function ( consCode, sort ){
 				//in case of Total consumption
 				for ( var cid in target ) {
 					if ( cid == "TO" ) continue;
+					if ( cid == "" ) continue;		//180413
 					data[di] = {};
 					data[di]["compare"] = scenario;
 					data[di]["ratio"] = Math.round(target[cid][sorttarget]/target[consCode][sorttarget]*1000)/10;
@@ -4571,7 +4572,7 @@ D6.calcConsAdjust = function() {
 				} else {
 					// top down pattern : group consumption is important 
 					if ( energySum.co2 > consSum.co2 ) {
-						//in case of sumup is bigger than sumCons divide each cons
+						//in case of sum of each consumption is bigger than sumCons divide each cons
 						for ( i=1 ; i<=consNum ; i++ ) {
 							consSum.partCons[i].multiply( consSum.co2 / energySum.co2 );
 						}
@@ -4621,10 +4622,26 @@ D6.calcConsAdjust = function() {
 		//in case of exist in total consumption
 		for ( j in D6.Unit.co2 ){
 			if ( energySum[j] == 0 ) {
-				this.energyAdj[j] = 1;
+				this.energyAdj[j] = 1;	//any number
 			} else {
-				// adjust is less than triple and more than 0.3 times
-				this.energyAdj[j] = Math.max( 0.3, Math.min( 3, this.consShow["TO"][j] / energySum[j] ) );
+				this.energyAdj[j] = this.consShow["TO"][j] / energySum[j];
+				if ( this.consShow["TO"].noPriceData[j] ) {
+					if ( this.energyAdj[j] < 0.5 ) {
+						this.consShow["TO"][j] *= 0.5 / this.energyAdj[j];
+						this.energyAdj[j] = 0.5;
+					}
+					if ( this.energyAdj[j] > 2 && j != "electricity" ) {
+						this.consShow["TO"][j] *= 2 / this.energyAdj[j];
+						this.energyAdj[j] = 2;
+					}
+				}
+				if ( j != "electricity" ) {
+					// adjust electricity not to be minus but residue is OK
+					this.energyAdj[j] = Math.max( 0.2, Math.min( 1.5, this.energyAdj[j] ) );
+				} else {
+					// adjust is less than triple and more than 0.3 times
+					this.energyAdj[j] = Math.max( 0.3, Math.min( 3, this.energyAdj[j] ) );
+				}
 			}
 		}
 

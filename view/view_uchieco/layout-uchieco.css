@@ -28,8 +28,12 @@ div.page {
 	text-align:center;
 }
 
-div.measure{
-	font-size:1em;
+div#measure{
+	font-size:0.9em;
+}
+
+div#measure th{
+	font-size:0.8em;
 }
 
 div.box{
@@ -77,12 +81,14 @@ div.box{
 }
 
 button.tab{
-	line-height:1.2em;
 	font-weight:500;
-	font-size:1.2em;
+	line-height:1.0em;
+	font-size:1.1em;
 	box-shadow:none;
 	margin:0px;
 }
+
+
 
 .menubutton, button.next{
 	padding-top:2px;

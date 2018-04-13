@@ -76,9 +76,7 @@ createInputPage = function (res) {
 		combo += "<ul class='submenucontents'>";
 		count = 0;
 		for ( var d in res.subgroup[c] ) {
-			if ( d !=  subName &&
-				!( consName == subName && count == 0 ) 
-			) {
+			if ( d !=  subName) {
 				continue;
 			}
 			combo += "<li class='page"+c+"' id='subpage"+c+"-"+d+"' ";
@@ -432,7 +430,7 @@ showAverageTable = function(dat) {
 	ret += "</table>";
 	
 	//compare avearage CO2 
-	ret += createCompareComment( same, dat.you, dat.av, dat.consCode );
+	ret += createCompareComment( same, dat.you, dat.av, dat.consCode,  dat.rank100 );
 		
 	return ret;
 };
@@ -504,6 +502,7 @@ showItemizeTable = function (target){
 			&& cons.sumCons2Name != tabNowName 
 			&& cons.consName != "consTotal"
 		) continue;
+		if ( cons.consName == "consEnergy" ) continue;
 
 		ret += "<tr><td class='conscolor' style='border-color:"+cons.color+"'>";
 		if ( cons.sumConsName == tabNowName

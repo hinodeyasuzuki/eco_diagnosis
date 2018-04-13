@@ -106,7 +106,7 @@ if ( $countryMode ==  $countryList[$languageMode] && $languageMode != "en" ) {
 	$lang["localizeCode"] = $countryMode;
 } else {
 	$lang["d6folder"] = "./localize_" . $countryMode ."_" . $languageMode;
-	$lang["localizeCode"] =  $countryMode ."_" . $countryMode;
+	$lang["localizeCode"] =  $countryMode ."_" . $languageMode;
 }
 
 $_SESSION["language"] = $languageMode;

@@ -1182,23 +1182,23 @@ D6.area = {
 		//month of heating / cooling
 		switch( this.heatingLevel ) {
 			case 1:
-				seasonMonth = [ 8, 3, 1 ];
+				seasonMonth = { winter:8, spring:3, summer:1 };
 				break;
 			case 2:
-				seasonMonth = [ 6, 4, 2 ];
+				seasonMonth = { winter:6, spring:4, summer:2 };
 				break;
 			case 3:
-				seasonMonth = [ 5, 5, 2 ];
+				seasonMonth = { winter:5, spring:5, summer:2 };
 				break;
 			case 5:
-				seasonMonth = [ 3, 5, 4 ];
+				seasonMonth = { winter:3, spring:5, summer:4 };
 				break;
 			case 6:
-				seasonMonth = [ 2, 5, 5 ];
+				seasonMonth = { winter:2, spring:5, summer:5 };
 				break;
 			case 4:
 			default:
-				seasonMonth = [ 4, 5, 3 ];
+				seasonMonth = { winter:4, spring:5, summer:3 };
 				break;
 		}
 		
@@ -2885,7 +2885,7 @@ D6.getAllResult = function(consName){
 			this.nowConsPageName = consName;
 		}
 		consName = this.nowConsPageName;
-		
+
 		//get consCode
 		var consCode = D6.consListByName[consName][0].consCode;
 
@@ -3046,6 +3046,7 @@ D6.getItemizeGraph = function ( consCode, sort ){
 				//in case of Total consumption
 				for ( var cid in target ) {
 					if ( cid == "TO" ) continue;
+					if ( cid == "" ) continue;		//180413
 					data[di] = {};
 					data[di]["compare"] = scenario;
 					data[di]["ratio"] = Math.round(target[cid][sorttarget]/target[consCode][sorttarget]*1000)/10;
@@ -4571,7 +4572,7 @@ D6.calcConsAdjust = function() {
 				} else {
 					// top down pattern : group consumption is important 
 					if ( energySum.co2 > consSum.co2 ) {
-						//in case of sumup is bigger than sumCons divide each cons
+						//in case of sum of each consumption is bigger than sumCons divide each cons
 						for ( i=1 ; i<=consNum ; i++ ) {
 							consSum.partCons[i].multiply( consSum.co2 / energySum.co2 );
 						}
@@ -4621,10 +4622,26 @@ D6.calcConsAdjust = function() {
 		//in case of exist in total consumption
 		for ( j in D6.Unit.co2 ){
 			if ( energySum[j] == 0 ) {
-				this.energyAdj[j] = 1;
+				this.energyAdj[j] = 1;	//any number
 			} else {
-				// adjust is less than triple and more than 0.3 times
-				this.energyAdj[j] = Math.max( 0.3, Math.min( 3, this.consShow["TO"][j] / energySum[j] ) );
+				this.energyAdj[j] = this.consShow["TO"][j] / energySum[j];
+				if ( this.consShow["TO"].noPriceData[j] ) {
+					if ( this.energyAdj[j] < 0.5 ) {
+						this.consShow["TO"][j] *= 0.5 / this.energyAdj[j];
+						this.energyAdj[j] = 0.5;
+					}
+					if ( this.energyAdj[j] > 2 && j != "electricity" ) {
+						this.consShow["TO"][j] *= 2 / this.energyAdj[j];
+						this.energyAdj[j] = 2;
+					}
+				}
+				if ( j != "electricity" ) {
+					// adjust electricity not to be minus but residue is OK
+					this.energyAdj[j] = Math.max( 0.2, Math.min( 1.5, this.energyAdj[j] ) );
+				} else {
+					// adjust is less than triple and more than 0.3 times
+					this.energyAdj[j] = Math.max( 0.3, Math.min( 3, this.energyAdj[j] ) );
+				}
 			}
 		}
 
@@ -5642,7 +5659,9 @@ D6.consTotal.init = function() {
 
 	//guide message in input page
 	this.inputGuide = "Basic information about the area and house";
-
+	
+	//no price Data set 1 if nodata
+	this.noPriceData = {};
 
 	//parameters related to solar and nitght time electricity usage
 	this.ratioNightEcocute = 0.4;		//night consumption rate of heat pump
@@ -5680,6 +5699,11 @@ D6.consTotal.precalc = function() {
 	this.priceEleSpring = this.input( "i0912" ,-1 );
 	this.priceEleSummer = this.input( "i0913" ,-1 );
 	this.priceEleWinter = this.input( "i0911" ,-1 );
+	this.noPriceData.electricity = 
+			this.input( "i061",-1) == -1
+			& this.priceEleSpring == -1
+			& this.priceEleSummer == -1
+			& this.priceEleWinter == -1;
 
 	this.priceEleSell =this.input( "i062", 0 );					//sell electricity
 				
@@ -5689,6 +5713,11 @@ D6.consTotal.precalc = function() {
 	this.priceGasSpring =this.input( "i0932" ,-1 );
 	this.priceGasSummer =this.input( "i0933" ,-1 );
 	this.priceGasWinter =this.input( "i0931" ,-1 );
+	this.noPriceData.gas = 
+			this.input( "i063",-1) == -1
+			& this.priceGasSpring == -1
+			& this.priceGasSummer == -1
+			& this.priceGasWinter == -1;
 
 	this.houseType =this.input( "i002", -1 );					//type of house
 	this.houseSize =this.input( "i003", 
@@ -5701,6 +5730,10 @@ D6.consTotal.precalc = function() {
 	this.priceKerosSpring =this.input( "i0942" ,-1 );
 	this.priceKerosSummer =this.input( "i0943" ,-1 );
 	this.priceKerosWinter =this.input( "i0941" ,-1 );
+	this.noPriceData.kerosene = 
+			  this.priceKerosSpring == -1
+			& this.priceKerosSummer == -1
+			& this.priceKerosWinter == -1;
 	
 
 	if( this.priceKerosWinter == -1 ) {
@@ -5715,6 +5748,7 @@ D6.consTotal.precalc = function() {
 
 	this.priceCar =this.input( "i075"
 			,D6.area.averageCostEnergy.car );					//gasoline
+	this.noPriceData.car = (this.input( "i075",-1) == -1);
 
 	this.equipHWType = this.input( "i101", 1 );					//type of heater
 
@@ -5774,7 +5808,10 @@ D6.consTotal.calc = function( ){
 	
 	//in case of no fee input, use sum of all consumption
 	this.noConsData = ret.noConsData 
-					&& ( this.input( "i061", -1) == -1 );
+					&& ( this.input( "i061", -1) == -1 )
+					&& this.noPriceData.gas
+					&& this.noPriceData.car
+					&& this.noPriceData.kerosene;
 					//&& !D6.averageMode;
 
 	//depend on hot water equipment
@@ -5836,14 +5873,17 @@ D6.consTotal.calc = function( ){
 		} else {
 			pvSellUnitPrice = 31;
 		}
-	} else if ( this.solarYear >= 2017 &&   this.solarYear  < 2100) {
+	} else if ( this.solarYear >= 2017 &&   this.solarYear  < 2020) {
 		if ( this.pvRestrict == 1 ) {
 			pvSellUnitPrice = 30;
 		} else {
 			pvSellUnitPrice = 28;
 		}
+	} else if ( this.solarYear  < 2100) {
+		//estimate
+		pvSellUnitPrice = 20;
 	}
-
+	
 	//PV installed
 	if ( this.solarKw > 0 ) {
 		// gross = electricity consumed in home include self consumption amount
@@ -6040,6 +6080,7 @@ D6.consHWsum.precalc = function() {
 	this.person =this.input( "i001", 3 );				//person number
 	this.housetype =this.input( "i002", 1 );			//structure of house
 	this.prefecture =this.input( "i021", 13 );			//prefecture
+	this.solarHeater =this.input( "i102", 3 );			//solar heater
 	this.heatArea = D6.area.getHeatingLevel(this.prefecture);	//heating level
 	this.tabDayWeek =this.input( "i103", 
 		( this.heatArea == 1 || this.heatArea == 6 ? 2 : 6 )
@@ -6063,6 +6104,7 @@ D6.consHWsum.precalc = function() {
 	this.dresserMonth = this.input( "i114", 4 );		//months of use hot water for dresser month
 	this.dishWashMonth = this.input( "i115", 4 );		//months of use hot water for dish wash month / 99 is machine
 	this.dishWashWater = this.input( "i113", 3 );		//use cold water for dish wash 1every day - 4 not
+	this.heaterPerformance = this.input( "i121", 2 );	//performance of heater 1good  3bad
 	this.cookingFreq = this.input( "i802", 6 );			//frequency of cooking 0-10
 	
 	this.keepSeason =this.input( "i131", 2 );			//use keep toilet seat hot 1:everyday - 4not use
@@ -6082,9 +6124,25 @@ D6.consHWsum.calc = function() {
 			this.equipType = 1;
 		}
 	}
+	
+	//good type
+	if ( this.equipType == 1 && this.heaterPerformance == 1 ) {
+		this.equipType == 2;
+	}
+	if ( this.equipType == 5 && this.heaterPerformance == 1 ) {
+		this.equipType == 6;
+	}
+	//bad type
+	if ( this.equipType == 2 && this.heaterPerformance == 3 ) {
+		this.equipType == 1;
+	}
 
 	// estimate templature of tap water
 	this.waterTemp = D6.area.getWaterTemplature();
+
+	//adjust by solar heater
+	this.waterTemp = ( this.solarHeater == 1 ? 0.4 * this.hotWaterTemp + 0.6 * this.waterTemp : 
+						( this.solarHeater == 2 ? 0.15 * this.hotWaterTemp + 0.85 * this.waterTemp : this.waterTemp ) );
 
 	// estimate amount of hot water used as shower litter/day
 	this.showerWaterLitter = 
@@ -6972,19 +7030,19 @@ D6.consHTsum.precalc = function() {
 			this.heatArea == 3 ? 0.25 : 0.2
 		);											//heating area m2
 		
-	this.heatEquip =this.input( "i202", -1 );		//heagin equipment
+	this.heatEquip =this.input( "i202", -1 );		//heating equipment
 	this.heatTime  =this.input( "i204", 
 			this.heatArea == 1 ? 24 :
 			this.heatArea == 2 ? 10 :
 			this.heatArea == 3 ? 6 : 6
 		);											//heating time
-	this.heatTemp  =this.input( "i205", 21 );		//heating templature setting
+	this.heatTemp  =this.input( "i205", 21 );		//heating temperature setting
 	this.priceEleSpring =this.input( "i0912", -1 );	//electricity charge in spring/fall
-	this.priceEleWinter =this.input( "i0911", -1 );	//elecuricity charge in winter
-	this.priceGasSpring =this.input( "i0922", -1 );	//gas chage in spring/fall
-	this.priceGasWinter =this.input( "i0921", -1 );	//gas chage in winter
+	this.priceEleWinter =this.input( "i0911", -1 );	//electricity charge in winter
+	this.priceGasSpring =this.input( "i0922", -1 );	//gas charge in spring/fall
+	this.priceGasWinter =this.input( "i0921", -1 );	//gas charge in winter
 	this.consKeros =this.input( "i064", -1 );		//consumption of kerosene
-	this.hotwaterEquipType = this.input( "i101", -1 );	//hot water templature
+	this.hotwaterEquipType = this.input( "i101", -1 );	//hot water temperature
 
 	this.performanceWindow =this.input( "i041", -1 );	//performance of window
 	this.performanceWall =this.input( "i042", -1 );	//performance of wall insulation
@@ -6997,7 +7055,7 @@ D6.consHTsum.calc = function() {
 	//calculate heat energy
 	var heatKcal = this.calcHeatLoad();
 
-	//covert to montly by seasonal data
+	//covert to monthly by seasonal data
 	heatKcal *= D6.area.seasonMonth.winter / 12;
 	this.endEnergy = heatKcal;
 
@@ -7006,7 +7064,7 @@ D6.consHTsum.calc = function() {
 		if ( this.consKeros > 0 
 			||D6.area.averageCostEnergy.kerosene > 1000 
 		) {
-			//kersene 
+			//kerosene 
 			this.heatEquip = 4;
 		} else if ( this.priceGasWinter < 0 
 				|| this.priceGasWinter > 4000 
@@ -7034,7 +7092,6 @@ D6.consHTsum.calc = function() {
 			}
 		}
 	}
-
 
 	//estimate of heat source
 	if ( this.heatEquip == 1 || this.heatEquip == 2 ) {
@@ -7911,6 +7968,7 @@ D6.consRF.precalc = function() {
 	this.templature = this.input( "i714" + this.subID, 4 );	//setting of temprature
 	this.full = this.input( "i715" + this.subID, 4 );		//stuffing too much
 	this.space = this.input( "i716" + this.subID, 3 );		//space beteween wall and refragerator
+	this.performance = this.input( "i721", 2 );				//performance
 	
 	var d = new Date();
 	this.nowEquip = this.equip(d.getFullYear() - this.year, this.size);
@@ -7958,10 +8016,13 @@ D6.consRF.calc = function( ) {
 	this.electricity = this.electricity 
 				* ( this.space ==1 ? 0.95 : ( this.space==2 ? 1.05 : 1 ) );
 
-	//fix by templature
+	//fix by temperature
 	this.electricity = this.electricity 
 				* ( this.templature ==1 ? 1.1 : ( this.templature==3 ? 0.95 : 1 ) );
 	
+	//fix by performance
+	this.electricity = this.electricity 
+				* ( this.performance ==1 ? 0.8 : ( this.performance==3 ? 1.2 : 1 ) );
 };
 
 
@@ -8024,7 +8085,7 @@ D6.consLIsum = D6.object( D6.ConsBase );
 D6.consLIsum.init =function() {
 	//construction setting
 	this.consName = "consLIsum";   		//code name of this consumption 
-	this.consCode = "";            		//short code to access consumption, only set main consumption user for itemize
+	this.consCode = "LI";            	//short code to access consumption, only set main consumption user for itemize
     this.title = "light";				//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "6";					//number code in items
@@ -8663,7 +8724,12 @@ D6.consCRsum.precalc = function() {
 
 	this.priceCar = D6.consShow["TO"].priceCar;		//car charge
 	this.carNum = this.input( "i901", -1 );			//number of cars
-	this.car =  this.priceCar /D6.Unit.price.car;	//monthly gasoline　L/month
+	if ( this.carNum == 0 && D6.consShow["TO"].noPriceData.car ) {
+		this.car = 0;
+		D6.consShow["TO"].priceCar = 0;
+	} else {
+		this.car =  this.priceCar /D6.Unit.price.car;	//monthly gasoline　L/month
+	}
 };
 
 
@@ -8740,6 +8806,7 @@ D6.consCR.precalc = function() {
 };
 
 D6.consCR.calc = function() {
+	//calculated in consCRtrip
 };
 
 D6.consCR.calc2nd = function( ) {
