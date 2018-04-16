@@ -85,6 +85,7 @@ D6.consHTsum.precalc = function() {
 			this.heatArea == 2 ? 10 :
 			this.heatArea == 3 ? 6 : 6
 		);											//heating time
+	this.heatMonth  = this.input( "i206", D6.area.seasonMonth.winter );	//heating month
 	this.heatTemp  =this.input( "i205", 21 );		//heating temperature setting
 	this.priceEleSpring =this.input( "i0912", -1 );	//electricity charge in spring/fall
 	this.priceEleWinter =this.input( "i0911", -1 );	//electricity charge in winter
@@ -101,11 +102,17 @@ D6.consHTsum.precalc = function() {
 };
 
 D6.consHTsum.calc = function() {
+	//heat floor/room size m2
+	var heatArea_m2	= this.houseSize * this.heatSpace;
+	if ( this.heatSpace > 0.05 ) {
+		heatArea_m2 = Math.max( heatArea_m2, 13 );		//minimum 13m2
+	}
+
 	//calculate heat energy
-	var heatKcal = this.calcHeatLoad();
+	var heatKcal = this.calcHeatLoad(heatArea_m2, this.heatTime, this.heatMonth, this.heatTemp);
 
 	//covert to monthly by seasonal data
-	heatKcal *= D6.area.seasonMonth.winter / 12;
+	heatKcal *= this.heatMonth / 12;
 	this.endEnergy = heatKcal;
 
 	//guess of heat source
@@ -126,14 +133,14 @@ D6.consHTsum.calc = function() {
 		}
 	}
 
-	//calc residue
+	//calculate residue
 	var elecOver = 0;
 	var coef = ( this.heatEquip == 1 ? this.apf : 1 );
 	if ( this.heatEquip == 1 || this.heatEquip == 2 ) {
 		if ( this.priceEleWinter > 0  ) {
 			var priceMaxCons = this.priceEleWinter * 0.7
 					/ D6.Unit.price.electricity 
-					* D6.Unit.seasonMonth.winter / 12;
+					* this.heatMonth / 12;
 			if ( heatKcal / coef /D6.Unit.calorie.electricity > priceMaxCons ) {
 				//in case that calculated electricity is more than fee
 				var elecOver = heatKcal - priceMaxCons * coef *D6.Unit.calorie.electricity;
@@ -170,7 +177,7 @@ D6.consHTsum.calc = function() {
 	var consbyprice = -1;
 	
 	//electricity
-	consbyprice = ( this.priceEleWinter -this.priceEleSpring ) / D6.Unit.price.electricity;
+	consbyprice = Math.max( 0,  this.priceEleWinter -this.priceEleSpring ) / D6.Unit.price.electricity;
 	if ( this.priceEleSpring != -1 && this.priceEleWinter != -1) {
 		if( this.hotwaterEquipType !=5 && this.hotwaterEquipType !=6 ) {
 			this.electricity = ( this.electricity*2 + consbyprice ) / 3;
@@ -180,7 +187,7 @@ D6.consHTsum.calc = function() {
 	}
 
 	//gas
-	consbyprice = ( this.priceGasWinter -this.priceGasSpring ) / D6.Unit.price.gas;
+	consbyprice = Math.max( 0, this.priceGasWinter -this.priceGasSpring ) / D6.Unit.price.gas;
 	var gasover = 0;
 	if ( this.priceGasSpring != -1 && this.priceGasWinter != -1) {
 		if( this.hotwaterEquipType >=3 && this.hotwaterEquipType <=6 ) {	//not gas
@@ -200,7 +207,7 @@ D6.consHTsum.calc = function() {
 		keroseneover = Math.max( 0,  this.kerosene - consbyprice );
 		this.kerosene = consbyprice;
 	}
-	
+
 	//fix electricity estimate is more than that of by fee
 	if ( elecOver > 0 ) {
 		//kerosene fix
@@ -210,20 +217,21 @@ D6.consHTsum.calc = function() {
 			this.gas +=  elecOver *  D6.Unit.calorie.electricity /D6.Unit.calorie.gas;
 		}
 	}
-	//gas fix
-	if (gasover>0){
+	//gas over fix
+	if ( gasover>0 ){
 		if( this.priceKeros > 0 ) {
 			this.kerosene = Math.min( gasover * D6.Unit.calorie.gas / D6.Unit.calorie.kerosene, this.consKeros / D6.Unit.price.kerosene );
 		} else {
 			this.electricity +=  gasover * D6.Unit.calorie.gas / D6.Unit.calorie.electricity;
 		}
 	}
+
 	//kerosene use estimate is more than fee
 	if (keroseneover>0){
 		this.electricity +=  keroseneover * D6.Unit.calorie.kerosene / D6.Unit.calorie.electricity;
 	}
-	
-	//recalc after fix
+
+	//re-calculate after fix
 	this.calcACkwh = heatKcal / this.apf /D6.Unit.calorie.electricity;
 	if ( this.mainSource == "electricity" && this.heatEquip != 2) {
 		//air conditioner
@@ -252,46 +260,53 @@ D6.consHTsum.calc2nd = function( ) {
 	//in case of use kerosene for heat, check electricity usage
 	if ( this.heatEquip == 4 ) {
 		//in case kerosene estimate is more than fee
-		if ( this.kerosene > spaceK ) {
+		if ( this.kerosene > spaceK && this.consKeros != -1) {
 			//heat consumption is over gas residue
 			if ( this.kerosene - spaceK 
 				> spaceG *D6.Unit.calorie.gas /D6.Unit.calorie.kerosene
 			) {
 				//estimate heat is supplied by electricity
-				this.electricity = 
+				this.electricity += 
 						( this.kerosene - spaceK ) 
 						*D6.Unit.calorie.kerosene
 						/D6.Unit.calorie.electricity;
 				//not over 70% of winter electricity
 				this.electricity = Math.min( this.electricity,
-						D6.consShow["TO"].electricity
-							* D6.consShow["TO"].seasonPrice["electricity"][0]	//winter
-							/ D6.consShow["TO"].priceEle
-							* D6.area.seasonMonth.winter / 12
-							*0.7
-					);
+							D6.consShow["TO"].electricity * this.heatMonth / 12 *0.7 );
 				this.kerosene = spaceK;
 				this.gas = spaceG;
 			} else {
 				//in case to use gas residure
-				this.gas = 
+				this.gas += 
 					( this.kerosene - spaceK ) 
 					*D6.Unit.calorie.kerosene
 					/D6.Unit.calorie.gas;
-			this.kerosene = spaceK;
+				this.kerosene = spaceK;
 			}
 		}
 	}
 
 	//kerosene cannot find suitable usage
 	if ( spaceK > 0 ) {
-		this.kerosene = spaceK;
+		if ( this.consKeros == -1 ) {
+			D6.consShow["TO"].kerosene = consHW.kerosene + this.kerosene;
+			
+			//total kerosene recalculate
+			var seasonConsPattern = D6.area.getSeasonParamCommon();
+			ret = D6.calcMonthly( D6.consShow["TO"].kerosene * D6.Unit.price.kerosene, [-1,-1,-1], [ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ], seasonConsPattern.kerosene, "kerosene" );
+			D6.consShow["TO"].priceKeros = ret.ave;
+			D6.consShow["TO"].seasonPrice["kerosene"] = ret.season;
+			D6.consShow["TO"].monthlyPrice["kerosene"] = ret.monthly;
+			
+		} else {
+			this.kerosene = spaceK;
+		}
 	}
 
-	//in case of use gas hetar
+	//in case of use gas heater
 	if ( this.heatEquip == 3 ) {
 		if ( this.gas > spaceG ) {
-			this.electricity = 
+			this.electricity += 
 						( this.gas - spaceG ) 
 						*D6.Unit.calorie.gas
 						/D6.Unit.calorie.electricity;
@@ -300,8 +315,7 @@ D6.consHTsum.calc2nd = function( ) {
 	}
 
 	//add electricity use in toilet
-	this.electricity += D6.consListByName["consHWtoilet"][
-	0].electricity;
+	this.electricity += D6.consListByName["consHWtoilet"][0].electricity;
 };
 
 //calculate heat load kcal/month
@@ -309,10 +323,10 @@ D6.consHTsum.calc2nd = function( ) {
 //		cons.houseType : type of house
 //		cons.houseSize : floor size(m2)
 //		cons.heatSpace : heat area rate(-)   room size(m2)
-D6.consHTsum.calcHeatLoad = function(){
+D6.consHTsum.calcHeatLoad = function( heatArea_m2, heatTime, heatMonth, heatTemp ){
 	var energyLoad = 0;
 
-	// heat loss when templature difference between house and outside is 20 degree-C  kcal/h/m2
+	// heat loss when temperature difference between house and outside is 20 degree-C  kcal/h/m2
 	var heatLoadUnit = this.heatLoadUnit_Wood;
 	
 	// cold area insulation standard
@@ -339,23 +353,16 @@ D6.consHTsum.calcHeatLoad = function(){
 		heatLoadUnit *= this.heatLoadUnit_Steel / this.heatLoadUnit_Wood;
 	}
 
-	//heat floor/room size m2
-	var heatArea_m2	= this.houseSize * this.heatSpace;
-	if ( this.heatSpace > 0.05 ) {
-		heatArea_m2 = Math.max( heatArea_m2, 13 );		//minimum 13m2
-	}
-
 	//heat factor by month and hours
-	var heatMonth = D6.area.seasonMonth.winter;
-	var heatFactor = D6.area.getHeatFactor( heatMonth, this.heatTime );
+	var heatFactor = D6.area.getHeatFactor( heatMonth, heatTime );
 
 	//heat time adjust for long time use
-	var heatTimeFactor = Math.min( this.heatTime, (this.heatTime - 8 ) * 0.3 + 8) / this.heatTime;
+	var heatTimeFactor = Math.min( heatTime, (heatTime - 8 ) * 0.3 + 8) / heatTime;
 
-	//coefficient by templature
-	var coefTemp = ( this.heatTemp - 20 ) / 10 + 1;
+	//coefficient by temperature
+	var coefTemp = ( heatTemp - 20 ) / 10 + 1;
 
-	energyLoad = heatLoadUnit * heatFactor[1] * heatArea_m2 * this.heatTime * heatTimeFactor * 30 * coefTemp;
+	energyLoad = heatLoadUnit * heatFactor[1] * heatArea_m2 * heatTime * heatTimeFactor * 30 * coefTemp;
 
 	return energyLoad;
 };

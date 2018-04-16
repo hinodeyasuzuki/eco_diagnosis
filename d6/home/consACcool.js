@@ -58,14 +58,15 @@ D6.consACcool.precalc = function() {
 	//prepare input value
 	this.coolArea  = this.input( "i212" + this.subID, 12 );		//size of room (m2)
 	this.coolTime  = this.input( "i271" + this.subID, this.sumCons.coolTime );	//time of cooling per day (hour/day)
-	this.coolTemp  = this.input( "i273" + this.subID, this.sumCons.coolTemp );	//templature setting (degree-C)
+	this.coolTemp  = this.input( "i273" + this.subID, this.sumCons.coolTemp );	//temperature setting (degree-C)
+	this.coolMonth  = this.input( "i274" + this.subID, this.sumCons.coolMonth );	//cooling month
 };
 
 D6.consACcool.calc = function() {
-	//calcurate cooling load ( kcal/month in cooling days )
-	var coolKcal = this.calcCoolLoad();
+	//calculate cooling load ( kcal/month in cooling days )
+	var coolKcal = this.calcCoolLoad(this.coolArea, this.coolTime, this.coolTemp, this.coolMonth  );
 
-	//calcurate annualy electricity from cooling season monthly one.
+	//calculate annual electricity from cooling season monthly one.
 	coolKcal *= D6.area.seasonMonth.summer / 12;
 
 	//monthly consumption electricity kWh/mon
@@ -73,7 +74,7 @@ D6.consACcool.calc = function() {
 
 };
 
-//calcuration after all consumptions are calcrated
+//calculation after all consumptions are calclated
 D6.consACcool.calc2nd = function( ) {
 	//in case of residue
 	if ( this.subID == 0 ){

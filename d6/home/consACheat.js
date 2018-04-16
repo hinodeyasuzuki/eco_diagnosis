@@ -57,19 +57,20 @@ D6.consACheat.precalc = function() {
 	//parameters
 	this.heatSpace = this.input( "i212" + this.subID, 13 );			//size of room (m2)
 	this.heatEquip = this.input( "i231" + this.subID, this.consHeat.heatEquip );	//equipment for heating
-	this.heatTime  = this.input( "i203" + this.subID, this.consHeat.heatTime );	//heating time ( hour/day )
-	this.heatTemp  = this.input( "i204" + this.subID, this.consHeat.heatTemp );	//temprature setting( degree-C )
+	this.heatTime  = this.input( "i233" + this.subID, this.consHeat.heatTime );	//heating time ( hour/day )
+	this.heatTemp  = this.input( "i234" + this.subID, this.consHeat.heatTemp );	//temperature setting( degree-C )
+	this.heatMonth  = this.input( "i235" + this.subID, this.consHeat.heatMonth );	//heating month
 	this.windowArea = this.input( "i213" + this.subID, -1 );		//window size (m2)
-	this.windowPerf = this.input( "i216" + this.subID, -1 );		//window insulation level
+	this.windowPerf = this.input( "i214" + this.subID, -1 );		//window insulation level
 	
 };
 
 D6.consACheat.calc = function() {
-	//calcurate heat load ( kcal/month in heating days )
-	var heatKcal = this.calcHeatLoad();
+	//calculate heat load ( kcal/month in heating days )
+	var heatKcal = this.calcHeatLoad(this.heatSpace, this.heatTime, this.heatMonth, this.heatTemp );
 
-	//calcurate annualy energy from heating season monthly one.
-	heatKcal *= D6.area.seasonMonth.winter / 12;
+	//calculate annual energy from heating season monthly one.
+	heatKcal *= this.heatMonth / 12;
 	this.endEnergy = heatKcal;
 
 	//guess heat equipment
@@ -78,7 +79,7 @@ D6.consACheat.calc = function() {
 		this.heatEquip = this.consHeat.heatEquip;
 	}
 	
-	//guess main source
+	//guess main energy source
 	if ( this.heatEquip == 1 || this.heatEquip == 2 ) {
 		this.mainSource = "electricity";
 	} else if ( this.heatEquip == 3 ) {
@@ -101,7 +102,7 @@ D6.consACheat.calc = function() {
 
 };
 
-//calcuration after all consumptions are calcrated
+//calculation after all consumptions are calculated
 D6.consACheat.calc2nd = function( ) {
 	//calculate residue
 	if ( this.subID == 0 ){
@@ -118,7 +119,7 @@ D6.consACheat.calcMeasure = function() {
 
 	//mACFilter,mACchangeHeat
 	if ( this.heatEquip == 1 ){
-		//in case of airconditioner heater
+		//in case of air-conditioner heater
 		this.measures["mACfilter"].copy( this );
 		this.measures["mACfilter"]["electricity"] = 
 					this.electricity * ( 1 - this.reduceRateFilter ) 

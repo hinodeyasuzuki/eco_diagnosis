@@ -91,14 +91,20 @@ D6.consHWsum.precalc = function() {
 		( this.heatArea == 1 || this.heatArea == 6 ? 2 : 6 )
 	);													//use tab day day/week
 	this.tabDayWeekSummer =this.input( "i104", 2 );		//use tab day in summer day/week
-	this.showerMinutes =this.input( "i105"
-			, this.showerWaterMinutes * this.person );	//shower time min/day
-	this.showerMinutesSummer =this.input( "i106"
-			, this.showerWaterMinutes * this.person );	//shower time in summer min/day
+
+	var ret = this.input2seasons( "i105", "i106", this.showerWaterMinutes * this.person );
+	this.showerMinutes = ret[0];				//shower time min/day
+	this.showerMinutesSummer = ret[1];			//shower time in summer min/day
+
+	this.showerHotTimeSpan = this.input( "i112", 10 );	//time(seconds) to pour Hot Water
+
 	this.savingShower =this.input( "i116", -1 );		//saving shower head 
 	this.tabKeepHeatingTime =this.input( "i108"
 			, (this.person > 1 ? 3 : 0 ) );				//keep time to tab hot hour/day
-	this.keepMethod =this.input( "i110", 5 );			//keep hot method 
+
+	this.keepMethod2 =this.input( "i111", 5 );			//keep hot method 2
+	this.keepMethod =this.input( "i110", this.keepMethod2 );			
+														//keep hot method 
 	this.tabInsulation =this.input( "i117", -1 );		//tab insulation
 	this.tabHeight =this.input( "i107", 8 );			//height of tab hot water 0-10
 	
@@ -151,13 +157,14 @@ D6.consHWsum.calc = function() {
 
 	// estimate amount of hot water used as shower litter/day
 	this.showerWaterLitter = 
-			( this.showerMinutes * ( 12 -D6.area.seasonMonth.summer )  +
+			( ( this.showerMinutes * ( 12 -D6.area.seasonMonth.summer )  +
 				this.showerMinutesSummer * D6.area.seasonMonth.summer ) 
 				/ 12 
 				* ( this.savingShower == 1  ?  1 - this.reduceRateShowerHead: 1 ) 
+				+ this.showerHotTimeSpan / 60 * 5 )		//	5 times
 				* this.showerWaterLitterUnit ;
 
-	// estimate amout of hot water used in tub	litter/day
+	// estimate amount of hot water used in tub	litter/day
 	this.consHWtubLitter = this.tabWaterLitter * this.tabHeight  / 10 * 
 					( this.tabDayWeek * ( 12 -D6.area.seasonMonth.summer ) 
 						+ this.tabDayWeekSummer * D6.area.seasonMonth.summer ) / 12 / 7;
@@ -166,7 +173,7 @@ D6.consHWsum.calc = function() {
 	this.allLitter = ( 
 						this.consHWtubLitter
 						+ this.showerWaterLitter
-						+ this.otherWaterLitter );
+						+ this.otherWaterLitter ) ;	
 
 	// tap water heating energy   kcal/month
 	this.heatTapEnergy = this.allLitter * ( this.hotWaterTemp - this.waterTemp ) * 365 / 12;
@@ -194,7 +201,7 @@ D6.consHWsum.calc = function() {
 	// ratio of dish wash
 	this.consHWdishwashRate = this.otherWaterLitter / 2 / this.allLitter * ( this.heatTapEnergy /  this.heatEnergy )
 										* ( this.dishWashMonth == 99 ? 1 : this.dishWashMonth / 6 )
-										* ( this.dishWashWater - 1 ) / 2
+										* ( 4 - this.dishWashWater ) / 2
 										* this.cookingFreq / 6;
 
 	// estimate loss energy when stored in tank  kcal/month

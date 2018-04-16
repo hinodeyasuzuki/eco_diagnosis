@@ -97,9 +97,9 @@ D6.consAC.calc2nd = function( ) {
  *		size : kw less than or equal to
  *	return value
  *		ret.pr1 : price of good one
- *		ret.pr2 : price of ordninal one
+ *		ret.pr2 : price of ordinal one
  *		ret.pf1 : performance of good one
- *		ret.pf2 : performance of ordninal one
+ *		ret.pf2 : performance of ordinal one
  */
 D6.consAC.equip = function( year, size ) {
 	var sizeThreshold = [ 2.8, 4.5, 100 ];	//last is maxsize

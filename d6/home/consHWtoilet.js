@@ -55,11 +55,17 @@ D6.consHWtoilet.precalc = function() {
 
 	this.person =this.input( "i001", 3 );			//person
 	this.keepSeason =this.input( "i131", 2 );		//use heating 1:everyday - 4 don't use
+	this.keepTemp =this.input( "i132", 2 );			//temperature 1:high - 3low, 4 don't know
 	this.savingToilet = this.input( "i133", 2 );	//use demand heat type
+	this.coverToilet = this.input( "i134", 1 );		//cover use
 };
 
 D6.consHWtoilet.calc = function() {	
-	this.electricity = this.warmerElec_kWh_y / 12 * (4-this.keepSeason)/3;
+	this.electricity = this.warmerElec_kWh_y / 12 
+						* (4-this.keepSeason)/3
+						* (this.keepTemp == 1 ? 1.1 : (this.keepTemp == 3 ? 0.9 : 1) )
+						* (this.savingToilet == 1 ? 0.5 : 1 )
+						* (this.coverToilet == 2 ? 1.1 : 1 );
 	this.water = this.water_m3_d * this.person *30;
 };
 
@@ -71,17 +77,23 @@ D6.consHWtoilet.calcMeasure = function() {
 	this.measures[ "mHWreplaceToilet5" ].water = this.water_m3_d * this.person *30 / 2;
 
 	//mHWreplaceToilet
-	if ( this.savingToilet != 1) {
+	if ( this.savingToilet != 1 || this.keepSeason != 4 ) {
 		this.measures[ "mHWreplaceToilet" ].calcReduceRate( this.resudeRateGoodSheat );
 	}
 		
 	//mHWtemplatureToilet
-	if ( !this.isSelected( "mHWreplaceToilet" ) || this.savingToilet != 1 ) {
-		this.measures[ "mHWtemplatureToilet" ].calcReduceRate( this.resudeRateTemplature );
+	if ( this.isSelected( "mHWreplaceToilet" ) || this.savingToilet == 1 ) {
+	} else {
+		if ( this.keepTemp == 1 ) {
+			this.measures[ "mHWtemplatureToilet" ].calcReduceRate( this.resudeRateTemplature );
+		} else if ( this.keepTemp == 2 ) {
+			this.measures[ "mHWtemplatureToilet" ].calcReduceRate( this.resudeRateTemplature/2 );
+		}
 	}
 
 	//mHWcoverTilet
-	if ( !this.isSelected( "mHWreplaceToilet" )|| this.savingToilet != 1 ) {
+	if ( this.isSelected( "mHWreplaceToilet" )|| this.savingToilet == 1 || this.coverToilet == 1 ) {
+	} else {
 		this.measures[ "mHWcoverTilet" ].calcReduceRate( this.resudeRateCover );
 	}
 

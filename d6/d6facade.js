@@ -404,7 +404,7 @@ D6.workercalc = function( command, param ){
 			//set array data
 			if ( typeof(param.inputs) != "undefined" && param.inputs) {
 				for ( var inp in param.inputs ) {
-					D6.inSet(param.inputs[inp].id,param.inputs[inp].val);
+					D6.inSet(param.inputs[inp].id, param.inputs[inp].val);
 				}
 			}
 			//measure select
@@ -417,20 +417,20 @@ D6.workercalc = function( command, param ){
 				measurechange = true;
 			}
 
-			//calc and return
+			//calculate and return
 			if ( measurechange ) {
 				D6.calcMeasures(-1);
 				result = D6.getAllResult();
-			} else if ( typeof(param.calc) == "undefined" || param.calc ) {
+			} else if ( typeof(param.calc) != "undefined" || param.calc ) {
 				D6.calculateAll(-1);
 			}
 
 			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			if ( typeof(param.getresult) == "undefined" || param.getresult ) {
+			if ( typeof(param.getresult) != "undefined" || param.getresult ) {
 				result = D6.getAllResult();
 			}
 			//create input components
-			if ( typeof(param.getinput) == "undefined" || param.getinput ) {
+			if ( typeof(param.getinput) != "undefined" || param.getinput ) {
 				result.inputPage = D6.getInputPage(param.consName,param.subName);
 			}
 			break;

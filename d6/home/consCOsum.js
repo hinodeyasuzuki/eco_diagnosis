@@ -63,13 +63,20 @@ D6.consCOsum.precalc = function() {
 	this.coolArea  = this.input( "i201", 0.5 );		//rate by space of cooling
 	this.coolTime  = this.input( "i261", 4 );		//time
 	this.coolTemp  = this.input( "i263", 27 );		//temperature
+	this.coolMonth  = this.input( "i264", D6.area.seasonMonth.summer );		//month
 };
 	
 D6.consCOsum.calc = function() {
-	var coolKcal = this.calcCoolLoad();
+	var coolArea_m2;				//area of cooling m2
+	coolArea_m2 = this.houseSize * this.coolArea;
+	if ( this.coolArea > 0.05 ) {
+		coolArea_m2 = Math.max( coolArea_m2, 13 );		//minimun 13m2
+	}
 
-	//calc year average from seasonal average
-	coolKcal *= D6.area.seasonMonth.summer / 12;
+	var coolKcal = this.calcCoolLoad(coolArea_m2, this.coolTime, this.coolMonth, this.coolTemp );
+
+	//calculate year average from seasonal average
+	coolKcal *= this.coolMonth / 12;
 
 	//monthly electricity
 	this.electricity =  coolKcal / this.apf / D6.Unit.calorie.electricity;
@@ -88,7 +95,7 @@ D6.consCOsum.calcMeasure = function() {
 //		cons.houseType : type of structure
 //		cons.houseSize : floor size(m2)
 //		cons.heatArea : area rate of heating(-)
-D6.consCOsum.calcCoolLoad = function()
+D6.consCOsum.calcCoolLoad = function( coolArea_m2, coolTime, coolMonth, coolTemp )
 {
 	var energyLoad = 0;
 
@@ -100,17 +107,10 @@ D6.consCOsum.calcCoolLoad = function()
 		coolLoadUnit = this.coolLoadUnit_Steel;
 	}
 
-	var coolArea_m2;				//area of cooling m2
-	coolArea_m2 = this.houseSize * this.coolArea;
-	if ( this.coolArea > 0.05 ) {
-		coolArea_m2 = Math.max( coolArea_m2, 13 );		//minimun 13m2
-	}
-
 	var coolTime;					//time of cooling
 	coolTime = this.coolTime;
 
 	//coefficient of cooling
-	var coolMonth = D6.area.seasonMonth.summer;
 	var coolFactor = D6.area.getCoolFactor( coolMonth, coolTime );
 
 	var coefTemp;					//difference by temperature

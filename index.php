@@ -362,6 +362,11 @@ switch( $dispMode ) {
 		include "view/view_uchieco/template-uchieco.html";
 		break;
 		
+	case 9:
+		//develop
+		include "view/view_develop/template-develop.html";
+		break;
+
 	case 99:
 	default:
 		//measure list
