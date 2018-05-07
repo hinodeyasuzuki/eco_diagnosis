@@ -181,6 +181,22 @@ grunt.initConfig({
 				]
 			}
         },
+        home_KR: {
+			files:{
+				'dist_develop/d6home_KR.js' :
+				[	'localize_KR/areaset/*.js',
+					'localize_KR/home/*.js'
+				]
+			}
+        },
+        office_KR: {
+			files:{
+				'dist_develop/d6office_KR.js' :
+				[	'localize_KR/areaset/*.js',
+					'localize_KR/office/*.js'
+				]
+			}
+        },
     },
 
     uglify: {
@@ -241,6 +257,18 @@ grunt.initConfig({
 			files:{
                 // output file : source file
                 'dist/d6office_FR.min.js': 'dist_develop/d6office_FR.js'
+			}
+		},
+		home_KR : {
+			files:{
+                // output file : source file
+                'dist/d6home_KR.min.js': 'dist_develop/d6home_KR.js'
+			}
+		},
+		office_KR : {
+			files:{
+                // output file : source file
+                'dist/d6office_KR.min.js': 'dist_develop/d6office_KR.js'
 			}
 		},
     },

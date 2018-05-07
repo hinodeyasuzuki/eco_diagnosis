@@ -4643,7 +4643,7 @@ D6.calcConsAdjust = function() {
 				this.energyAdj[j] = 1;	//any number
 			} else {
 				this.energyAdj[j] = this.consShow["TO"][j] / energySum[j];
-				if ( this.consShow["TO"].noPriceData[j] ) {
+				if ( typeof(this.consShow["TO"].noPriceData[j]) !== "undefined" && this.consShow["TO"].noPriceData[j] ) {
 					if ( this.energyAdj[j] < 0.5 ) {
 						this.consShow["TO"][j] *= 0.5 / this.energyAdj[j];
 						this.energyAdj[j] = 0.5;
@@ -6071,6 +6071,9 @@ DC.init = function() {
 	this.groupID = "9";				//うちわけ番号
 	this.color = "#a9a9a9";		//表示の色}
 	this.inputGuide = "全体のエネルギーの使い方について";		//入力欄でのガイド
+
+	//no price Data set 1 if nodata
+	this.noPriceData = {};
 
 	this.measureName = [ 
 		"mTOcontracthigh",

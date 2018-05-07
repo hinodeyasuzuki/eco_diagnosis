@@ -29,6 +29,9 @@ DC.init = function() {
 	this.color = "#a9a9a9";		//表示の色}
 	this.inputGuide = "全体のエネルギーの使い方について";		//入力欄でのガイド
 
+	//no price Data set 1 if nodata
+	this.noPriceData = {};
+
 	this.measureName = [ 
 		"mTOcontracthigh",
 		"mTOcontracthome",
