@@ -12,28 +12,29 @@
  *								2011/01/21 original PHP version
  *								2011/05/06 ported to ActionScript3
  * 								2016/04/12 ported to JavaScript
+ * 								2018/05/07 for korea
  */
 
 //fix D6.Unit
 
-	// unit price   元(in China)/each unit
+	// unit price   won(in Korea)/each unit
 D6.Unit.price = {
-		electricity:1,			// override in D6.area.setPersonArea by supplyer
-		nightelectricity:0.3,
-		sellelectricity:1,
-		nagas:10,
-		lpgas:30,
-		kerosene:7,
-		gasoline:8,
-		lightoil:7,
-		heavyoil:6,
-		coal:3,
+		electricity:100,			// override in D6.area.setPersonArea by supplyer
+		nightelectricity:100,
+		sellelectricity:150,
+		nagas:1000,
+		lpgas:3000,
+		kerosene:700,
+		gasoline:800,
+		lightoil:700,
+		heavyoil:600,
+		coal:300,
 		biomass:0,
-		hotwater:0.1,		// 元/MJ
+		hotwater:3.6,
 		waste:0,
 		water:0,
-		gas:10,
-		car:8
+		gas:1000,
+		car:800
 	};
 
 D6.Unit.defaultPriceElectricity = D6.Unit.price.electricity;
@@ -51,7 +52,7 @@ D6.Unit.priceBase = {
 		heavyoil:0,
 		coal:0,
 		biomass:0,
-		hotwater:50,
+		hotwater:5000,
 		waste:0,
 		water:0,
 		gas:0,
@@ -60,22 +61,22 @@ D6.Unit.priceBase = {
 	
 	// names ( dataset is now witten in Japanse )
 D6.Unit.name = {
-		electricity:"电力",
-		nightelectricity:"电力",
+		electricity:"전기",
+		nightelectricity:"전기",
 		sellelectricity:"売電",
-		nagas:"都市ガス",
-		lpgas:"LPガス",
-		kerosene:"灯油",
-		gasoline:"ガソリン",
-		lightoil:"軽油",
-		heavyoil:"重油",
-		coal:"煤球",
+		nagas:"도시가스",
+		lpgas:"LP 가스",
+		kerosene:"등유",
+		gasoline:"가솔린",
+		lightoil:"경유",
+		heavyoil:"중유",
+		coal:"연탄",
 		biomass:0,
-		hotwater:"区供热",
+		hotwater:"지역 열",
 		waste:0,
 		water:0,
-		gas:"气",
-		car:"汽油"
+		gas:"가스",
+		car:"가솔린"
 	};
 	
 	// unit discription text
@@ -111,7 +112,7 @@ D6.Unit.calorie = {
 		heavyoil:9000,
 		coal:8000,
 		biomass:0,
-		hotwater:225,	//kcal/MJ
+		hotwater:225,
 		waste:0,
 		water:0,
 		gas:11000,

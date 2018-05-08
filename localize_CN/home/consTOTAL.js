@@ -47,8 +47,18 @@ DC.paramSet = function() {
 
 	this.heatEquip =this.input( "i202", -1 );			//主な暖房機器
 
+<<<<<<< HEAD
 	//coal
 	this.priceCoal = this.input( "i065" ,D6.area.averageCostEnergy.coal );
+=======
+	//coal original
+	this.priceKeros = this.priceKerosSpring = this.priceKerosSummer = 0;
+	if (D6.area.averageCostEnergy.coal < 1000 ) {
+		this.priceCoal = this.input( "i065" ,0 );
+	} else {
+		this.priceCoal = this.input( "i065" ,D6.area.averageCostEnergy.coal );
+	}
+>>>>>>> 2b48771... 中国問題　電気単価が地域で上書きされて大きな値になっていたのが原因
 	this.priceCoalSpring =this.input( "i0942" ,-1 );
 	this.priceCoalSummer =this.input( "i0943" ,-1 );
 	this.priceCoalWinter =this.input( "i0941" ,-1 );
@@ -111,7 +121,7 @@ DC.paramSet = function() {
 };
 
 
-//消費量の計算
+//consumption override
 DC.calc = function( ){
 
 	this.clear();			//結果の消去
@@ -159,7 +169,7 @@ DC.calc = function( ){
 
 	//solar generation
 	var generateEle = this.generateEleUnit * this.solarKw / 12;
-	
+
 	//solar sell price 
 	var pvSellUnitPrice = D6.Unit.price.sellelectricity;
 
