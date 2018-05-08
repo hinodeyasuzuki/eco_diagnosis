@@ -15,91 +15,83 @@ DC.init = function() {
 };
 DC.init();
 
-//Documentからの変換
-DC.paramSet = function() {
-	this.person =this.input( "i001", 3 );			//世帯人数
+
+D6.consTotal.precalc = function() {
+	this.clear();
+	
+	this.person =this.input( "i001", 3 );						//person
 
 	//solar
-	this.solarSet =this.input( "i051", 0 );					//太陽光発電の設置　あり=1
-	this.solarKw =this.input( "i052", this.solarSet * 3.5 );	//太陽光発電の設置容量(kW)
-	this.solarYear =this.input( "i053", 0 );				//太陽光発電の設置年
+	this.solarSet = this.input( "i051", 0 );					//PV exist 1:exist
+	this.solarKw = this.input( "i052", this.solarSet * 3.5 );	//PV size (kW)
+	this.solarYear = this.input( "i053", 0 );					//PV set year
+	
 	
 	//electricity
 	this.priceEle = this.input( "i061"
-			,D6.area.averageCostEnergy.electricity );	//月電気代
+			,D6.area.averageCostEnergy.electricity );			//electricity fee
 	this.priceEleSpring = this.input( "i0912" ,-1 );
 	this.priceEleSummer = this.input( "i0913" ,-1 );
 	this.priceEleWinter = this.input( "i0911" ,-1 );
+	this.noPriceData.electricity = 
+			this.input( "i061",-1) == -1
+			& this.priceEleSpring == -1
+			& this.priceEleSummer == -1
+			& this.priceEleWinter == -1;
 
-	this.priceEleSell =this.input( "i062", 0 );		//月売電
+	this.priceEleSell =this.input( "i062", 0 );					//sell electricity
 				
 	//gas
 	this.priceGas =this.input( "i063"
-			,D6.area.averageCostEnergy.gas );			//月ガス代
+			,D6.area.averageCostEnergy.gas );					//gas fee
 	this.priceGasSpring =this.input( "i0932" ,-1 );
 	this.priceGasSummer =this.input( "i0933" ,-1 );
 	this.priceGasWinter =this.input( "i0931" ,-1 );
+	this.noPriceData.gas = 
+			this.input( "i063",-1) == -1
+			& this.priceGasSpring == -1
+			& this.priceGasSummer == -1
+			& this.priceGasWinter == -1;
 
-	this.houseType =this.input( "i002", 2 );			//戸建て集合
+	this.houseType =this.input( "i002", -1 );					//type of house
 	this.houseSize =this.input( "i003", 
 			( this.person == 1 ? 60 : (80 + this.person * 10) ) );
-													//家の広さ
+																//floor size
 
-	this.heatEquip =this.input( "i202", -1 );			//主な暖房機器
+	this.heatEquip =this.input( "i202", -1 );					//main heat equipment
 
-	//coal
-	this.priceCoal = this.input( "i065" ,D6.area.averageCostEnergy.coal );
+	//coal original
+	if (D6.area.averageCostEnergy.coal < 1000 ) {
+		this.priceCoal = this.input( "i065" ,0 );
+	} else {
+		this.priceCoal = this.input( "i065" ,D6.area.averageCostEnergy.coal );
+	}
 	this.priceCoalSpring =this.input( "i0942" ,-1 );
 	this.priceCoalSummer =this.input( "i0943" ,-1 );
 	this.priceCoalWinter =this.input( "i0941" ,-1 );
 
+	//hotwater supply oiginal
 	this.priceHotWater = this.input( "i066" , 1 ) == 1 ? D6.area.averageCostEnergy.hotwater * this.houseSize / 100 : 0;
 
-	if( this.priceKerosWinter == -1 ) {
-		if (D6.area.averageCostEnergy.kerosene < 1000 ) {
-			this.priceKeros =this.input( "i064", 0 );		//冬の月灯油代0（円)
-		} else {
-			this.priceKeros =this.input( "i064"
-				,D6.area.averageCostEnergy.kerosene 
-				/ D6.area.seasonMonth.winter * 12 );	//月灯油代標準値（円)　入力は冬
-		}
-	}
-
 	this.priceCar =this.input( "i075"
-			,D6.area.averageCostEnergy.car );			//月車燃料代
-	this.equipHWType = this.input( "i101", 1 );			//給湯器の種類
+			,D6.area.averageCostEnergy.car );					//gasoline
+	this.noPriceData.car = (this.input( "i075",-1) == -1);
 
-	this.generateEleUnit = D6.area.unitPVElectricity;	//地域別の値を読み込む
-		
-	//灯油・ガスが無記入の場合は、平均値としてガスに灯油分を加えておく
-	if (D6.area.averageCostEnergy.kerosene < 1000 ) {
-		if (this.input( "i063", -1 ) < 0 			//ガスの記入がない
-			&&this.input( "i0931", -1 ) < 0 
-			&&this.input( "i0932", -1 ) < 0 
-			&&this.input( "i0933", -1 ) < 0 
-		) {
-			//灯油分のエネルギーをガスに追加
-			this.keros2gas =D6.area.averageCostEnergy.kerosene
-					/D6.Unit.price.kerosene
-					*D6.Unit.calorie.kerosene
-					/D6.Unit.calorie.gas
-					*D6.Unit.price.gas;
-			this.priceGasSpring += this.keros2gas;
-			this.priceGasWinter += this.keros2gas;				
-		}
-	}
+	this.equipHWType = this.input( "i101", 1 );					//type of heater
 
-	//季節別の光熱費の入力のパターン（初期値　-1:無記入）
+	this.generateEleUnit = D6.area.unitPVElectricity;			//area parameters of PV generate
+
+	//set seasonal fee
 	this.seasonPrice =  {
-			electricity :	[ this.priceEleWinter, this.priceEleSpring, this.priceEleSummer ],		//電気
-			gas :			[ this.priceGasWinter, this.priceGasSpring, this.priceGasSummer ],		//ガス
-			kerosene:		[ this.priceKeros, this.priceKerosSpring,this.priceKerosSummer ], 		//灯油
-			coal :			[ -1, -1,-1 ], 
+			electricity :	[ this.priceEleWinter, this.priceEleSpring, this.priceEleSummer ],		
+			gas :			[ this.priceGasWinter, this.priceGasSpring, this.priceGasSummer ],		
+			kerosene:		[ this.priceKeros, this.priceKerosSpring,this.priceKerosSummer ], 		
+			coal :			[ this.priceCoalWinter, this.priceCoalSpring,this.priceCoalSummer ], 
 			hotwater :		[ -1, -1,-1 ],
-			car :			[ -1, -1,-1 ] 		//ガソリン
+			car :			[ -1, -1,-1 ] 
 	};
 
-	//毎月の消費量の入力のパターン（初期値　-1：無記入）
+	//monthly pattern  -1:no input
 	this.monthlyPrice = {
 			electricity :	[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
 			gas :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
@@ -108,29 +100,29 @@ DC.paramSet = function() {
 			hotwater :		[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
 			car :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ] 
 	};
+
 };
 
 
 //消費量の計算
 DC.calc = function( ){
-
-	this.clear();			//結果の消去
 	var ret;					//return values
 
-	//入力値の読み込み
-	this.paramSet();
-
-	//季節係数の読込（全エネルギー）
+	//seasonal parameters
 	var seasonConsPattern = D6.area.getSeasonParamCommon();
 
-	//電気の推計
+	//estimate of electricity
 	ret = D6.calcMonthly( this.priceEle, this.seasonPrice["electricity"], this.monthlyPrice["electricity"], seasonConsPattern.electricity, "electricity" );
 	this.priceEle = ret.ave;
 	this.seasonPrice["electricity"] = ret.season;
 	this.monthlyPrice["electricity"] = ret.monthly;
-		//光熱費の記入がないときには、分野の単純積み上げとする
+	
+	//in case of no fee input, use sum of all consumption
 	this.noConsData = ret.noConsData 
-					&& ( this.input( "i061", -1) == -1 );
+					&& ( this.input( "i061", -1) == -1 )
+					&& this.noPriceData.gas
+					&& this.noPriceData.car
+					&& this.noPriceData.kerosene;
 					//&& !D6.averageMode;
 		
 	//depend on hot water equipment
@@ -188,7 +180,7 @@ DC.calc = function( ){
 	this.gas = ( this.priceGas -D6.Unit.priceBase.gas ) 
 											/D6.Unit.price.gas;
 
-	//coal
+	//coal original=====================================
 	ret = D6.calcMonthly( this.priceCoal, this.seasonPrice["coal"], this.monthlyPrice["coal"], seasonConsPattern.coal, "coal" );
 	this.priceCoal = ret.ave;
 	this.seasonPrice["coal"] = ret.season;
@@ -196,7 +188,7 @@ DC.calc = function( ){
 	
 	this.coal = this.priceCoal / D6.Unit.price.coal;
 
-	//hotwater
+	//hotwater  original=====================================
 	ret = D6.calcMonthly( this.priceHotWater, this.seasonPrice["hotwater"], this.monthlyPrice["hotwater"], seasonConsPattern.hotwater, "hotwater" );
 	this.priceHotWater = ret.ave;
 	this.hotwater = this.priceHotWater / D6.Unit.price.hotwater;

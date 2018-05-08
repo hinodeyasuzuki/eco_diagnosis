@@ -17,9 +17,7 @@ var allowedMeasures = [];
 
 //fix in D6.setscenario, just after setDefs
 var defInput = [];
-defInput[0] = ["i002", "title", "独立，则房屋"];
-defInput[1] = ["i061", "title", "请选择大约的电费/月。"];
-defInput[4] = ["i075", "title",  "选择的约一个月的汽油（轻油费）。"];
+defInput[1] = ["i061", "title", "1 개월 전기 요금"];
 
 //global 
 var showMeasureTable_Max = 7;	//createpage.js showMeasureTable() max result

@@ -28,7 +28,7 @@ D6.area = {
 
 
 	// heat category with prefecture
-	//	prefHeatingLeverl[prefecture]
+	//	prefHeatingLevel[prefecture]
 	//
 	//	return code
 	//		1:cold area in Japan(Hokkaido)
@@ -36,7 +36,7 @@ D6.area = {
 	//			.
 	//		6:hot area in Japan(Okinawa)
 	//
-	prefHeatingLeverl : [ 4,
+	prefHeatingLevel : [ 4,
 				1, 2, 2, 3, 2, 2, 3,
 				3, 3, 3, 4, 4, 4, 4,
 				3, 3, 3, 4, 4, 3, 4, 4, 4,
@@ -208,7 +208,7 @@ D6.area = {
 
 	// get heat category
 	getHeatingLevel : function( pref ) {
-		return this.prefHeatingLeverl[pref];
+		return this.prefHeatingLevel[pref];
 	},
 
 	// get electricity CO2 emission factor

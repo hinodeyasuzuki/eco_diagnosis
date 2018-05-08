@@ -205,14 +205,14 @@ createModalPage = function( mes ){
 			+ "</td><td>" + lang.co2unitperyear + "</td></tr>";
 		modalHtml += "<tr><td style='white-space:nowrap;'>" + lang.feereductiontitle + "</td><td style='text-align:right'>" 
 			+ comma3(-mes.costChangeOriginal*12) 
-			+ "</td><td>" + lang.co2unitperyear + "</td></tr>";
+			+ "</td><td>" + lang.priceunit + "/" + lang.yearunit + "</td></tr>";
 		modalHtml += "<tr><td style='white-space:nowrap;'>" + lang.initialcosttitle + "</td><td style='text-align:right'>" 
 			+ comma3(mes.priceNew) 
 			+ "</td><td>" + lang.priceunit + "</td></tr>";
 		if ( mes.priceNew > 0 ){
 			modalHtml += "<tr><td>" + lang.loadperyear + "</td><td style='text-align:right'>" 
 				+ comma3(-mes.costTotalChangeOriginal*12) 
-				+ "</td><td>" + lang.co2unitperyear + "</td></tr>";
+				+ "</td><td>" + lang.priceunit + "/" + lang.yearunit + "</td></tr>";
 		}
 	}
 	modalHtml += "<p>" + ret[1] + "</p>";

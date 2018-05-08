@@ -226,7 +226,7 @@ D6.patch( D6.area, {
 
 
 	// heat category with prefecture
-	//	prefHeatingLeverl[prefecture]
+	//	prefHeatingLevel[prefecture]
 	//
 	//	return code
 	//		1:cold area in Japan(Hokkaido)
@@ -234,7 +234,7 @@ D6.patch( D6.area, {
 	//			.
 	//		6:hot area in Japan(Okinawa)
 	//
-	prefHeatingLeverl : [ 2, 2, 3, 5],
+	prefHeatingLevel : [ 2, 2, 3, 5],
 
 								
 	// CO2 emittion factor

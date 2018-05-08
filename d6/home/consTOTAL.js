@@ -109,7 +109,7 @@ D6.consTotal.precalc = function() {
 
 	this.heatEquip =this.input( "i202", -1 );					//main heat equipment
 
-	//kerosene
+	//kerosene------------------------------
 	this.priceKerosSpring =this.input( "i0942" ,-1 );
 	this.priceKerosSummer =this.input( "i0943" ,-1 );
 	this.priceKerosWinter =this.input( "i0941" ,-1 );
@@ -139,9 +139,9 @@ D6.consTotal.precalc = function() {
 
 	//set seasonal fee
 	this.seasonPrice =  {
-			electricity :	[ this.priceEleWinter, this.priceEleSpring, this.priceEleSummer ],		//電気
-			gas :			[ this.priceGasWinter, this.priceGasSpring, this.priceGasSummer ],		//ガス
-			kerosene:		[ this.priceKeros, this.priceKerosSpring,this.priceKerosSummer ], 		//灯油
+			electricity :	[ this.priceEleWinter, this.priceEleSpring, this.priceEleSummer ],	
+			gas :			[ this.priceGasWinter, this.priceGasSpring, this.priceGasSummer ],	
+			kerosene:		[ this.priceKeros, this.priceKerosSpring,this.priceKerosSummer ], 	
 //			coal :			[ -1, -1,-1 ], 
 //			hotwater :		[ -1, -1,-1 ],
 			car :			[ -1, -1,-1 ] 

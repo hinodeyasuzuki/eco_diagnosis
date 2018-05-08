@@ -669,7 +669,7 @@ D6.area = {
 
 
 	// heat category with prefecture
-	//	prefHeatingLeverl[prefecture]
+	//	prefHeatingLevel[prefecture]
 	//
 	//	return code
 	//		1:cold area in Japan(Hokkaido)
@@ -677,7 +677,7 @@ D6.area = {
 	//			.
 	//		6:hot area in Japan(Okinawa)
 	//
-	prefHeatingLeverl : [ 4,
+	prefHeatingLevel : [ 4,
 				1, 2, 2, 3, 2, 2, 3,
 				3, 3, 3, 4, 4, 4, 4,
 				3, 3, 3, 4, 4, 3, 4, 4, 4,
@@ -849,7 +849,7 @@ D6.area = {
 
 	// get heat category
 	getHeatingLevel : function( pref ) {
-		return this.prefHeatingLeverl[pref];
+		return this.prefHeatingLevel[pref];
 	},
 
 	// get electricity CO2 emission factor
@@ -1294,9 +1294,9 @@ D6.Unit = {
 		gasoline:2.32,
 		lightoil:2.62,
 		heavyoil:3,
-		coal:0,
+		coal:6,
 		biomass:0,
-		hotwater:0,
+		hotwater:0.06,
 		waste:0,
 		water:0,
 		gas:2.23,
@@ -2286,13 +2286,13 @@ D6.MeasureBase.calcSave = function() {
 	if ( this.priceNew == 0 ) this.priceNew = this.priceOrg;
 	if ( this.priceNew >= 0 && this.lifeTime > 0 )
 	{
-		this.costTotalChange = this.costChangeOriginal + this.priceNew / this.lifeTime / 12;
+		this.costTotalChange = this.costChange + this.priceNew / this.lifeTime / 12;
 
 		//payback year
-		if ( this.costChangeOriginal > 0 ) {
+		if ( this.costChange > 0 ) {
 			this.payBackYear = 999;
 		} else {
-			this.payBackYear = Math.min( Math.round( -this.priceNew / this.costChangeOriginal / 12 ), 999 );
+			this.payBackYear = Math.min( Math.round( -this.priceNew / this.costChange / 12 ), 999 );
 		}
 	} else {
 		this.costTotalChange = this.costChange;

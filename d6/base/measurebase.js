@@ -172,13 +172,13 @@ D6.MeasureBase.calcSave = function() {
 	if ( this.priceNew == 0 ) this.priceNew = this.priceOrg;
 	if ( this.priceNew >= 0 && this.lifeTime > 0 )
 	{
-		this.costTotalChange = this.costChangeOriginal + this.priceNew / this.lifeTime / 12;
+		this.costTotalChange = this.costChange + this.priceNew / this.lifeTime / 12;
 
 		//payback year
-		if ( this.costChangeOriginal > 0 ) {
+		if ( this.costChange > 0 ) {
 			this.payBackYear = 999;
 		} else {
-			this.payBackYear = Math.min( Math.round( -this.priceNew / this.costChangeOriginal / 12 ), 999 );
+			this.payBackYear = Math.min( Math.round( -this.priceNew / this.costChange / 12 ), 999 );
 		}
 	} else {
 		this.costTotalChange = this.costChange;

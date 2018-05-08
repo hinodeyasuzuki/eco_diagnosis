@@ -38,12 +38,6 @@ $lang['co2unit']='kg';
 $lang['energyunit']='GJ';
 $lang['monthunit']='mon';
 $lang['yearunit']='year';
-$lang["co2unitperyear"]='';
-$lang["co2unitpermonth"]='';
-$lang["feeunitperyear"]='';
-$lang["feeunitpermonth"]='';
-$lang["energyunitperyear"]='';
-$lang["energyunitpermonth"]='';
 
 //--common page-----------------
 $lang["startPageName"]='Overall (simple)';

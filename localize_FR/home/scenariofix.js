@@ -393,5 +393,10 @@ D6.scenario.areafix = function() {
 	D6.scenario.defSelectValue['sel022'] = [ "please select", "north", "south"];
 	D6.scenario.defSelectData['sel022'] = [ "-1", "1", "2"];
 
+	//easy input
+	D6.scenario.defEasyQues[0].title = "Entrée simple";
+	D6.scenario.defEasyQues[1].title = "Entrée de vérification du comportement";
+
+
 };
 

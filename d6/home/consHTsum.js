@@ -159,6 +159,8 @@ D6.consHTsum.calc = function() {
 	} else if ( this.heatEquip == 4 ) {
 		//kerosene
 		this.mainSource = "kerosene";
+	} else if ( this.priceHotWater > 0 ) {
+		this.mainSource = "hotwater";
 	} else {
 		this.mainSource = this.sumCons.mainSource;
 	}

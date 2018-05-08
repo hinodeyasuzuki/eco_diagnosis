@@ -36,14 +36,8 @@ $lang['point_disp']='function(num) {return num + "점"};';
 $lang["priceunit"]='원형';
 $lang['co2unit']='kg';
 $lang['energyunit']='GJ';
-$lang['monthunit']=
-$lang['yearunit']=
-$lang["co2unitperyear"]='kg/년';
-$lang["co2unitpermonth"]='kg/월';
-$lang["feeunitperyear"]='원형/년';
-$lang["feeunitpermonth"]='원형/월';
-$lang["energyunitperyear"]='GJ/년';
-$lang["energyunitpermonth"]='GJ/월';
+$lang['monthunit']='월';
+$lang['yearunit']='년';
 
 //--common page-----------------
 $lang["startPageName"]='전체 (간이)';

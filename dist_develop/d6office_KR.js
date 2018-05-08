@@ -209,7 +209,7 @@ D6.patch( D6.area , {
 	prefDefault : 1,	//not selected
 
 	// heat category with prefecture
-	//	prefHeatingLeverl[prefecture]
+	//	prefHeatingLevel[prefecture]
 	//
 	//	return code
 	//		1:cold area in Japan(Hokkaido)
@@ -218,7 +218,7 @@ D6.patch( D6.area , {
 	//		6:hot area in Japan(Okinawa)
 	//
 	//
-	prefHeatingLeverl : [ 
+	prefHeatingLevel : [ 
 		2, //2,-10,31,22"서울",			//2	札幌 -1,-7, 27,19
 		2, //2,-10,31,22"서울",			//2	札幌 -1,-7, 27,19
 		5, //8,1,32,25	'부산'			//5 東京 10, 1, 31, 23
