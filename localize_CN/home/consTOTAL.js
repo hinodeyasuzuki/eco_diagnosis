@@ -61,6 +61,7 @@ D6.consTotal.precalc = function() {
 	this.heatEquip =this.input( "i202", -1 );					//main heat equipment
 
 	//coal original
+	this.priceKeros = this.priceKerosSpring = this.priceKerosSummer = 0;
 	if (D6.area.averageCostEnergy.coal < 1000 ) {
 		this.priceCoal = this.input( "i065" ,0 );
 	} else {
@@ -104,7 +105,7 @@ D6.consTotal.precalc = function() {
 };
 
 
-//消費量の計算
+//consumption override
 DC.calc = function( ){
 	var ret;					//return values
 
@@ -151,7 +152,7 @@ DC.calc = function( ){
 
 	//solar generation
 	var generateEle = this.generateEleUnit * this.solarKw / 12;
-	
+
 	//solar sell price 
 	var pvSellUnitPrice = D6.Unit.price.sellelectricity;
 

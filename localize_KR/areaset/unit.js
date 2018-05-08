@@ -19,7 +19,7 @@
 
 	// unit price   won(in Korea)/each unit
 D6.Unit.price = {
-		electricity:1,			// override in D6.area.setPersonArea by supplyer
+		electricity:100,			// override in D6.area.setPersonArea by supplyer
 		nightelectricity:100,
 		sellelectricity:150,
 		nagas:1000,
@@ -36,6 +36,8 @@ D6.Unit.price = {
 		gas:1000,
 		car:800
 	};
+
+D6.Unit.defaultPriceElectricity = D6.Unit.price.electricity;
 
 	// intercept price when consumption is zero
 D6.Unit.priceBase = {

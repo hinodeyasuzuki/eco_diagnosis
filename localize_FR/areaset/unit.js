@@ -33,6 +33,8 @@ D6.Unit.price = {
 		car:1.30
 	};
 
+D6.Unit.defaultPriceElectricity = D6.Unit.price.electricity;
+
 	// intercept price when consumption is zero 	yen(in Japan)
 D6.Unit.priceBase = {
 		electricity:0,

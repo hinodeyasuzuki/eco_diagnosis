@@ -29,12 +29,14 @@ D6.Unit.price = {
 		heavyoil:6,
 		coal:3,
 		biomass:0,
-		hotwater:0.036,
+		hotwater:0.1,		// 元/MJ
 		waste:0,
 		water:0,
 		gas:10,
 		car:8
 	};
+
+D6.Unit.defaultPriceElectricity = D6.Unit.price.electricity;
 
 	// intercept price when consumption is zero
 D6.Unit.priceBase = {
@@ -109,7 +111,7 @@ D6.Unit.calorie = {
 		heavyoil:9000,
 		coal:8000,
 		biomass:0,
-		hotwater:225,
+		hotwater:225,	//kcal/MJ
 		waste:0,
 		water:0,
 		gas:11000,

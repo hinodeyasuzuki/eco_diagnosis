@@ -571,6 +571,7 @@ D6.patch( D6.area , {
 	//地域別平均光熱費 2人以上世帯（補正後）
 	//　中国の電力消費 2011年 413kWh/年・人　http://www.chinaero.com.cn/zxdt/djxx/ycwz/2014/05/146440.shtml
 	//　413×1元/kWh×3人÷12
+	// おおむね3000kWh/年世帯程度か？
 	prefKakeiEnergy : [ 
 		[ 200, 80, 0, 50, 5, 0 ],  //東京都区部
 		[ 150, 80, 0, 50, 5, 300 ],  //旭川市
@@ -639,6 +640,28 @@ D6.patch( D6.area , {
 	[ [ 0.8457, 1.1222, 1.5081, 0.9201 ], [ 0.9351, 0.9941, 0.8528, 0.9802 ], [ 1.3139, 0.847, 0.5678, 1.1395 ] ]   //naha
 
 	],
+
+	// get seasonal fee factor table
+	//
+	//	ret[energy_name][season]
+	//
+	//	energy_name: electricity, gas, kerosene
+	//  season: 
+	//		0:winter
+	//		1:spring
+	//		2:summer
+	//
+	getSeasonParam : function( pref ) {
+		var param = this.getSeasonFactor(pref);
+
+		ret = Array();
+		ret["electricity"] = [ param[0][0], param[1][0], param[2][0] ];
+		ret["gas"] = [ param[0][1], param[1][1], param[2][1] ];
+		ret["kerosene"] = [ param[0][2], param[1][2], param[2][2] ];
+		ret["hotwater"] = [ 1, 0, 0];		//original
+
+		return ret;
+	},
 
 
 
@@ -729,12 +752,14 @@ D6.Unit.price = {
 		heavyoil:6,
 		coal:3,
 		biomass:0,
-		hotwater:0.036,
+		hotwater:0.1,		// 元/MJ
 		waste:0,
 		water:0,
 		gas:10,
 		car:8
 	};
+
+D6.Unit.defaultPriceElectricity = D6.Unit.price.electricity;
 
 	// intercept price when consumption is zero
 D6.Unit.priceBase = {
@@ -809,7 +834,7 @@ D6.Unit.calorie = {
 		heavyoil:9000,
 		coal:8000,
 		biomass:0,
-		hotwater:225,
+		hotwater:225,	//kcal/MJ
 		waste:0,
 		water:0,
 		gas:11000,
@@ -959,6 +984,7 @@ DC.init = function() {
 };
 DC.init();
 
+
 //change Input data to local value 
 DC.precalc = function() {
 	this.clear();			//clear data
@@ -1006,9 +1032,19 @@ DC.precalc = function() {
 	this.reformWindow =this.input( "i043", -1 );	//reform to change window
 	this.reformfloor =this.input( "i044", -1 );		//reform to change floor
 
+
 };
 
-
+//add function
+D6.consHTsum.calc_org  =D6.consHTsum.calc;
+D6.consHTsum.calc=function(){
+	D6.consHTsum.calc_org();
+	//set all for heater
+	if ( this.priceHotWater > 0 ) {
+		this.hotwater = D6.consShow["TO"].hotwater;
+		this.priceHotWater = D6.consShow["TO"].priceHotWater;
+	}
+}
 
 
 /**
@@ -1122,6 +1158,7 @@ D6.consTotal.precalc = function() {
 	this.heatEquip =this.input( "i202", -1 );					//main heat equipment
 
 	//coal original
+	this.priceKeros = this.priceKerosSpring = this.priceKerosSummer = 0;
 	if (D6.area.averageCostEnergy.coal < 1000 ) {
 		this.priceCoal = this.input( "i065" ,0 );
 	} else {
@@ -1165,7 +1202,7 @@ D6.consTotal.precalc = function() {
 };
 
 
-//消費量の計算
+//consumption override
 DC.calc = function( ){
 	var ret;					//return values
 
@@ -1212,7 +1249,7 @@ DC.calc = function( ){
 
 	//solar generation
 	var generateEle = this.generateEleUnit * this.solarKw / 12;
-	
+
 	//solar sell price 
 	var pvSellUnitPrice = D6.Unit.price.sellelectricity;
 

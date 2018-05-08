@@ -14,6 +14,7 @@ DC.init = function() {
 };
 DC.init();
 
+
 //change Input data to local value 
 DC.precalc = function() {
 	this.clear();			//clear data
@@ -61,7 +62,17 @@ DC.precalc = function() {
 	this.reformWindow =this.input( "i043", -1 );	//reform to change window
 	this.reformfloor =this.input( "i044", -1 );		//reform to change floor
 
+
 };
 
-
+//add function
+D6.consHTsum.calc_org  =D6.consHTsum.calc;
+D6.consHTsum.calc=function(){
+	D6.consHTsum.calc_org();
+	//set all for heater
+	if ( this.priceHotWater > 0 ) {
+		this.hotwater = D6.consShow["TO"].hotwater;
+		this.priceHotWater = D6.consShow["TO"].priceHotWater;
+	}
+}
 
