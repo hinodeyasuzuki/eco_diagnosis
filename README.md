@@ -60,6 +60,19 @@ You can fill efficent equipment, price, adive message, subsidy information, ques
 ### step4) access and check
 
 
+
+## logig priority
+
+### measure
+
+1. prohibited in localize_**/view/**_home_n.js
+2. modified in localize_**/home/senariofix.js, which is defined in Excel file
+		- set measure name as #, which means do not show
+3. modified in localize_**/home/consCC.js calcMeasure() function
+		- override or add calculation functions
+		- set another prohibit status
+4. see calculation funciton in common function d6/home/calcCC.js
+		
 ## Third party tools
 * jQuery JavaScript Library: Copyright 2005, 2013 jQuery Foundation, Inc. and other contributors
 * leanModal v1.1 by Ray Stone - http://finelysliced.com.au
