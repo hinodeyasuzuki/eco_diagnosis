@@ -184,9 +184,9 @@ function showEvaluateAxis( res ){
 	for ( var i=0 ; i<3 ;i++ ) {
 		html += "<div class='evaluate'>";
 		html += "<h3>" + title[i] + "</h3>";
-		html += "<img src='view/images/" + ( res[i][0] > 75 ? "good.jpg" : ( res[i][0] > 40 ? "even.jpg" : "bad.jpg" ) ) + "'><br>";
-		html += "<font size='+2'>" + ( res[i][0] > 75 ? label[0] : ( res[i][0] > 40 ? label[1] : label[2] ) ) + "</font><br>";
-		html += lang.point_disp(parseInt(res[i][0])) +"<Br>"+lang.home_action_good_point.replace(/\\\'/g, '\'')+"：<br>" + res[i][1] + "<br>"+lang.home_action_bad_point.replace(/\\\'/g, '\'')+"：<br>" + res[i][2] + "<br>" ;
+		html += "<div style='text-align:center'><img src='view/images/" + ( res[i][0] > 75 ? "good.jpg" : ( res[i][0] > 40 ? "even.jpg" : "bad.jpg" ) ) + "'><br>";
+		html += "<span style='font-size:1.4em;'>" + ( res[i][0] > 75 ? label[0] : ( res[i][0] > 40 ? label[1] : label[2] ) ) + "</span></div>";
+		html += "<div  style='text-align:center;background-color:#bfb;font-size:1.3em;'>" + lang.point_disp(parseInt(res[i][0])) +"</div>"+lang.home_action_good_point.replace(/\\\'/g, '\'')+"：<ul>" + res[i][1] + "</ul>"+lang.home_action_bad_point.replace(/\\\'/g, '\'')+"：<ul>" + res[i][2] + "</ul>" ;
 		html += "</div>";
 	}
 	$("#actionpoint").html( html );

@@ -207,7 +207,7 @@ $lang['home_easy_step4']='Measures';
 $lang['home_easy_toptitle']='Why do not you try to lower the houses utility bill?';
 $lang['home_easy_top1']=' \'Energy saving\' is misunderstood in Japan. It is not something to \'endure\' but to enrich your life. Costs for light and heat are cheap, life becomes comfortable, and it will also be for the future children.';
 $lang['home_easy_top2']='Six questions will tell you what measures were right for your life. Please try eco-check in 3 minutes.';
-$lang['home_easy_top3sm']='※ It is completely free. You do not need to enter information to identify you, such as name or email address.';
+$lang['home_easy_top3sm']='* It is completely free. You do not need to enter information to identify you, such as name or email address. Since this diagnostic software is executed by downloading the calculation logic itself to the terminal, the entered value is never sent to other than the user terminal.This page uses Google Analitics to understand usage situation.';
 $lang['home_easy_top_button_start']='Start diagnosis';
 $lang['home_easy_top_button_about']='Commentary';
 

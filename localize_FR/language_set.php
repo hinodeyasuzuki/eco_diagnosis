@@ -207,7 +207,8 @@ $lang['home_easy_step4']='Mesures';
 $lang['home_easy_toptitle']='Pourquoi n\'essayez-vous pas de réduire la facture d\'électricité de la maison?';
 $lang['home_easy_top1']='L\'économie d\'énergie est mal comprise au Japon. Il ne s\'agit pas de «supporter» mais d\'enrichir votre vie. Les coûts de la lumière et de la chaleur sont peu coûteux, la vie devient confortable, ce sera aussi pour les futurs enfants.';
 $lang['home_easy_top2']='Six questions vous diront quelles mesures ont été bonnes pour votre vie. Veuillez essayer Eco-Check en 3 minutes.';
-$lang['home_easy_top3sm']='※ C\'est complètement gratuit. Vous n\'avez pas besoin de saisir des informations pour vous identifier, comme le nom ou l\'adresse électronique.';
+$lang['home_easy_top3sm']='* C\'est complètement gratuit. Vous n\'avez pas besoin de saisir des informations pour vous identifier, comme le nom ou l\'adresse électronique.Comme ce logiciel de diagnostic est exécuté en téléchargeant la logique de calcul elle-même sur le terminal, la valeur saisie n\'est jamais envoyée à un terminal autre que le terminal utilisateur. Cette page utilise Google Anarlitics pour comprendre la situation d\'utilisation.';
+
 $lang['home_easy_top_button_start']='Début du diagnostic';
 $lang['home_easy_top_button_about']='Commentaire';
 

@@ -4080,6 +4080,10 @@ D6.getEvaluateAxisPoint = function( target,inpListDefCode ) {
 		var maxname = "";
 		var minpoint = 0;
 		var minname = "";
+		var maxpoint2 = 0;
+		var maxname2 = "";
+		var minpoint2= 0;
+		var minname2 = "";
 		var tmax = 0;
 		var defaultvalue = 0;
 		var thispoint = 0;
@@ -4116,19 +4120,31 @@ D6.getEvaluateAxisPoint = function( target,inpListDefCode ) {
 				thispoint = 0;
 			}
 			
-			if ( maxpoint <thispoint ) {
-				maxpoint = thispoint;
-				maxname = weight.title;
+			if ( maxpoint2 < thispoint ) {
+				maxpoint2 = thispoint;
+				maxname2 = weight.title;
+				if ( maxpoint <maxpoint2 ) {
+					maxpoint2 = maxpoint;
+					maxname2 = maxname;
+					maxpoint = thispoint;
+					maxname = weight.title;
+				}
 			}
-			if ( minpoint > thispoint - weightone * 2 ) {
-				minpoint = thispoint - weightone * 2;
-				minname = weight.title;
+			if ( minpoint2 > thispoint - weightone * 2 ) {
+				minpoint2 = thispoint - weightone * 2;
+				minname2 = weight.title;
+				if ( minpoint > minpoint2 ) {
+					minpoint2 = minpoint;
+					minname2 = minname;
+					minpoint = thispoint;
+					minname = weight.title;
+				}
 			}
 			point += thispoint;
 		}
 		retall[i][0] = point / (pointfull==0 ? 1 :pointfull) * 100;
-		retall[i][1] = maxname;
-		retall[i][2] = minname;
+		retall[i][1] = ( maxname ? "<li>"+maxname+ "</li>" : ""  ) + ( maxname2 ? "<li>"+maxname2+ "</li>" : ""  );
+		retall[i][2] = ( minname ? "<li>"+minname+ "</li>" : ""  ) + ( minname2 ? "<li>"+minname2+ "</li>" : ""  );;
 	}
 	return retall;
 };

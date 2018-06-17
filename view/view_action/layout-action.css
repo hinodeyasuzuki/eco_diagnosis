@@ -10,6 +10,16 @@ body {
 	line-height:1.7em;
 }
 
+div#header{
+	/*background-image:url('head.jpg') !important;*/
+	background-color:#a3d65c;
+}
+
+#footer {
+	/*background-image:url('head.jpg') !important;*/
+	background-color:#a3d65c;
+}
+
 p{
 	line-height:1.2em;
 	margin:8px;
@@ -62,11 +72,16 @@ h1 {
 	padding-left:20px;
 	padding-top:10px;
 	line-height:120%;
-	background-color:#FFC;
+/*	background-color:#FFC;*/
+	color:#fff;
+    text-shadow: 2px 2px 1px #030,
+    -2px 2px 1px #030,
+    2px -2px 1px #030,
+    -2px -2px 1px #030;
 }
 
 h2 {
-	border-bottom: 3px solid #007700;
+	border-bottom: 3px solid #1b8131;
 	background-color:#9f9;
 	padding:2px 4px 4px 4px;
 	margin-top:5px;
@@ -78,8 +93,14 @@ h3 {
 	margin-top:10px;
 	margin-bottom:3px;
 	width:98%;
-	background-color:#ecffec;
-	border-left: 6px solid #afa;
+	background-color:#a3d65c;
+	border-left: 6px solid #1b8131;
+	color:#fff;
+	padding:3px;
+    text-shadow: 1px 1px 1px #161,
+    -1px 1px 1px #161,
+    1px -1px 1px #161,
+    -1px -1px 1px #161;
 }
 
 .submenucontents h3 {
@@ -120,13 +141,14 @@ select{
 	padding-top:2px;
 	padding-bottom:2px;
 	line-height:1.3em;	
-	background-color:#8bffc8;
+	color:#fff;
+	background-color:#ea783f;
 }
 
 
 .button:hover {
 	color:#fafafa;
-	background:#009800!important;
+	background:#1b8131!important;
 }
 
 .large {
@@ -167,10 +189,17 @@ a:hover {
 
 /*=========== input are　=========== */
 
+div.inputarea{
+	width:60%;
+	padding-left:20%;:
+}
+
 ul { 
 	margin-top:0px;
 	margin-bottom:0px;
+	margin-left:20px;
 	padding:0px;
+	width:100%;
 }
 li { 
 	margin-top:0px;
@@ -311,6 +340,15 @@ div#modal-contents img {
 	transition: opacity 0.4s;
 }
 
+/* fukidashi */
+.tool-tips{
+	background-color:#ea783f;
+}
+
+.tool-tips:after {
+  border-left:8px solid #ea783f;
+}
+
 #p4 h3{
 	display:none;
 }
@@ -319,7 +357,7 @@ div#modal-contents img {
 
 #step{
 	line-height:2em;
-	background-color:#FFC;
+/*	background-color:#FFC;*/
 }
 
 #step span{
@@ -333,19 +371,28 @@ div#modal-contents img {
 
 #header span:hover{
 	color:#fafafa;
-	background:#009800!important;
+	background:#2ba141!important;
 }
 
 #step span.already{
 	color:#fafafa;
-	background:#009800!important;
+	background:#1b8131!important;
+}
+
+
+/* =========== small ============ */
+@media only screen and (max-width: 800px) {
+div.inputarea{
+	width:80%;
+	padding-left:10%;:
+}
 }
 
 /* =========== smart phone ============ */
 @media only screen and (max-width: 640px) {
 
 body {
-	font-size:90%;
+	font-size:95%;
 }
 
 div.widthhalf{
@@ -359,6 +406,11 @@ div.page {
 
 .button {
 	width:90%;
+}
+
+div.inputarea{
+	width:100%;
+	padding-left:0px;
 }
 
 
@@ -376,7 +428,7 @@ h2{
 	font-size:130%;
 }
 table{
-	font-size:90%;
+	font-size:95%;
 }
 #tabcontents li{
 	padding:3px;
