@@ -251,8 +251,8 @@ $scripts  .='
 	<script src="view/main.js" type="text/javascript"></script>
 	<script src="view/createpage.js" type="text/javascript"></script>
 	<script src="view/graph.js" type="text/javascript"></script>
-	<script src="view/lib/D3/d3.v3.4.8.min.js"></script>
-	<script src="view/lib/dimple-js/dimple.v2.1.4.min.js"></script>
+	<script src="view/lib/D3/d3.min.js"></script>
+	<script src="view/lib/dimple-js/dimple.v2.3.0.min.js"></script>
 	<!--[if lte IE 10]><script>alert("Sorry, this page does not work under IE8, and too slow under IE10.\n Please use IE11 up, chrome, Edge, Firefox or safari.");</script><![endif]-->';
 
 
@@ -266,10 +266,10 @@ $scripts .= "<script src='" . $lang["d6folder"] . "/view/" . $countryMode . "_" 
 if ( $useCode==1 ) {
 	$scripts .= $includeeachjs;
 } else if ( $useCode==2 && $useWorker =="false" ) {
-	$scripts .= "<script src='" .$includesumcorejs . "' type='text/javascript'></script>";
+	$scripts .= "\n<script src='" .$includesumcorejs . "' type='text/javascript'></script>";
 	$scripts .= "<script src='" .$includesumjs_direct . "' type='text/javascript'></script>";
 } else if ( $useCode==3 && $useWorker =="false") {
-	$scripts .= "<script src='" .$includemincorejs . "' type='text/javascript'></script>";
+	$scripts .= "\n<script src='" .$includemincorejs . "' type='text/javascript'></script>";
 	$scripts .= "<script src='" .$includeminjs_direct . "' type='text/javascript'></script>";
 }
 //in case of worker, no need to include in html.

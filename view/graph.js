@@ -80,6 +80,8 @@ function graphItemizeCommon( ret, targetname ) {
 	}
 	var chart = new dimple.chart(svg, ret.data);
 	chart.customClassList.axisLine = 'dimple-custom-gridline';
+
+	//X axis
 	var xAxis = chart.addCategoryAxis("x", captionCompare);
 	xAxis.fontSize = "13px";
 	xAxis.title = "";
@@ -98,6 +100,7 @@ function graphItemizeCommon( ret, targetname ) {
 	}
 	xAxis.addOrderRule(categoryOrder);
 
+	// y axis
 	var yAxis = chart.addMeasureAxis("y",titles[ret.yaxis]);
 	yAxis.tickFormat = "";
 	yAxis.textAlign = "left";
@@ -126,7 +129,6 @@ function graphItemizeCommon( ret, targetname ) {
 
 	//draw
 	chart.draw();
-
 
 	//comment-------------------
 	var rat = [];

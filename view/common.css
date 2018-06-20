@@ -401,6 +401,7 @@ div#modal-contents img {
 	transform:translate(65,0) !important;
 }
 
+
 /* printer */
 @media only print {
 	span.button, button {
