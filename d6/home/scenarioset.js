@@ -199,7 +199,7 @@ D6.scenario =
 		this.defSelectData = defSelectData;
 		this.defEquipment = defEquipment;
 		this.defEquipmentSize = defEquipmentSize;
-
+console.log( D6);
 		//set area and person to calculate average, heat load etc.
 		D6.area.setCalcBaseParams = function(){
 			D6.area.setPersonArea( D6.doc.data.i001, D6.doc.data.i021, D6.doc.data.i023);		

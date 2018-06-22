@@ -32,7 +32,7 @@ D6.calcCons = function() {
 	var ci;
 
 	//area parameters set
-	this.area.setCalcBaseParams();
+	D6.area.setCalcBaseParams();
 
 	//pre calculation such as common parameters setting
 	for ( i=0 ; i<D6.consList.length ; i++ ) {

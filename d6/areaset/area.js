@@ -526,6 +526,7 @@ D6.area = {
 		
 		//set air conditioner load
 		this.airconFactor_mon = D6.accons.getArray( this.area );
+		console.log( this.area );
 		this.heatFactor_mon = D6.acload.getArray( this.area );
 		this.plusHeatFactor_mon = D6.acadd.getArray( this.area );
 		

@@ -44,11 +44,11 @@ D6.patch( D6.acadd, {
 //
 factorPrefTimeMonth : [
 
-	[ [ 0.17, 0.16, 0.14, 0.12, 0.09, 0.06, 0.05],   //hokkaido
-	  [ 0.06, 0.05, 0.04, 0.04, 0.03, 0.02, 0.01], 
-	  [ 0.09, 0.09, 0.07, 0.06, 0.04, 0.03, 0.02], 
-	  [ 0.16, 0.15, 0.13, 0.11, 0.09, 0.06, 0.04] ], 
-
+    [ [ 0, 0, 0, 0, 0, 0, 0],   //tokyo
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0], 
+	  [ 0, 0, 0, 0, 0, 0, 0] ], 
+	  
 	[ [ 0.17, 0.16, 0.14, 0.12, 0.09, 0.06, 0.05],   //hokkaido
 	  [ 0.06, 0.05, 0.04, 0.04, 0.03, 0.02, 0.01], 
 	  [ 0.09, 0.09, 0.07, 0.06, 0.04, 0.03, 0.02], 
@@ -154,11 +154,11 @@ D6.patch( D6.accons, {
 
 factorPrefTimeMonth : [
 
-[ [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.94, 0.77, 0.06, 0.05, 0.03, 0.02, 0.02],   //sapporo
-  [ 1.14, 1.13, 1.1, 1.05, 0.98, 0.8, 0.67, 0.2, 0.17, 0.13, 0.1, 0.08], 
-  [ 1.2, 1.19, 1.16, 1.13, 1.06, 0.88, 0.72, 0.1, 0.08, 0.05, 0.04, 0.03], 
-  [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.95, 0.79, 0.03, 0.02, 0.01, 0.01, 0.01] ], 
-  
+[ [ 0.64, 0.63, 0.6, 0.55, 0.5, 0.41, 0.37, 0.31, 0.28, 0.25, 0.21, 0.16],   //tokyo
+  [ 0.39, 0.37, 0.35, 0.32, 0.29, 0.26, 0.25, 0.62, 0.57, 0.52, 0.45, 0.37], 
+  [ 0.42, 0.4, 0.39, 0.36, 0.33, 0.28, 0.26, 0.43, 0.4, 0.37, 0.32, 0.26], 
+  [ 0.58, 0.56, 0.54, 0.5, 0.46, 0.38, 0.34, 0.25, 0.23, 0.21, 0.17, 0.13] ], 
+
 [ [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.94, 0.77, 0.06, 0.05, 0.03, 0.02, 0.02],   //sapporo
   [ 1.14, 1.13, 1.1, 1.05, 0.98, 0.8, 0.67, 0.2, 0.17, 0.13, 0.1, 0.08], 
   [ 1.2, 1.19, 1.16, 1.13, 1.06, 0.88, 0.72, 0.1, 0.08, 0.05, 0.04, 0.03], 
@@ -220,7 +220,6 @@ factorPrefTimeMonth : [
   [ 0.11, 0.07, 0.06, 0.05, 0.04, 0.08, 0.08, 0.35, 0.35, 0.34, 0.33, 0.3] ] 
 
   ]
-  
 });
 
  
@@ -265,11 +264,11 @@ D6.patch( D6.acload, {
 //
 
 factorPrefTimeMonth: [
-[ [ 1.06, 1.05, 1.03, 1, 0.95, 0.95, 0.82, 0.09, 0.09, 0.05, 0.03, 0.02],   //sapporo
-  [ 0.93, 0.92, 0.9, 0.87, 0.83, 0.7, 0.59, 0.27, 0.23, 0.18, 0.14, 0.11], 
-  [ 0.99, 0.98, 0.96, 0.93, 0.88, 0.76, 0.64, 0.14, 0.11, 0.07, 0.05, 0.04], 
-  [ 1.05, 1.04, 1.02, 0.99, 0.95, 0.83, 0.7, 0.04, 0.03, 0.02, 0.01, 0.01] ], 
-  
+[ [ 0.63, 0.62, 0.6, 0.57, 0.53, 0.53, 0.44, 0.43, 0.43, 0.35, 0.28, 0.23],   //tokyo
+  [ 0.44, 0.42, 0.4, 0.37, 0.34, 0.3, 0.29, 0.75, 0.7, 0.63, 0.56, 0.47], 
+  [ 0.48, 0.45, 0.44, 0.41, 0.37, 0.32, 0.3, 0.58, 0.54, 0.5, 0.43, 0.35], 
+  [ 0.6, 0.58, 0.56, 0.53, 0.5, 0.41, 0.37, 0.36, 0.33, 0.3, 0.24, 0.19] ], 
+
 [ [ 1.06, 1.05, 1.03, 1, 0.95, 0.95, 0.82, 0.09, 0.09, 0.05, 0.03, 0.02],   //sapporo(asahikawa)
   [ 0.93, 0.92, 0.9, 0.87, 0.83, 0.7, 0.59, 0.27, 0.23, 0.18, 0.14, 0.11], 
   [ 0.99, 0.98, 0.96, 0.93, 0.88, 0.76, 0.64, 0.14, 0.11, 0.07, 0.05, 0.04], 
@@ -366,7 +365,7 @@ D6.patch( D6.area , {
 		"海口"
 	],
 
-	prefDefault : 6,	//not selected
+	prefDefault : 2,	//not selected
 
 	// heat category with prefecture
 	//	prefHeatingLevel[prefecture]
@@ -379,11 +378,11 @@ D6.patch( D6.area , {
 	//
 	//
 	prefHeatingLevel : [ 
-		5, //8,1,32,25	'上海',			//2
+		5, //8,1,32,25	'上海',			//5　東京
 		1, //-11,-23, 29, 18"長春",		//1　旭川 -3,-13, 26,17
 		2, //2,-10,31,22"北京",			//2	札幌 -1,-7, 27,19
 		2, //3,-4, 28,23"青島",			//3
-		3, //6,-5, 32,23 "鄭州",		//3 宇都宮 8,-3, 31, 22
+		3, //6,-5, 32,23 "鄭州",			//3 宇都宮 8,-3, 31, 22
 		2, //2, -11, 29, 16 "蘭州",		//5
 		5, //8,1,32,25	'上海',			//5 東京 10, 1, 31, 23
 		5, //9,5, 35,25"重慶",			//5
@@ -573,19 +572,19 @@ D6.patch( D6.area , {
 	//　413×1元/kWh×3人÷12
 	// おおむね3000kWh/年世帯程度か？
 	prefKakeiEnergy : [ 
-		[ 200, 80, 0, 50, 5, 0 ],  //東京都区部
-		[ 150, 80, 0, 50, 5, 300 ],  //旭川市
-		[ 150, 80, 0, 50, 5, 250 ],  //札幌市
-		[ 150, 80, 0, 50, 5, 250 ],  //札幌市
-		[ 150, 80, 0, 50, 5, 200 ],  //宇都宮市
-		[ 150, 80, 0, 50, 5, 250 ],  //札幌市
-		[ 200, 80, 0, 50, 5, 0 ],  //東京都区部
-		[ 200, 80, 0, 50, 5, 200 ],  //東京都区部
-		[ 150, 80, 0, 50, 5, 250 ],  //札幌市
-		[ 150, 80, 0, 50, 5, 200 ],  //奈良市
-		[ 150, 80, 0, 50, 5, 200 ],  //奈良市
-		[ 200, 80, 0, 50, 5, 0 ],   //那覇市
-		[ 200, 80, 0, 50, 5, 0 ]   //那覇市
+		[ 250, 80, 0, 50, 5, 0 ],  //東京都区部
+		[ 200, 80, 0, 50, 5, 300 ],  //旭川市
+		[ 200, 80, 0, 50, 5, 250 ],  //札幌市
+		[ 200, 80, 0, 50, 5, 250 ],  //札幌市
+		[ 200, 80, 0, 50, 5, 200 ],  //宇都宮市
+		[ 200, 80, 0, 50, 5, 250 ],  //札幌市
+		[ 250, 80, 0, 50, 5, 0 ],  //東京都区部
+		[ 250, 80, 0, 50, 5, 200 ],  //東京都区部
+		[ 200, 80, 0, 50, 5, 250 ],  //札幌市
+		[ 200, 80, 0, 50, 5, 200 ],  //奈良市
+		[ 200, 80, 0, 50, 5, 200 ],  //奈良市
+		[ 250, 80, 0, 50, 5, 0 ],   //那覇市
+		[ 250, 80, 0, 50, 5, 0 ]   //那覇市
 
 	],
 
@@ -989,35 +988,28 @@ DC.init();
 DC.precalc = function() {
 	this.clear();			//clear data
 
-	this.prefecture =this.input( "i021", 6 );		//city, prefecture
+	this.prefecture =this.input( "i021", 2 );		//city, prefecture
 	this.heatArea = D6.area.getHeatingLevel(this.prefecture);
 
 	this.person =this.input( "i001", 3 );			//person
 	this.houseType =this.input( "i002", 2 );		//standalone / apartment CN
 	this.houseSize =D6.consShow["TO"].houseSize;	//home size 
-	this.heatSpace  =this.input( "i201",
-			this.heatArea <= 2 ? 0.6 :
-			this.heatArea == 3 ? 0.25 : 0.2
-		);											//heating area m2
 		
-
-	// original set
-	this.heatTime  =this.input( "i204", 
-			this.heatArea == 1 ? 24 :
-			this.heatArea == 2 ? 10 :
-			this.heatArea == 3 ? 6 : 6
-		);											//heating time
-
-	// original hotwater set
+	// default area heating set
 	this.priceHotWater = this.input( "i066" , 1 ) == 1 ? D6.area.averageCostEnergy.hotwater * this.houseSize / 100 : 0;
 
-	this.heatSpace  =this.input( "i201", this.heatArea < 5 ? 0.8 : 0.2 );	//part of heating CN
+	this.heatSpace  =this.input( "i201", this.heatArea <= 3 ? 0.6 : 0.2 );	//part of heating CN
 	this.heatMonth  = this.input( "i206", D6.area.seasonMonth.winter );	//heating month
 
-	//original set
+	//default set
 	this.heatEquip =this.input( "i202", 
-			this.heatArea <= 2 ? 6 : -1
+			this.heatArea <= 4 ? 6 : -1
 		 );		//heating equipment
+
+	 // heat time default set
+	this.heatTime  =this.input( "i204", 
+			this.heatArea <= 4 ? 24 : 6
+		);											//heating time
 
 	this.heatTemp  =this.input( "i205", 21 );		//heating temperature setting
 	this.priceEleSpring =this.input( "i0912", -1 );	//electricity charge in spring/fall
@@ -1074,8 +1066,73 @@ D6.consHWsum.precalc = function() {
 }
 
 
+/* 2017/12/10  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * consRFsum.js 
+ * 
+ * calculate consumption and measures related to refrigerator in your hourse
+ * total use
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/21 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 								2017/12/10 ver.1.0 set functions
+ * 								2018/03/14 			global setting fix
+ */
+
+
+
+/*performance and price of equipment
+ * 	parameter
+ *		year : product year include future1
+ *		level : 1:good, 2:ordinal
+ *		size : L less than or equal to
+ *	return value
+ *		ret.pr1 : price of good one
+ *		ret.pr2 : price of ordninal one
+ *		ret.pf1 : performance of good one
+ *		ret.pf2 : performance of ordninal one
+ */
+D6.consRFsum.equip = function( year, size ) {
+	var sizeThreshold = [ 200, 400,  1000 ];	//last is maxsize
+
+	//definition of equip [size][year][code]
+	//	code: pf1,pf2 performance 1 is good one
+	//				pr1,pr2 price 1 is good one
+	var defEquip = {
+		200 : {
+			1900 : { "pf1" : 250, "pf2" : 350, "pr1" : 5000, "pr2" : 4000 } ,
+			2005 : { "pf1" : 250, "pf2" : 350, "pr1" : 5000, "pr2" : 4000 } ,
+			2015 : { "pf1" : 200, "pf2" : 300, "pr1" : 5000, "pr2" : 4000 } ,
+			2030 : { "pf1" : 200, "pf2" : 250, "pr1" : 5000, "pr2" : 4000 }
+		},
+		400 : {
+			1900 : { "pf1" : 450, "pf2" : 550, "pr1" : 7000, "pr2" : 6000 } ,
+			1995 : { "pf1" : 400, "pf2" : 500, "pr1" : 7000, "pr2" : 6000 } ,
+			2015 : { "pf1" : 300, "pf2" : 350, "pr1" : 6000, "pr2" : 5000 } ,
+			2030 : { "pf1" : 250, "pf2" : 300, "pr1" : 6000, "pr2" : 5000 }
+		},
+		1100 : {
+			1900 : { "pf1" : 700, "pf2" : 900, "pr1" : 12000, "pr2" : 10000 } ,
+			1995 : { "pf1" : 600, "pf2" : 800, "pr1" : 12000, "pr2" : 10000 } ,
+			2015 : { "pf1" : 400, "pf2" : 700, "pr1" : 10000, "pr2" : 9000 } ,
+			2030 : { "pf1" : 400, "pf2" : 500, "pr1" : 10000, "pr2" : 9000 }
+		}
+	};
+
+	return this.getEquipParameters( year, size, sizeThreshold, defEquip )
+};
+
+
+
+
 /**
-* Home-Eco Diagnosis for JavaScript
+* Home-Eco Diagnosis for JavaScript for CN fix
 * 
 * ConsTotal
 */
@@ -1129,13 +1186,16 @@ D6.consTotal.precalc = function() {
 			& this.priceGasSummer == -1
 			& this.priceGasWinter == -1;
 
-	this.houseType =this.input( "i002", -1 );					//type of house
+	this.houseType =this.input( "i002", 2 );					//type of house 　小区楼房
 	this.houseSize =this.input( "i003", 
 			( this.person == 1 ? 60 : (80 + this.person * 10) ) );
 																//floor size
 
-	this.heatEquip =this.input( "i202", -1 );					//main heat equipment
-
+	if ( D6.area.heatingLevel <= 4 ) {
+		this.heatEquip =this.input( "i202", 6 );					//main heat equipment
+	} else {
+		this.heatEquip =this.input( "i202", -1 );					//main heat equipment
+	}
 	//coal original
 	this.priceKeros = this.priceKerosSpring = this.priceKerosSummer = 0;
 	if (D6.area.averageCostEnergy.coal < 1000 ) {
@@ -1359,7 +1419,9 @@ DC.calcMeasure = function( ) {
 
 // D6.scenario.areafix  fix area set by home/office
 // called by diagnosis.js  just after create scenario
+
 D6.scenario.areafix = function() {
+/*
 	//set area and person to calculate average, heat load etc.
 	D6.area.setCalcBaseParams = function(){
 		D6.area.setPersonArea( D6.doc.data.i001, D6.doc.data.i021, D6.doc.data.i023);		
@@ -1369,7 +1431,7 @@ D6.scenario.areafix = function() {
 	D6.area.getSeasonParamCommon = function(){
 		return D6.area.getSeasonParam(  D6.area.area  );
 	};
-
+*/
 
 	D6.consAC.title = "机房空调";
 	D6.consAC.countCall = "个房间";
@@ -1556,7 +1618,7 @@ D6.scenario.areafix = function() {
 	D6.scenario.defInput["i007"] = {  cons:"consTotal",  title:"向阳",  unit:"",  text:"阳光朝向好不好？", inputType:"sel007", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"3",d11p:"0",d12t:"2",d12p:"1",d13t:"1",d13p:"2",d1w:"3",d1d:"1", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel007"]= [ "请选择", "非常好", "很好", "有时不太好", "不好", "", "", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel007']= [ '-1', '1', '2', '3', '4', '', '', '', '', '', '', '', '', '', '', '' ];
 	D6.scenario.defInput["i008"] = {  cons:"consTotal",  title:"房间数",  unit:"部屋",  text:"您家共有几个房间？", inputType:"sel008", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"8",d11p:"0",d12t:"5",d12p:"1",d13t:"1",d13p:"2",d1w:"2",d1d:"1", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel008"]= [ "请选择", "1个", "2个", "3个", "4个", "5个", "6个", "7个", "8个以上", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel008']= [ '-1', '1', '2', '3', '4', '5', '6', '7', '8', '', '', '', '', '', '', '' ];
 	D6.scenario.defInput["i009"] = {  cons:"consTotal",  title:"建造年数",  unit:"年",  text:"您家房屋的建筑年代？", inputType:"sel009", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel009"]= [ "请选择", "不到5年", "5 - 10年", "10 - 20年", "20年以上", "我不知道", "", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel009']= [ '-1', '3', '7', '13', '30', '', '', '', '', '', '', '', '', '', '', '' ];
-	D6.scenario.defInput["i021"] = {  cons:"consTotal",  title:"#省份",  unit:"",  text:"请选择您所在的省份。", inputType:"sel021", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue[""]= [ "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['']= [ '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ];
+	D6.scenario.defInput["i021"] = {  cons:"consTotal",  title:"省份",  unit:"",  text:"请选择您所在的省份。", inputType:"sel021", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue[""]= [ "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['']= [ '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ];
 	D6.scenario.defInput["i022"] = {  cons:"consTotal",  title:"#",  unit:"",  text:"", inputType:"sel022", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue[""]= [ "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['']= [ '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '' ];
 	D6.scenario.defInput["i023"] = {  cons:"consTotal",  title:"城区还是郊区",  unit:"",  text:"您家附近交通方便吗？", inputType:"sel023", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel023"]= [ "请选择", "很方便", "还可以", "不太方便", "不方便", "", "", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel023']= [ '-1', '1', '2', '3', '4', '', '', '', '', '', '', '', '', '', '', '' ];
 	D6.scenario.defInput["i041"] = {  cons:"consTotal",  title:"窗户隔热性",  unit:"",  text:"您家窗户的隔热性能怎么样？", inputType:"sel041", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"5",d21p:"0",d22t:"4",d22p:"1",d23t:"0",d23p:"2",d2w:"2",d2d:"0", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel041"]= [ "请选择", "树脂窗框与三层玻璃窗", "树脂窗框与low-E玻璃窗", "树脂（铝合成）窗框与两层玻璃窗", "铝窗框与两层玻璃窗", "铝窗框与单层玻璃窗", "我不知道", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel041']= [ '-1', '1', '2', '3', '4', '5', '6', '', '', '', '', '', '', '', '', '' ];
@@ -1606,8 +1668,8 @@ D6.scenario.areafix = function() {
 	D6.scenario.defInput["i133"] = {  cons:"consHWtoilet",  title:"#",  unit:"",  text:"", inputType:"sel133", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel133"]= [ "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel133']= [ '-1', '1', '2', '', '', '', '', '', '', '', '', '', '', '', '', '' ];
 	D6.scenario.defInput["i134"] = {  cons:"consHWtoilet",  title:"#",  unit:"",  text:"", inputType:"sel134", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"2",d31p:"0",d32t:"1",d32p:"2",d33t:"",d33p:"1",d3w:"1",d3d:""}; 			D6.scenario.defSelectValue["sel134"]= [ "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel134']= [ '-1', '1', '2', '', '', '', '', '', '', '', '', '', '', '', '', '' ];
 	D6.scenario.defInput["i201"] = {  cons:"consHTsum",  title:"取暖范围",  unit:"",  text:"您家的取暖范围大概是多少？", inputType:"sel201", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"1",d11p:"0",d12t:"0.5",d12p:"1",d13t:"0",d13p:"2",d1w:"1",d1d:"0", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel201"]= [ "请选择", "全屋", "一半左右", "一部分", "不取暖", "", "", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel201']= [ '-1', '1', '0.5', '0.25', '0.1', '0.02', '', '', '', '', '', '', '', '', '', '' ];
-	D6.scenario.defInput["i202"] = {  cons:"consHTsum",  title:"主要使用的取暖器",  unit:"",  text:"您家最常使用的取暖方式是什么？如果地板采暖，请选择热源。", inputType:"sel202", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"6",d11p:"0",d12t:"5",d12p:"2",d13t:"",d13p:"",d1w:"2",d1d:"0", d21t:"6",d21p:"0",d22t:"5",d22p:"2",d23t:"",d23p:"",d2w:"2",d2d:"0", d31t:"5",d31p:"2",d32t:"2",d32p:"0",d33t:"1",d33p:"1",d3w:"2",d3d:"0"}; 			D6.scenario.defSelectValue["sel202"]= [ "请选择", "空调", "电子", "煤气", "燃油", "木柴", "电热地毯", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel202']= [ '-1', '1', '2', '3', '4', '5', '6', '', '', '', '', '', '', '', '', '' ];
-	D6.scenario.defInput["i203"] = {  cons:"consHTsum",  title:"辅助取暖方式",  unit:"",  text:"您家的辅助取暖方式是什么？", inputType:"sel203", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel203"]= [ "请选择", "空调", "电子", "煤气", "燃油", "木柴", "电热地毯", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel203']= [ '-1', '0', '18', '19', '20', '21', '22', '23', '24', '25', '26', '', '', '', '', '' ];
+	D6.scenario.defInput["i202"] = {  cons:"consHTsum",  title:"主要使用的取暖器",  unit:"",  text:"您家最常使用的取暖方式是什么？如果地板采暖，请选择热源。", inputType:"sel202", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"6",d11p:"0",d12t:"5",d12p:"2",d13t:"",d13p:"",d1w:"2",d1d:"0", d21t:"6",d21p:"0",d22t:"5",d22p:"2",d23t:"",d23p:"",d2w:"2",d2d:"0", d31t:"5",d31p:"2",d32t:"2",d32p:"0",d33t:"1",d33p:"1",d3w:"2",d3d:"0"}; 			D6.scenario.defSelectValue["sel202"]= [ "请选择", "空调", "电子", "煤气", "燃油", "木柴", "区域供热", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel202']= [ '-1', '1', '2', '3', '4', '5', '6', '7', '', '', '', '', '', '', '', '' ];
+	D6.scenario.defInput["i203"] = {  cons:"consHTsum",  title:"辅助取暖方式",  unit:"",  text:"您家的辅助取暖方式是什么？", inputType:"sel203", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel203"]= [ "请选择", "空调", "电子", "煤气", "燃油", "木柴", "区域供热", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel203']= [ '-1', '0', '18', '19', '20', '21', '22', '23', '24', '25', '26', '', '', '', '', '' ];
 	D6.scenario.defInput["i204"] = {  cons:"consHTsum",  title:"取暖时长",  unit:"時間",  text:"冬季一天的取暖时间有多少？", inputType:"sel204", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"24",d11p:"0",d12t:"0",d12p:"2",d13t:"",d13p:"",d1w:"2",d1d:"0", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel204"]= [ "请选择", "不取暖", "1小时", "2小时", "3小时", "4小时", "6时间", "8时间", "12小时", "16小时", "24小时", "", "", "", "", "" ];			D6.scenario.defSelectData['sel204']= [ '-1', '0', '1', '2', '3', '4', '6', '8', '12', '16', '24', '', '', '', '', '' ];
 	D6.scenario.defInput["i205"] = {  cons:"consHTsum",  title:"取暖温度",  unit:"℃",  text:"您家取暖时的温度设置是多少？如果无法调节，感觉大概达到了多少度？", inputType:"sel205", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"23",d11p:"0",d12t:"21",d12p:"1",d13t:"0",d13p:"2",d1w:"3",d1d:"0", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"23",d31p:"0",d32t:"21",d32p:"1",d33t:"0",d33p:"2",d3w:"3",d3d:"0"}; 			D6.scenario.defSelectValue["sel205"]= [ "请选择", "不取暖", "18℃", "19℃", "20℃", "21℃", "22℃", "23℃", "24℃", "25℃", "26℃以上", "", "", "", "", "" ];			D6.scenario.defSelectData['sel205']= [ '-1', '0', '18', '19', '20', '21', '22', '23', '24', '25', '26', '', '', '', '', '' ];
 	D6.scenario.defInput["i206"] = {  cons:"consHTsum",  title:"一年中多久取暖",  unit:"ヶ月",  text:"您家一年中有几个月需要取暖？", inputType:"sel206", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel206"]= [ "请选择", "不取暖", "1个月", "3个月", "3个月", "6个月", "6个月", "6个月", "11个月", "12个月", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel206']= [ '-1', '0', '1', '2', '3', '4', '5', '6', '8', '10', '', '', '', '', '', '' ];
@@ -1618,8 +1680,8 @@ D6.scenario.areafix = function() {
 	D6.scenario.defInput["i215"] = {  cons:"consACcool",  title:"空调使用年数",  unit:"年",  text:"您家的空调已经使用了多少年？", inputType:"sel215", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel215"]= [ "请选择", "未装空调", "不到一年", "1年到3年", "3年到5年", "5年到7年", "7年到10年", "10年到15年", "15年到20年", "20年以上", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel215']= [ '-1', '0', '1', '2', '4', '6', '9', '13', '18', '25', '', '', '', '', '', '' ];
 	D6.scenario.defInput["i216"] = {  cons:"consACcool",  title:"空调性能",  unit:"",  text:"您购买的是节能型空调吗？", inputType:"sel216", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"2",d11p:"0",d12t:"1",d12p:"2",d13t:"",d13p:"",d1w:"2",d1d:"0", d21t:"2",d21p:"0",d22t:"1",d22p:"2",d23t:"",d23p:"",d2w:"2",d2d:"0", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel216"]= [ "请选择", "是", "否", "我不知道", "", "", "", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel216']= [ '-1', '1', '2', '3', '', '', '', '', '', '', '', '', '', '', '', '' ];
 	D6.scenario.defInput["i217"] = {  cons:"consACcool",  title:"空调过滤器清洗",  unit:"",  text:"您平时打扫空调过滤器吗？", inputType:"sel217", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"2",d31p:"0",d32t:"1",d32p:"2",d33t:"",d33p:"",d3w:"1",d3d:"0"}; 			D6.scenario.defSelectValue["sel217"]= [ "请选择", "是", "否", "我不知道", "", "", "", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel217']= [ '-1', '1', '2', '3', '', '', '', '', '', '', '', '', '', '', '', '' ];
-	D6.scenario.defInput["i231"] = {  cons:"consACheat",  title:"主要使用的取暖器",  unit:"",  text:"您家最使用的取暖方式是什么？如果地板采暖，请选择热源。", inputType:"sel231", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel231"]= [ "请选择", "空调", "电子", "煤气", "燃油", "木柴", "电热地毯", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel231']= [ '-1', '1', '2', '3', '4', '5', '6', '', '', '', '', '', '', '', '', '' ];
-	D6.scenario.defInput["i232"] = {  cons:"consACheat",  title:"辅助取暖方式",  unit:"",  text:"您家的辅助取暖方式是什么？", inputType:"sel232", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel232"]= [ "请选择", "空调", "电子", "煤气", "燃油", "木柴", "电热地毯", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel232']= [ '-1', '0', '18', '19', '20', '21', '22', '23', '24', '25', '26', '', '', '', '', '' ];
+	D6.scenario.defInput["i231"] = {  cons:"consACheat",  title:"主要使用的取暖器",  unit:"",  text:"您家最使用的取暖方式是什么？如果地板采暖，请选择热源。", inputType:"sel231", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel231"]= [ "请选择", "空调", "电子", "煤气", "燃油", "木柴", "区域供热", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel231']= [ '-1', '1', '2', '3', '4', '5', '6', '7', '', '', '', '', '', '', '', '' ];
+	D6.scenario.defInput["i232"] = {  cons:"consACheat",  title:"辅助取暖方式",  unit:"",  text:"您家的辅助取暖方式是什么？", inputType:"sel232", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel232"]= [ "请选择", "空调", "电子", "煤气", "燃油", "木柴", "电热地毯", "区域供热", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel232']= [ '-1', '0', '18', '19', '20', '21', '22', '23', '24', '25', '26', '', '', '', '', '' ];
 	D6.scenario.defInput["i233"] = {  cons:"consACheat",  title:"空调取暖时间",  unit:"時間",  text:"冬季您家一天的取暖时间有多少？", inputType:"sel233", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel233"]= [ "请选择", "不使用", "1小时", "2小时", "3小时", "4小时", "6小时", "8小时", "12小时", "16小时", "24小时", "", "", "", "", "" ];			D6.scenario.defSelectData['sel233']= [ '-1', '0', '1', '2', '3', '4', '6', '8', '12', '16', '24', '', '', '', '', '' ];
 	D6.scenario.defInput["i234"] = {  cons:"consACheat",  title:"空调取暖温度",  unit:"℃",  text:"空调取暖时的温度设置是多少？如果无法设置温度，感觉大概达到了多少度？", inputType:"sel234", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel234"]= [ "请选择", "不使用", "18℃", "19℃", "20℃", "21℃", "22℃", "23℃", "24℃", "25℃", "26℃以上", "", "", "", "", "" ];			D6.scenario.defSelectData['sel234']= [ '-1', '0', '18', '19', '20', '21', '22', '23', '24', '25', '26', '', '', '', '', '' ];
 	D6.scenario.defInput["i235"] = {  cons:"consACheat",  title:"一年中多久使用空调取暖",  unit:"ヶ月",  text:"您家一年开多长时间空调取暖？", inputType:"sel235", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"",d11p:"",d12t:"",d12p:"",d13t:"",d13p:"",d1w:"",d1d:"", d21t:"",d21p:"",d22t:"",d22p:"",d23t:"",d23p:"",d2w:"",d2d:"", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel235"]= [ "请选择", "不使用", "1个月", "2个月", "3个月", "4个月", "5个月", "6个月", "8个月", "10个月", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel235']= [ '-1', '0', '1', '2', '3', '4', '5', '6', '8', '10', '', '', '', '', '', '' ];
@@ -1720,7 +1782,6 @@ D6.scenario.areafix = function() {
 	D6.scenario.defInput["i621"] = {  cons:"consTVsum",  title:"电视能效",  unit:"",  text:"您家的电视节能性能好不好？", inputType:"sel621", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"3",d11p:"0",d12t:"2",d12p:"1",d13t:"1",d13p:"2",d1w:"1",d1d:"0", d21t:"3",d21p:"0",d22t:"2",d22p:"1",d23t:"1",d23p:"2",d2w:"1",d2d:"0", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel621"]= [ "请选择", "一级", "二级", "三级", "我不知道", "", "", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel621']= [ '-1', '1', '2', '3', '4', '', '', '', '', '', '', '', '', '', '', '' ];
 	D6.scenario.defInput["i421"] = {  cons:"consDRsum",  title:"洗衣机能效",  unit:"",  text:"您家的洗衣机节能性能好不好？", inputType:"sel421", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"3",d11p:"0",d12t:"2",d12p:"1",d13t:"1",d13p:"2",d1w:"1",d1d:"0", d21t:"3",d21p:"0",d22t:"2",d22p:"1",d23t:"1",d23p:"2",d2w:"1",d2d:"0", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel421"]= [ "请选择", "一级", "二级", "三级", "我不知道", "", "", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel421']= [ '-1', '1', '2', '3', '4', '', '', '', '', '', '', '', '', '', '', '' ];
 	D6.scenario.defInput["i721"] = {  cons:"consRFsum",  title:"冰箱能效",  unit:"",  text:"您家的冰箱节能性能好不好？", inputType:"sel721", right:"", postfix:"", nodata:"", varType:"Number", min:"", max:"", defaultValue:"-1", d11t:"3",d11p:"0",d12t:"2",d12p:"1",d13t:"1",d13p:"2",d1w:"1",d1d:"0", d21t:"3",d21p:"0",d22t:"2",d22p:"1",d23t:"1",d23p:"2",d2w:"1",d2d:"0", d31t:"",d31p:"",d32t:"",d32p:"",d33t:"",d33p:"",d3w:"",d3d:""}; 			D6.scenario.defSelectValue["sel721"]= [ "请选择", "一级", "二级", "三级", "我不知道", "", "", "", "", "", "", "", "", "", "", "" ];			D6.scenario.defSelectData['sel721']= [ '-1', '1', '2', '3', '4', '', '', '', '', '', '', '', '', '', '', '' ];
-	
 
 
 	// prefecture definition ----------------------------------------------------

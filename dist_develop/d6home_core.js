@@ -1167,6 +1167,7 @@ D6.area = {
 		
 		//set air conditioner load
 		this.airconFactor_mon = D6.accons.getArray( this.area );
+		console.log( this.area );
 		this.heatFactor_mon = D6.acload.getArray( this.area );
 		this.plusHeatFactor_mon = D6.acadd.getArray( this.area );
 		
@@ -4529,7 +4530,7 @@ D6.calcCons = function() {
 	var ci;
 
 	//area parameters set
-	this.area.setCalcBaseParams();
+	D6.area.setCalcBaseParams();
 
 	//pre calculation such as common parameters setting
 	for ( i=0 ; i<D6.consList.length ; i++ ) {
@@ -4944,6 +4945,9 @@ D6.calcMeasures = function( gid ) {
 	if ( D6.debugMode ) {
 		console.log( "measure calculate in d6.js calcMeasures() --- " );
 		console.log( ret2 );
+		console.log( "d6--- " );
+		console.log( D6 );
+
 	}
 	return ret2;
 };
@@ -5508,7 +5512,7 @@ D6.scenario =
 		this.defSelectData = defSelectData;
 		this.defEquipment = defEquipment;
 		this.defEquipmentSize = defEquipmentSize;
-
+console.log( D6);
 		//set area and person to calculate average, heat load etc.
 		D6.area.setCalcBaseParams = function(){
 			D6.area.setPersonArea( D6.doc.data.i001, D6.doc.data.i021, D6.doc.data.i023);		

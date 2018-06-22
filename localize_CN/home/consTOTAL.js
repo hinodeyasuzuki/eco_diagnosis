@@ -1,5 +1,5 @@
 ﻿/**
-* Home-Eco Diagnosis for JavaScript
+* Home-Eco Diagnosis for JavaScript for CN fix
 * 
 * ConsTotal
 */
@@ -53,13 +53,16 @@ D6.consTotal.precalc = function() {
 			& this.priceGasSummer == -1
 			& this.priceGasWinter == -1;
 
-	this.houseType =this.input( "i002", -1 );					//type of house
+	this.houseType =this.input( "i002", 2 );					//type of house 　小区楼房
 	this.houseSize =this.input( "i003", 
 			( this.person == 1 ? 60 : (80 + this.person * 10) ) );
 																//floor size
 
-	this.heatEquip =this.input( "i202", -1 );					//main heat equipment
-
+	if ( D6.area.heatingLevel <= 4 ) {
+		this.heatEquip =this.input( "i202", 6 );					//main heat equipment
+	} else {
+		this.heatEquip =this.input( "i202", -1 );					//main heat equipment
+	}
 	//coal original
 	this.priceKeros = this.priceKerosSpring = this.priceKerosSummer = 0;
 	if (D6.area.averageCostEnergy.coal < 1000 ) {

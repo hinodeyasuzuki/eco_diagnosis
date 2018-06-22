@@ -93,6 +93,9 @@ D6.calcMeasures = function( gid ) {
 	if ( D6.debugMode ) {
 		console.log( "measure calculate in d6.js calcMeasures() --- " );
 		console.log( ret2 );
+		console.log( "d6--- " );
+		console.log( D6 );
+
 	}
 	return ret2;
 };

@@ -19,35 +19,28 @@ DC.init();
 DC.precalc = function() {
 	this.clear();			//clear data
 
-	this.prefecture =this.input( "i021", 6 );		//city, prefecture
+	this.prefecture =this.input( "i021", 2 );		//city, prefecture
 	this.heatArea = D6.area.getHeatingLevel(this.prefecture);
 
 	this.person =this.input( "i001", 3 );			//person
 	this.houseType =this.input( "i002", 2 );		//standalone / apartment CN
 	this.houseSize =D6.consShow["TO"].houseSize;	//home size 
-	this.heatSpace  =this.input( "i201",
-			this.heatArea <= 2 ? 0.6 :
-			this.heatArea == 3 ? 0.25 : 0.2
-		);											//heating area m2
 		
-
-	// original set
-	this.heatTime  =this.input( "i204", 
-			this.heatArea == 1 ? 24 :
-			this.heatArea == 2 ? 10 :
-			this.heatArea == 3 ? 6 : 6
-		);											//heating time
-
-	// original hotwater set
+	// default area heating set
 	this.priceHotWater = this.input( "i066" , 1 ) == 1 ? D6.area.averageCostEnergy.hotwater * this.houseSize / 100 : 0;
 
-	this.heatSpace  =this.input( "i201", this.heatArea < 5 ? 0.8 : 0.2 );	//part of heating CN
+	this.heatSpace  =this.input( "i201", this.heatArea <= 3 ? 0.6 : 0.2 );	//part of heating CN
 	this.heatMonth  = this.input( "i206", D6.area.seasonMonth.winter );	//heating month
 
-	//original set
+	//default set
 	this.heatEquip =this.input( "i202", 
-			this.heatArea <= 2 ? 6 : -1
+			this.heatArea <= 4 ? 6 : -1
 		 );		//heating equipment
+
+	 // heat time default set
+	this.heatTime  =this.input( "i204", 
+			this.heatArea <= 4 ? 24 : 6
+		);											//heating time
 
 	this.heatTemp  =this.input( "i205", 21 );		//heating temperature setting
 	this.priceEleSpring =this.input( "i0912", -1 );	//electricity charge in spring/fall
