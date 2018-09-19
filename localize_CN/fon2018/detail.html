@@ -1,0 +1,400 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<link href="view/common.css" rel="stylesheet" type="text/css" />
+	<link href="view/view_focus/layout-focus.css" rel="stylesheet" type="text/css" />
+	<title>低碳家庭诊断</title>
+
+  </head>
+
+  <body>
+	<div id="leanModalDialog">
+		<input type="button" class="modal_close" value="返回">
+		<div id="modal-contents"></div>
+	</div>
+	
+	<div class="contents">
+
+		<div id="header">
+			<div data-intro="欢迎使用新节能诊断软件。填写您当前的能源使用方式，为您计算并提供有效的节能方案。" data-step="1">
+				<h1>低碳家庭诊断</h1>
+			</div>
+		</div>
+		
+		<div id="headerMenu">
+			<button class="button inmode selected" id="m2" onclick="modeChange('m2');" >诊断首页</button>
+			<button class="button" id="btnsave" onclick="dataSave();" data-intro="可在浏览器中保存您输入的信息。" data-step="7">保存</button>
+			<button class="button" id="btnclear" onclick="dataClear();">删除</button>
+		</div>
+
+		<div id="header_attension">
+			<p>
+				2018/06/22				<a href="http://www.hinodeya-ecolife.com">Hinodeya Institute for Ecolife co.ltd.</a>
+							</p>
+		</div>
+
+		<div class="preloader">
+			<p>now loading diagnosis system</p>
+		</div>
+	
+		<div id="divco2">
+			<div class="leftmenu" data-intro="请在您所知的范围内选择目前的能源使用方式。可以不准确，不了解的问题请直接跳过。" data-step="2" data-position="right">
+				<ul id='tabcontents'></ul>
+			</div>
+		
+			<div class="result"  data-intro="根据您的输入内容随时显示分析结果。" data-step="3"  data-position="right">
+				<div id="graph" data-intro="以下是按照不同用途分析得出的碳排放量结果。左边为您的现状。右边为对比项，显示与您类似的家庭（或单位）的情况。中间为采取措施后可达到的减排效果。" data-step="4" ></div>
+				<p id="graphcomment"></p>
+				<div style="padding:20px;"></div>
+				<div id="graphMonthly" data-intro="图表方式显示的每月煤电费" data-step="5"  data-position="top"></div>
+			</div>
+		
+			<div class="mesmenu">
+				<div id="measure" data-intro="随时显示有效的节能措施。点击标题可查看详细说明。★代表获益，指的是将购置费计算在内后依然可收回成本的节能措施。点击右列，采取措施后的效果会显示在中间的图表上。" data-step="6"  data-position="left"></div>
+				<div style="text-align:right;">
+					<button style='color:blue;' onclick="over15show();">[显示全部]</button>
+				</div>
+				<p id="totalReduceComment"></p>
+			</div>
+		</div>
+
+		<div id="divelec" style="display:none">
+			<div class="leftmenu">
+				<div id="inDemandSumup"></div>
+				<div id="inDemandLog"></div>
+			</div>
+			<div class="result">
+				<div id="graphDemandSumup"></div>
+				<div id="graphDemandLog"></div>
+			</div>
+		</div>
+
+		<div id="about" style="display:none">
+			﻿			<h2>节能诊断的探讨</h2>
+<p>　该诊断有限日出公司和生态生命研究所（Hinodeya研究所Ecolife有限公司）提供的。其正在审查的目前是“uchi-eco sindan”正被在日本由从基部的环境部促进了计算逻辑，已被设计为容纳一个灵活的系统，如多语言。</p>
+<p>　根据家庭或办公室的能耗，有效的措施会有所不同。通过在范围内得到答案的理解，使提出的措施和分析，有更多的情况下家中。然而，没有必要强行回答我不知道该项目。通过猜测使用的逻辑，没有必要强行回答，它已成为如提出了相应的措施。</p>
+<p>　是那些已经提出的经营模式，但建议我们一般都是根据输入相应的数值计算，没有准确性和操作的保证。如果不适当的建议和数值输出，我们希望您告诉我们。另外它响应的系统，这是审查诊断逻辑的发展。<a class="button" href="./?lang=zh">対策一覧</a></p>
+
+			<h2>Parameters</h2>
+<form action="./" method="get">
+<ul>
+	<li>target:
+	<select name="t">
+		<option value="1" selected>home</option>
+		<option value="2">office(only japan)</option>
+	</select>
+	</li>
+
+	<li>view mode:
+	<select name="v">
+		<option value="3" selected>easy</option>
+		<option value="2">one page</option>
+		<option value="0">detail</option>
+		<option value="1">button type</option>
+	</select>
+	</li>
+
+	<li>introduction:
+	<select name="intro">
+		<option value="0" selected>no</option>
+		<option value="1">yes(only one page type)</option>
+	</select>
+	</li>
+
+	<li>language:
+	<select name="lang">
+		<option value="ja" selected>Japanese in Japan</option>
+		<option value="zh" >Chinese in China</option>
+		<option value="en" >English in Japan</option>
+		<option value="fr" >French in Japan</option>
+	</select>
+	</li>
+
+	<li>google translate:
+	<select name="translate">
+		<option value="0" selected>no</option>
+		<option value="1" >yes</option>
+	</select>
+	</li>
+
+</ul>
+<input type="submit" name="submit" value="Start Diagnosis">
+</form>
+
+
+
+<H2>开发记录</H2>
+<P>2011年5月1日  诊断平台的开发项目的开始</P>
+<P>2016年4月12日  Javascript。开发代码D6。 </P>
+<P>2017年5月20日 中国版本开发开始</P>
+
+<p>Special thank's to</p>
+
+<p>Yingqi Peng, 秋吉枫, 王媛</p>
+
+<p>for this chinese version.</p>
+
+
+
+		</div>
+		
+		<div id="top" style="display:none">
+			﻿<h2>家用节能诊断，节能舒适</h2>
+
+<div class="topmessage">
+<p>　为了保护我们的生命免受全球变暖，在2050年（未来将来约有30年），我们将成为一个不排放二氧化碳的社会。日本的二氧化碳排放量已经稳步下降。</p>
+<p>　通过将节能设备和创造力结合在一起，我们几乎不会产生二氧化碳排放。为此诊断准备了约60项此类有效措施。</p>
+<p>　在这种节能诊断中，可以根据每个人的生活计算有效的对策，并且组装生活可以减少自己的距离。请在您的电脑上尝试如何使终身的生活，适合自己的节能生活。当然，会发现好的设计。</p>
+</p>
+</div>
+
+<div class="button button_top" onclick="top2start();" onkeypress="top2start();" tabindex=0>开始诊断</div>
+
+<div class="topmessage" style="margin-top:30px;">
+<p>　用法很简单请选择您的问题选择，如如何使用您的家庭生活和精力。你不介意跳过你不知道的更多的东西。相反，如果要进行详细诊断，可以设置更详细的信息，例如“按类别”或“详细版本”。</p>
+<p>　根据答案，结果会变化越来越大。由于在图表中显示出什么是平均值或什么样的问题，请参考。有效对策的顺序也会发生变化。</p>
+<p>　显示的对策按照推荐的顺序排列。从那里，请检查并选择您感兴趣的，即使您现在不在。当采取措施时，立即可以了解到有关房屋多少公用事业费用和二氧化碳排放量减少的模拟结果。请尝试组装，并尝试创建一个直到2050年的生活设计。</p>
+</div>
+
+		</div>
+	</div>
+
+	<script>var targetMode=1;var debugMode=false;var dispMode=2;var languageMode='zh';var focusMode=2;var useWorker=true;var useCode=3;var messhownumber=7;var hideAverage='0';var hidePrice='0';var includeminjs='dist/worker_CN.js';var includesumjs='dist_develop/worker_CN.js';var includemincore='dist/d6home_core.min.js';var includeminlocalize='dist/d6home_CN.min.js';var lang={};
+lang.d6folder='q@Yv9fo2AuoTy6MI9QGt==';
+lang.localizeCode='q@D04=';
+lang.pageLanguage='q@D05srzt=';
+lang.code='q@L24=';
+lang.home_title='q@5Y2B56Xm5n625odg6X+X5cng';
+lang.home_joy_title='q@5Y2B56Xm5n625odg6X+X5cng77lV566N5L2I54zV77lW';
+lang.countfix_pre_after='q@Zt==';
+lang.show_electricity='q@ISWIED==';
+lang.show_gas='q@ISWIED==';
+lang.show_kerosene='q@ExSZH0H=';
+lang.show_briquet='q@ISWIED==';
+lang.show_area='q@ISWIED==';
+lang.show_gasoline='q@ISWIED==';
+lang.electricitytitle='q@55F15Ldo';
+lang.gastitle='q@54Jx5ePH';
+lang.kerosenetitle='q@54Jx5eX5';
+lang.briquettitle='q@6WlP56dq54Jx';
+lang.areatitle='q@5Ll65M+s5Y6o5cdJ';
+lang.gasolinetitle='q@5eT95eX5';
+lang.electricityunit='q@n1qb';
+lang.gasunit='q@oGZ=';
+lang.keroseneunit='q@GN==';
+lang.briquetunit='q@n2p=';
+lang.areaunit='q@GHb=';
+lang.gasolineunit='q@GN==';
+lang.point_disp=function(num) {return num + "分"};;
+lang.priceunit='q@5LJQ';
+lang.co2unit='q@n2p=';
+lang.energyunit='q@E0b=';
+lang.monthunit='q@5clV';
+lang.yearunit='q@5oz0';
+lang.startPageName='q@5LJb5Y2G77lV566N5L2I77lW';
+lang.header_attension='q@';
+lang.dataClear='q@5Lvt6Mzx5LJb6LBb5LnS5n6577lZ5Lvt6Mzx77ls';
+lang.savetobrowser='q@5orl5Y+q5n2L5Lvj5eJC6XrV5Mzb44PP';
+lang.savedataisshown='q@5Y+q55JM5LP85nnP5YvY44PP';
+lang.QuestionNumber=function(numques, nowques) {return  "（" + nowques + "个问题中第" + numques + "个）"};;
+lang.youcall='q@5bXb';
+lang.youcount='q@5n625odg6XrR5dvu';
+lang.totalhome='q@5LJb5Y2G5n625odg5bvD5MTL';
+lang.comparehome=function(target) {return "同一家庭规模的"+target};;
+lang.rankin100=function(count) {return "在情况相似的100个家庭中，您家排在第 " + count +"名"};;
+lang.rankcall='q@5MPA';
+lang.co2ratio=function(ratio) {return "　您家的二氧化碳排放量是平均的" + ratio +"倍。<br>"};;
+lang.co2compare06='q@5nFa5nFa5Y2B5YdB5n625odg5ozm5M2U56Xm5b6F5cF+6LrC77lZ6M2r5ov45dBF55dR5Y2B56Xm55Fs5eF744PP';
+lang.co2compare08='q@55Jy5Y2B5YdB5n625odg5ozm5M2U56Xm5b6F5cF+6LrC77lZ5Y2B56Xm55Fs5eF744PP';
+lang.co2compare10='q@5YvB5n625odg5ozm5M2U56Xm5b6F5cF+6LrC5blO5ozm44PP';
+lang.co2compare12='q@55Jy6nhL5YdB5n625odg5ozm5M2U56Xm5b6F5cF+6LrC77lZ6LPn6Y+U5L2U57da5cF56LPt77lZ6Y+L6VB95clW5o6V5nFa6Y+o5d2y56z66Mr044PP';
+lang.co2compare14='q@6nhL5YdB5n625odg5ozm5M2U56Xm5b6F5cF+6LrC77lZ6LPn6Y+U5L2U57da5cF56LPt77lZ6Y+L6VB95clW5o6V5nFa6Y+o5d2y56z66Mr044PP';
+lang.rankcomment=function(same,youcount,rank) {return "假如有100个类似家庭" + youcount + "，您家排在第" +   rank+ "名。<br>"};;
+lang.itemize='q@57hT6nT5';
+lang.itemname='q@5cn56M2v';
+lang.percent='q@5d+H5Y6YXPHc';
+lang.measure='q@5b6d5cn9';
+lang.merit='q@5YlL5bBt';
+lang.select='q@6LPW5bhc';
+lang.itemizecomment=function(main3,sum) {return main3+"）的比例较大，占到这3方面的" + sum+"%。占比大的策略效果更好。"};;
+lang.effectivemeasures='q@5clW5cJV55dR5b6d5cn9';
+lang.comment_combined_reduce=function(percent,fee,co2) {return "　将以上措施组合起来每年可减少 " + percent+"%的二氧化碳排放量（" + ( hidePrice != 1  ? fee +"元水电费、 ":"") + co2+"公斤）。如果您已经采取了如上措施，说明您已经在享受低碳生活了。"};;
+lang.titlemessage=function(title) {return  title+"有效的措施组合。"};;
+lang.co2reduction=function(co2) {return "每年可减少 " + co2+"kg二氧化碳排放量。"};;
+lang.reducepercent=function(name,percent) {return "相当于二氧化碳排放量减少了" + name+"的"+ percent+"% "};;
+lang.co2minus='q@5L+i5n6r546j5YdZ5ePa5LlJ56XmZBnBxhnHihrnuBrHa+n0h+BNtt==';
+lang.error='q@VBXNh+rHfrF6whnPdBnlbrnpvrJud+JTzrvichr7uhnIfBnAeh+8wBJobBngcBv/zrzUwBJCdhvQirnCxBF+z+nzthrhy+BNtt==';
+lang.feereduction=function(fee) {return "该措施组合每年可节省约" + fee+"元。"};;
+lang.feenochange='q@54Jx55F16YF55crt5L+L5LlJ44PP';
+lang.initialcost=function(price,lifetime,load) {return "由于需要重新购买，需要花费约" + price+"元左右（参考价）。价格除以使用寿命 " + lifetime+"年​​，平均每年约负担"+ load+"元。"};;
+lang.payback=function(change,totalchange,down) {return "另一方面，煤电费每年减少约 " + change+ "元，每年会节省 " + totalchange +(down?"元。您只需负担":"元。" )};;
+lang.payback1month='q@5bXb5L+i5Mlb5YvN5Yvd5clV5LnS5cF25Mhr5bvD5clf44PP';
+lang.paybackmonth=function(month) {return "您可在约" + month+"个月内收回成本。"};;
+lang.paybackyear=function(year) {return "您可在约" + year+"年内收回成本。"};;
+lang.paybacknever='q@5L2m5Y6/6Y6+5Lvj5YdT5Yda5MBO5Y2/55Fb5n+/5MT977lZ5Yzs5crt5eBI6LPn6Y+U6VdP55lO54Jx55F16YF55c2y5cF25Mhr5bvD5clf44PP';
+lang.notinstallfee=function(fee) {return "每年会节省煤电费" + fee+"元。"};;
+lang.monthlytitle='q@5d+C5clV55dR54Jx55F16YF55b6b566K';
+lang.month='q@5clV';
+lang.energy='q@6VB95edD';
+lang.button_clear='q@5Lvt6Mzx';
+lang.button_savenew='q@5L+z5n2L5Yv6';
+lang.button_save='q@5Y+q5n2L';
+lang.button_open='q@5olN';
+lang.button_close='q@5LJm';
+lang.button_showall='q@5cv+56F65LJb6LBb';
+lang.add='q@6Y+95Ldt';
+lang.button_menu='q@6V+p5L2I';
+lang.button_back_toppage='q@6Y+H5Mhr6nnJ6nT1';
+lang.button_back='q@6Y+H5Mhr';
+lang.button_prev='q@5YvX5YvN6nT1';
+lang.button_next='q@5YvY5YvN6nT1';
+lang.button_top='q@6nnJ6nT1';
+lang.button_input='q@5nTe5LnM546j54d2';
+lang.button_queslist='q@5bzN5clW6Mrh6nXL';
+lang.button_diagnosis='q@6X+X5cng6nnJ6nT1';
+lang.button_measures='q@56PH56z25b6d5cn9';
+lang.button_selectcategory='q@6X6+5n6n6X+R5Yh35cn56M2v';
+lang.button_calcresult='q@6X6u566K57hG5c6p';
+lang.button_about='q@6X+05cvB';
+lang.button_fullversion='q@5Lds6VB95n6Z5cJ054zV';
+lang.clear_confirm='q@5YvN6XrV6XTb5dvu5olC';
+lang.button_co2emission='q@5YdZ5ePa5LlJ56Xm5b6F5cF+6LrC';
+lang.button_firstenergy='q@5Lvq57da6VB95edD6LrC';
+lang.button_energyfee='q@54Jx55F16YF5';
+lang.home_button_intro1='q@5clf6Y2i5Yh25L+i5dP55b2h5bXb5n625Y2/55Fb55dR55dR6VPK6VB96X6+5nFU5L+X5Y2/55Fb5cn55olC5b+D5Y6o5Yvd5bPa5LlJ55dR6VdP6VB95b6d5cn944PP5Yhy5YvY5cviZwQxhXexhV7yeeoyhd3bt73btWsxio/ayXwzyeayiV/az7wyuoCazbGcy67cbcwiiVmbe7syfYUztdwaa6KctMCazbGbwVCyz7Gbi5ibbLmyz57aeMGiiVmzw5QxhdGyxV7xiWeyw43ccbwah5aztdwaz7wyhcGazbGbvbYbt73zwdezye3wtVV=';
+lang.home_button_intro2='q@5bXb5bzN6Y6G5LJy55dR5Y+u5bTi5YvA5Yln6XXe5Y+q5n2L5Lvj5clA5Ldu5Mzb77lZ5YhS5cv+56F65Mlb5bXb55dR5bzY5cl65YvX44PP';
+lang.home_button_startdiagnosis='q@5olN5nrY6X+X5cng';
+lang.home_button_about='q@5LJm5YdB6X+X5cng';
+lang.home_button_result='q@55lY57hG5c6p';
+lang.home_button_retry='q@6LrA5cnj5Mhr562H';
+lang.home_button_average='q@5YvB5ozm5M2U5d+H6Y6Q';
+lang.home_button_monthly='q@5d+C5clV5L+L5LlJ';
+lang.home_button_measure='q@5clW5cJV5b6d5cn9';
+lang.home_button_resultmessage='q@6Y+M5cvi5bXb5n625YvB5n625odg5ozm5M2U5LP855dR5n+55d+H5Mh+44PP5Yvg6Mr055dR5Mh+6XTb5cvi5o2G5bXb5bza6XTZ5YdT4bPp5clW5cJV5b6d5cn94bPq5MPB5oPT5L+J5o6K55dR5cJV5c6p44PP';
+lang.home_button_measuremessage='q@5clW5cJV5b6d5cn95YvN6XrV6XTb44PP6X+35Mlb5cn55dTT5LnS5bzG5Lh+77lZ55h45odH55dR5cJV5c6p5oPT5Yhy5Mh+6XTb5o2v5olC5cv+56F644PP';
+lang.home_button_pagemessage='q@5L+i5blU5n6n5c+D5Yvd6LBb5LvT6LrA5cnj5Mhr562H44PP54X55Lr74bPp6Y+95Ldt4bPq5L+i6Y+95Ldt5bv/6Mr05bvJ6X6+5nFU44PP';
+lang.home_focus_title_after='q@5LvK6XTb5dvu5olC';
+lang.intro1='q@5dlv6Y+B5Y2/55Fb5cnj6VdP6VB96X+X5cng6Y2i5Yh244PP5nTe5LnM5bXb5o2G5LzA55dR6VB95edD5Y2/55Fb5cn55olC77lZ5Yv65bXb6X6u566K5oz25b+D5Y6o5clW5cJV55dR6VdP6VB95cn55dTV44PP';
+lang.intro2='q@6X+35Mlb5bXb5bzN55+y55dR6VlQ5Mh05LnS6LPW5bhc55hh5LzA55dR6VB95edD5Y2/55Fb5cn55olC44PP5L+i5Yhy5YvA5LrT56Th77lZ5YvA5YdT6Xrw55dR6Mrh6nXL6X+355h05b6y6Yrm6Y+U44PP';
+lang.intro3='q@5dP55b2h5bXb55dR6Y6G5LJy5LnS5n656MdC5cr25cv+56F65LvT5c6D57hG5c6p44PP';
+lang.intro4='q@5Yhy5YvY5cvi5blW54Ja5YvA5MPZ55Fb6LPH5LvT5c6D5o6K5Lr655dR56Xm5b6F5cF+6LrC57hG5c6p44PP5orz6Y655Yv65bXb55dR546j54d244PP5L+m6Y655Yv65n+55d+H6nT577lZ5cv+56F65YvB5bXb57T75Yl855dR5n625odg77lV5bvJ5L2I5Y2A77lW55dR5bBS5Ln144PP5Yvg6Mr05Yv66LrU5L+J5b6d5cn95MPB5L+i6Y6+5Lvj55dR5LrC5b6F5cJV5c6p44PP';
+lang.intro5='q@5Mh+6XTb5cn55olC5cv+56F655dR5d+C5clV54Jx55F16YF5';
+lang.intro6='q@6MdC5cr25cv+56F65clW5cJV55dR6VdP6VB95b6d5cn944PP54X55Lr75dPU6nXL5L+i5c+y55lY6X+z57hT6X+05cvB44PP4cvS5Yhw6XTb6V6355hX77lZ5blU55dR5cvi5oPT6YFg572h6YF56X6u566K5Mlb5LnS5MPB5Y6q54F25L+i5cF25Mhr5bvD5clf55dR6VdP6VB95b6d5cn944PP54X55Lr75L+m5LvK77lZ6LrU5L+J5b6d5cn95MPB55dR5cJV5c6p5Yln5cv+56F65Mlb5Yvg6Mr055dR5Mh+6XTb5YvX44PP';
+lang.intro7='q@5L+i5Mlb5eJC6XrV5Mzb5Yvg5Y+q5n2L5bXb6Y6G5LJy55dR5Y+u5bTi44PP';
+lang.intro8='q@5bXb5L+d6MlN5Mhr562H5clf6nT16M2v5Yvg55dRZwQxhXecy67cbcwiiVmywoCyw6/yicsyvYQbe6oah4obe4ezyd3xi6Uztn/wtVYateayu7ivtWkRo25y4bPq56hY5Lv75olN5nrY44PP';
+lang.home_easy_title='q@5Y2B56Xm5n625odg566N5L2I6X+X5cng';
+lang.home_easy_step1='q@6Mrh6nXL';
+lang.home_easy_step2='q@5n+55d+H';
+lang.home_easy_step3='q@54z554X5';
+lang.home_easy_step4='q@5b6d5cn9';
+lang.home_easy_toptitle='q@5YvA6VPQ6WzE6VdP55lO5YvN5Ydo54Jx55F16YF55MPK77ls';
+lang.home_easy_top1='q@4bPp6VdP6VB94bPq5YvA5cvi6X6c5Y2t5o+A5L+K5YvA5Y6/77lZ6VPZ5cvi5Y2/6Vrd5ork55dR55Fs5eF75ch05Ldt5n+Z6Ynm77lZ6VvF6LPP77lZ5Yzs5cvi5Yv65YdT5n2D5n2M5MPB5Yhw55dR5oz456nC55Fs5eF744PP';
+lang.home_easy_top2='q@5L+d6MlN5Mhr562H566N5L2I55dR6Mrh6nXL77lZ5L2m5L+i5o6K5Lvj5YvB5bXb55dR55Fs5eF755h45Ll56LJA55dR6VdP6VB95b6d5cn944PP6X+I6X+IZ+JVuhzFa+F9whrvf+JhghJ6ervivhnJerJDc+BNtt==';
+lang.home_easy_top3sm='q@4bP75clf6Y2i5Yh25n6Z5LJb5LJA6YF544PP5crt6MlN5nTe5LnM5nrG5MPA44PO6LXh566k562W5Yvd5Yd65Y+u5bTi44PP';
+lang.home_easy_top_button_start='q@5olN5nrY6X+X5cng';
+lang.home_easy_top_button_about='q@6X+05cvB';
+lang.home_easy_p5title='q@6X+35Mhr562H6Mrh6nXL';
+lang.home_easy_p5_1='q@6X+36LPW5bhc5bXb5clN5MPV6LPP55dR6nT555hh44PP5YvA5evS5dJn55dR6Mrh6nXL5L+i55h05b6y6Yrm6Y+U44PP';
+lang.home_easy_p5_button_next='q@55lY57hG5c6p';
+lang.home_easy_p2title='q@5YvB5ozm5M2U5n625odg55h45d+H';
+lang.home_easy_p2_button_next='q@56Th5n6n5Yv76XnO5L6s5Mht';
+lang.home_easy_p3title='q@5bXb55dR55Fs5eF754z554X5';
+lang.home_easy_p3_1='q@6Y+M5cvi5LJm5YdB5YdZ5ePa5LlJ56Xm5b6F5cF+5edD55dR5LvT5c6D57hG5c6p44PP5orz6Y655cvi5bXb5n6277lZ5L+m6Y655cvi5YvB5bXb5n6257T75Yl85n625odg55dR56Xm5b6F5cF+5dPU5LrT5LP844PP';
+lang.home_easy_p3_button_next='q@5b6b6V2D55dR5b6d5cn9';
+lang.home_easy_p4title_pre='q@5LJk';
+lang.home_easy_p4title_after='q@5Yvd5b6b6V2D5b6d5cn9';
+lang.home_easy_p4_button_next='q@5clN5b6b6V2D55dR5b6d5cn9';
+lang.home_easy_p4_1='q@5Yhy5YvY5cvi5dP55b2h5bXb55dR5n625odg5bBS5Ln15n6n5Lv25b6b6V2D55dR6VdP6VB95b6d5cn944PP54X55Lr75dPU6nXL5c+y55lY6X+z57hT6X+05cvB44PP';
+lang.home_easy_p4_2='q@5Yhy5YvX5YhS5cvi57XK55Jy55dR5LvT5c6D44PP6Y+L5L+i5dP55b2h5ch06X+z57hT55dR6X+X5cng5b6b6V2D5ch05Yv65Ll56LJA55dR5b6d5cn944PP';
+lang.home_easy_p4_button_next2='q@6Y+o6XTZ5ch06X+z57hT55dR6X+X5cng';
+lang.home_easy_p4_button_next3='q@6VPQ6WzE5ch05b2v5n6255F155dR55Fb5bv3';
+lang.home_easy_measure_show=function(num) {return "第 "+ num + "个建议措施"};;
+lang.home_maintenance_message='q@5Yhy5YvY5cvi5bXb6LPW5bhc55dR5b6d5cn944PP5bXb5Mlb5bza6XTZ5YdT5MPK77ls';
+lang.home_maintenance_list='q@5orl6LPW5bhc55dR5b6d5cn9';
+lang.home_maintenance_selected='q@6LPW5bhc5YdT6Y+M5Yvd5b6d5cn9';
+lang.home_action_title='q@5Y2B56Xm55Fs5eF7566N5L2I6X+X5cng';
+lang.home_action_step1='q@6Mrh6nXL';
+lang.home_action_step2='q@6X+R5Yh3';
+lang.home_action_step3='q@5n+5562J';
+lang.home_action_toptitle='q@6M2v5MPE5Y2B56Xm55Fs5eF755dR5n625odg';
+lang.home_action_top1='q@55Fb5YvN5Ydo5oPC56dA6Mrb5oPk5L+i5Yhy5LrC5oPE56Xm5b6F5cF+6LrC';
+lang.home_action_top2='q@';
+lang.home_action_axis1='q@5L+i5blO57hg5bPa';
+lang.home_action_axis2='q@6VdP6VB96X6+5nFU';
+lang.home_action_axis3='q@6VdP6VB96XTZ5Yv6';
+lang.home_action_label1='q@6YJr77lO';
+lang.home_action_label2='q@6Y+L5L+i5Yhy';
+lang.home_action_label3='q@5clW54X55L+i5bBp';
+lang.home_action_good_point='q@5LTn5o6K5nJ955dR5Mlj5cn5';
+lang.home_action_bad_point='q@5L+i5Yhy5cF56Y+o55dR5Mlj5cn5';
+lang.home_list_message='q@5oPT5YhB6Y+M6LrZ6LPW5Lr66LPP5MPV5bXb55dR5b6d5cn9';
+lang.younow='q@5o2G5LzA5bBS5Ln1';
+lang.youafter='q@6LrU5L+J5b6d5cn95MPB';
+lang.average='q@5ozm5M2U';
+lang.compare='q@5n+554Ja';
+lang.comparetoaverage='q@';
+lang.co2emission='q@5YdZ5ePa5LlJ56Xm5b6F5cF+6LrC';
+lang.co2reductiontitle='q@D08l5LrC5b6F5cJV5c6p';
+lang.fee='q@54Jx55F16YF5';
+lang.feereductiontitle='q@5LrC5oPE54Jx55F16YF5';
+lang.initialcosttitle='q@5Lvq5cls5bdI6YJR6nXq';
+lang.loadperyear='q@5YvN5oz06YFs5bhS6nXq';
+lang.primaryenergy='q@5Lvq57da6VB95edD';
+lang.ohter='q@5LJ25YhJ';
+lang.office_title='q@5Y2B56Xm5Ldr5LJf5n6x566N5L2I6X+X5cng';
+lang.officecall='q@6YF15LJf5L+4';
+lang.officecount='q@5Ldr5LJf5n6x';
+lang.totaloffice='q@5cJ05Yvd5Ldr5LJf5n6x';
+lang.officenow='q@5o2G5LzA5bBS5Ln1';
+lang.compareoffice=function() {return "同样规模的" + target};;
+lang.button_demand='q@6MlN5eTP';
+lang.home_lifegame_title='q@';
+lang.home_lifegame_toptitle='q@';
+lang.home_lifegame_top1='q@';
+lang.home_lifegame_top2='q@';
+lang.home_lifegame_top3='q@';
+lang.home_lifegame_top3b='q@';
+lang.home_lifegame_toptitle4='q@';
+lang.home_lifegame_top4='q@';
+lang.home_lifegame_toptitle5='q@';
+lang.home_lifegame_top5='q@';
+lang.home_lifegame_toptitle6='q@';
+lang.home_lifegame_top6='q@';
+lang.home_lifegame_top6b='q@';
+lang.home_lifegame_toptitle7='q@';
+lang.home_lifegame_top7='q@';
+lang.home_lifegame_toptitle90='q@';
+lang.home_lifegame_top90='q@';
+lang.home_lifegame_toptitle99='q@';
+lang.home_lifegame_top99='q@';
+lang.button_end='q@57hG5c2s';
+lang.button_agree='q@6X6+572h';
+lang.button_commit='q@5bza6XTZ';
+lang.home_lifegame_button_sel99='q@';
+lang.home_lifegame_button_sel3a='q@';
+lang.home_lifegame_button_sel3b='q@';
+lang.home_uchieco_title='q@';
+lang.co2unitperyear='q@n2pi5oz0';
+lang.co2unitpermonth='q@n2pi5clV';
+lang.feeunitperyear='q@5LJQY+J5gN==';
+lang.feeunitpermonth='q@5LJQY+npvN==';
+lang.energyunitperyear='q@E0bi5oz0';
+lang.energyunitpermonth='q@E0bi5clV';
+</script>
+		<!--[if IE 9]><script>var a=location.search.substring(1);location.href='./?fm=4&'+a;</script><![endif]-->
+	
+	<script src="view/lib/jquery/jquery.min.js" type="text/javascript"></script>
+	<script src="view/lib/leanModal/jquery.leanModal.min.js" type="text/javascript"></script>
+	<script src="view/lib/jquery.cookie/jquery.cookie.js" type="text/javascript"></script>
+	<script src="view/main.js" type="text/javascript"></script>
+	<script src="view/createpage.js" type="text/javascript"></script>
+	<script src="view/graph.js" type="text/javascript"></script>
+	<script src="view/lib/D3/d3.min.js"></script>
+	<script src="view/lib/dimple-js/dimple.v2.3.0.min.js"></script>
+	<!--[if lte IE 10]><script>alert("Sorry, this page does not work under IE8, and too slow under IE10.\n Please use IE11 up, chrome, Edge, Firefox or safari.");</script><![endif]--><script src='./localize_CN/view/CN_home_2.js' type='text/javascript'></script>	<script>paramdata='';</script>
+	<script src="view/view_focus/onclick-focus.js" type="text/javascript"></script>
+	
+  </body>
+</html>

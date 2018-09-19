@@ -1,0 +1,8 @@
+npm install grunt
+npm install grunt-contrib-concat
+npm install grunt-contrib-uglify
+
+grunt　のみで全部
+grunt core でコアのみ
+
+

@@ -1,0 +1,140 @@
+﻿<?php
+// Home-Eco Diagnosis for JavaScript
+//
+// view/template-action.html
+//		main html for home action page
+//
+// require php, and inluded by index.php
+//
+?><!DOCTYPE html>
+<html lang="<?php echo $languageMode; ?>">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="target-densitydpi=device-dpi, width=320, initial-scale=1.0, user-scalable=yes">
+	<link href="view/common.css" rel="stylesheet" type="text/css" />
+	<link href="view/view_action/layout-action.css" rel="stylesheet" type="text/css" />
+<?php
+	if ( !$oneAreaRelease ) {
+?>
+	<link rel="alternate" hreflang="ja" href="./?lang=ja&v=6" />
+	<link rel="alternate" hreflang="en" href="./?lang=en&v=6" />
+	<link rel="alternate" hreflang="zh" href="./?lang=zh&v=6" />
+	<link rel="alternate" hreflang="fr" href="./?lang=fr&v=6" />
+<?php
+	}
+?>
+
+	<title><?php echo $lang["home_easy_title"];?> - <?php echo $title;?></title>
+
+  </head>
+
+  <body>
+  
+	<div id="leanModalDialog" style="float:left;">
+		<input type="button" class="modal_close" value="<?php echo $lang['button_back'];?>" tabindex=0>
+		<div id="modal-contents"></div>
+	</div>
+	
+	<div class="contents">
+
+		<div id="header">
+			<h1><?php echo $lang["home_action_title"];?></h1>
+			<div align="center" id="step">
+				<span id="s1" onclick="modeChange('m2');" onkeypress="modeChange('m2');" tabindex=0>1<?php echo $lang['home_action_step1'];?></span>>
+				<span id="s2" onclick="calcActionPoint();" onkeypress="calcActionPoint();" tabindex=0>2<?php echo $lang['home_action_step2'];?></span>>
+				<span id="s3" onclick="modeChange('m4');" onkeypress="modeChange('m4');" tabindex=0>3<?php echo $lang['home_action_step3'];?></span>
+			</div>
+		</div>
+
+		<div class="preloader">
+			<p>now loading diagnosis system</p>
+		</div>
+	
+		<div class="page" id="p1" >	
+			<h2><?php echo $lang['home_action_toptitle'];?></h2>
+			<p><?php echo $lang['home_action_top1'];?></p>
+			<p><?php echo $lang['home_action_top2'];?></p>
+
+			<p style="text-align:right;font-size:80%"><?php echo $lang['home_easy_top3sm'];?></p>
+			<div class="center">
+				<span class="next button large" onclick="modeChange('m2');" onkeypress="modeChange('m2');" tabindex=0><?php echo $lang['home_easy_top_button_start'];?></span>
+<!--			<a class="button inmode" href="./?lang=<?php echo $languageMode; ?>&v=4" target="_blank"><?php echo $lang['button_about'];?></a>-->
+			</div>
+
+		</div>
+
+		<div class="page" id="p2"  style="display:none">	
+			<!-- question list -->
+			<h2><?php echo $lang['home_easy_p5title'];?></h2>
+			<p><?php echo $lang['home_easy_p5_1'];?></p>
+
+			<div class="inputarea">
+			<ul id='tabcontents'></ul>
+			</div>
+
+			<div class="center">
+				<span class="next button large" onclick="calcActionPoint();" onkeypress="calcActionPoint();" tabindex=0><?php echo $lang['home_easy_p5_button_next'];?></span>
+			</div>
+
+		</div>
+
+
+		<div class="page" id="p3" style="display:none">
+			<!-- action points -->
+			<h2 class="constitle"><?php echo $lang['home_easy_p3title'];?></h2>
+			<div class="result" >
+				<div id="actionpoint"></div>
+			</div>
+			<div class="center" style="clear:both;">
+				<span class="next button large" onclick="modeChange('m4');" onkeypress="modeChange('m4');" tabindex=0><?php echo $lang['home_easy_p3_button_next'];?></span>
+			</div>
+
+		</div>
+
+		<div class="page" id="p4" style="display:none">
+			<!-- measures show one by one -->
+			<h2 class="constitle"><?php echo $lang['home_easy_p4title_pre'].$messhownumber.$lang['home_easy_p4title_after'];?></h2>
+			<div class="result" >
+				<div id="measure" style="display:none"></div>
+			</div>
+			<div class="center">
+				<span id="mesnextbtn" class="next button large" onclick="measurenext();" onkeypress="measurenext();" tabindex=0><?php echo $lang['home_easy_p4_button_next'];?></span><br>
+			</div>
+
+			<p class="onlyfirst"><?php echo $lang['home_easy_p4_1'];?></p>
+			<p id="totalReduceComment"></p>
+			<p class="show7" style="display:none"><?php echo $lang['home_easy_p4_2'];?></p>
+
+			<div id="lastbtns" class="center" style="display:none">
+				<?php if ( isset($_GET["event"] )){ ?>
+					<span class="next button large" onclick="dataClear();modeChange('m5');" onkeypress="dataClear();modeChange('m5');" tabindex=0><?php echo $lang['button_clear'] . " & " . $lang['button_back'];?></span><br>
+				<?php } else { ?>
+					<span class="next button large" onclick="saveandgo();" onkeypress="saveandgo();" tabindex=0><?php echo $lang['home_easy_p4_button_next2'];?></span><br>
+					<?php if ($countryMode == "JP" ) { ?>
+					<span class="next button large" onclick="location.href='http://label.eek.jp'" onkeypress="location.href='http://label.eek.jp'"><?php echo $lang['home_easy_p4_button_next3'];?></span>
+					<?php } ?>
+				<?php } ?>
+			</div>
+
+		</div>
+		
+		<div id="footer">
+			<p>
+				<?php echo $opendate;?>
+				Copyright(C) <a href="http://www.fon.org.cn">自然之友</a>、<a href="http://www.hinodeya-ecolife.com/">Hinodeya</a>
+			</p>
+		</div>
+		
+	</div>
+
+	<?php
+		echo $jssets;
+		echo $scripts;
+		echo $jsgoogle;
+		echo $jsgoogle_analytics;
+	?>
+
+	<script src="view/view_action/onclick-action.js" type="text/javascript"></script>
+
+  </body>
+</html>
