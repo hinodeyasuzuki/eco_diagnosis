@@ -22,6 +22,9 @@
  * calcMeasure()	main formula to calculate measures
  * 
  */
+
+//resolve D6
+var D6 = D6||{};
  
 //Inherited class of D6.consLIsum
 D6.consLI = D6.object( D6.consLIsum );
@@ -30,14 +33,14 @@ D6.consLI.init = function() {
 	//construction setting
 	this.consName = "consLI";   		//code name of this consumption 
 	this.consCode = "";            		//short code to access consumption, only set main consumption user for itemize
-    this.title = "light";				//consumption title name
+	this.title = "light";				//consumption title name
 	this.orgCopyNum = 1;                //original copy number in case of countable consumption, other case set 0
 	this.addable = "room for lighting";		//add message
 	this.groupID = "6";					//number code in items
 	this.color = "#ffff00";				//color definition in graph
 	this.countCall = "th room";			//how to point n-th equipment
 
-    this.sumConsName = "consLIsum";		//code name of consumption sum up include this
+	this.sumConsName = "consLIsum";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
@@ -50,15 +53,15 @@ D6.consLI.precalc = function( ) {
 	this.clear();
 
 	// room name
-	var roomNames = [ '', '玄関', '門灯', '廊下', 'トイレ', '脱衣所', '風呂', '居室' ];
+	var roomNames = [ "", "玄関", "門灯", "廊下", "トイレ", "脱衣所", "風呂", "居室" ];
 	this.rid = this.input("i511" + this.subID, 0);					//room ID
 	this.mesTitlePrefix = this.rid ? roomNames[this.rid] 
-			: this.mesTitlePrefix;									//set room name
+		: this.mesTitlePrefix;										//set room name
 
 	this.type =this.input( "i512" + this.subID, 2 );				//type of light
 	this.watt =this.input( "i513" + this.subID, -1 );				//electricity W/tube
 	this.num =this.input( "i514" + this.subID, 0 );					//tube number
-	this.time =this.input( "i515" + this.subID, this.lightTime );	//time to use　hour/day
+	this.time =this.input( "i515" + this.subID, this.lightTime );	//time to use hour/day
 
 };
 
@@ -73,7 +76,7 @@ D6.consLI.calc = function( ) {
 			this.watt = 100;
 		}
 	}
-	this.electricity = this.watt * this.time * this.num / 1000 * 365　/ 12;	
+	this.electricity = this.watt * this.time * this.num / 1000 * 365 / 12;	
 
 };
 
@@ -99,7 +102,7 @@ D6.consLI.calc2nd = function( ) {
 
 D6.consLI.calcMeasure = function() {
 	var rejectSelect = false;
-	var mes;
+	//var mes;
 	
 	//can or not install good light
 	if (

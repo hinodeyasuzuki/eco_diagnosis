@@ -37,7 +37,7 @@ var D6 = D6||{};
  *		-each consumption instance include measures, sumCons, subCons etc.
  */
 D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
-	var i,j,k;
+	var i,j;
 	var notinit = false;
 
 	if ( prohibitQuestions == "add"){
@@ -62,7 +62,6 @@ D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
 		D6.logicList = D6.scenario.getLogicList();
 	}
 	var consList = D6.consList;
-	var cname;
 
 	// step 2 : Implementation of consumption class -----------
 	//

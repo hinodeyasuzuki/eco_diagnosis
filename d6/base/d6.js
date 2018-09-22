@@ -62,8 +62,9 @@ D6.resMeasure = [];					//result of measures list
 D6.mesCount = 0;					//count of measures
 D6.consCount = 0;					//count of consumptions
 
-D6.average = { consList:""
-				};					//average of consumptions 
+D6.average = { 
+	consList:""
+};									//average of consumptions 
 	
 D6.isOriginal = true;					//in case of no measure is selected
 D6.sortTarget = "co2ChangeOriginal";	//by which measureas are sorted, changeable by input

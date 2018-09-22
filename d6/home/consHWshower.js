@@ -21,6 +21,9 @@
  * calcMeasure()	main formula to calculate measures
  * 
  */
+
+//resolve D6
+var D6 = D6||{};
  
 //Inherited class of D6.ConsBase
 D6.consHWshower = D6.object( D6.ConsBase );
@@ -29,13 +32,13 @@ D6.consHWshower.init = function() {
 	//construction setting
 	this.consName = "consHWshower";    	//code name of this consumption 
 	this.consCode = "HW";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "shower";					//consumption title name
+	this.title = "shower";					//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "1";					//number code in items
 	this.color = "#ffb700";				//color definition in graph
 	this.countCall = "";				//how to point n-th equipment
 
-    this.sumConsName = "consHWsum";		//code name of consumption sum up include this
+	this.sumConsName = "consHWsum";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page

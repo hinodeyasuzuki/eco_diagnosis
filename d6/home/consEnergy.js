@@ -23,7 +23,10 @@
  * calcMeasure()	main formula to calculate measures
  * 
  */
- 
+
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.consCRsum
 D6.consEnergy = D6.object( D6.ConsBase );
 
@@ -31,13 +34,13 @@ D6.consEnergy.init = function() {
 	//construction setting
 	this.consName = "consEnergy";    	//code name of this consumption 
 	this.consCode = "";            		//short code to access consumption, only set main consumption user for itemize
-    this.title = "General Energy Setting";	//consumption title name
+	this.title = "General Energy Setting";	//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "0";					//number code in items
 	this.color = "#ff0000";				//color definition in graph
 	this.countCall = "";				//how to point n-th equipment
 
-    this.sumConsName = "consTotal";		//code name of consumption sum up include this
+	this.sumConsName = "consTotal";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page

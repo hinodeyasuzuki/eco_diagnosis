@@ -16,7 +16,9 @@
  * 								2016/04/12 ported to JavaScript
  * 
  */
- 
+
+//resolve D6
+var D6 = D6||{};
 
 D6.scenario =
 {
@@ -59,7 +61,7 @@ D6.scenario =
 		logicList["consRFsum"] = 	D6.consRFsum;
 		logicList["consRF"] = 		D6.consRF;
 		logicList["consLIsum"] = 	D6.consLIsum;
-		logicList['consLI'] = 		D6.consLI;
+		logicList["consLI"] = 		D6.consLI;
 		logicList["consTVsum"] = 	D6.consTVsum;
 		logicList["consTV"] = 		D6.consTV;
 		logicList["consDRsum"] = 	D6.consDRsum;
@@ -94,60 +96,61 @@ D6.scenario =
 		var defEquipmentSize = [];
 
 		// defMeasures[measure] ------------------------------------------
-			//		measure : measure code (string) same to name below
-			// mid			max 3 digit identify number need not to overlap
-			// name 		measure code
-			// title		measure title
-			// easyness		the factor of easy to do
-			// refCons 		related consumption class code 
-			// titleShort 	short title less than 30 charactors
-			// joyfull		joyfull detail discription
-			// level		suggest level 0:anytime, 1:only easy case , 5: only detail case
-			// figNum		figure number
-			// lifeTime		lifetime of equipments. year except last charactor is "h"
-			// price		inital cost
-			// roanShow		show roan simulation, if true
-			// standardType	equipment name of orginal type 
-			// hojoGov		subsidy by national government
-			// advice		advice to conqure this measure
-			// lifestyle	no need to pay initial cost if 1
-			// season		advice season, "wss" w:winter, s:summer, s:spring. in case
-			//					not to advice, set "0" in spite of charactor
-			//
-			//	calculation logic is descrived in each consumption class
+		//		measure : measure code (string) same to name below
+		// mid			max 3 digit identify number need not to overlap
+		// name 		measure code
+		// title		measure title
+		// easyness		the factor of easy to do
+		// refCons 		related consumption class code 
+		// titleShort 	short title less than 30 charactors
+		// joyfull		joyfull detail discription
+		// level		suggest level 0:anytime, 1:only easy case , 5: only detail case
+		// figNum		figure number
+		// lifeTime		lifetime of equipments. year except last charactor is "h"
+		// price		inital cost
+		// roanShow		show roan simulation, if true
+		// standardType	equipment name of orginal type 
+		// hojoGov		subsidy by national government
+		// advice		advice to conqure this measure
+		// lifestyle	no need to pay initial cost if 1
+		// season		advice season, "wss" w:winter, s:summer, s:spring. in case
+		//					not to advice, set "0" in spite of charactor
+		//
+		//	calculation logic is descrived in each consumption class
 
-			//defined in EXCEL sheet
+		//defined in EXCEL sheet
 		
 
 		// defInput[inname] ---------------------------------------------------------------
-			//		definition of questions copied from EXCEL file
-			//		inname is "i" + num
-			//
-			//	cons 		related consumption code
-			//	title 		question
-			//	unit 		unit of data
-			//	text 		detail description of question
-			//	inputType 	input method text/radio/sel/check
-			//	right 		if set 1, align is right
-			//	postfix 	automatic pre deal 
-			//	nodata 		show data in case of data is -1
-			//	varType 	type of data
-			//	min			minimum data
-			//	max			maximum	data
-			//	defaultValue	default data
-			//
+		//		definition of questions copied from EXCEL file
+		//		inname is "i" + num
+		//
+		//	cons 		related consumption code
+		//	title 		question
+		//	unit 		unit of data
+		//	text 		detail description of question
+		//	inputType 	input method text/radio/sel/check
+		//	right 		if set 1, align is right
+		//	postfix 	automatic pre deal 
+		//	nodata 		show data in case of data is -1
+		//	varType 	type of data
+		//	min			minimum data
+		//	max			maximum	data
+		//	defaultValue	default data
+		//
+		
 		// defSelectValue[selname] : caption array
 		// defSelectData[selname]  : data array
-			//		selname is "sel" + num
-		
-			//defined in EXCEL sheet
+		//		selname is "sel" + num
+	
+		//defined in EXCEL sheet
 
 
 		// prefecture definition ----------------------------------------------------
-		defSelectValue['sel021'] = [ "select", "hokkaido" ];
-		defSelectData['sel021']= [ '-1', '1' ];
-		defSelectValue['sel022'] = [ "select", "north", "south"];
-		defSelectData['sel022'] = [ "-1", "1", "2"];
+		defSelectValue["sel021"] = [ "select", "hokkaido" ];
+		defSelectData["sel021"]= [ "-1", "1" ];
+		defSelectValue["sel022"] = [ "select", "north", "south"];
+		defSelectData["sel022"] = [ "-1", "1", "2"];
 
 		// input list which impact average 
 		this.defCalcAverage = [ "i001", "i005", "i021"];
@@ -199,7 +202,7 @@ D6.scenario =
 		this.defSelectData = defSelectData;
 		this.defEquipment = defEquipment;
 		this.defEquipmentSize = defEquipmentSize;
-console.log( D6);
+
 		//set area and person to calculate average, heat load etc.
 		D6.area.setCalcBaseParams = function(){
 			D6.area.setPersonArea( D6.doc.data.i001, D6.doc.data.i021, D6.doc.data.i023);		

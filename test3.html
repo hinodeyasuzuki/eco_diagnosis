@@ -1,0 +1,381 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="target-densitydpi=device-dpi, width=320, initial-scale=1.0, user-scalable=yes">
+	<link href="view/common.css" rel="stylesheet" type="text/css" />
+	<link href="view/view_easy/layout-easy.css" rel="stylesheet" type="text/css" />
+	<link rel="alternate" hreflang="ja" href="./?lang=ja&v=3" />
+	<link rel="alternate" hreflang="en" href="./?lang=en&v=3" />
+	<link rel="alternate" hreflang="zh" href="./?lang=zh&v=3" />
+	<link rel="alternate" hreflang="fr" href="./?lang=fr&v=3" />
+
+	<title>快適生活のための簡単エコチェック - 家庭の省エネ診断</title>
+
+  </head>
+
+  <body>
+	<div id="leanModalDialog" style="float:left;">
+		<input type="button" class="modal_close" value="戻る" tabindex=0>
+		<div id="modal-contents"></div>
+	</div>
+	
+	<div class="contents">
+
+		<div id="header">
+			<h1>快適生活のための簡単エコチェック</h1>
+			<div align="center" id="step">
+				<span id="s1" onclick="modeChange('m5');" onkeypress="modeChange('m5');" tabindex=0>1質問</span>>
+				<span id="s2" onclick="modeChange('m2');" onkeypress="modeChange('m2');" tabindex=0>2比較</span>>
+				<span id="s3" onclick="modeChange('m3');" onkeypress="modeChange('m3');" tabindex=0>3特徴</span>>
+				<span id="s4" onclick="modeChange('m4');" onkeypress="modeChange('m4');" tabindex=0>4対策</span>
+			</div>
+		</div>
+
+		
+		<div class="preloader">
+			<p>now loading diagnosis system</p>
+		</div>
+	
+	
+		<div class="page" id="p1" contents="start page">	
+			<h2>家の光熱費を安くしてみませんか</h2>
+			<p>　日本では「省エネ」が誤解されています。決して「がまんする」ものではなく、より生活を豊かにするものです。光熱費も安くなり、生活が快適になり、それで未来の子どもたちのためにもなります。</p>
+			<p>　かんたんな質問で、あなたの生活にあった対策を示します。3分間でできるエコチェックしてみてください。</p>
+
+			<p style="text-align:right;font-size:80%">※完全無料です。名前やメールアドレスなど、あなたを特定する情報の入力は必要ありません。</p>
+			<div class="center">
+				<span class="next button large" onclick="modeChange('m5');" onkeypress="modeChange('m5');" tabindex=0>診断をはじめる</span>
+			<a class="button inmode" href="./?lang=ja&v=4" target="_blank">解説</a>
+			</div>
+		</div>
+
+		
+		<div class="page" id="p5" style="display:none" contents="question list page">	
+			<h2>この質問にお答えください</h2>
+			<p>　おおよそあてはまる選択肢を選んでください。わからない場合には、回答しなくても構いません。</p>
+
+			<div class="widthhalf" >
+				<ul id='tabcontents'></ul>
+			</div>
+
+			<div class="center">
+				<span class="next button large" onclick="modeChange('m2');" onkeypress="modeChange('m2');" tabindex=0>
+					結果をみる				</span>
+			</div>
+		</div>
+
+
+		<div class="page" id="p2" style="display:none" contents="compare to average">
+			<h2 class="constitle">平均世帯とくらべて</h2>
+			<div class="result widthhalf" >
+				<div id="average"></div>
+			</div>
+
+			<div class="center">
+				<span class="next button large" onclick="modeChange('m3');" onkeypress="modeChange('m3');" tabindex=0>
+					大きな原因を明らかにします				</span>
+			</div>
+		</div>
+
+		
+		<div class="page" id="p3" style="display:none" contents="itemize / main source">
+			<h2 class="constitle">あなたの生活の特徴</h2>
+			<div class="widthhalf" class="result" style="float:left;">
+				<div id="graph"></div>
+			</div>
+
+			<p>&nbsp;<br>
+				　CO2がどこから出ているのか分析した結果です。左があなた、右は条件があなたに似た家庭の標準値を示しています。			</p>
+			<p id="graphcomment"></p>
+
+			<div class="center" style="clear:both;">
+				<span class="next button large" onclick="modeChange('m4');"  onkeypress="modeChange('m4');" tabindex=0>
+					おすすめの対策はこちら				</span>
+			</div>
+		</div>
+
+		
+		<div class="page" id="p4" style="display:none" contents="measure advice">
+			<h2 class="constitle">　7つのおすすめ対策</h2>
+			<div class="result" >
+				<div id="measure" style="display:none"></div>
+			</div>
+			
+			<div class="center">
+				<span id="mesnextbtn" class="next button large" onclick="measurenext();" onkeypress="measurenext();" tabindex=0>
+					一番おすすめの対策				</span><br>
+			</div>
+
+			<p class="onlyfirst">
+				　あなたの家庭に合わせた、おすすめの省エネ対策です。タイトルをクリックすると、詳しく解説されます。お得の★マークは、購入費用があっても元を取れる対策です。			</p>
+			<p id="totalReduceComment"></p>
+			<p class="show7" style="display:none">
+				　これは概算です。詳しい診断で、よりあなたにあった提案をすることもできます。			</p>
+
+			<div id="lastbtns" class="center" style="display:none">
+			
+									<span class="next button large" onclick="saveandgo();" onkeypress="saveandgo();" tabindex=0>
+						さらに詳しい診断はこちらからできます					</span><br>
+					
+											<span class="next button large" onclick="location.href='http://label.eek.jp'" onkeypress="location.href='http://label.eek.jp'" tabindex=0>
+							家電製品の買い換えを考えているかた						</span>
+													
+			</div>
+		</div>
+		
+		
+		<div id="footer">
+			<p>
+				2018/03/15				<a href="http://www.hinodeya-ecolife.com/">Hinodeya Institute for Ecolife co.ltd.</a>
+			</p>
+		</div>
+		
+	</div>
+
+	<script>var targetMode=1;var debugMode=false;var dispMode=3;var languageMode='ja';var focusMode=3;var useWorker=true;var useCode=3;var messhownumber=7;var hideAverage='0';var hidePrice='0';var includeminjs='dist/worker_JP.js';var includesumjs='dist_develop/worker_JP.js';var includemincore='dist/d6home_core.min.js';var includeminlocalize='dist/d6home_JP.min.js';var lang={};
+lang.d6folder='q@Yv9fo2AuoTy6MI9XHN==';
+lang.localizeCode='q@FyN=';
+lang.pageLanguage='q@FyOsnzR=';
+lang.code='q@nzR=';
+lang.home_title='q@5n625odg44Th55lO44Xb44BA6Xv65cng';
+lang.home_joy_title='q@5n625odg44Th55lO44Xb44BA6Xv65cng77lV44TX5ePK5dJ954zV77lW';
+lang.countfix_pre_after='q@Zt==';
+lang.show_electricity='q@ISWIED==';
+lang.show_gas='q@ISWIED==';
+lang.show_kerosene='q@ISWIED==';
+lang.show_briquet='q@ExSZH0H=';
+lang.show_area='q@ExSZH0H=';
+lang.show_gasoline='q@ISWIED==';
+lang.electricitytitle='q@6Mh75ePK';
+lang.gastitle='q@44Xf44X5';
+lang.kerosenetitle='q@54Ti5eX5';
+lang.briquettitle='q@57r054Xg';
+lang.areatitle='q@5Mlj5M+s54nk';
+lang.gasolinetitle='q@44Xf44X944Bd44Bm';
+lang.electricityunit='q@n1qb';
+lang.gasunit='q@oGZ=';
+lang.keroseneunit='q@GN==';
+lang.briquetunit='q@n2p=';
+lang.areaunit='q@GHb=';
+lang.gasolineunit='q@GN==';
+lang.point_disp=function(num) {return num + "点"};;
+lang.priceunit='q@5LnT';
+lang.co2unit='q@n2p=';
+lang.energyunit='q@E0b=';
+lang.monthunit='q@5clV';
+lang.yearunit='q@5oz0';
+lang.co2unitperyear='q@n2pi5oz0';
+lang.co2unitpermonth='q@n2pi5clV';
+lang.feeunitperyear='q@5LnTY+J5gN==';
+lang.feeunitpermonth='q@5LnTY+npvN==';
+lang.energyunitperyear='q@E0bi5oz0';
+lang.energyunitpermonth='q@E0bi5clV';
+lang.startPageName='q@5LJb5Y2G77lV57Pu5cvG77lW';
+lang.header_attension='q@77lV5LhI5Y2p44Bv44BU44Be44Th44Ts44XO5b+D5dTV5cJj5LPx44Th5Y+q6Xv844Ti44TP44XX44T+44To44XG44PP44BY44B844X644Te5o+p44TL44Ts6MnY55z644TZ44Ta44TA44T+44TM44PP77lW';
+lang.dataClear='q@5LJy5Ldo44BU44B844X/44XF5LJb44Tz5LzX6Mzx44TK44T+44TM44PP44XV44XA44TK44TR44Ta44TM44TY44PP';
+lang.savetobrowser='q@44BJ44Bc44Xz44X244Te5Y+q5n2L44TK44T+44TK44Ts44PP';
+lang.savedataisshown='q@5Y+q5n2L5LPx44Ti5Yhy5YvY44Th44Tb44TX44XX44Ta44TM44PP';
+lang.QuestionNumber=function(numques, nowques) {return  "（" + numques +"問中" + nowques + "問目）"};;
+lang.youcall='q@44TP44Td44Ts';
+lang.youcount='q@5YvJ5ovi';
+lang.totalhome='q@5n625odg5LJb5Y2G';
+lang.comparehome=function(target) {return "同じ世帯人数の"+target+"の家庭"};;
+lang.rankin100=function(count) {return "100" + count +"中順位"};;
+lang.rankcall='q@5Y2A';
+lang.co2ratio=function(ratio) {return "　CO2排出量は、平均の" + ratio +"倍です。"};;
+lang.co2compare06='q@5ozm5M2U44XV44XX44XP44Tt44TR44T25oPE44Td44TR44Ta44TM44PP44Tb44Tz44XP44TM44Tz44TA44Td5cdh44XW44TK44Ta44TM44PP';
+lang.co2compare08='q@5ozm5M2U44XV44XX44XP5oPE44Td44XO44Ta44TM44PP44TM44Tz44TA44Td5cdh44XW44TK44Ta44TM44PP';
+lang.co2compare10='q@5ozm5M2U44Tb5MPZ44TL56vY5odz44Ta44TM44PP';
+lang.co2compare12='q@5ozm5M2U44XV44XX44XP44XR44XR5nFn44XO44Ta44TM44PP5cF55MnR44Te44XV44XX5LJW54nk6YX744TZ5YvY44TZ44XY5Y2M5Mlj44Ti5nFa44TA44Tq44TT44Ta44TM44PP';
+lang.co2compare14='q@5ozm5M2U44XV44XX44XP5nFn44XO44Ta44TM44PP5cF55MnR44Te44XV44XX5LJW54nk6YX744TZ5YvY44TZ44XY5Y2M5Mlj44Ti5nFa44TA44Tq44TT44Ta44TM44PP';
+lang.rankcomment=function(same,youcount,rank) {return same +"が100" + youcount + "あったとすると、少ないほうから" +   rank+ "番目です。<br>"};;
+lang.itemize='q@5LnS6Xvm';
+lang.itemname='q@5LvT6LrB';
+lang.percent='q@5Lzl5MPVXPHc';
+lang.measure='q@5n++562J';
+lang.merit='q@44TX5o6K';
+lang.select='q@6LT45bdr';
+lang.itemizecomment=function(main3,sum) {return main3+"の割合が大きく、この3分野で" + sum+"%を占めます。こうした大きい分野の対策が効果的です。"};;
+lang.effectivemeasures='q@5Ld55c6p55dR44Td5n++562J';
+lang.comment_combined_reduce=function(percent,fee,co2) {return "　組み合わせると" + percent+"%、年間" + ( hidePrice != 1  ? fee +"円の光熱費と、":"") + co2+"kgのCO2が削減できます。すでに取り組んでいる場合、これだけの成果があがるエコ生活ができていることを意味しています。"};;
+lang.titlemessage=function(title) {return  title+"取り組みが効果的です。"};;
+lang.co2reduction=function(co2) {return "年間" + co2+"kgのCO2を減らすことができます。"};;
+lang.reducepercent=function(name,percent) {return "これは" + name+"の" +percent+"%を減らすことに相当します。"};;
+lang.co2minus='q@D08l44XF5b6F5Lr644TK44Td44TR55Fs5eF744TZ6LTH5bvD44Ta44TA44T+44TM44PP';
+lang.error='q@VBXNh+vcf+r0fBBOehvbzBJScrBOwBBOdhBOuBBOa+BPtrnzthrhy+BOc+BOzrBNtt==';
+lang.feereduction=function(fee) {return "年間約" + fee+"円お得な取り組みです。"};;
+lang.feenochange='q@5LJW54nk6YX7562W44Th5nFW5LlJ44Ti44TP44XX44T+44To44XG44PP';
+lang.initialcost=function(price,lifetime,load) {return "新たに購入するために、約" + price+"円（参考価格）かかり、" + lifetime+"年の寿命で割ると、年間約"+ load+"円の負担になります。"};;
+lang.payback=function(change,totalchange,down) {return "一方、光熱費が毎年約" + change+ "円安くなるため、トータルでは年間約" + totalchange +(down?"円お得となります。":"円の負担ですみます。" )};;
+lang.payback1month='q@ZrBQghnpvBF7crJTurBOd+JSt+BPxhBOdBBPwBBOihBOzrBNtt==';
+lang.paybackmonth=function(month) {return "約" + month+"ヶ月で元をとれます。"};;
+lang.paybackyear=function(year) {return "約" + year+"年で元をとれます。"};;
+lang.paybacknever='q@44Td44TX44PO6XB95MBO44Th5n+/5MT944T+44Ta44Te44PO5LJW54nk6YX75LzX5evo6nTA44Ta5LJQ44XF44Tb44XY44TG44Tb44Ti44Ta44TA44T+44To44XG44PP';
+lang.notinstallfee=function(fee) {return "光熱費は年間約" + fee+"円安くなります。"};;
+lang.monthlytitle='q@5clV44TH44Tb44Th5LJW54nk6YX75b6b6XvV';
+lang.month='q@5clV';
+lang.energy='q@44Xb44BA44Be44Xh44B8';
+lang.button_clear='q@44Xi44Bd44Xv';
+lang.button_savenew='q@5cnj6XnC5Y+q5n2L';
+lang.button_save='q@5Y+q5n2L';
+lang.button_open='q@6MnY44TC';
+lang.button_close='q@6MnW44TL44XY';
+lang.button_showall='q@5LJb44Tz6XTb56F6';
+lang.add='q@6Y+95Ldt';
+lang.button_menu='q@44Bu44BY44By44B8';
+lang.button_back_toppage='q@5clN5Lvq44Th44Bn44B844X444Te5bv744XY';
+lang.button_back='q@5bv744XY';
+lang.button_prev='q@5LzA44T4';
+lang.button_next='q@5dlu44T4';
+lang.button_top='q@44BV44BQ44BK';
+lang.button_input='q@54++54d26XvL5LJy';
+lang.button_queslist='q@6YBd5MJC5YvN6Xna';
+lang.button_diagnosis='q@6Xv65cng55F76M2v';
+lang.button_measures='q@5n++562J5dFp6XvB';
+lang.button_selectcategory='q@6XzI5Y6u5LvT6LrB6Xvg5n6n';
+lang.button_calcresult='q@6XvV566K57JD5c6p';
+lang.button_about='q@6Xrw6Xdf';
+lang.button_fullversion='q@5LJb5dzs6VB954zV';
+lang.clear_confirm='q@5YvN6Xna44Bv44B844BW';
+lang.button_co2emission='q@D08l5b6F5Lr66LrC';
+lang.button_firstenergy='q@5YvN5dlu44Xb44BA44Be44Xh44B86LrC';
+lang.button_energyfee='q@5LJW54nk6YX7';
+lang.home_button_intro1='q@44PN44TP44Td44Ts44Th5n625odg44Ta44Th44Xb44BA44Be44Xh44B85dzs5Mzb44XR44PO44Tq44Th5Y2/44TR5cn544Te5o+p44TL44Tz44PO5clW5Ld544Td55lO44Xb44BA5n++562J44XF5b+D5dTV44TK44T+44TM44PP5n625odg44Ta44Th44Xb44BA44Be44Xh44B844Th5Y2/44TR5cn544Te44Tx44TR44TzZwQyyL/adViyhdowtn7bf6eyyL/wtLmwtLYwtbewto7wtMawtVYaeMGwtLwwtbawtbmwtbibf6eyyL/wtnQwtMUwtnsagMQzc4iwtnswtMawtn7wtnswtVUyz57aeMGwtLGwtM/wtnQwtL/wtnwwtVUwtLYwtnewtM/wtn7yeeoyhd3wtniwtLYwtnCwtM/ye77aeMowtcYzw5QzbLwwtMawtbiwtMCwtnwwtLmwtnswtL3wto7wtMawtVV=';
+lang.home_button_intro2='q@44PN5LJy5Ldo44TI44XZ44Ts5bBS5nPk44Te44Tx44TR44Tz44Ti44PO44TG44Th56hi5cle44XF5Lvc55Fb44TM44XY44TP44Td44Ts44Tt44TE44TZ6Mnl6Xna44Ta44TA44PO44X144B844BD44B844Te44Ti6WBR56zA44TI44XZ44T+44To44XG44PP';
+lang.home_button_startdiagnosis='q@6Xv65cng44XF44Ti44TL44XO44XY';
+lang.home_button_about='q@44TG44Th6Xv65cng44Te44Tx44TR44Tz';
+lang.home_button_result='q@57JD5c6p44XF44T/44XY';
+lang.home_button_retry='q@5Mhr562H44TK44Td44TX44TM';
+lang.home_button_average='q@5ozm5M2U5d+H6YlQ';
+lang.home_button_monthly='q@5clV5nFW5LlJ';
+lang.home_button_measure='q@5clW5Ld544Td5n++562J';
+lang.home_button_resultmessage='q@44PN5ozm5M2U44Tb44Th5d+H6YlQ44XF44Xj44Bc44BI44Te44TK44T+44TK44Ts44PP44PZ5clW5Ld544Td5n++562J44PA44XF5n6s6XTZ44TK44Ts5nP05MPV44Th5Ld55c6p44TZ5Yvg5nFh44Th44Xj44Bc44BI44Te6XTb56F644TI44XZ44T+44TM44PP';
+lang.home_button_measuremessage='q@44PN5clW5Ld544Td5n++562J44Th5YvN6Xna44Ta44TM44PP44PZ6LT45bdr44PA44Te44BO44Xa44BQ44Xi44XF44TM44XY44Tb44PO5Ld55c6p44TZ44Xj44Bc44BI44Ta6XTb56F644TI44XZ44T+44TM44PP';
+lang.home_button_pagemessage='q@44PN5LvT6LrB44XF5blU5n6n44TK44Tz6Xzm44TK44TC5Mhr562H44TK44Td44TX44TM44TG44Tb44TZ44Ta44TA44T+44TM44PP44PZ6Y+95Ldt44PA44Ta6LBb5oTY44XR5dzs5Mzb44XF6Y+95Ldt44Ta44TA44T+44TM44PP';
+lang.home_focus_title_after='q@44PN5YvN6Xna44Bv44B844BW';
+lang.intro1='q@44XV44TT44TG44Tq5cnj55lO44Xb44BA6Xv65cng44X944BI44BVXRD2XrBOhBBNthBOuBBOihBOehBPdBBQwrBQd+BPehBQiBBOehF9i+BOuBnJhrBPxhJScrJXz+BOzrBPv+BOx+BOdBBOc+BNtrnpvrJXhrBOdhrptrBPdBBQwrJiihrgyhBPxhvbvBrhy+BOy+BOchnCxBnuvBBOc+BOwrBOihBOzrBNtt==';
+lang.intro2='q@44XC44TY44XY56+R5Mhl44Ta44PO5YhX44Th44Xb44BA44Be44Xh44B844Th5Y2/44TR5cn544XF6LT444XG44Ta44TC44Tt44TI44TR44PP44TX44TX44XV44Tq44Ta44XP5drY44TR44T+44To44XG44TK44PO44XC44TY44XW44Td44TR6YBd5MJC44Ti6nBo44Tj44TK44Tz44TC44Tt44TI44TR44PP';
+lang.intro3='q@5LJy5Ldo44Te5o+p44TL44Ts5LvT5c6D57JD5c6p44TZ6MdC5czP6XTb56F644TI44XZ44T+44TM44PP';
+lang.intro4='q@D08l5b6F5Lr66LrC44XF55Fb6LPH5Lvy44Te5LvT5c6D44TK44Ts5b6b6XvV57JD5c6p44Ta44TM44PP5orz44TZ44TP44Td44Ts44Th54++54d244Ta44TM44PP5L+m44TZ5d+H6YlQ44Tb44TK44Tz44PO5MPZ5drL44Th5n625odg77lV5YdY5dJg6VPS77lW44XF56F644TK44Tz44TR44T+44TM44PP5Yvg5nFh44Ti44PO5n++562J44XF6LT45bdr44TK44Ts44Tb44TA44Th5LzX5evo5bvD5c6p44TZ56F644TI44XZ44T+44TM44PP';
+lang.intro5='q@5clV5Lvy44Th5LJW54nk6YX744XF44Xj44Bc44BI44Te44TK44Tz44TR44T+44TM44PP';
+lang.intro6='q@5clW5Ld544Td55lO44Xb44BA5n++562J44TZ6MdC5czP6XTb56F644TI44XZ44T+44TM44PP44X/44Xx44BV44Be44XF44Xi44Bd44BQ44Xi44TM44XY44Tb44PO6Xzm44TK44TC6Xrw6Xdf44TI44XZ44T+44TM44PP44TX5o6K44Th4cvS44Ti44PO6YB85LJy6YX755Fb44TZ44TP44Tw44Tz44XP5LJQ44XF5L+J44XZ44XY5n++562J44Ta44TM44PP5L+m44Th5LvK44XF44Xi44Bd44BQ44Xi44TK44Tz6LT45bdr44TM44XY44Tb44PO5n++562J44XF44TK44Ts5nP05MPV44Th5bvD5c6p44TZ44PO5Yvg5nFh44Th44Xj44Bc44BI44Te5L+A5cvt44TI44XZ44T+44TM44PP';
+lang.intro7='q@44BJ44Bc44Xz44X244Te5LJy5Ldo5bBS5nPk44XF5Y+q5n2L44TK44Tz44TX44TC44TG44Tb44TZ44Ta44TA44T+44TM44PP';
+lang.intro8='q@44TG44Th55F76M2v44TiZwQcbVKaz67adViyhdowtn7czMQwtbawtbmwtM/bf6eyyL/wtnQwtMUwtnswtMawtLmwtVUbdoCwtMswtL/bdYezyd3wtMawtbiwtMCwtnwwtbYwtnswtL3wto7wtMawtVYwtnswtn/wtMKwtnCwtM3wtL9oET9hMI3wtcYzvemwtMswtnobdYezyd3wtcYwtn/wtMwwtbUwtnowtL/wtnQwtMKwtLGwtVV=';
+lang.home_easy_title='q@5o+e6LTc55Fs5eF744Th44Ts44XO44Th57Pu5L2L44Xb44Xm44BO44Xa44BQ44Xi';
+lang.home_easy_step1='q@6YBd5MJC';
+lang.home_easy_step2='q@5d+H6YlQ';
+lang.home_easy_step3='q@54z55o60';
+lang.home_easy_step4='q@5n++562J';
+lang.home_easy_toptitle='q@5n6244Th5LJW54nk6YX744XF5n6W44TC44TK44Tz44T/44T+44To44XG44TY';
+lang.home_easy_top1='q@44PN5cry5clf44Ta44Ti44PZ55lO44Xb44BA44PA44TZ6Xdx6Xrw44TI44XZ44Tz44TR44T+44TM44PP5eT644TK44Tz44PZ44TZ44T+44XG44TM44XY44PA44XP44Th44Ta44Ti44Td44TC44PO44XV44XX55Fs5eF744XF6YTX44TY44Te44TM44XY44XP44Th44Ta44TM44PP5LJW54nk6YX744XP5n6W44TC44Td44XX44PO55Fs5eF744TZ5o+e6LTc44Te44Td44XX44PO44Tq44XZ44Ta5cld5c2y44Th5n2D44Tc44XP44Ts44Tu44Th44Ts44XO44Te44XP44Td44XX44T+44TM44PP';
+lang.home_easy_top2='q@44PN44TY44XG44Ts44XG44Td6YBd5MJC44Ta44PO44TP44Td44Ts44Th55Fs5eF744Te44TP44Tw44Ts5n++562J44XF56F644TK44T+44TM44PPZ+JVuhzJx+BOc+BOc+BOwrBPv+BPdBBPf+BQtrBPc+BQt+BPe+BOy+BOchBOi+BOchBOw+BObBBOyrBOuBBNtt==';
+lang.home_easy_top3sm='q@4bP75n6Z5LJb54Fu5cnM44Ta44TM44PP5MPA5LzA44XR44Bu44B844Be44Xv44BW44Bf44X544Td44Tc44PO44TP44Td44Ts44XF54z55n6n44TM44XY5bBS5nPk44Th5LJy5Ldo44Ti5o+S6XnO44TP44XX44T+44To44XG44PP';
+lang.home_easy_top_button_start='q@6Xv65cng44XF44Ti44TL44XO44XY';
+lang.home_easy_top_button_about='q@44PN6Xrw6Xdf44PN';
+lang.home_easy_p5title='q@44TG44Th6YBd5MJC44Te44TX562H44TV44TC44Tt44TI44TR';
+lang.home_easy_p5_1='q@44PN44TX44TX44XV44Tq44TP44Tz44Ti44T+44XY6LT45bdr6VXv44XF6LT444XG44Ta44TC44Tt44TI44TR44PP44XC44TY44XW44Td44TR5nP05MPV44Te44Ti44PO5Mhr562H44TK44Td44TC44Tz44XP5drY44TR44T+44To44XG44PP';
+lang.home_easy_p5_button_next='q@57JD5c6p44XF44T/44XY';
+lang.home_easy_p2title='q@5ozm5M2U5YvJ5ovi44Tb44TC44XW44T544Tz';
+lang.home_easy_p2_button_next='q@5nFa44TA44Td5L6s5Mht44XF5cvB44XW44TY44Te44TK44T+44TM';
+lang.home_easy_p3title='q@44TP44Td44Ts44Th55Fs5eF744Th54z55o60';
+lang.home_easy_p3_1='q@44PND08l44TZ44Tc44TG44TY44XW5Lr644Tz44TR44XY44Th44TY5LvT5c6D44TK44Ts57JD5c6p44Ta44TM44PP5orz44TZ44TP44Td44Ts44PO5L+m44Ti5c2u5Yh244TZ44TP44Td44Ts44Te5Yl844Ts5n625odg44Th5dvM5edJ5LPx44XF56F644TK44Tz44TR44T+44TM44PP';
+lang.home_easy_p3_button_next='q@44TX44TM44TM44XO44Th5n++562J44Ti44TG44Tu44XW';
+lang.home_easy_p4title_pre='q@44PN';
+lang.home_easy_p4title_after='q@44Tx44Th44TX44TM44TM44XO5n++562J';
+lang.home_easy_p4_button_next='q@5YvN55Jd44TX44TM44TM44XO44Th5n++562J';
+lang.home_easy_p4_1='q@44PN44TP44Td44Ts44Th5n625odg44Te5MPV44XC44To44Ts44PO44TX44TM44TM44XO44Th55lO44Xb44BA5n++562J44Ta44TM44PP44X/44Xx44BV44Be44XF44Xi44Bd44BQ44Xi44TM44XY44Tb44PO6Xzm44TK44TC6Xrw6Xdf44TI44XZ44T+44TM44PP44TX5o6K44Th4cvS44Br44B844Xi44Ti44PO6YB85LJy6YX755Fb44TZ44TP44Tw44Tz44XP5LJQ44XF5L+J44XZ44XY5n++562J44Ta44TM44PP';
+lang.home_easy_p4_2='q@44PN44TG44XZ44Ti5dnP566K44Ta44TM44PP6Xzm44TK44TR6Xv65cng44Ta44PO44XV44XX44TP44Td44Ts44Te44TP44Tw44Ts5b+D5dTV44XF44TM44XY44TG44Tb44XP44Ta44TA44T+44TM44PP';
+lang.home_easy_p4_button_next2='q@44TI44XW44Te6Xzm44TK44TR6Xv65cng44Ti44TG44Tu44XW44TY44XW44Ta44TA44T+44TM';
+lang.home_easy_p4_button_next3='q@5n626Mh76XB95MBO44Th6YX344TR5b+o44TV44XF6VPQ44TV44Tz44TR44XY44TY44Ts';
+lang.home_easy_measure_show=function(num) {return num + "番目におすすめを表示"};;
+lang.home_maintenance_message='q@44PN44TP44Td44Ts44Th6LT45bdr44TK44Ts5n++562J44Ti5Yhy5YvY44Th44Tb44TX44XX44Ta44TM44PP5L+J44XX57JR44XO44Tz44TR44T+44TM44TY77ls';
+lang.home_maintenance_list='q@6LT45bdr44TK44Ts5n++562J';
+lang.home_maintenance_selected='q@44TG44Th5n++562J44XF6LT45bdr44TK44T+44TK44Ts';
+lang.home_action_title='q@5Y2B54Xg57Ft55Fs5eF744Th44Ts44XO44Th57Pu5L2L44Xb44Xm44BO44Xa44BQ44Xi';
+lang.home_action_step1='q@6YBd5MJC';
+lang.home_action_step2='q@6XzI5Y6u';
+lang.home_action_step3='q@5n++562J';
+lang.home_action_toptitle='q@44XO44TJ44To5Y2B54Xg57Ft5n625odg';
+lang.home_action_top1='q@5LzX5evo44TZ44Ta44TA44T+44TM';
+lang.home_action_top2='q@44TY44XG44Ts44XG44Td5cn55eBI44Ta';
+lang.home_action_axis1='q@5blO57nn5L+i6VB95bPa';
+lang.home_action_axis2='q@55lO44Xb44BA5dzs5Mzb';
+lang.home_action_axis3='q@55lO44Xb44BA6XTZ5LhI';
+lang.home_action_label1='q@44TM44Tj44XW44TK44TR77lO';
+lang.home_action_label2='q@44T+44TP44T+44TP44XV44TR';
+lang.home_action_label3='q@44Tu44XU44Tw44Tb5d6Y5o+1';
+lang.home_action_good_point='q@6Vzi44TR54X5';
+lang.home_action_bad_point='q@5cF55MnR54X5';
+lang.home_list_message='q@44TG44Th5Yvg44TY44XW44TP44Td44Ts44Te44TP44Tw44Ts5n++562J44XF5L6m6LT444TK44T+44TM';
+lang.younow='q@54++54d2';
+lang.youafter='q@5n++562J5o6Z';
+lang.average='q@5ozm5M2U';
+lang.compare='q@5d+H6YlQ';
+lang.comparetoaverage='q@';
+lang.co2emission='q@D08l5b6F5Lr66LrC';
+lang.co2reductiontitle='q@D08l5LzX5evo5Ld55c6p';
+lang.fee='q@5LJW54nk6YX7';
+lang.feereductiontitle='q@5LJW54nk6YX75LzX5evo';
+lang.initialcosttitle='q@5Lvq5cls5bdI6YBU6nTA';
+lang.loadperyear='q@5oz06MnG6YXt5bhS6nTA';
+lang.primaryenergy='q@5YvN5dlu44Xb44BA44Be44Xh44B85enV6YX76LrC';
+lang.other='q@44Tq44Th5YhJ';
+lang.office_title='q@5YdY5dJg5bzN57Pu5cvG55lO44Xb44BA6Xv65cng';
+lang.officecall='q@5o6u56F+';
+lang.officecount='q@5YdY5dJg5bzN';
+lang.totaloffice='q@5YdY5dJg5bzN5LJb5Y2G';
+lang.officenow='q@54++54d2';
+lang.compareoffice=function(target) {return "同じ規模の" + target};;
+lang.button_demand='q@44BU44Br44Bm44BW';
+lang.home_lifegame_title='q@';
+lang.home_lifegame_toptitle='q@';
+lang.home_lifegame_top1='q@';
+lang.home_lifegame_top2='q@';
+lang.home_lifegame_top3='q@';
+lang.home_lifegame_top3b='q@';
+lang.home_lifegame_toptitle4='q@';
+lang.home_lifegame_top4='q@';
+lang.home_lifegame_toptitle5='q@';
+lang.home_lifegame_top5='q@';
+lang.home_lifegame_toptitle6='q@';
+lang.home_lifegame_top6='q@';
+lang.home_lifegame_top6b='q@';
+lang.home_lifegame_toptitle7='q@';
+lang.home_lifegame_top7='q@';
+lang.home_lifegame_toptitle90='q@';
+lang.home_lifegame_top90='q@';
+lang.home_lifegame_toptitle99='q@';
+lang.home_lifegame_top99='q@';
+lang.button_end='q@44XR44XO44XY';
+lang.button_agree='q@6Xvg5n6n44TM44XY';
+lang.button_commit='q@5n6s6XTZ44TK44T+44TM';
+lang.home_lifegame_button_sel99='q@';
+lang.home_lifegame_button_sel3a='q@';
+lang.home_lifegame_button_sel3b='q@';
+lang.home_uchieco_title='q@44TT44Tu44Xb44Xm44Xg44BQ44X6I0IP6Xv65cng';
+</script>
+		<!--[if IE 9]><script>var a=location.search.substring(1);location.href='./?fm=4&'+a;</script><![endif]-->
+	
+	<script src="view/lib/jquery/jquery.min.js" type="text/javascript"></script>
+	<script src="view/lib/leanModal/jquery.leanModal.min.js" type="text/javascript"></script>
+	<script src="view/lib/jquery.cookie/jquery.cookie.js" type="text/javascript"></script>
+	<script src="view/main.js" type="text/javascript"></script>
+	<script src="view/createpage.js" type="text/javascript"></script>
+	<script src="view/graph.js" type="text/javascript"></script>
+	<script src="view/lib/d3/d3.v3.4.8.min.js"></script>
+	<script src="view/lib/dimple-js/dimple.v2.1.4.min.js"></script>
+	<!--[if lte IE 10]><script>alert("Sorry, this page does not work under IE8, and too slow under IE10.\n Please use IE11 up, chrome, Edge, Firefox or safari.");</script><![endif]--><script src='./localize_JP/view/JP_home_3.js' type='text/javascript'></script>
+
+	<script>
+	$(function(){
+		$('#top').show();
+		$('#divco2').hide();
+	});
+	</script>
+	<script>paramdata='';</script>
+	<script src="view/view_easy/onclick-easy.js" type="text/javascript"></script>
+
+  </body>
+</html>

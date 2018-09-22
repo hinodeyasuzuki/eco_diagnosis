@@ -18,6 +18,7 @@
  * clear()
  * loadDataSet()
  */
+var D6 = D6 || {};
 
 D6.doc =
 {
@@ -55,6 +56,8 @@ D6.doc =
 	serialize :  function() {
 		var saveData = "";
 		var temp = "";
+		var tempg = "";
+		var tempi = "";
 		var prop = 0;
 		var i = 0;
 		var Input = this.data;

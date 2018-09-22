@@ -28,8 +28,7 @@ var D6 = D6||{};
 //		calculate consumption in consumption instance
 // 
 D6.calcCons = function() {
-	var i,j;
-	var ci;
+	var i;
 
 	//area parameters set
 	D6.area.setCalcBaseParams();
@@ -154,7 +153,6 @@ D6.calcConsAdjust = function() {
 	energySum.electricity += this.consShow["TO"].electricity * 0.1;
 		
 	//execute adjust
-	energyAdj = [];
 	if ( !nodataTotal ) {
 		//in case of exist in total consumption
 		for ( j in D6.Unit.co2 ){

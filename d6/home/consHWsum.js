@@ -21,7 +21,10 @@
  * calcMeasure()	main formula to calculate measures
  * 
  */
- 
+
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.ConsBase
 D6.consHWsum = D6.object( D6.ConsBase );
 
@@ -31,13 +34,13 @@ D6.consHWsum.init = function() {
 	//construction setting
 	this.consName = "consHWsum";   	 	//code name of this consumption 
 	this.consCode = "HW";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "hot water supply";				//consumption title name
+	this.title = "hot water supply";				//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "1";					//number code in items
 	this.color = "#ffb700";				//color definition in graph
 	this.countCall = "";				//how to point n-th equipment
 
-    this.sumConsName = "consTotal";		//code name of consumption sum up include this
+	this.sumConsName = "consTotal";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
@@ -100,11 +103,10 @@ D6.consHWsum.precalc = function() {
 
 	this.savingShower =this.input( "i116", -1 );		//saving shower head 
 	this.tabKeepHeatingTime =this.input( "i108"
-			, (this.person > 1 ? 3 : 0 ) );				//keep time to tab hot hour/day
+		, (this.person > 1 ? 3 : 0 ) );					//keep time to tab hot hour/day
 
 	this.keepMethod2 =this.input( "i111", 5 );			//keep hot method 2
-	this.keepMethod =this.input( "i110", this.keepMethod2 );			
-														//keep hot method 
+	this.keepMethod =this.input( "i110", this.keepMethod2 );	//keep hot method 
 	this.tabInsulation =this.input( "i117", -1 );		//tab insulation
 	this.tabHeight =this.input( "i107", 8 );			//height of tab hot water 0-10
 	
@@ -153,7 +155,7 @@ D6.consHWsum.calc = function() {
 
 	//adjust by solar heater
 	this.waterTemp = ( this.solarHeater == 1 ? 0.4 * this.hotWaterTemp + 0.6 * this.waterTemp : 
-						( this.solarHeater == 2 ? 0.15 * this.hotWaterTemp + 0.85 * this.waterTemp : this.waterTemp ) );
+		( this.solarHeater == 2 ? 0.15 * this.hotWaterTemp + 0.85 * this.waterTemp : this.waterTemp ) );
 
 	// estimate amount of hot water used as shower litter/day
 	this.showerWaterLitter = 
@@ -170,8 +172,8 @@ D6.consHWsum.calc = function() {
 						+ this.tabDayWeekSummer * D6.area.seasonMonth.summer ) / 12 / 7;
 	
 	// sum hot water use litter/day
-	this.allLitter = ( 
-						this.consHWtubLitter
+	this.allLitter =  
+					(	this.consHWtubLitter
 						+ this.showerWaterLitter
 						+ this.otherWaterLitter ) ;	
 
@@ -180,7 +182,7 @@ D6.consHWsum.calc = function() {
 	
 	// tab keep energy kcal/month
 	this.tabKeepEnergy = this.consHWtubLitter * this.tabKeepHeatingTime *365 / 12
-					*  ( ( this.tabInsulation == 1 || this.tabInsulation == 2 ) ?  tabTemplatureInsulationDown : this.tabTemplatureDown )
+					*  ( ( this.tabInsulation == 1 || this.tabInsulation == 2 ) ? this.tabTemplatureInsulationDown : this.tabTemplatureDown )
 					/ ( ( this.equipType == 4 || this.equipType ==5 ) ? this.performanceKeepWithTank : 1 )
 					* this.keepMethod / 10;
 
@@ -210,48 +212,48 @@ D6.consHWsum.calc = function() {
 
 	// Heater Equip Type
 	switch ( this.equipType ) {
-		case 1:
-			//gas heater
-			this.mainSource = "gas";
-			this[this.mainSource] = this.heatEnergy / this.performanceGas 
-						/ D6.Unit.calorie[this.mainSource];
-			break;
-		case 2:
-			//high efficient gas heater
-			this.mainSource = "gas";
-			this[this.mainSource] = this.heatEnergy / this.performanceEcojozu 
-						/ D6.Unit.calorie[this.mainSource];
-			break;
-		case 3:
-			//kerosene heater
-			this.mainSource = "kerosene";
-			this[this.mainSource] = this.heatEnergy / this.performanceGas 
-						/ D6.Unit.calorie[this.mainSource];
-			break;
-		case 4:
-			//high efficient kerosene heate
-			this.mainSource = "kerosene";
-			this[this.mainSource] = this.heatEnergy / this.performanceEcojozu 
-						/ D6.Unit.calorie[this.mainSource];
-			break;
-		case 5:
-			//electricity heater
-			this.mainSource = "electricity";
-			this[this.mainSource] = ( this.heatEnergy + this.tanklossEnergy  )
-						/ this.performanceElec / D6.Unit.calorie[this.mainSource];
-			break;
-		case 6:
-			//heat pump heater
-			this.mainSource = "electricity";
-			this[this.mainSource] = ( this.heatEnergy + this.tanklossEnergy ) 
-						/ this.performanceEcocute / D6.Unit.calorie[this.mainSource];
-			break;
-		case 7:
-		case 8:
-		default:
-			this.mainSource = "gas";
-			this.gas = this.heatEnergy / this.performanceEcojozu 
-						/ D6.Unit.calorie.gas;
+	case 1:
+		//gas heater
+		this.mainSource = "gas";
+		this[this.mainSource] = this.heatEnergy / this.performanceGas 
+					/ D6.Unit.calorie[this.mainSource];
+		break;
+	case 2:
+		//high efficient gas heater
+		this.mainSource = "gas";
+		this[this.mainSource] = this.heatEnergy / this.performanceEcojozu 
+					/ D6.Unit.calorie[this.mainSource];
+		break;
+	case 3:
+		//kerosene heater
+		this.mainSource = "kerosene";
+		this[this.mainSource] = this.heatEnergy / this.performanceGas 
+					/ D6.Unit.calorie[this.mainSource];
+		break;
+	case 4:
+		//high efficient kerosene heate
+		this.mainSource = "kerosene";
+		this[this.mainSource] = this.heatEnergy / this.performanceEcojozu 
+					/ D6.Unit.calorie[this.mainSource];
+		break;
+	case 5:
+		//electricity heater
+		this.mainSource = "electricity";
+		this[this.mainSource] = ( this.heatEnergy + this.tanklossEnergy  )
+					/ this.performanceElec / D6.Unit.calorie[this.mainSource];
+		break;
+	case 6:
+		//heat pump heater
+		this.mainSource = "electricity";
+		this[this.mainSource] = ( this.heatEnergy + this.tanklossEnergy ) 
+					/ this.performanceEcocute / D6.Unit.calorie[this.mainSource];
+		break;
+	case 7:
+	case 8:
+	default:
+		this.mainSource = "gas";
+		this.gas = this.heatEnergy / this.performanceEcojozu 
+			/ D6.Unit.calorie.gas;
 	}
 	
 	//toilet
@@ -266,8 +268,8 @@ D6.consHWsum.calc = function() {
 	
 	//reduce rate by insulation tab 
 	this.reduceRateInsulation = ( (this.tabInsulation == 1 || this.tabInsulation == 2 ) ? 0 : 
-			this.reduceRateTabKeep 
-					* (this.tabTemplatureDown - this.tabTemplatureInsulationDown ) / this.tabTemplatureDown );
+		this.reduceRateTabKeep 
+			* (this.tabTemplatureDown - this.tabTemplatureInsulationDown ) / this.tabTemplatureDown );
 
 	//reduce rate by use shower in summer
 	var ssummer = this.tabDayWeekSummer * D6.area.seasonMonth.summer;
@@ -303,7 +305,7 @@ D6.consHWsum.calcMeasure = function() {
 			|| this.equipType == 1
 			|| this.equipType == 3 
 			|| this.equipType == 5 )
-		 && !goodPerformance
+		&& !goodPerformance
 	) {
 		//mHWecocute
 		if( this.housetype == 1 ) {		
@@ -332,7 +334,8 @@ D6.consHWsum.calcMeasure = function() {
 			var notCoGenerationEnergy = 500 * 1000 / 12;	//	kcal/month
 			var coGenerationEnergy  = endEnergyNow - notCoGenerationEnergy;
 			
-			this.measures[ "mHWenefarm" ].gas = ( 
+			this.measures[ "mHWenefarm" ].gas = 
+						( 
 							coGenerationEnergy / this.performanceEnefarmHW 
 							+ notCoGenerationEnergy / this.performanceEcojozu
 						) / D6.Unit.calorie.gas;

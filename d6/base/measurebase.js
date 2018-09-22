@@ -32,6 +32,9 @@
  * measureSumMonth()		sum 12 month
  */
 
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.Energy
 D6.MeasureBase = D6.object(D6.Energy);		//measure class include energy 
 
@@ -239,7 +242,7 @@ D6.MeasureBase.addReduction = function() {
 //
 D6.MeasureBase.calc = function() {
 	this.clearMeasure();					//clear data
-	cons.calcMeasure( this.measureName );	//call consumption class 
+	this.calcMeasure( this.measureName );	//call consumption class 
 	this.calcSave();						//calc saving CO2 and cost
 };
 

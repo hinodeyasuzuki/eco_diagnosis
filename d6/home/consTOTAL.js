@@ -22,7 +22,10 @@
  * calcMeasure()	main formula to calculate measures
  * 
  */
- 
+
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.ConsBase
 D6.consTotal = D6.object( D6.ConsBase );
 
@@ -31,13 +34,13 @@ D6.consTotal.init = function() {
 	//construction setting
 	this.consName = "consTotal";   		//code name of this consumption 
 	this.consCode = "TO";           	//short code to access consumption, only set main consumption user for itemize
-    this.title = "whole";				//consumption title name
+	this.title = "whole";				//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "9";					//number code in items
 	this.color = "#a9a9a9";				//color definition in graph
 	this.countCall = "";				//how to point n-th equipment
 
-    this.sumConsName = "";				//code name of consumption sum up include this
+	this.sumConsName = "";				//code name of consumption sum up include this
 	this.sumCons2Name = "";	//code name of consumption related to this
 
 	//guide message in input page
@@ -78,7 +81,7 @@ D6.consTotal.precalc = function() {
 	
 	//electricity
 	this.priceEle = this.input( "i061"
-			,D6.area.averageCostEnergy.electricity );			//electricity fee
+		,D6.area.averageCostEnergy.electricity );			//electricity fee
 	this.priceEleSpring = this.input( "i0912" ,-1 );
 	this.priceEleSummer = this.input( "i0913" ,-1 );
 	this.priceEleWinter = this.input( "i0911" ,-1 );
@@ -92,7 +95,7 @@ D6.consTotal.precalc = function() {
 				
 	//gas
 	this.priceGas =this.input( "i063"
-			,D6.area.averageCostEnergy.gas );					//gas fee
+		,D6.area.averageCostEnergy.gas );						//gas fee
 	this.priceGasSpring =this.input( "i0932" ,-1 );
 	this.priceGasSummer =this.input( "i0933" ,-1 );
 	this.priceGasWinter =this.input( "i0931" ,-1 );
@@ -104,8 +107,7 @@ D6.consTotal.precalc = function() {
 
 	this.houseType =this.input( "i002", -1 );					//type of house
 	this.houseSize =this.input( "i003", 
-			( this.person == 1 ? 60 : (80 + this.person * 10) ) );
-																//floor size
+		( this.person == 1 ? 60 : (80 + this.person * 10) ) );	//floor size
 
 	this.heatEquip =this.input( "i202", -1 );					//main heat equipment
 
@@ -114,7 +116,7 @@ D6.consTotal.precalc = function() {
 	this.priceKerosSummer =this.input( "i0943" ,-1 );
 	this.priceKerosWinter =this.input( "i0941" ,-1 );
 	this.noPriceData.kerosene = 
-			  this.priceKerosSpring == -1
+			this.priceKerosSpring == -1
 			& this.priceKerosSummer == -1
 			& this.priceKerosWinter == -1;
 	
@@ -130,7 +132,7 @@ D6.consTotal.precalc = function() {
 	}
 
 	this.priceCar =this.input( "i075"
-			,D6.area.averageCostEnergy.car );					//gasoline
+		,D6.area.averageCostEnergy.car );						//gasoline
 	this.noPriceData.car = (this.input( "i075",-1) == -1);
 
 	this.equipHWType = this.input( "i101", 1 );					//type of heater
@@ -139,22 +141,22 @@ D6.consTotal.precalc = function() {
 
 	//set seasonal fee
 	this.seasonPrice =  {
-			electricity :	[ this.priceEleWinter, this.priceEleSpring, this.priceEleSummer ],	
-			gas :			[ this.priceGasWinter, this.priceGasSpring, this.priceGasSummer ],	
-			kerosene:		[ this.priceKeros, this.priceKerosSpring,this.priceKerosSummer ], 	
-//			coal :			[ -1, -1,-1 ], 
-//			hotwater :		[ -1, -1,-1 ],
-			car :			[ -1, -1,-1 ] 
+		electricity :	[ this.priceEleWinter, this.priceEleSpring, this.priceEleSummer ],	
+		gas :			[ this.priceGasWinter, this.priceGasSpring, this.priceGasSummer ],	
+		kerosene:		[ this.priceKeros, this.priceKerosSpring,this.priceKerosSummer ], 	
+//		coal :			[ -1, -1,-1 ], 
+//		hotwater :		[ -1, -1,-1 ],
+		car :			[ -1, -1,-1 ] 
 	};
 
 	//monthly pattern  -1:no input
 	this.monthlyPrice = {
-			electricity :	[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
-			gas :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
-			kerosene :		[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
-//			coal :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
-//			hotwater :		[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
-			car :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ] 
+		electricity :	[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
+		gas :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
+		kerosene :		[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
+//		coal :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
+//		hotwater :		[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
+		car :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ] 
 	};
 
 	//add kerosene to gas if both input is null
@@ -195,7 +197,7 @@ D6.consTotal.calc = function( ){
 					&& this.noPriceData.gas
 					&& this.noPriceData.car
 					&& this.noPriceData.kerosene;
-					//&& !D6.averageMode;
+	//&& !D6.averageMode;
 
 	//depend on hot water equipment
 	if ( this.equipHWType == 5 ) {
@@ -272,10 +274,10 @@ D6.consTotal.calc = function( ){
 		// gross = electricity consumed in home include self consumption amount
 		this.grossElectricity = ( 1 - this.solarSaleRatio ) * generateEle 
 					+ Math.max(0, ( this.priceEle 
-												-  this.priceEleSell
-												+ this.solarSaleRatio * generateEle * pvSellUnitPrice 
-												- priceBase ) 
-											) / this.averagePriceElec;
+						-  this.priceEleSell
+						+ this.solarSaleRatio * generateEle * pvSellUnitPrice 
+						- priceBase ) 
+					) / this.averagePriceElec;
 		this.electricity = this.grossElectricity - generateEle;
 	} else {
 		//not installed
@@ -316,7 +318,7 @@ D6.consTotal.calc = function( ){
 
 
 D6.consTotal.calcMeasure = function( ) {
-	var mes;
+	var mes,pvSellUnitPrice;
 
 	var solar_reduceVisualize = this.reduceHEMSRatio;
 
@@ -353,7 +355,7 @@ D6.consTotal.calcMeasure = function( ) {
 		mes.priceNew = this.standardSize * mes.priceOrg;	
 		
 		//comment add to original definition
-		mes.advice = D6.scenario.defMeasures['mTOsolar']['advice'] 
+		mes.advice = D6.scenario.defMeasures["mTOsolar"]["advice"] 
 			+ "<br>(" + this.standardSize + "kW)";
 	}
 

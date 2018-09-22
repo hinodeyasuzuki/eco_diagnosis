@@ -95,7 +95,6 @@ D6.calcMeasures = function( gid ) {
 		console.log( ret2 );
 		console.log( "d6--- " );
 		console.log( D6 );
-
 	}
 	return ret2;
 };
@@ -159,14 +158,14 @@ D6.calcMeasuresNotLifestyle = function( gid ) {
 //
 D6.calcMeasuresOne = function( gid ) {
 	var ret;								//return
-	var topList;							//list of measures id
-	var selectList;							//list of selected measures id
+	//var topList;							//list of measures id
+	//var selectList;							//list of selected measures id
 	var i;
 
 	var sortTarget = this.sortTarget;		//sort target
 	ret = new Array();
-	topList = new Array();
-	selectList = new Array();
+	//topList = new Array();
+	//selectList = new Array();
 
 	//each measures defined in cons object
 	for ( i in this.consList ) {
@@ -269,7 +268,7 @@ D6.calcMaxMeasuresList = function( gid, count )
 			//max reduction in measureList
 			mes = this.measureList[j];
 			if ( mes.groupID == gid || gid < 0 ) {
-				if ( measureList[j].selected != true 		//skip already selected
+				if ( this.measureList[j].selected != true 		//skip already selected
 					|| !isFinite(mes.co2Change) 
 					|| isNaN(mes.co2Change)) 				//useful
 				{
@@ -293,7 +292,7 @@ D6.calcMaxMeasuresList = function( gid, count )
 		targetmes.addReduction();					//set reduction
 		resultCalc = this.calcMeasuresOne( -1 );	//main calculation for next step
 	}
-	ret = calcMeasures(gid);
+	ret = this.calcMeasures(gid);
 	ret.sumCO2 = sumCO2;
 	ret.sumCOST = sumCOST;
 

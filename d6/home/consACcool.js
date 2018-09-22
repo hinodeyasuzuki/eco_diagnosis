@@ -22,7 +22,10 @@
  * calc2nd()		called just after calc(), in case of need to use other consumption data
  * calcMeasure()	main formula to calculate measures
  */
- 
+
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.consCOsum
 D6.consACcool = D6.object( D6.consCOsum );
 
@@ -31,14 +34,14 @@ D6.consACcool.init = function(){
 	//construction setting
 	this.consName = "consACcool"; 		//code name of this consumption 
 	this.consCode = "";                 //short code to access consumption, only set main consumption user for itemize
-    this.title = "room air conditioning";			//consumption title name
+	this.title = "room air conditioning";			//consumption title name
 	this.orgCopyNum = 1;                //original copy number in case of countable consumption, other case set 0
 	this.addable = "room air conditioning";	//the name of object shown as add target
 	this.groupID = "2";					//number code in items
 	this.color = "#0000ff";				//color definition in graph
 	this.countCall = "th room";			//how to point n-th equipment
 
-    this.sumConsName = "consCOsum";		//code name of consumption sum up include this
+	this.sumConsName = "consCOsum";		//code name of consumption sum up include this
 	this.sumCons2Name = "consAC";		//code name of consumption related to this
 
 	//guide message in input page

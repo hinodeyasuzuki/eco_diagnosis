@@ -20,6 +20,9 @@
  * calcMeasure()	main formula to calculate measures
  */
 
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.Energy
 D6.ConsBase = D6.object(D6.Energy);		//base class is energy
 
@@ -95,7 +98,7 @@ D6.ConsBase.init = function(){
 	// in case of monthly calculation
 	this.consSumMonth  = function( source, month ) {
 		for (var i in Unit.co2 ) {
-			this.i += source.i * month;
+			this[i] += source[i] * month;
 		}
 		this.co2 += source.co2 * month;
 		this.cost += source.cost * month;
@@ -232,7 +235,7 @@ D6.ConsBase.init = function(){
 			
 			} else {
 				//in case of objects
-				//　親のmeasuresについて、pconsListにリストされているconsNameが存在する場合
+				//	親のmeasuresについて、pconsListにリストされているconsNameが存在する場合
 				//	分割側の消費量を、対策の消費量とする（もう一度親を計算する） consAC
 				//		例： mes["consACCool"] = ***; を 消費クラスで定義	
 				//親のIDがある場合にはそのsubIDを用いる（冷暖房部屋など）
@@ -240,7 +243,7 @@ D6.ConsBase.init = function(){
 					if ( pconsList[pcons].co2 > 0 ) {
 						if ( pconsList[pcons].consAddSet ) {
 							//devide method is defined in consAddSet
-							for ( pmes in this.measures ){
+							for ( var pmes in this.measures ){
 								var mes = this.measures[pmes];
 								if ( mes.selected && mes[pconsList[pcons].consName] ){
 									submargin.copy( mes[pconsList[pcons].consName] );

@@ -1,8 +1,59 @@
+node.js インストール windwosでは pathを通す（システムのプロパティから、一時的にはset path=%path%;c:\////）
+
 npm install grunt
 npm install grunt-contrib-concat
 npm install grunt-contrib-uglify
 
-grunt�@�݂̂őS��
-grunt core �ŃR�A�̂�
+grunt　のみで全部
+grunt core でコアのみ
+
+
+■node.jsへの移転
+
+workerをそのまま　apiとして活用する
+
+d6home_core.min.js
+d6home_JP.min.js
+
+js側に状態変数を持っており、その状態に応じて要求する形式。サーバーのnode.jsにはなじまない。
+
+・入力値を毎回すべて送る。すべてデータを取得する。
+・設定値はローカル側で持つ。
+・対策の文字は重いので、ローカル側に一度転送をして、生成する。
+
+
+■送信データ量をなるべく少なくする
+入力データ
+　入力値　100項目　10バイト 1kB
+　選択　　100項目
+
+結果
+　対策　1項目100b 100項目　10kb
+
+　入力が変わったときのみ。
+
+テーブル生成は local側。テーブル定義作成が server側。
+
+
+■設計のしなおし
+node.jsで動かない部分を除く。　
+	onmessage()
+API側を毎回全計算の実行をさせる　100ms
+
+ローカル側で全入力データを保持し（OK）、毎回送信する。
+main.js側を
+
+
+
+■ローカル側の画面設計
+入力とそのデザイン、入力値の管理にのみ注目。vueなど。
+
+■API
+データを受けて結果をすべて返す。
+
+
+
+
+
 
 

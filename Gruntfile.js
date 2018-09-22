@@ -7,7 +7,7 @@ grunt.initConfig({
 			files:{
 				'dist_develop/d6home_core.js' :
 				[	
-					'd6/d6facade.js',
+					//'d6/d6facade.js',
 					'd6/areaset/*.js',
 					'd6/base/objectcreate.js',
 					'd6/base/energy.js',
@@ -66,7 +66,7 @@ grunt.initConfig({
 			files:{
 				'dist_develop/d6office_core.js' :
 				[	
-					'd6/d6facade.js',
+					//'d6/d6facade.js',
 					'd6/areaset/*.js',
 					'd6/base/objectcreate.js',
 					'd6/base/energy.js',

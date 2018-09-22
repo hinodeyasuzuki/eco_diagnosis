@@ -22,6 +22,9 @@
  * calcMeasure()	main formula to calculate measures
  * 
  */
+
+//resolve D6
+var D6 = D6||{};
  
 //Inherited class of D6.ConsBase
 D6.consHTsum = D6.object( D6.ConsBase );
@@ -30,13 +33,13 @@ D6.consHTsum.init = function() {
 	//construction setting
 	this.consName = "consHTsum";    	//code name of this consumption 
 	this.consCode = "HT";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "heating";				//consumption title name
+	this.title = "heating";				//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "2";					//number code in items
 	this.color = "#ff0000";				//color definition in graph
 	this.countCall = "";			//how to point n-th equipment
 
-    this.sumConsName = "consTotal";		//code name of consumption sum up include this
+	this.sumConsName = "consTotal";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
@@ -75,16 +78,16 @@ D6.consHTsum.precalc = function() {
 	this.houseSize =D6.consShow["TO"].houseSize;	//floor size
 
 	this.heatSpace  =this.input( "i201",
-			this.heatArea <= 2 ? 0.6 :
+		this.heatArea <= 2 ? 0.6 :
 			this.heatArea == 3 ? 0.25 : 0.2
-		);											//heating area m2
+	);												//heating area m2
 		
 	this.heatEquip =this.input( "i202", -1 );		//heating equipment
 	this.heatTime  =this.input( "i204", 
-			this.heatArea == 1 ? 24 :
+		this.heatArea == 1 ? 24 :
 			this.heatArea == 2 ? 10 :
-			this.heatArea == 3 ? 6 : 6
-		);											//heating time
+				this.heatArea == 3 ? 6 : 6
+	);												//heating time
 	this.heatMonth  = this.input( "i206", D6.area.seasonMonth.winter );	//heating month
 	this.heatTemp  =this.input( "i205", 21 );		//heating temperature setting
 	this.priceEleSpring =this.input( "i0912", -1 );	//electricity charge in spring/fall
@@ -143,7 +146,7 @@ D6.consHTsum.calc = function() {
 					* this.heatMonth / 12;
 			if ( heatKcal / coef /D6.Unit.calorie.electricity > priceMaxCons ) {
 				//in case that calculated electricity is more than fee
-				var elecOver = heatKcal - priceMaxCons * coef *D6.Unit.calorie.electricity;
+				elecOver = heatKcal - priceMaxCons * coef *D6.Unit.calorie.electricity;
 				heatKcal -= elecOver;
 			}
 		}
@@ -257,7 +260,7 @@ D6.consHTsum.calc2nd = function( ) {
 	
 	//amount of not fixed gas
 	spaceG = Math.max( 0, 
-			consTotal.gas - consHW.gas - consCK.gas );
+		consTotal.gas - consHW.gas - consCK.gas );
 
 	//in case of use kerosene for heat, check electricity usage
 	if ( this.heatEquip == 4 ) {
@@ -274,7 +277,7 @@ D6.consHTsum.calc2nd = function( ) {
 						/D6.Unit.calorie.electricity;
 				//not over 70% of winter electricity
 				this.electricity = Math.min( this.electricity,
-							D6.consShow["TO"].electricity * this.heatMonth / 12 *0.7 );
+					D6.consShow["TO"].electricity * this.heatMonth / 12 *0.7 );
 				this.kerosene = spaceK;
 				this.gas = spaceG;
 			} else {
@@ -289,6 +292,7 @@ D6.consHTsum.calc2nd = function( ) {
 	}
 
 	//kerosene cannot find suitable usage
+	var ret;
 	if ( spaceK > 0 ) {
 		if ( this.consKeros == -1 ) {
 			D6.consShow["TO"].kerosene = consHW.kerosene + this.kerosene;

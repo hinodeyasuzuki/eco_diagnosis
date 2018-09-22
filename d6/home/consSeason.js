@@ -20,7 +20,10 @@
  * calcMeasure()	main formula to calculate measures
  * 
  */
- 
+
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.ConsBase
 D6.consSeason = D6.object( D6.ConsBase );
 
@@ -30,14 +33,14 @@ D6.consSeason.init = function() {
 	//construction setting
 	this.consName = "consSeason";   	//code name of this consumption 
 	this.consCode = "";            		//short code to access consumption, only set main consumption user for itemize
-    this.title = "";					//consumption title name
+	this.title = "";					//consumption title name
 	this.orgCopyNum = 3;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "2";					//number code in items
 	this.color = "#ff0000";				//color definition in graph
 	this.countCall = "";				//how to point n-th equipment
 	this.residueCalc = "sumup";			//calculate method	no/sumup/yes
 
-    this.sumConsName = "";				//code name of consumption sum up include this
+	this.sumConsName = "";				//code name of consumption sum up include this
 	this.sumCons2Name = "consTotal";	//code name of consumption related to this
 
 	//guide message in input page

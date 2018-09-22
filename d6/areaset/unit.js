@@ -13,7 +13,10 @@
  *								2011/05/06 ported to ActionScript3
  * 								2016/04/12 ported to JavaScript
  */
- 
+
+//resolve D6
+var D6 = D6||{};
+
 D6.Unit = {
 	
 	// co2 emission factor  kg-CO2/each unit
@@ -170,7 +173,7 @@ D6.Unit = {
 	//		cons: energy consumption per month
 	costToCons : function( cost, energy_name, elecType, kw )
 	{
-		if(typeof kw === 'undefined') kw = 0;
+		if(typeof kw === "undefined") kw = 0;
 		var ret;
 		if ( cost == -1 || cost == "" ) {
 			ret = "";

@@ -13,11 +13,9 @@
 */
 
 D6.consCOsum = D6.object( D6.ConsBase );
-DC = D6.consCOsum;
-
 
 //初期設定値
-DC.init = function() {
+D6.consCOsum.init = function() {
 	this.coolLoadUnit_Wood = 220/3;			//標準冷房負荷（W/m2）
 	this.coolLoadUnit_Steel = 145/3;		//標準冷房負荷鉄筋住宅の場合（W/m2）
 	this.apf = 4;							//エアコンAPF
@@ -36,10 +34,10 @@ DC.init = function() {
 	this.inputGuide = "全体の冷房の使い方について";		//入力欄でのガイド
 
 };
-DC.init();
+D6.consCOsum.init();
 
 //冷房消費量計算
-DC.calc = function() {
+D6.consCOsum.calc = function() {
 	this.clear();			//結果の消去
 
 	//入力値の読み込み
@@ -79,7 +77,7 @@ DC.calc = function() {
 
 
 //対策計算 consP
-DC.calcMeasure = function() {
+D6.consCOsum.calcMeasure = function() {
 };
 
 
@@ -88,7 +86,7 @@ DC.calcMeasure = function() {
 //		cons.buidType : 建物の形態
 //		cons.floot : 延べ床面積(m2)
 //		cons.heatArea : 冷暖房範囲(-)
-DC.calcCoolLoad = function()
+D6.consCOsum.calcCoolLoad = function()
 {
 	var energyLoad = 0;
 	this.coolArea = 0.3;

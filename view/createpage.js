@@ -25,7 +25,7 @@
 //  global
 //		pageMode 	"m1" then not show after selection
 
-createInputPage = function (res) {
+var createInputPage = function (res) {
 	var consName = res.consName;
 	var subName = res.subName;
 	var page = {};
@@ -45,7 +45,7 @@ createInputPage = function (res) {
 		combo += "<li class='inppage'>";
 		
 		//addable equip/room
-		ad = "";
+		var ad = "";
 		for( var a in res.groupAddable[c] ){
 			if ( res.groupAddable[c][a] ){
 				ad +=  "<button style='color:blue;' " +
@@ -75,7 +75,7 @@ createInputPage = function (res) {
 		if ( c !=  consName ) continue;
 		combo += "<ul class='submenucontents'>";
 		count = 0;
-		for ( var d in res.subgroup[c] ) {
+		for ( d in res.subgroup[c] ) {
 			if ( d !=  subName) {
 				continue;
 			}
@@ -103,7 +103,7 @@ createInputPage = function (res) {
 		}
 		//end of page wrapper
 		combo += "<p style='clear:both;'></p></ul></li>";
-	};
+	}
 		
 	page.combo = combo;
 	page.menu  = menu;
@@ -124,23 +124,23 @@ createInputPage = function (res) {
 //		page			input page html with buttons
 //
 createInputButtonPageOne = function (res) {
-		if ( !res ) return "";
-		var page = "<h2>" + res.title;
-		page += lang.QuestionNumber(res.numques, res.nowques ) + "</h2>";
-		page += "<p>" + res.text + "</p>\n<p>";
-		for ( var i in res.defSelectValue ){
-			if( res.defSelectData[i] == -1 ) continue;
-			if ( res.defSelectValue[i] ) {
-				page += "<button class='button qbutton " 
-				page += ( res.selected == res.defSelectData[i] ? "selected" : "" ) 
-				page += "' id='s" + res.defSelectData[i];
-				page += "' onclick='quesone_set(\"" + res.id + "\", \"" ;
-				page += res.defSelectData[i] + "\");' >" ;
-				page += res.defSelectValue[i] + "</button>\n" ;
-			}
+	if ( !res ) return "";
+	var page = "<h2>" + res.title;
+	page += lang.QuestionNumber(res.numques, res.nowques ) + "</h2>";
+	page += "<p>" + res.text + "</p>\n<p>";
+	for ( var i in res.defSelectValue ){
+		if( res.defSelectData[i] == -1 ) continue;
+		if ( res.defSelectValue[i] ) {
+			page += "<button class='button qbutton " 
+			page += ( res.selected == res.defSelectData[i] ? "selected" : "" ) 
+			page += "' id='s" + res.defSelectData[i];
+			page += "' onclick='quesone_set(\"" + res.id + "\", \"" ;
+			page += res.defSelectData[i] + "\");' >" ;
+			page += res.defSelectValue[i] + "</button>\n" ;
 		}
-		page += "</p><br>";
-		return page;
+	}
+	page += "</p><br>";
+	return page;
 };
 
 // createPageList(res) ---------------------------------
@@ -155,7 +155,7 @@ createPageList = function (res) {
 		page += "<tr><td rowspan='" + ( 1 + Object.keys(res.subgroup[c]).length ) + "'>" + res.group[c] + "</td>";
 
 		//addable equip/room
-		ad = "";
+		var ad = "";
 		for( var a in res.groupAddable[c] ){
 			if ( res.groupAddable[c][a] ){
 				ad +=  "<span class='button' style='cursor:pointer;color:blue;' onclick='addroom(\"" +
@@ -173,7 +173,7 @@ createPageList = function (res) {
 			page += "<tr><td>" + res.subgroup[c][d] + "</td>";
 			page += "<td><input type='radio' name='cons' onchange='conschange( \""+ c + "\",\"" + d +"\");' " + checked + "></td></tr>";
 		}
-	};
+	}
 	page += "</table>";
 
 	return page;
@@ -192,7 +192,7 @@ createPageList = function (res) {
 //	return
 //		modalHtml result written in html
 createModalPage = function( mes ){
-	ret = getMeasureComment( mes );
+	var ret = getMeasureComment( mes );
 	var modalHtml = "<h2>" + mes.title + "</h2>";
 	modalHtml += "<img src='./view/images/p" + mes.figNum + ".jpg' class='modalfig' alt='figure of "+ mes.title+"'>";
 	modalHtml += "<div class='modaladvice'><p>" + mes.advice + "</p><hr></div>";
@@ -578,7 +578,7 @@ showItemizeTableSort = function (target){
 	ret += "</tr>";
 
 	//each item
-	for ( var cid in target ) {
+	for ( cid in target ) {
 		cons = target[cid];
 		if ( cons.sumConsName != "consTotal" 
 			&& cons.consName != "consTotal"

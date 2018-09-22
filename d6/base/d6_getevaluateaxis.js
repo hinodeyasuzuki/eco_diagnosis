@@ -55,7 +55,7 @@ D6.getEvaluateAxisPoint = function( target,inpListDefCode ) {
 		var maxname2 = "";
 		var minpoint2= 0;
 		var minname2 = "";
-		var tmax = 0;
+		//var tmax = 0;
 		var defaultvalue = 0;
 		var thispoint = 0;
 

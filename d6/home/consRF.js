@@ -23,6 +23,9 @@
  * calcMeasure()	main formula to calculate measures
  */
 
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.consRFsum
 D6.consRF = D6.object( D6.consRFsum );
 
@@ -36,14 +39,14 @@ D6.consRF.init = function() {
 	//construction setting
 	this.consName = "consRF";           //code name of this consumption 
 	this.consCode = "";                 //short code to access consumption, only set main consumption user for itemize
-    this.title = "refrigerator";		//consumption title name
+	this.title = "refrigerator";		//consumption title name
 	this.orgCopyNum = 1;                //original copy number in case of countable consumption, other case set 0
 	this.addable = "refrigerator";		//the name of object shown as add target
 	this.groupID = "3";					//number code in items
 	this.color = "#a0ffa0";				//color definition in graph
 	this.countCall = "th";				//how to point n-th equipment
 
-    this.sumConsName = "consRFsum";		//code name of consumption sum up include this
+	this.sumConsName = "consRFsum";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page

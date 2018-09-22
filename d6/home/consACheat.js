@@ -23,6 +23,9 @@
  * calcMeasure()	main formula to calculate measures
  */
 
+//resolve D6
+var D6 = D6||{};
+
 // Inherited class of D6.consHTsum
 D6.consACheat = D6.object( D6.consHTsum );
 
@@ -31,10 +34,10 @@ D6.consACheat.init = function() {
 	//construction setting
 	this.consName = "consACheat"; 		//code name of this consumption 
 	this.consCode = "";                 //short code to access consumption, only set main consumption user for itemize
-    this.title = "room heating";		//consumption title name
+	this.title = "room heating";		//consumption title name
 	this.orgCopyNum = 1;                //original copy number in case of countable consumption, other case set 0
 	this.addable = "room air conditioning";	//the name of object shown as add target
-    this.sumConsName = "consHTsum";		//code name of consumption sum up include this
+	this.sumConsName = "consHTsum";		//code name of consumption sum up include this
 	this.sumCons2Name = "consAC";		//code name of consumption related to this
 	this.groupID = "2";					//number code in items
 	this.color = "#ff0000";				//color definition in graph
@@ -115,7 +118,7 @@ D6.consACheat.calc2nd = function( ) {
 };
 
 D6.consACheat.calcMeasure = function() {
-	var mes;
+	//var mes;
 
 	//mACFilter,mACchangeHeat
 	if ( this.heatEquip == 1 ){

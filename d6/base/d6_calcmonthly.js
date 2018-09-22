@@ -14,7 +14,7 @@
  * 
  */
 
-D6 = D6 || {};
+var D6 = D6 || {};
 
 D6.calcMonthly = function( ave, season, monthly, seasonPatternP, energyCode ) {
 	// first use monthly, season
@@ -25,7 +25,7 @@ D6.calcMonthly = function( ave, season, monthly, seasonPatternP, energyCode ) {
 	var seasonPattern = [ 0, 0, 0 ];
 	var seasonCount = [ 0, 0, 0 ];
 	var seasonCons = [ 0, 0, 0 ];
-	var monthlyCons = [];
+	//var monthlyCons = [];
 	var i;
 	var noConsData = true;
 
@@ -112,6 +112,7 @@ D6.calcMonthly = function( ave, season, monthly, seasonPatternP, energyCode ) {
 	seasonCons[2] = D6.Unit.costToCons( season[2], energyCode );
 
 	//set to monthly data
+	var sim, si, sip;
 	for ( i=0 ; i<12 ; i++ ) {
 		if ( monthly[i] == -1 ) {
 			sim = month2season[ (i+12-1) % 12 ];

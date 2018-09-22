@@ -25,6 +25,9 @@
  * escapeHtml()
  */
 
+//resolve D6
+var D6 = D6 || {};
+
 // getInputPage(consName,subName ) -----------------------------------------
 //		generate html components
 // parameters
@@ -46,7 +49,7 @@ D6.getInputPage = function( consName,subName ) {
 	var subguide = [];			//guidance to input for subgroup
 	var combos = [];			//input combobox html
 	var definp;
-	var pagename;
+	//var pagename;
 	var subid = 0;
 	var subcode = "";
 	var cons = "";
@@ -98,10 +101,10 @@ D6.getInputPage = function( consName,subName ) {
 			if ( cons.consName == cname 
 				|| ( cons.sumConsName == cname 
 					&& cons.sumConsName != "consTotal"
-					)
+				)
 				|| ( cons.sumCons2Name == cname 
 					&& cons.sumCons2Name != "consTotal"
-					)
+				)
 				|| cons.inputDisp == cname
 			) {
 				if( i.length == 4 ) {	//consumption name is 4 or more length
@@ -136,7 +139,7 @@ D6.getInputPage = function( consName,subName ) {
 						addlist[cname].push( cons.consName );
 						groupAddable[cname].push( 
 							{ "consName" : cons.consName,
-							"caption" : cons.addable } );
+								"caption" : cons.addable } );
 					}
 				}
 
@@ -265,8 +268,8 @@ D6.createTextArea = function( inpId, onlyCombo )
 D6.tfHandlerCombo = function( name ) {
 	return function( e ) {
 		Input[name] = e.target.value;
-    		e.target.removeEventListener( Event.ENTER_FRAME, arguments.callee );
-	}
+		e.target.removeEventListener( Event.ENTER_FRAME, arguments.callee );
+	};
 };
 
 	
@@ -280,25 +283,24 @@ D6.quesOrder = [];			//question code list
 D6.getFirstQues = function(consName, subName)
 {
 	var definp;
-	var cons;
-	quesOrder = [];
+
 	if ( consName == "easy01") {
 		if ( Array.isArray(subName) ) {
-			quesOrder = subName;
+			this.quesOrder = subName;
 		} else {
-			quesOrder = D6.scenario.defQuesOrder;
+			this.quesOrder = D6.scenario.defQuesOrder;
 		}
 	} else {
 		for( var i in D6.doc.data ) {
 			definp = D6.scenario.defInput[i.substr(0,4)];
 			if ( definp.cons == subName ) {
-				quesOrder.push( i );
+				this.quesOrder.push( i );
 			}
 		}
 	}
-	nowQuesID = 0;
-	nowQuesCode =  quesOrder[nowQuesID];
-	return this.getQues(nowQuesCode);
+	this.nowQuesID = 0;
+	this.nowQuesCode =  this.quesOrder[this.nowQuesID];
+	return this.getQues(this.nowQuesCode);
 };
 
 
@@ -306,20 +308,20 @@ D6.getFirstQues = function(consName, subName)
 //		return next question data, for smartphone
 D6.getNextQues = function()
 {
-	nowQuesID++;
-	nowQuesCode =  quesOrder[nowQuesID];
-		return this.getQues(nowQuesCode);
+	this.nowQuesID++;
+	this.nowQuesCode = this.quesOrder[this.nowQuesID];
+	return this.getQues(this.nowQuesCode);
 };
 
 //getPrevQues() --------------------------------------------
 //		return previous question data, for smartphone
 D6.getPrevQues = function()
 {
-	nowQuesID--;
-	if ( nowQuesID < 0) nowQuesID = 0;
-	nowQuesCode =  quesOrder[nowQuesID];
+	this.nowQuesID--;
+	if ( this.nowQuesID < 0) this.nowQuesID = 0;
+	this.nowQuesCode =  this.quesOrder[this.nowQuesID];
 
-	return this.getQues(nowQuesCode);
+	return this.getQues(this.nowQuesCode);
 };
 
 // getQues(id) ------------------------------------------------
@@ -339,14 +341,14 @@ D6.getPrevQues = function()
 //		ret.selected			selected value
 //		ret.consTitle			related consumption name
 D6.getQues = function( id ){
-	ret = {};
+	var ret = {};
 	if ( this.isEndOfQues() ) {
 		ret.info = "end";
 	} else {
 		ret.info = "continue";
 		ret.id = id;
-		ret.numques = quesOrder.length;
-		ret.nowques = nowQuesID+1;
+		ret.numques = this.quesOrder.length;
+		ret.nowques = this.nowQuesID+1;
 			
 		var def = D6.scenario.defInput[id.substr(0,4)];
 		ret.title = def.title;
@@ -380,7 +382,7 @@ D6.getQuesList = function() {
 D6.isEndOfQues = function()
 {
 	var ret = false;
-	if ( nowQuesID+1 > quesOrder.length ) {
+	if ( this.nowQuesID+1 > this.quesOrder.length ) {
 		ret = true;
 	}
 	return ret;
@@ -398,17 +400,17 @@ D6.escapeHtml = function (String) {
 		'<': '&lt;',
 		'>': '&gt;'
 	};
-	var escapeReg = '[';
+	var escapeReg = "[";
 	var reg;
 	for (var p in escapeMap) {
 		if (escapeMap.hasOwnProperty(p)) {
 			escapeReg += p;
 		}
 	}
-	escapeReg += ']';
-	reg = new RegExp(escapeReg, 'g');
+	escapeReg += "]";
+	reg = new RegExp(escapeReg, "g");
 	return function escapeHtml (str) {
-		str = (str === null || str === undefined) ? '' : '' + str;
+		str = (str === null || str === undefined) ? "" : "" + str;
 		return str.replace(reg, function (match) {
 			return escapeMap[match];
 		});

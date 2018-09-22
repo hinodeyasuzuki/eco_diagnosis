@@ -16,15 +16,17 @@
  * getInputDemandLog()
  */
 
+//resolve D6
+var D6 = D6 || {};
+
 ///get data of Demand graph
 // getDemandGraph()-----------------------------------------------------
 //		demand graph of sumup and consumption log
 // return
 //		retall.log		log graph data
 //		retall.sumup	pile up graph data
-D6.getDemandGraph  = function ( ){
+D6.getDemandGraph  = function (){
 	var work = {};
-	var retone = {};
 	var retall = {};
 	var clist = [];
 		
@@ -115,7 +117,7 @@ D6.getDemandGraph  = function ( ){
 	retall.clist = clist;	//color list
 	//log data
 	var log = [];
-	for ( var t=0 ; t<24 ; t++ ){
+	for ( t=0 ; t<24 ; t++ ){
 		log[t] = {};
 		log[t]["equip"] = "log";
 		log[t]["time"] = t;
@@ -124,7 +126,7 @@ D6.getDemandGraph  = function ( ){
 	retall.log = log;		//log data
 	return retall;
 		
-	//set color by ID　"#0000ff";　.toString(16); 1-6 pattern
+	//set color by ID "#0000ff"; .toString(16); 1-6 pattern
 	function graphColorSeries( colid ) {
 		var color;
 		var col = [100,100,100];
@@ -151,8 +153,6 @@ D6.getInputDemandSumup = function() {
 	var ret = {};
 	var title = {};
 	var pdata = {};
-	var demandone= {};
-	var combos = [];
 
 	//pick up related consName
 	for( var c in D6.scenario.defInput ) {

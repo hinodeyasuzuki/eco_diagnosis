@@ -23,6 +23,9 @@
  * 
  */
 
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.ConsBase
 D6.consCOsum = D6.object( D6.ConsBase );
 
@@ -36,13 +39,13 @@ D6.consCOsum.init = function() {
 	//construction setting
 	this.consName = "consCOsum";    	//code name of this consumption 
 	this.consCode = "CO";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "cooling";				//consumption title name
+	this.title = "cooling";				//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "2";					//number code in items
 	this.color = "#0000ff";				//color definition in graph
 	this.countCall = "";				//how to point n-th equipment
 
-    this.sumConsName = "consTotal";		//code name of consumption sum up include this
+	this.sumConsName = "consTotal";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
@@ -57,8 +60,7 @@ D6.consCOsum.precalc = function() {
 
 	this.person =this.input( "i001", 3 );			//person number
 	this.houseSize =this.input( "i003", 
-			( this.person == 1 ? 60 : (80 + this.person * 10) ) );
-													//space of house
+		( this.person == 1 ? 60 : (80 + this.person * 10) ) );	//space of house
 	this.houseType = this.input( "i002", 1 );		//standalone / collective
 	this.coolArea  = this.input( "i201", 0.5 );		//rate by space of cooling
 	this.coolTime  = this.input( "i261", 4 );		//time
@@ -107,14 +109,11 @@ D6.consCOsum.calcCoolLoad = function( coolArea_m2, coolTime, coolMonth, coolTemp
 		coolLoadUnit = this.coolLoadUnit_Steel;
 	}
 
-	var coolTime;					//time of cooling
-	coolTime = this.coolTime;
-
 	//coefficient of cooling
 	var coolFactor = D6.area.getCoolFactor( coolMonth, coolTime );
 
 	var coefTemp;					//difference by temperature
-	coefTemp = ( 27 - this.coolTemp ) / 10 + 1;
+	coefTemp = ( 27 - coolTemp ) / 10 + 1;
 
 	energyLoad = coolLoadUnit * coolFactor[0] *  coolArea_m2 * coolTime * 30 * coefTemp;
 

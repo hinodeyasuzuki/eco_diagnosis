@@ -41,7 +41,7 @@ function graphItemizeCommon( ret, targetname ) {
 	var captionPercent =lang.percent;
 
 	$("#"+targetname).html("<h3>" + titles[ret.yaxis] +
-		 ( hideAverage != 1 ? ":" + ret.averageCaption + captionCompareAverage + "（" + ret.consTitle  + "）" : "" ) + 
+		( hideAverage != 1 ? ":" + ret.averageCaption + captionCompareAverage + "（" + ret.consTitle  + "）" : "" ) + 
 	"</h3>");
 	
 	// use dimple
@@ -165,21 +165,21 @@ function graphEnergy( averageData ) {
 	hei = Math.max(wid * 0.4,320);
 
 	var svg = dimple.newSvg("#graphEnergy", wid, hei);
-    var data = [
-      { "user":lang.youcall, "energy":lang.electricitytitle, "cons":Math.round(averageData.cost[0].electricity) },
-      { "user":lang.average, "energy":lang.electricitytitle, "cons":Math.round(averageData.cost[1].electricity) },
-      { "user":lang.youcall, "energy":lang.gastitle, "cons":Math.round(averageData.cost[0].gas) },
-      { "user":lang.average, "energy":lang.gastitle, "cons":Math.round(averageData.cost[1].gas) },
-      { "user":lang.youcall, "energy":lang.kerosenetitle, "cons":Math.round(averageData.cost[0].kerosene) },
-      { "user":lang.average, "energy":lang.kerosenetitle, "cons":Math.round(averageData.cost[1].kerosene) },
-      { "user":lang.youcall, "energy":lang.gasolinetitle, "cons":Math.round(averageData.cost[0].car) },
-      { "user":lang.average, "energy":lang.gasolinetitle, "cons":Math.round(averageData.cost[1].car) }
-    ];
+	var data = [
+		{ "user":lang.youcall, "energy":lang.electricitytitle, "cons":Math.round(averageData.cost[0].electricity) },
+		{ "user":lang.average, "energy":lang.electricitytitle, "cons":Math.round(averageData.cost[1].electricity) },
+		{ "user":lang.youcall, "energy":lang.gastitle, "cons":Math.round(averageData.cost[0].gas) },
+		{ "user":lang.average, "energy":lang.gastitle, "cons":Math.round(averageData.cost[1].gas) },
+		{ "user":lang.youcall, "energy":lang.kerosenetitle, "cons":Math.round(averageData.cost[0].kerosene) },
+		{ "user":lang.average, "energy":lang.kerosenetitle, "cons":Math.round(averageData.cost[1].kerosene) },
+		{ "user":lang.youcall, "energy":lang.gasolinetitle, "cons":Math.round(averageData.cost[0].car) },
+		{ "user":lang.average, "energy":lang.gasolinetitle, "cons":Math.round(averageData.cost[1].car) }
+	];
 	for ( var c in data ) {
 		data[c][lang.fee] = data[c].cons;
 		delete data[c].cons;
 	}
-    var chart = new dimple.chart(svg, data);
+	var chart = new dimple.chart(svg, data);
 
 	//x axis
 	var xAxis = chart.addCategoryAxis("x", ["energy","user"]);
@@ -204,8 +204,8 @@ function graphEnergy( averageData ) {
 
 	chart.setBounds(70, 10, wid-150, hei-70); //left padding, top padding, graph width, graph height
 	
-    chart.addSeries("user", dimple.plot.bar);
-    chart.draw();
+	chart.addSeries("user", dimple.plot.bar);
+	chart.draw();
 
 };
 
@@ -229,11 +229,11 @@ function graphCO2averageCommon( averageData, target ) {
 	hei = Math.max(wid * 0.4,320);
 
 	var svgco2 = dimple.newSvg('#'+target, wid, hei);
-    var data = [
-      { "user":lang.average, "CO2":Math.round(averageData.co2[1].total*12) },
-      { "user":lang.youcall, "CO2":Math.round(averageData.co2[0].total*12) }
-    ];
-    var chart = new dimple.chart(svgco2, data);
+	var data = [
+		{ "user":lang.average, "CO2":Math.round(averageData.co2[1].total*12) },
+		{ "user":lang.youcall, "CO2":Math.round(averageData.co2[0].total*12) }
+	];
+	var chart = new dimple.chart(svgco2, data);
 
 	//x axis
 	var xAxis = chart.addCategoryAxis("x", "user");
@@ -252,8 +252,8 @@ function graphCO2averageCommon( averageData, target ) {
 	chart.assignColor(lang.average, "green");
 	chart.setBounds(80, 10, wid-150, hei-70); //left padding, top padding, graph width, graph height
 	
-    chart.addSeries("user", dimple.plot.bar);
-    chart.draw();
+	chart.addSeries("user", dimple.plot.bar);
+	chart.draw();
 
 };
 
@@ -271,20 +271,20 @@ function graphMonthly( ret ) {
 	//graph captions
 	var titles = { kg:lang.co2emission + "（"+lang.co2unitpermonth+"）", MJ:lang.primaryenergy + "（"+lang.energyunitpermonth+"）", yen:lang.fee + "（"+lang.feeunitpermonth+"）"};
 	var enename = {
-			electricity:lang.electricitytitle,
-			gas:lang.gastitle,
-			kerosene:lang.kerosenetitle,
-			coal:lang.briquettitle,
-			hotwater:lang.areatitle,
-			car:lang.gasolinetitle
+		electricity:lang.electricitytitle,
+		gas:lang.gastitle,
+		kerosene:lang.kerosenetitle,
+		coal:lang.briquettitle,
+		hotwater:lang.areatitle,
+		car:lang.gasolinetitle
 	};
 	var color = {
-			electricity:"orange",
-			gas:"Lime",
-			kerosene:"red",
-			coal:"black",
-			hotwater:"yellow",
-			car:"magenta"
+		electricity:"orange",
+		gas:"Lime",
+		kerosene:"red",
+		coal:"black",
+		hotwater:"yellow",
+		car:"magenta"
 	};
 	var captionGraph = lang.monthlytitle;
 	var captionMonth = lang.month;

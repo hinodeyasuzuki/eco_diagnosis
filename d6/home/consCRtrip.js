@@ -23,6 +23,9 @@
  * 
  */
 
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.consCRsum
 D6.consCRtrip = D6.object( D6.consCRsum );
 
@@ -31,14 +34,14 @@ D6.consCRtrip.init = function() {
 	//construction setting
 	this.consName = "consCRtrip";    		//code name of this consumption 
 	this.consCode = "";            		//short code to access consumption, only set main consumption user for itemize
-    this.title = "movement";				//consumption title name
+	this.title = "movement";				//consumption title name
 	this.orgCopyNum = 1;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "8";					//number code in items
 	this.color = "#ee82ee";				//color definition in graph
 	this.countCall = "th places";			//how to point n-th equipment
 	this.addable = "destination";
 
-    this.sumConsName = "consCRsum";		//code name of consumption sum up include this
+	this.sumConsName = "consCRsum";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
@@ -63,7 +66,7 @@ D6.consCRtrip.calc = function() {
 	//performance
 	this.performance =this.consCar.performance;
 	
-	//consumption of gasoline　L/month
+	//consumption of gasoline L/month
 	this.car = this.km * 2 * this.frequency / 12 / this.performance;
 
 	//add related car

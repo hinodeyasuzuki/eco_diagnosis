@@ -22,6 +22,9 @@
  * calcMeasure()	main formula to calculate measures
  * 
  */
+
+//resolve D6
+var D6 = D6||{};
  
 //Inherited class of D6.ConsBase
 D6.consLIsum = D6.object( D6.ConsBase );
@@ -30,13 +33,13 @@ D6.consLIsum.init =function() {
 	//construction setting
 	this.consName = "consLIsum";   		//code name of this consumption 
 	this.consCode = "LI";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "light";				//consumption title name
+	this.title = "light";				//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "6";					//number code in items
 	this.color = "#ffff00";				//color definition in graph
 	this.residueCalc = "sumup";			//calculate method	no/sumup/yes
 
-    this.sumConsName = "consTotal";		//code name of consumption sum up include this
+	this.sumConsName = "consTotal";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
@@ -75,13 +78,13 @@ D6.consLIsum.precalc = function(){
 	this.clear();
 
 	this.person =this.input( "i001", 3 );			//person
-	this.lightType =this.input( "i501", 2 );		//living light　1bulb 2fluorescent 3LED
+	this.lightType =this.input( "i501", 2 );		//living light 1bulb 2fluorescent 3LED
 	this.otherRate =this.input( "i502", 3 );		//other room light use
 	this.houseSize =D6.consShow["TO"].houseSize;	//floor size
 };
 
 D6.consLIsum.calc = function( ) {
-	//living consumption　kWh/month
+	//living consumption kWh/month
 	if( this.lightType == 1 ) {
 		this.sumWatt = this.wattLivingBulb;
 	} else if ( this.lightType == 3 ) {

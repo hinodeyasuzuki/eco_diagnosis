@@ -23,6 +23,9 @@
  * 
  */
 
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.ConsBase
 D6.consCKsum = D6.object( D6.ConsBase );
 
@@ -30,13 +33,13 @@ D6.consCKsum.init = function() {
 	//construction setting
 	this.consName = "consCKsum";    	//code name of this consumption 
 	this.consCode = "CK";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "Cooking";				//consumption title name
+	this.title = "Cooking";				//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "4";					//number code in items
 	this.color = "#ffe4b5";				//color definition in graph
 	this.countCall = "";				//how to point n-th equipment
 
-    this.sumConsName = "consTotal";		//code name of consumption sum up include this
+	this.sumConsName = "consTotal";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 	this.residueCalc = "no";			//calculate residue
 

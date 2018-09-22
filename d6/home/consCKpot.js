@@ -23,6 +23,9 @@
  * 
  */
 
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.ConsBase
 D6.consCKpot = D6.object( D6.ConsBase );
 
@@ -33,13 +36,13 @@ D6.consCKpot.init = function() {
 	//construction setting
 	this.consName = "consCKpot";    	//code name of this consumption 
 	this.consCode = "CK";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "heat holding pot";	//consumption title name
+	this.title = "heat holding pot";	//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "4";					//number code in items
 	this.color = "#ffe4b5";				//color definition in graph
 	this.countCall = "";				//how to point n-th equipment
 
-    this.sumConsName = "consCKsum";		//code name of consumption sum up include this
+	this.sumConsName = "consCKsum";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
@@ -57,7 +60,7 @@ D6.consCKpot.precalc = function() {
 };
 
 D6.consCKpot.calc = function() {
-	//monthly electricity consumption　kWh/month
+	//monthly electricity consumption kWh/month
 	this.electricity = this.wattOrdinal * this.time * 30 / 1000
 						* (this.ecoType == 1 ? 0.5 : 1 );
 };

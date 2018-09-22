@@ -21,7 +21,10 @@
  * calc2nd()		called just after calc(), in case of need to use other consumption data
  * calcMeasure()	main formula to calculate measures
  */
- 
+
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.consBase
 D6.consAC = D6.object( D6.ConsBase );
 
@@ -30,13 +33,13 @@ D6.consAC.init = function() {
 	//construction setting
 	this.consName = "consAC";           //code name of this consumption 
 	this.consCode = "";                 //short code to access consumption, only set main consumption user for itemize
-    this.title = "room air conditioning";			//consumption title name
+	this.title = "room air conditioning";			//consumption title name
 	this.orgCopyNum = 1;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "2";					//number code in items
 	this.color = "#ff0000";				//color definition in graph
 	this.countCall = "th room";			//how to point n-th equipment
 
-    this.sumConsName = "";				//code name of consumption sum up include this
+	this.sumConsName = "";				//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//code name of consumption in which input is shown, set only input page is hidden
@@ -131,7 +134,7 @@ D6.consAC.equip = function( year, size ) {
 		}
 	};
 
-	return this.getEquipParameters( year, size, sizeThreshold, defEquip )
+	return this.getEquipParameters( year, size, sizeThreshold, defEquip );
 };
 
 
@@ -172,7 +175,7 @@ D6.consAC.calcMeasure = function() {
 		mes.clear();
 		mes["consACheat"] = D6.object( D6.Energy );
 		mes["consACheat"].copy( this.acHeat );
-		mes["consACheat"].electricity = this.acHeat.endEnergy /　this.apfMax / D6.Unit.calorie.electricity;
+		mes["consACheat"].electricity = this.acHeat.endEnergy / this.apfMax / D6.Unit.calorie.electricity;
 
 		mes["consACcool"] = D6.object( D6.Energy );
 		mes["consACcool"].copy( this.acCool );

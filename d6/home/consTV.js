@@ -23,6 +23,9 @@
  * calcMeasure()	main formula to calculate measures
  */
 
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.consTVsum
 D6.consTV = D6.object( D6.consTVsum );
 
@@ -30,14 +33,14 @@ D6.consTV.init = function() {
 	//construction setting
 	this.consName = "consTV";           //code name of this consumption 
 	this.consCode = "";                 //short code to access consumption, only set main consumption user for itemize
-    this.title = "TV";					//consumption title name
+	this.title = "TV";					//consumption title name
 	this.orgCopyNum = 1;                //original copy number in case of countable consumption, other case set 0
 	this.addable = "TV";				//the name of object shown as add target
 	this.groupID = "7";					//number code in items
 	this.color = "#00ff00";				//color definition in graph
 	this.countCall = "th";				//how to point n-th equipment
 
-    this.sumConsName = "consTVsum";		//code name of consumption sum up include this
+	this.sumConsName = "consTVsum";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
@@ -72,7 +75,7 @@ D6.consTV.calc = function( ) {
 	//reduce rate by replace
 	this.reduceRateReplace = ( 1 - this.newWatt / this.nowWatt);
 
-	//electricity　kWh/month
+	//electricity kWh/month
 	this.electricity =  this.useTime * this.nowWatt / 1000 * 30;
 };
 

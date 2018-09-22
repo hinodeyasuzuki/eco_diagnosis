@@ -17,6 +17,8 @@
  * getMeasureTable()
  */
 
+var D6 = D6 || {};
+
 // getMeasureDetail(mesid) ---------------------------------------
 //		detail data about measures
 // parameters
@@ -76,13 +78,13 @@ D6.getMeasureDetail= function( mesid ) {
 D6.getMeasure = function( consName, maxPrice, notSelected )
 {
 	//cannot set default in function for IE
-	if(typeof maxPrice === 'undefined') maxPrice = 100000000;
-	if(typeof notSelected === 'undefined') notSelected = 0;
+	if(typeof maxPrice === "undefined") maxPrice = 100000000;
+	if(typeof notSelected === "undefined") notSelected = 0;
 
 	var ret = [];
 	var i=0;
 	var mes;
-	var count = 0;
+	//var count = 0;
 	var mesidArray = [];
 	for ( var cid in D6.measureList ) {
 		mesidArray.push( D6.measureList[cid] );

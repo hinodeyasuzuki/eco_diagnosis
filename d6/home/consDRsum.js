@@ -23,6 +23,9 @@
  * 
  */
 
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.ConsBase
 D6.consDRsum = D6.object( D6.ConsBase );
 
@@ -36,12 +39,12 @@ D6.consDRsum.init = function() {
 	//construction setting
 	this.consName = "consDRsum";    	//code name of this consumption 
 	this.consCode = "DR";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "laundry washing";			//consumption title name
+	this.title = "laundry washing";			//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "5";					//number code in items
 	this.color = "#00ffff";				//color definition in graph
 
-    this.sumConsName = "consTotal";		//code name of consumption sum up include this
+	this.sumConsName = "consTotal";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
@@ -50,18 +53,18 @@ D6.consDRsum.init = function() {
 D6.consDRsum.init();
 
 
-D6.consDRsum.precalc = function( cons ) {
+D6.consDRsum.precalc = function() {
 	this.clear();
 
 	this.dryUse = this.input( "i401", 0 );		//use dryer or not
 	this.person = D6.consShow["TO"].person;		//person number
 };
 
-D6.consDRsum.calc = function( cons ) {
+D6.consDRsum.calc = function() {
 	//rate of dry
 	this.rateDry = ( this.whDry * this.res2Freq[this.dryUse] ) / ( this.whWash + this.whDry * this.res2Freq[this.dryUse] );
 
-	//electricity　kWh/month
+	//electricity kWh/month
 	this.electricity = ( this.whWash + this.whDry * this.res2Freq[this.dryUse] ) / 1000
 									* this.person / 3 
 									* 30;

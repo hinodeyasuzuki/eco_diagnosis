@@ -23,9 +23,11 @@
  * 
  */
 
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.ConsBase
 D6.consCKrice = D6.object( D6.ConsBase );
-
 
 //initialize
 D6.consCKrice.init = function() {
@@ -34,13 +36,13 @@ D6.consCKrice.init = function() {
 	//construction setting
 	this.consName = "consCKrice";    	//code name of this consumption 
 	this.consCode = "CK";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "rice cooker";			//consumption title name
+	this.title = "rice cooker";			//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "4";					//number code in items
 	this.color = "#ffe4b5";				//color definition in graph
 	this.countCall = "";				//how to point n-th equipment
 
-    this.sumConsName = "consCKsum";		//code name of consumption sum up include this
+	this.sumConsName = "consCKsum";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 
 	//guide message in input page
@@ -59,7 +61,7 @@ D6.consCKrice.precalc = function() {
 };
 
 D6.consCKrice.calc = function() {
-	//monthly electricity consumption　kWh/month
+	//monthly electricity consumption kWh/month
 	this.electricity = this.wattOrdinal * this.time * 30 / 1000;
 };
 

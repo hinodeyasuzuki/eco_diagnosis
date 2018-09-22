@@ -1,447 +1,3 @@
-/*  2017/12/10  version 1.0
- * coding: utf-8, Tab as 4 spaces
- * 
- * Home Energy Diagnosis System Ver.6
- * d6facade.js 
- * 
- * call diagnosis calculation functions through onmessage()
- * 
- * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
- * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
- *								2011/01/21 original PHP version
- *								2011/05/06 ported to ActionScript3
- * 								2016/04/12 ported to JavaScript
- * 								2016/05/25 make facade design
- * 
- */
-
-
-/*
- * work as D6 facade on web-worker. Call such functions through this onmessage() call.
- *
-
-
------- structure creation  ------
-D6.constructor()							generate calculation logic
-D6.addConsSetting(consName)					add countable consumption, ex. room, equipment
-				consName: consumption code name
-
------- data set and calculation  ------
-D6.calcAverage()							calculate average		
-D6.calcMeasures(cid)						calculate measures		
-				cid:consumption ID , -1 is total consumption
-D6.inSet(id,val)							set data when input change
-				id: question id
-				val:answerd value
-D6.measureAdd(mesId)						add(accept) one measure and calculate
-D6.measureDelete(mesid)						delete(recall) one measure and calculate
-				mesid:measure id
-D6.calculateAll();							full data re-calclation, collective
-
------- file io  ------
-D6.doc.serialize()							serialize input data for saving
-D6.doc.loadDataSet(data)					load saved data
-				data:serialized data
-
------ html component create ------
-D6.getInputPage(consName, subName)		get input page 
-				consName: consumption code name
-				subName: sub category of consumption name
-
-D6.getItemizeGraph(consCode, sort )		get itemized graph data
-				consCode: consumption short code
-				sort: target 
-
-D6.getEvaluateAxisPoint()				get 
-
-// related to button selection page
-D6.getNextQues()
-D6.getPrevQues()
-
-// related to demand graph
-D6.getInputDemandSumup()				get demand value
-D6.getInputDemandLog()
-D6.getDemandGraph()						get demand graph
-
-// one measure detail
-D6.getMeasureDetail( id, ret )		s	measure detail data to show dialog	
-				id:measureID
-D6.getMeasureComment(id)				comment of measure
-				id:measureID
-
-// collective 
-D6.getAllResult(consName)			get total result 
-				consName: consumption code name
-				
-
-*/
-
-//TODO new result 180304 ==================================
-// in order to create common facade call , as common
-//	command.command			text
-//	command.action_list		array
-//	command.return_list		array
-//	command.return_text		1:return text 0:not
-//
-//
-// command
-//  param.construct			construct D6 senario 			default false
-//  param.calc				calculate consumption,measure	default true
-//  param.getresult			calculate consumption,measure	default true
-//  param.getinput			calculate consumption,measure	default true
-//
-// parametes set in case of parameter exist
-//  param.rdata				file data set
-//  param.id, param.val		set one data
-//  param.inputs[ {id:in**, val:** },.... ]		set multi data
-//  param.addmeasureid		select one measure
-//  param.deletemeasureid	select unset one measure
-//
-// return value
-//	result.command			command to call
-//  result.errormessage		error message if not null 
-//	result.monthly
-//	result.itemize
-//	result.measure
-//	result.measuredetail
-//	result.demand
-//
-// make html at ay generator
-
-
-
-//resolve D6 -------------------------------------
-var D6 = D6||{};
-
-
-// onmessage(event) function called as worker ========================================
-//
-onmessage = function (event) {
-  
-	var param = event.data.param;
-	if ( !event.data.param ) {
-		param = "";
-	}
-	if ( typeof(param.targetMode) != "undefined" ){
-		D6.targetMode = param.targetMode;
-	};
-	var result = D6.workercalc( event.data.command, param );
-
-	//return to main.js
-	try {
-		postMessage({ 
-			"command": event.data.command,
-			"result": result
-		}, "http://" + window.location.hostname);
-	} catch(e) {
-		postMessage({ 
-			"command": event.data.command,
-			"result": result
-		});
-		
-	};
-	
-};
-
-
-// workercalc(command, param)  simulating worker for non worker ========================
-// parameters
-// 		command: command code(string)
-// 		param: parameters array
-//
-D6.workercalc = function( command, param ){
-	var result = {};
-	var ad;
-	
-	switch( command ) {
-		case "start" :
-			//program setting , execute only once.
-			D6.viewparam = D6.viewparam || {};
-			D6.viewparam.ode = param.ode;
-			D6.viewparam.focusMode = param.focusMode;
-			D6.viewparam.countfix_pre_after = param.countfix_pre_after;
-			
-			//set debug mode
-			if ( param.debugMode && param.debugMode == 1 ){
-				D6.debugMode = true;
-			} else {
-				D6.debugMode = false;
-			}
-
-			//initialize D6 datasets
-			D6.constructor(param.prohibitQuestions, param.allowedQuestions, param.defInput);
-
-			// set file data
-			if ( typeof(param.rdata) != "undefined" && param.rdata ) {
-				try {
-					D6.doc.loadDataSet( decodeURIComponent(escape(atob(param.rdata))) );
-				} catch(e){
-					//console.log("load data error");
-				}
-			}
-			
-			//calculation
-			D6.calculateAll();
-
-			//get initial page as consTotal
-			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.getAllResult( "consTotal" );
-
-			//create input componets
-			result.inputPage = D6.getInputPage(param.consName,param.subName);
-
-			//button selection
-			result.quesone = D6.getFirstQues(param.consName,param.subName);
-
-			//debug
-			if ( D6.debugMode ) {
-				console.log( "d6 construct value ----" );
-				console.log( D6 );
-			}
-
-			break;
-
-		case "addandstart":
-			//change structure such as number of equipments
-			var serialize = D6.doc.serialize();
-			param.rdata = btoa(unescape(encodeURIComponent(serialize)));
-
-			//add equip or room(sub category)
-			D6.addConsSetting(param.consName);
-			//initialize datasets without scenarioset
-			D6.setscenario("add");
-
-			//filed data set
-			if ( typeof(param.rdata) != "undefined"  ) {
-				D6.doc.loadDataSet( decodeURIComponent(escape(atob(param.rdata))), "add" );
-			}
-
-			//calculate
-			D6.calculateAll();
-
-			//#0 page is basic question
-			var showName = D6.consListByName[param.consName][0].sumConsName;
-
-			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.getAllResult(showName );
-
-			//create input components
-			result.inputPage = D6.getInputPage(showName,param.subName);
-
-			break;
-
-		case "tabclick" :
-			//menu selected / main cons change		
-
-			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.getAllResult(param.consName);
-
-			//create input componets
-			result.inputPage = D6.getInputPage(param.consName, param.subName);
-
-			//button selection
-			result.quesone = D6.getFirstQues(param.consName, param.subName);
-
-			break;
-
-		case "subtabclick" :
-			//create input componets / sub cons change
-			result.inputPage = D6.getInputPage(param.consName, param.subName);
-			result.subName = param.subName;
-			break;
-
-		case "inchange" :
-			//in case of changing input value, recalc.
-			D6.inSet(param.id,param.val);
-			if ( param.id == D6.scenario.measuresSortChange ){
-				D6.sortTarget =  D6.scenario.measuresSortTarget[param.val < 0 ? 0:param.val];
-			}
-			D6.calculateAll();
-
-			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.getAllResult();	//show result 
-			break;
-
-		case "inchange_only" :
-			//in case of changing input value.
-			D6.inSet(param.id,param.val);
-			result = "ok";
-			break;
-
-		case "quesone_next" : 
-			result.quesone = D6.getNextQues();
-			break;
-			
-		case "quesone_prev" : 
-			result.quesone = D6.getPrevQues();
-			break;
-			
-		case "quesone_set" : 
-			D6.inSet(param.id,param.val);
-			result.quesone = D6.getNextQues();
-			break;
-			
-		case "recalc" :
-			//only recalc no graph data
-			D6.calculateAll();
-
-			result = D6.getAllResult(param.consName);
-			
-			//create input componets
-			result.inputPage = D6.getInputPage(param.consName,param.subName);
-			break;
-
-		case "pagelist" :
-			//create itemize list
-			result.inputPage = D6.getInputPage(param.consName,param.subName);
-			break;
-			
-		case "measureadd" :
-		case "measureadd_comment" :
-			//add measure to select list 
-			D6.measureAdd( param.mid );
-			D6.calcMeasures(-1);
-
-			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.getAllResult();
-			break;
-
-		case "measuredelete" :
-			//delete measure from select list
-			D6.measureDelete( param.mid  );
-			D6.calcMeasures(-1);
-
-			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			result = D6.getAllResult();
-			break;
-
-		case "graphchange" :
-			//change graph
-			result.itemize_graph = D6.getItemizeGraph("", param.graph);
-			break;
-
-		case "evaluateaxis" :
-			//calc evaluate axis point
-			result.evaluateAxis = D6.getEvaluateAxisPoint("", param.subName);
-			break;
-
-		case "add_demand" :
-			// add equipment to demand graph
-			var serialize = D6.doc.serialize();
-			param.rdata = btoa(unescape(encodeURIComponent(serialize)));
-			
-			D6.addConsSetting(param.consName);
-			
-			//initialize datasets
-			D6.setscenario("add");
-
-			//filedataset
-			if ( param.rdata ) {
-				D6.doc.loadDataSet( decodeURIComponent(escape(atob(param.rdata))), "add" );
-			}
-			//--continue to demand command
-
-		case "demand" :
-			//create input componets and graph for demand page
-			result.demandin = D6.getInputDemandSumup();
-			result.demandlog = D6.getInputDemandLog();
-			result.graphDemand = D6.getDemandGraph();
-			break;
-			
-		case "inchange_demand" :
-			D6.inSet(param.id,param.val);
-			result.graphDemand = D6.getDemandGraph();
-			break;
-			
-		case "modal" :
-			//ay detail information about measure, modal dialog
-			var id =param.mid;
-			result.measure_detail = D6.getMeasureDetail( id );	
-			break;
-
-		case "save" :
-		case "savenew" :
-		case "saveandgo" :
-		case "save_noalert" :
-			//save data
-			var serialize = D6.doc.serialize();
-			result = btoa(unescape(encodeURIComponent(serialize)));
-			break;
-
-		case "load":
-			break;
-
-		case "getinputpage" :
-			//create input componets
-			result.inputPage = D6.getInputPage(param.consName,param.subName);
-			break;
-
-		case "getqueslist" :
-			//return question list
-			result.queslist = D6.getQuesList();
-			break;
-
-		case "common" :
-			//common action to get full data set----------------------------------
-			var measurechange  = false;
-			//construct d6 senario
-			if ( typeof(param.construct) != "undefined" && param.construct ) {
-				D6.constructor(param.prohibitQuestions, param.allowedQuestions, param.defInput);
-			}
-			//file data load
-			if ( typeof(param.rdata) != "undefined" && param.rdata ) {
-				try {
-					D6.doc.loadDataSet( decodeURIComponent(escape(atob(param.rdata))) );
-				} catch(e){
-					//console.log("load data error");
-				}
-			}
-			//set one input data
-			if ( typeof(param.id) != "undefined" && param.id ) {
-				D6.inSet(param.id,param.val);
-			}
-			//set array data
-			if ( typeof(param.inputs) != "undefined" && param.inputs) {
-				for ( var inp in param.inputs ) {
-					D6.inSet(param.inputs[inp].id, param.inputs[inp].val);
-				}
-			}
-			//measure select
-			if ( typeof(param.addmeasureid) != "undefined" && param.addmeasureid) {
-				D6.measureAdd( param.addmeasureid );
-				measurechange = true;
-			}
-			if ( typeof(param.deletemeasureid) != "undefined" && param.deletemeasureid) {
-				D6.measureDelete( param.deletemeasureid );
-				measurechange = true;
-			}
-
-			//calculate and return
-			if ( measurechange ) {
-				D6.calcMeasures(-1);
-				result = D6.getAllResult();
-			} else if ( typeof(param.calc) != "undefined" || param.calc ) {
-				D6.calculateAll(-1);
-			}
-
-			//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-			if ( typeof(param.getresult) != "undefined" || param.getresult ) {
-				result = D6.getAllResult();
-			}
-			//create input components
-			if ( typeof(param.getinput) != "undefined" || param.getinput ) {
-				result.inputPage = D6.getInputPage(param.consName,param.subName);
-			}
-			break;
-
-		default:
-	};
-	
-	return result;
-};
-
-
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -1167,7 +723,6 @@ D6.area = {
 		
 		//set air conditioner load
 		this.airconFactor_mon = D6.accons.getArray( this.area );
-		console.log( this.area );
 		this.heatFactor_mon = D6.acload.getArray( this.area );
 		this.plusHeatFactor_mon = D6.acadd.getArray( this.area );
 		
@@ -1281,7 +836,10 @@ D6.area = {
  *								2011/05/06 ported to ActionScript3
  * 								2016/04/12 ported to JavaScript
  */
- 
+
+//resolve D6
+var D6 = D6||{};
+
 D6.Unit = {
 	
 	// co2 emission factor  kg-CO2/each unit
@@ -1438,7 +996,7 @@ D6.Unit = {
 	//		cons: energy consumption per month
 	costToCons : function( cost, energy_name, elecType, kw )
 	{
-		if(typeof kw === 'undefined') kw = 0;
+		if(typeof kw === "undefined") kw = 0;
 		var ret;
 		if ( cost == -1 || cost == "" ) {
 			ret = "";
@@ -1764,6 +1322,9 @@ D6.Energy = {
  * calcMeasure()	main formula to calculate measures
  */
 
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.Energy
 D6.ConsBase = D6.object(D6.Energy);		//base class is energy
 
@@ -1839,7 +1400,7 @@ D6.ConsBase.init = function(){
 	// in case of monthly calculation
 	this.consSumMonth  = function( source, month ) {
 		for (var i in Unit.co2 ) {
-			this.i += source.i * month;
+			this[i] += source[i] * month;
 		}
 		this.co2 += source.co2 * month;
 		this.cost += source.cost * month;
@@ -1976,7 +1537,7 @@ D6.ConsBase.init = function(){
 			
 			} else {
 				//in case of objects
-				//　親のmeasuresについて、pconsListにリストされているconsNameが存在する場合
+				//	親のmeasuresについて、pconsListにリストされているconsNameが存在する場合
 				//	分割側の消費量を、対策の消費量とする（もう一度親を計算する） consAC
 				//		例： mes["consACCool"] = ***; を 消費クラスで定義	
 				//親のIDがある場合にはそのsubIDを用いる（冷暖房部屋など）
@@ -1984,7 +1545,7 @@ D6.ConsBase.init = function(){
 					if ( pconsList[pcons].co2 > 0 ) {
 						if ( pconsList[pcons].consAddSet ) {
 							//devide method is defined in consAddSet
-							for ( pmes in this.measures ){
+							for ( var pmes in this.measures ){
 								var mes = this.measures[pmes];
 								if ( mes.selected && mes[pconsList[pcons].consName] ){
 									submargin.copy( mes[pconsList[pcons].consName] );
@@ -2146,6 +1707,9 @@ D6.ConsBase.init();
  * calc()					in case want to calculate only one measure
  * measureSumMonth()		sum 12 month
  */
+
+//resolve D6
+var D6 = D6||{};
 
 //Inherited class of D6.Energy
 D6.MeasureBase = D6.object(D6.Energy);		//measure class include energy 
@@ -2354,7 +1918,7 @@ D6.MeasureBase.addReduction = function() {
 //
 D6.MeasureBase.calc = function() {
 	this.clearMeasure();					//clear data
-	cons.calcMeasure( this.measureName );	//call consumption class 
+	this.calcMeasure( this.measureName );	//call consumption class 
 	this.calcSave();						//calc saving CO2 and cost
 };
 
@@ -2398,6 +1962,7 @@ D6.MeasureBase.measureSumMonth = function( source, month ) {
  * clear()
  * loadDataSet()
  */
+var D6 = D6 || {};
 
 D6.doc =
 {
@@ -2435,6 +2000,8 @@ D6.doc =
 	serialize :  function() {
 		var saveData = "";
 		var temp = "";
+		var tempg = "";
+		var tempi = "";
 		var prop = 0;
 		var i = 0;
 		var Input = this.data;
@@ -2674,8 +2241,9 @@ D6.resMeasure = [];					//result of measures list
 D6.mesCount = 0;					//count of measures
 D6.consCount = 0;					//count of consumptions
 
-D6.average = { consList:""
-				};					//average of consumptions 
+D6.average = { 
+	consList:""
+};									//average of consumptions 
 	
 D6.isOriginal = true;					//in case of no measure is selected
 D6.sortTarget = "co2ChangeOriginal";	//by which measureas are sorted, changeable by input
@@ -2742,7 +2310,7 @@ if ( typeof ( atob) =="undefined" ) {
  * 
  */
 
-D6 = D6 || {};
+var D6 = D6 || {};
 
 D6.calcMonthly = function( ave, season, monthly, seasonPatternP, energyCode ) {
 	// first use monthly, season
@@ -2753,7 +2321,7 @@ D6.calcMonthly = function( ave, season, monthly, seasonPatternP, energyCode ) {
 	var seasonPattern = [ 0, 0, 0 ];
 	var seasonCount = [ 0, 0, 0 ];
 	var seasonCons = [ 0, 0, 0 ];
-	var monthlyCons = [];
+	//var monthlyCons = [];
 	var i;
 	var noConsData = true;
 
@@ -2840,6 +2408,7 @@ D6.calcMonthly = function( ave, season, monthly, seasonPatternP, energyCode ) {
 	seasonCons[2] = D6.Unit.costToCons( season[2], energyCode );
 
 	//set to monthly data
+	var sim, si, sip;
 	for ( i=0 ; i<12 ; i++ ) {
 		if ( monthly[i] == -1 ) {
 			sim = month2season[ (i+12-1) % 12 ];
@@ -2889,351 +2458,349 @@ D6.calcMonthly = function( ave, season, monthly, seasonPatternP, energyCode ) {
  * 
  */
 
- //resolve D6
+//resolve D6
 var D6 = D6 || {};
 
-	//result total values
-	//	param
-	//		consName : ex. "consTotal"
-	//  return
-	//		graphItemize,graphMonthly,average,cons,measure
+//result total values
+//	param
+//		consName : ex. "consTotal"
+//  return
+//		graphItemize,graphMonthly,average,cons,measure
 D6.getAllResult = function(consName){
-		var ret = [];
-		if ( consName ) {
-			if ( !D6.logicList[consName] ) consName = "consTotal";
-			this.nowConsPageName = consName;
-		}
-		consName = this.nowConsPageName;
+	var ret = [];
+	if ( consName ) {
+		if ( !D6.logicList[consName] ) consName = "consTotal";
+		this.nowConsPageName = consName;
+	}
+	consName = this.nowConsPageName;
 
-		//get consCode
-		var consCode = D6.consListByName[consName][0].consCode;
+	//get consCode
+	var consCode = D6.consListByName[consName][0].consCode;
 
-		//create collective result
-		ret.common = D6.getCommonParameters();
+	//create collective result
+	ret.common = D6.getCommonParameters();
 		
-		ret.monthly = this.getMonthly();		
-		ret.average = this.getAverage(consCode);
-		ret.average_graph = this.getAverage_graph();
-		ret.itemize = this.getItemize(consCode);
-		ret.itemize_graph = this.getItemizeGraph(consCode);
-		ret.measure = this.getMeasure(consName);
+	ret.monthly = this.getMonthly();		
+	ret.average = this.getAverage(consCode);
+	ret.average_graph = this.getAverage_graph();
+	ret.itemize = this.getItemize(consCode);
+	ret.itemize_graph = this.getItemizeGraph(consCode);
+	ret.measure = this.getMeasure(consName);
 
-		return ret;
-	};
+	return ret;
+};
 	
 	
-	//compare to average value about one Consumption
-	// params
-	//		consCode : consumption category
-	// return
-	//		you and average params
+//compare to average value about one Consumption
+// params
+//		consCode : consumption category
+// return
+//		you and average params
 D6.getAverage = function ( consCode ){
-		var ret = [];
-		ret.you = D6.consShow[consCode].co2Original*12;		//yearly co2 emission
-		ret.after = D6.consShow[consCode].co2*12;			//yearly co2 after set measures
-		ret.av = D6.average.consList[consCode].co2*12;		//yearly average co2
-		ret.youc = D6.consShow[consCode].costOriginal*12;	//yearly cost
-		ret.afterc = D6.consShow[consCode].cost*12;			//yearly cost after set measures
-		ret.avc = D6.average.consList[consCode].cost*12;	//yearly average cost
+	var ret = [];
+	ret.you = D6.consShow[consCode].co2Original*12;		//yearly co2 emission
+	ret.after = D6.consShow[consCode].co2*12;			//yearly co2 after set measures
+	ret.av = D6.average.consList[consCode].co2*12;		//yearly average co2
+	ret.youc = D6.consShow[consCode].costOriginal*12;	//yearly cost
+	ret.afterc = D6.consShow[consCode].cost*12;			//yearly cost after set measures
+	ret.avc = D6.average.consList[consCode].cost*12;	//yearly average cost
 
-		ret.rank100 = D6.rankIn100( ret.you/ret.av);		//rank( 1-100 )
-		ret.afterrank100 = D6.rankIn100( ret.after/ret.av);	//rank after set measures( 1-100 )
+	ret.rank100 = D6.rankIn100( ret.you/ret.av);		//rank( 1-100 )
+	ret.afterrank100 = D6.rankIn100( ret.after/ret.av);	//rank after set measures( 1-100 )
 
-		ret.samehome = D6.scenario.defSelectValue["sel021"][Math.max(1,D6.doc.data["i021"])];
-			//same home's name
-		ret.sameoffice = D6.scenario.defSelectValue["sel001"][Math.max(1,D6.doc.data["i001"])];
-			//same office's name
+	ret.samehome = D6.scenario.defSelectValue["sel021"][Math.max(1,D6.doc.data["i021"])];
+	//same home's name
+	ret.sameoffice = D6.scenario.defSelectValue["sel001"][Math.max(1,D6.doc.data["i001"])];
+	//same office's name
 
-		ret.consCode = consCode;
-		return ret;		
-	};
+	ret.consCode = consCode;
+	return ret;		
+};
 	
-	//average compare result 
+//average compare result 
 D6.getAverage_graph = function()
-	{		
-		var ret = [];
-		ret.cost = [];
-		ret.co2 = [];
+{		
+	var ret = [];
+	ret.cost = [];
+	ret.co2 = [];
 
-		//	co2[1], cost[1] average
-		ret.cost[1] = D6.area.averageCostEnergy;
-		ret.co2[1] = D6.area.averageCO2Energy;
-		ret.co2[1].total = ret.co2[1].electricity + ret.co2[1].gas + ret.co2[1].kerosene + ret.co2[1].car;
+	//	co2[1], cost[1] average
+	ret.cost[1] = D6.area.averageCostEnergy;
+	ret.co2[1] = D6.area.averageCO2Energy;
+	ret.co2[1].total = ret.co2[1].electricity + ret.co2[1].gas + ret.co2[1].kerosene + ret.co2[1].car;
 
-		//  co2[0], cost[0] user
-		ret.cost[0] = [];
-		ret.cost[0].electricity = D6.consTotal.priceEle;
-		ret.cost[0].gas = D6.consTotal.priceGas;
-		ret.cost[0].kerosene = D6.consTotal.priceKeros;
-		ret.cost[0].car = D6.consTotal.car * D6.Unit.price.gasoline;
+	//  co2[0], cost[0] user
+	ret.cost[0] = [];
+	ret.cost[0].electricity = D6.consTotal.priceEle;
+	ret.cost[0].gas = D6.consTotal.priceGas;
+	ret.cost[0].kerosene = D6.consTotal.priceKeros;
+	ret.cost[0].car = D6.consTotal.car * D6.Unit.price.gasoline;
 
-		ret.co2[0] = [];
-		ret.co2[0].electricity = D6.consTotal.electricity * D6.Unit.co2.electricity;
-		ret.co2[0].gas = D6.consTotal.gas * D6.Unit.co2.gas;
-		ret.co2[0].kerosene = D6.consTotal.kerosene * D6.Unit.co2.kerosene;
-		ret.co2[0].car = D6.consTotal.car * D6.Unit.co2.gasoline;
-		ret.co2[0].total = D6.consTotal.co2Original;
-		return ret;
-	};
+	ret.co2[0] = [];
+	ret.co2[0].electricity = D6.consTotal.electricity * D6.Unit.co2.electricity;
+	ret.co2[0].gas = D6.consTotal.gas * D6.Unit.co2.gas;
+	ret.co2[0].kerosene = D6.consTotal.kerosene * D6.Unit.co2.kerosene;
+	ret.co2[0].car = D6.consTotal.car * D6.Unit.co2.gasoline;
+	ret.co2[0].total = D6.consTotal.co2Original;
+	return ret;
+};
 
-	//itemized value
-	// parameter
-	// 		consCode : consumption category
-	// result
-	//		ret[nowConsCode] : itemized data for table( all items )
-	//
+//itemized value
+// parameter
+// 		consCode : consumption category
+// result
+//		ret[nowConsCode] : itemized data for table( all items )
+//
 D6.getItemize = function (consCode){
-		var ret = [];
-		var cons;
-		var i = 0;
+	var ret = [];
+	var cons;
+	var i = 0;
 
-		for ( var cid in D6.consList ) {
-			cons = D6.consList[cid];
-			ret[i] = [];
+	for ( var cid in D6.consList ) {
+		cons = D6.consList[cid];
+		ret[i] = [];
 
-			//name
-			ret[i].title = cons.title;
-			ret[i].consName = cons.consName;
-			ret[i].subID = cons.subID;
-			ret[i].sumConsName = cons.sumConsName;
-			ret[i].sumCons2Name = cons.sumCons2Name;
-			ret[i].countCall = cons.countCall;
+		//name
+		ret[i].title = cons.title;
+		ret[i].consName = cons.consName;
+		ret[i].subID = cons.subID;
+		ret[i].sumConsName = cons.sumConsName;
+		ret[i].sumCons2Name = cons.sumCons2Name;
+		ret[i].countCall = cons.countCall;
 
-			//co2
-			ret[i].co2 = cons.co2;
-			ret[i].co2Total = D6.consShow["TO"].co2;
+		//co2
+		ret[i].co2 = cons.co2;
+		ret[i].co2Total = D6.consShow["TO"].co2;
 
-			//each energy 
-			ret[i].electricity = cons.electricity;
-			ret[i].nightelectricity = cons.nightelectricity;
-			ret[i].gas = cons.gas;
-			ret[i].water = cons.water;
-			ret[i].coal = cons.coal;
-			ret[i].hotwater = cons.hotwater;
-			ret[i].kerosene = cons.kerosene;
-			ret[i].car = cons.car;
-			ret[i].color = cons.color;
-			i++;
-		}
-		return ret;
-	};
+		//each energy 
+		ret[i].electricity = cons.electricity;
+		ret[i].nightelectricity = cons.nightelectricity;
+		ret[i].gas = cons.gas;
+		ret[i].water = cons.water;
+		ret[i].coal = cons.coal;
+		ret[i].hotwater = cons.hotwater;
+		ret[i].kerosene = cons.kerosene;
+		ret[i].car = cons.car;
+		ret[i].color = cons.color;
+		i++;
+	}
+	return ret;
+};
 
 	
-	//itemize graph data set
-	// parameters
-	//		consCode: consumption code
-	//		sort:sort target (co2,energy,money)
-	// result
-	//		itemized co2 graph data
+//itemize graph data set
+// parameters
+//		consCode: consumption code
+//		sort:sort target (co2,energy,money)
+// result
+//		itemized co2 graph data
 D6.getItemizeGraph = function ( consCode, sort ){
-		var otherCaption = "other";
+	var otherCaption = "other";
 
-		if ( consCode ) {
-			this.nowConsCode = consCode;
-		}
-		consCode = this.nowConsCode;
-		if ( sort ) {
-			this.nowSortTarget = sort;
-		}
-		sort = this.nowSortTarget;
-		
-		//graph data
-		var menu = {
-			co2: {sort:"co2", title:"kg", round:1, divide:1},
-			energy: {sort:"jules", title:"GJ", round:1, divide:1000},
-			money: {sort:"cost", title:"yen", round:10,divide:1},	// same code to view
-		};
-		var show = menu[(sort ? sort : "co2")];
+	if ( consCode ) {
+		this.nowConsCode = consCode;
+	}
+	consCode = this.nowConsCode;
+	if ( sort ) {
+		this.nowSortTarget = sort;
+	}
+	sort = this.nowSortTarget;
+	
+	//graph data
+	var menu = {
+		co2: {sort:"co2", title:"kg", round:1, divide:1},
+		energy: {sort:"jules", title:"GJ", round:1, divide:1000},
+		money: {sort:"cost", title:"yen", round:10,divide:1},	// same code to view
+	};
+	var show = menu[(sort ? sort : "co2")];
 
-		var ret = [];
+	var ret = [];
 
-		//in function getItemizeGraph( return one target of graph data )
-		// params
-		//		target:   co2/jules/cost
-		//		scenario:  
-		//		original: "original" or "" 
-		//		consCode: 2 charactors
-		// result
-		//		ret[]	
-		var gdata = function( target, scenario, original, consCode ){
-			var sorttarget = show.sort;
-			if( original ) sorttarget += "Original";
-			var sum = 0;
-			var data = [];
-			var di = 0;
-			if ( consCode =="TO") {
-				//in case of Total consumption
-				for ( var cid in target ) {
-					if ( cid == "TO" ) continue;
-					if ( cid == "" ) continue;		//180413
+	//in function getItemizeGraph( return one target of graph data )
+	// params
+	//		target:   co2/jules/cost
+	//		scenario:  
+	//		original: "original" or "" 
+	//		consCode: 2 charactors
+	// result
+	//		ret[]	
+	var gdata = function( target, scenario, original, consCode ){
+		var sorttarget = show.sort;
+		if( original ) sorttarget += "Original";
+		var sum = 0;
+		var data = [];
+		var di = 0;
+		if ( consCode =="TO") {
+			//in case of Total consumption
+			for ( var cid in target ) {
+				if ( cid == "TO" ) continue;
+				if ( cid == "" ) continue;		//180413
+				data[di] = {};
+				data[di]["compare"] = scenario;
+				data[di]["ratio"] = Math.round(target[cid][sorttarget]/target[consCode][sorttarget]*1000)/10;
+				data[di][show.title] = Math.round(target[cid][sorttarget]*12/show.divide*show.round)/show.round;
+				data[di]["item"] = target[cid].title;
+				di++;
+				sum += target[cid][sorttarget];
+			}
+			data[di] = {};
+			data[di]["compare"] = scenario;
+			data[di]["ratio"] = Math.round((target["TO"][sorttarget] - sum)/target["TO"][sorttarget]*1000)/10;
+			data[di][show.title] = Math.round((target["TO"][sorttarget] - sum)*12/show.divide*show.round)/show.round;
+			data[di]["item"] = otherCaption;
+
+		} else {
+			//each consumption exclude consTotal
+			if ( target[consCode].partCons ) {
+				var target2 = target[consCode].partCons;
+				for ( cid in target2 ) {
+					//if ( target2[cid].title == target[consCode].title ) continue;
 					data[di] = {};
 					data[di]["compare"] = scenario;
-					data[di]["ratio"] = Math.round(target[cid][sorttarget]/target[consCode][sorttarget]*1000)/10;
-					data[di][show.title] = Math.round(target[cid][sorttarget]*12/show.divide*show.round)/show.round;
-					data[di]["item"] = target[cid].title;
+					data[di]["ratio"] = Math.round(target2[cid][sorttarget]/target[consCode][sorttarget]*1000)/10;
+					data[di][show.title] = Math.round(target2[cid][sorttarget]*12/show.divide*show.round)/show.round;
+					data[di]["item"] = target2[cid].title + 
+						( target2[cid].subID > 0 ? 
+							":" +  
+							( D6.viewparam.countfix_pre_after == 1 ? 
+								target2[cid].countCall + target2[cid].subID : 
+								target2[cid].subID + target2[cid].countCall ):  "" );
 					di++;
-					sum += target[cid][sorttarget];
+					sum += target2[cid][sorttarget];
 				}
 				data[di] = {};
 				data[di]["compare"] = scenario;
-				data[di]["ratio"] = Math.round((target["TO"][sorttarget] - sum)/target["TO"][sorttarget]*1000)/10;
-				data[di][show.title] = Math.round((target["TO"][sorttarget] - sum)*12/show.divide*show.round)/show.round;
+				data[di]["ratio"] = Math.round((target[consCode][sorttarget] - sum)/target[consCode][sorttarget]*1000)/10;
+				data[di][show.title] = Math.round((target[consCode][sorttarget] - sum)*12/show.divide*show.round)/show.round;
 				data[di]["item"] = otherCaption;
-
 			} else {
-				//each consumption exclude consTotal
-				if ( target[consCode].partCons ) {
-					var target2 = target[consCode].partCons;
-					for ( var cid in target2 ) {
-						//if ( target2[cid].title == target[consCode].title ) continue;
-						data[di] = {};
-						data[di]["compare"] = scenario;
-						data[di]["ratio"] = Math.round(target2[cid][sorttarget]/target[consCode][sorttarget]*1000)/10;
-						data[di][show.title] = Math.round(target2[cid][sorttarget]*12/show.divide*show.round)/show.round;
-						data[di]["item"] = target2[cid].title + 
-							( target2[cid].subID > 0 ? 
-								":" +  
-								( D6.viewparam.countfix_pre_after == 1 ? 
-									target2[cid].countCall + target2[cid].subID : 
-									target2[cid].subID + target2[cid].countCall )
-							:  "" );
-						di++;
-						sum += target2[cid][sorttarget];
-					}
-					data[di] = {};
-					data[di]["compare"] = scenario;
-					data[di]["ratio"] = Math.round((target[consCode][sorttarget] - sum)/target[consCode][sorttarget]*1000)/10;
-					data[di][show.title] = Math.round((target[consCode][sorttarget] - sum)*12/show.divide*show.round)/show.round;
-					data[di]["item"] = otherCaption;
-				} else {
-					data[di] = {};
-					data[di]["compare"] = scenario;
-					data[di]["ratio"] = 1000/10;
-					data[di][show.title] = Math.round(target[consCode][sorttarget]*12/show.divide*show.round)/show.round;
-					data[di]["item"] = target[consCode].title;
-					di++;
-				}
-			}
-			return data;
-		};
-
-		var captions = ["you", "after", "average"];		//same code to view
-		var averageCaption ="";
-		if ( D6.targetMode == 1 ){
-			averageCaption = D6.scenario.defSelectValue["sel021"][D6.area.area];
-		} else {
-			averageCaption = D6.scenario.defSelectValue["sel001"][Math.max(1,D6.doc.data["i001"])];
-		}
-		var data = gdata( D6.consShow, captions[0],true,consCode );
-		Array.prototype.push.apply(data, gdata( D6.consShow, captions[1] ,false,consCode));
-		Array.prototype.push.apply(data, gdata( D6.average.consList, captions[2],false,consCode) );
-
-		//graph color list ( get from each cons** class )
-		var clist = [];
-		for ( var cid in D6.consShow ) {
-			if ( cid == "TO" ) continue;
-			if ( consCode == "TO" || cid == consCode ) {
-				clist.push( { title:D6.consShow[cid].title, 
-						//co2:D6.consShow[cid].co2, 
-						target:D6.consShow[cid][show.sort + "Original"], 
-						color:D6.consShow[cid].color });
+				data[di] = {};
+				data[di]["compare"] = scenario;
+				data[di]["ratio"] = 1000/10;
+				data[di][show.title] = Math.round(target[consCode][sorttarget]*12/show.divide*show.round)/show.round;
+				data[di]["item"] = target[consCode].title;
+				di++;
 			}
 		}
-
-		//graph order set(sort)
-		var ord = [];
-		if ( consCode =="TO") {
-			D6.ObjArraySort( clist, "target","desc" );
-			for ( var cid in clist ) {
-				ord.push(clist[cid].title);
-			}
-			ord.push(otherCaption);
-		} else {
-			ord.push(clist.title);
-		}
-
-		ret.data = data;
-		ret.yaxis = show.title;
-		ret.ord = ord;
-		ret.clist = clist;
-		ret.averageCaption = averageCaption;
-		ret.captions = captions;
-		ret.consTitle = D6.consShow[consCode].title;
-
-		return ret;
+		return data;
 	};
 
-	//CO2 itemize array
-	//
-	// return
-	//		consObject array ( [0] is consTotal ) only for graph
-	//		
+	var captions = ["you", "after", "average"];		//same code to view
+	var averageCaption ="";
+	if ( D6.targetMode == 1 ){
+		averageCaption = D6.scenario.defSelectValue["sel021"][D6.area.area];
+	} else {
+		averageCaption = D6.scenario.defSelectValue["sel001"][Math.max(1,D6.doc.data["i001"])];
+	}
+	var data = gdata( D6.consShow, captions[0],true,consCode );
+	Array.prototype.push.apply(data, gdata( D6.consShow, captions[1] ,false,consCode));
+	Array.prototype.push.apply(data, gdata( D6.average.consList, captions[2],false,consCode) );
+
+	//graph color list ( get from each cons** class )
+	var clist = [];
+	for ( var cid in D6.consShow ) {
+		if ( cid == "TO" ) continue;
+		if ( consCode == "TO" || cid == consCode ) {
+			clist.push( { title:D6.consShow[cid].title, 
+				//co2:D6.consShow[cid].co2, 
+				target:D6.consShow[cid][show.sort + "Original"], 
+				color:D6.consShow[cid].color });
+		}
+	}
+
+	//graph order set(sort)
+	var ord = [];
+	if ( consCode =="TO") {
+		D6.ObjArraySort( clist, "target","desc" );
+		for ( cid in clist ) {
+			ord.push(clist[cid].title);
+		}
+		ord.push(otherCaption);
+	} else {
+		ord.push(clist.title);
+	}
+
+	ret.data = data;
+	ret.yaxis = show.title;
+	ret.ord = ord;
+	ret.clist = clist;
+	ret.averageCaption = averageCaption;
+	ret.captions = captions;
+	ret.consTitle = D6.consShow[consCode].title;
+
+	return ret;
+};
+
+//CO2 itemize array
+//
+// return
+//		consObject array ( [0] is consTotal ) only for graph
+//		
 D6.dataItemize = function()
-	{
-		var consShow = D6.consShow;
+{
+	var consShow = D6.consShow;
 
-		var cons_temp = new Array();
-		var cons_rebuild = new Array();
-		var ci;
+	var cons_temp = new Array();
+	//var cons_rebuild = new Array();
+	var ci;
 
-		//remove consTotal
-		for ( ci in consShow ) {
-			if ( consShow[ci].consCode != "TO" ) {
-				cons_temp.push( consShow[ci] );
-			}
+	//remove consTotal
+	for ( ci in consShow ) {
+		if ( consShow[ci].consCode != "TO" ) {
+			cons_temp.push( consShow[ci] );
 		}
-		
-		//sort
-		var NUMERIC = 16;			//function parameter stable definition
-		var DESCENDING = 2;		//function parameter stable definition
-		cons_temp.sortOn( "co2", NUMERIC | DESCENDING );	//sort
-		
-		//add consTotal as top
-		cons_temp.unshift( consShow["TO"] );
+	}
+	
+	//sort
+	var NUMERIC = 16;			//function parameter stable definition
+	var DESCENDING = 2;		//function parameter stable definition
+	cons_temp.sortOn( "co2", NUMERIC | DESCENDING );	//sort
+	
+	//add consTotal as top
+	cons_temp.unshift( consShow["TO"] );
 
-		return cons_temp;
-	};
+	return cons_temp;
+};
 
 
-	//monthly graph data
-	//
-	// return
-	//		ret.data[]	graph data
-	//		ret.yaxis	title
+//monthly graph data
+//
+// return
+//		ret.data[]	graph data
+//		ret.yaxis	title
 D6.getMonthly  = function ( ){
-		var ret = [];
-		var menu = {
-			co2: {sort:"co2", title:"kg", round:1, divide:1},
-			energy: {sort:"jules", title:"MJ", round:1, divide:1000},
-			money: {sort:"cost", title:"yen", round:1,divide:1},
-		};
-		var show = menu["money"];
-		var ene1 = [
-			{ r:0, ene:"electricity", name:D6.Unit.name["electricity"]},
-			{ r:1, ene:"gas", name:D6.Unit.name["gas"]},
-			{ r:2, ene:"kerosene", name:D6.Unit.name["kerosene"]},
-			{ r:3, ene:"coal", name:D6.Unit.name["coal"]},
-			{ r:4, ene:"hotwater", name:D6.Unit.name["hotwater"]},
-			{ r:5, ene:"car", name:D6.Unit.name["car"]}
-		];
-		var ene2 = [];
-		
-		var month = [];
-		var ri = 0;
-		var e;
-		for ( var m=1 ; m<=12 ; m++ ){
-			for ( e=0 ; e<ene1.length ;e++ ){
-				if ( !D6.consShow["TO"].monthlyPrice[ene1[e].ene] ) continue;
-				month[ri] = [];
-				month[ri]["month"] = m;
-				month[ri][show.title] = Math.round(D6.consShow["TO"].monthlyPrice[ene1[e].ene][m-1]/show.divide*show.round)/show.round;
-				month[ri]["energyname"] = ene1[e].ene;
-				ri++;
-			}
+	var ret = [];
+	var menu = {
+		co2: {sort:"co2", title:"kg", round:1, divide:1},
+		energy: {sort:"jules", title:"MJ", round:1, divide:1000},
+		money: {sort:"cost", title:"yen", round:1,divide:1},
+	};
+	var show = menu["money"];
+	var ene1 = [
+		{ r:0, ene:"electricity", name:D6.Unit.name["electricity"]},
+		{ r:1, ene:"gas", name:D6.Unit.name["gas"]},
+		{ r:2, ene:"kerosene", name:D6.Unit.name["kerosene"]},
+		{ r:3, ene:"coal", name:D6.Unit.name["coal"]},
+		{ r:4, ene:"hotwater", name:D6.Unit.name["hotwater"]},
+		{ r:5, ene:"car", name:D6.Unit.name["car"]}
+	];
+	
+	var month = [];
+	var ri = 0;
+	var e;
+	for ( var m=1 ; m<=12 ; m++ ){
+		for ( e=0 ; e<ene1.length ;e++ ){
+			if ( !D6.consShow["TO"].monthlyPrice[ene1[e].ene] ) continue;
+			month[ri] = [];
+			month[ri]["month"] = m;
+			month[ri][show.title] = Math.round(D6.consShow["TO"].monthlyPrice[ene1[e].ene][m-1]/show.divide*show.round)/show.round;
+			month[ri]["energyname"] = ene1[e].ene;
+			ri++;
 		}
-		ret.data = month;
-		ret.yaxis = show.title;
-		return ret;
+	}
+	ret.data = month;
+	ret.yaxis = show.title;
+	return ret;
 };
 
 
@@ -3296,6 +2863,9 @@ D6.getCommonParameters = function(){
  * escapeHtml()
  */
 
+//resolve D6
+var D6 = D6 || {};
+
 // getInputPage(consName,subName ) -----------------------------------------
 //		generate html components
 // parameters
@@ -3317,7 +2887,7 @@ D6.getInputPage = function( consName,subName ) {
 	var subguide = [];			//guidance to input for subgroup
 	var combos = [];			//input combobox html
 	var definp;
-	var pagename;
+	//var pagename;
 	var subid = 0;
 	var subcode = "";
 	var cons = "";
@@ -3369,10 +2939,10 @@ D6.getInputPage = function( consName,subName ) {
 			if ( cons.consName == cname 
 				|| ( cons.sumConsName == cname 
 					&& cons.sumConsName != "consTotal"
-					)
+				)
 				|| ( cons.sumCons2Name == cname 
 					&& cons.sumCons2Name != "consTotal"
-					)
+				)
 				|| cons.inputDisp == cname
 			) {
 				if( i.length == 4 ) {	//consumption name is 4 or more length
@@ -3407,7 +2977,7 @@ D6.getInputPage = function( consName,subName ) {
 						addlist[cname].push( cons.consName );
 						groupAddable[cname].push( 
 							{ "consName" : cons.consName,
-							"caption" : cons.addable } );
+								"caption" : cons.addable } );
 					}
 				}
 
@@ -3536,8 +3106,8 @@ D6.createTextArea = function( inpId, onlyCombo )
 D6.tfHandlerCombo = function( name ) {
 	return function( e ) {
 		Input[name] = e.target.value;
-    		e.target.removeEventListener( Event.ENTER_FRAME, arguments.callee );
-	}
+		e.target.removeEventListener( Event.ENTER_FRAME, arguments.callee );
+	};
 };
 
 	
@@ -3551,25 +3121,24 @@ D6.quesOrder = [];			//question code list
 D6.getFirstQues = function(consName, subName)
 {
 	var definp;
-	var cons;
-	quesOrder = [];
+
 	if ( consName == "easy01") {
 		if ( Array.isArray(subName) ) {
-			quesOrder = subName;
+			this.quesOrder = subName;
 		} else {
-			quesOrder = D6.scenario.defQuesOrder;
+			this.quesOrder = D6.scenario.defQuesOrder;
 		}
 	} else {
 		for( var i in D6.doc.data ) {
 			definp = D6.scenario.defInput[i.substr(0,4)];
 			if ( definp.cons == subName ) {
-				quesOrder.push( i );
+				this.quesOrder.push( i );
 			}
 		}
 	}
-	nowQuesID = 0;
-	nowQuesCode =  quesOrder[nowQuesID];
-	return this.getQues(nowQuesCode);
+	this.nowQuesID = 0;
+	this.nowQuesCode =  this.quesOrder[this.nowQuesID];
+	return this.getQues(this.nowQuesCode);
 };
 
 
@@ -3577,20 +3146,20 @@ D6.getFirstQues = function(consName, subName)
 //		return next question data, for smartphone
 D6.getNextQues = function()
 {
-	nowQuesID++;
-	nowQuesCode =  quesOrder[nowQuesID];
-		return this.getQues(nowQuesCode);
+	this.nowQuesID++;
+	this.nowQuesCode = this.quesOrder[this.nowQuesID];
+	return this.getQues(this.nowQuesCode);
 };
 
 //getPrevQues() --------------------------------------------
 //		return previous question data, for smartphone
 D6.getPrevQues = function()
 {
-	nowQuesID--;
-	if ( nowQuesID < 0) nowQuesID = 0;
-	nowQuesCode =  quesOrder[nowQuesID];
+	this.nowQuesID--;
+	if ( this.nowQuesID < 0) this.nowQuesID = 0;
+	this.nowQuesCode =  this.quesOrder[this.nowQuesID];
 
-	return this.getQues(nowQuesCode);
+	return this.getQues(this.nowQuesCode);
 };
 
 // getQues(id) ------------------------------------------------
@@ -3610,14 +3179,14 @@ D6.getPrevQues = function()
 //		ret.selected			selected value
 //		ret.consTitle			related consumption name
 D6.getQues = function( id ){
-	ret = {};
+	var ret = {};
 	if ( this.isEndOfQues() ) {
 		ret.info = "end";
 	} else {
 		ret.info = "continue";
 		ret.id = id;
-		ret.numques = quesOrder.length;
-		ret.nowques = nowQuesID+1;
+		ret.numques = this.quesOrder.length;
+		ret.nowques = this.nowQuesID+1;
 			
 		var def = D6.scenario.defInput[id.substr(0,4)];
 		ret.title = def.title;
@@ -3651,7 +3220,7 @@ D6.getQuesList = function() {
 D6.isEndOfQues = function()
 {
 	var ret = false;
-	if ( nowQuesID+1 > quesOrder.length ) {
+	if ( this.nowQuesID+1 > this.quesOrder.length ) {
 		ret = true;
 	}
 	return ret;
@@ -3669,17 +3238,17 @@ D6.escapeHtml = function (String) {
 		'<': '&lt;',
 		'>': '&gt;'
 	};
-	var escapeReg = '[';
+	var escapeReg = "[";
 	var reg;
 	for (var p in escapeMap) {
 		if (escapeMap.hasOwnProperty(p)) {
 			escapeReg += p;
 		}
 	}
-	escapeReg += ']';
-	reg = new RegExp(escapeReg, 'g');
+	escapeReg += "]";
+	reg = new RegExp(escapeReg, "g");
 	return function escapeHtml (str) {
-		str = (str === null || str === undefined) ? '' : '' + str;
+		str = (str === null || str === undefined) ? "" : "" + str;
 		return str.replace(reg, function (match) {
 			return escapeMap[match];
 		});
@@ -3706,6 +3275,8 @@ D6.escapeHtml = function (String) {
  * tableMeasuresSimple()
  * getMeasureTable()
  */
+
+var D6 = D6 || {};
 
 // getMeasureDetail(mesid) ---------------------------------------
 //		detail data about measures
@@ -3766,13 +3337,13 @@ D6.getMeasureDetail= function( mesid ) {
 D6.getMeasure = function( consName, maxPrice, notSelected )
 {
 	//cannot set default in function for IE
-	if(typeof maxPrice === 'undefined') maxPrice = 100000000;
-	if(typeof notSelected === 'undefined') notSelected = 0;
+	if(typeof maxPrice === "undefined") maxPrice = 100000000;
+	if(typeof notSelected === "undefined") notSelected = 0;
 
 	var ret = [];
 	var i=0;
 	var mes;
-	var count = 0;
+	//var count = 0;
 	var mesidArray = [];
 	for ( var cid in D6.measureList ) {
 		mesidArray.push( D6.measureList[cid] );
@@ -3849,15 +3420,17 @@ D6.getMeasure = function( consName, maxPrice, notSelected )
  * getInputDemandLog()
  */
 
+//resolve D6
+var D6 = D6 || {};
+
 ///get data of Demand graph
 // getDemandGraph()-----------------------------------------------------
 //		demand graph of sumup and consumption log
 // return
 //		retall.log		log graph data
 //		retall.sumup	pile up graph data
-D6.getDemandGraph  = function ( ){
+D6.getDemandGraph  = function (){
 	var work = {};
-	var retone = {};
 	var retall = {};
 	var clist = [];
 		
@@ -3948,7 +3521,7 @@ D6.getDemandGraph  = function ( ){
 	retall.clist = clist;	//color list
 	//log data
 	var log = [];
-	for ( var t=0 ; t<24 ; t++ ){
+	for ( t=0 ; t<24 ; t++ ){
 		log[t] = {};
 		log[t]["equip"] = "log";
 		log[t]["time"] = t;
@@ -3957,7 +3530,7 @@ D6.getDemandGraph  = function ( ){
 	retall.log = log;		//log data
 	return retall;
 		
-	//set color by ID　"#0000ff";　.toString(16); 1-6 pattern
+	//set color by ID "#0000ff"; .toString(16); 1-6 pattern
 	function graphColorSeries( colid ) {
 		var color;
 		var col = [100,100,100];
@@ -3984,8 +3557,6 @@ D6.getInputDemandSumup = function() {
 	var ret = {};
 	var title = {};
 	var pdata = {};
-	var demandone= {};
-	var combos = [];
 
 	//pick up related consName
 	for( var c in D6.scenario.defInput ) {
@@ -4085,7 +3656,7 @@ D6.getEvaluateAxisPoint = function( target,inpListDefCode ) {
 		var maxname2 = "";
 		var minpoint2= 0;
 		var minname2 = "";
-		var tmax = 0;
+		//var tmax = 0;
 		var defaultvalue = 0;
 		var thispoint = 0;
 
@@ -4190,7 +3761,7 @@ var D6 = D6||{};
  *		-each consumption instance include measures, sumCons, subCons etc.
  */
 D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
-	var i,j,k;
+	var i,j;
 	var notinit = false;
 
 	if ( prohibitQuestions == "add"){
@@ -4215,7 +3786,6 @@ D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
 		D6.logicList = D6.scenario.getLogicList();
 	}
 	var consList = D6.consList;
-	var cname;
 
 	// step 2 : Implementation of consumption class -----------
 	//
@@ -4526,8 +4096,7 @@ var D6 = D6||{};
 //		calculate consumption in consumption instance
 // 
 D6.calcCons = function() {
-	var i,j;
-	var ci;
+	var i;
 
 	//area parameters set
 	D6.area.setCalcBaseParams();
@@ -4652,7 +4221,6 @@ D6.calcConsAdjust = function() {
 	energySum.electricity += this.consShow["TO"].electricity * 0.1;
 		
 	//execute adjust
-	energyAdj = [];
 	if ( !nodataTotal ) {
 		//in case of exist in total consumption
 		for ( j in D6.Unit.co2 ){
@@ -4947,7 +4515,6 @@ D6.calcMeasures = function( gid ) {
 		console.log( ret2 );
 		console.log( "d6--- " );
 		console.log( D6 );
-
 	}
 	return ret2;
 };
@@ -5011,14 +4578,14 @@ D6.calcMeasuresNotLifestyle = function( gid ) {
 //
 D6.calcMeasuresOne = function( gid ) {
 	var ret;								//return
-	var topList;							//list of measures id
-	var selectList;							//list of selected measures id
+	//var topList;							//list of measures id
+	//var selectList;							//list of selected measures id
 	var i;
 
 	var sortTarget = this.sortTarget;		//sort target
 	ret = new Array();
-	topList = new Array();
-	selectList = new Array();
+	//topList = new Array();
+	//selectList = new Array();
 
 	//each measures defined in cons object
 	for ( i in this.consList ) {
@@ -5121,7 +4688,7 @@ D6.calcMaxMeasuresList = function( gid, count )
 			//max reduction in measureList
 			mes = this.measureList[j];
 			if ( mes.groupID == gid || gid < 0 ) {
-				if ( measureList[j].selected != true 		//skip already selected
+				if ( this.measureList[j].selected != true 		//skip already selected
 					|| !isFinite(mes.co2Change) 
 					|| isNaN(mes.co2Change)) 				//useful
 				{
@@ -5145,7 +4712,7 @@ D6.calcMaxMeasuresList = function( gid, count )
 		targetmes.addReduction();					//set reduction
 		resultCalc = this.calcMeasuresOne( -1 );	//main calculation for next step
 	}
-	ret = calcMeasures(gid);
+	ret = this.calcMeasures(gid);
 	ret.sumCO2 = sumCO2;
 	ret.sumCOST = sumCOST;
 
@@ -6569,11 +6136,9 @@ DC.calcAdjustStrategy = function( energyAdj ){
 */
 
 D6.consCOsum = D6.object( D6.ConsBase );
-DC = D6.consCOsum;
-
 
 //初期設定値
-DC.init = function() {
+D6.consCOsum.init = function() {
 	this.coolLoadUnit_Wood = 220/3;			//標準冷房負荷（W/m2）
 	this.coolLoadUnit_Steel = 145/3;		//標準冷房負荷鉄筋住宅の場合（W/m2）
 	this.apf = 4;							//エアコンAPF
@@ -6592,10 +6157,10 @@ DC.init = function() {
 	this.inputGuide = "全体の冷房の使い方について";		//入力欄でのガイド
 
 };
-DC.init();
+D6.consCOsum.init();
 
 //冷房消費量計算
-DC.calc = function() {
+D6.consCOsum.calc = function() {
 	this.clear();			//結果の消去
 
 	//入力値の読み込み
@@ -6635,7 +6200,7 @@ DC.calc = function() {
 
 
 //対策計算 consP
-DC.calcMeasure = function() {
+D6.consCOsum.calcMeasure = function() {
 };
 
 
@@ -6644,7 +6209,7 @@ DC.calcMeasure = function() {
 //		cons.buidType : 建物の形態
 //		cons.floot : 延べ床面積(m2)
 //		cons.heatArea : 冷暖房範囲(-)
-DC.calcCoolLoad = function()
+D6.consCOsum.calcCoolLoad = function()
 {
 	var energyLoad = 0;
 	this.coolArea = 0.3;

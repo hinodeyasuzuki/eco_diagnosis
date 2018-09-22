@@ -23,9 +23,11 @@
  * calcMeasure()	main formula to calculate measures
  */
 
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.consTVsum
 D6.consTVsum = D6.object( D6.ConsBase );
-
 
 //初期設定値
 D6.consTVsum.init = function() {
@@ -37,12 +39,12 @@ D6.consTVsum.init = function() {
 	//construction setting
 	this.consName = "consTVsum";    	//code name of this consumption 
 	this.consCode = "TV";            	//short code to access consumption, only set main consumption user for itemize
-    this.title = "TV";					//consumption title name
+	this.title = "TV";					//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
 	this.groupID = "7";					//number code in items
 	this.color = "#00ff00";				//color definition in graph
 
-    this.sumConsName = "consTotal";		//code name of consumption sum up include this
+	this.sumConsName = "consTotal";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 	this.residueCalc = "sumup";			//calculate type of residue	no/sumup/yes
 
@@ -55,7 +57,7 @@ D6.consTVsum.init();
 D6.consTVsum.calc = function() {
 	this.useTime =this.input( "i601", 8.5 );	//time to use hour
 
-	//electiricy　kWh/month
+	//electiricy kWh/month
 	this.electricity =  this.watt / 1000 * this.useTime * 30;	
 };
 

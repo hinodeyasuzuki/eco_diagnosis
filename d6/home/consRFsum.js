@@ -17,6 +17,9 @@
  * 								2018/03/14 			global setting fix
  */
 
+//resolve D6
+var D6 = D6||{};
+
 //Inherited class of D6.ConsBase
 D6.consRFsum = D6.object( D6.ConsBase );
 
@@ -25,9 +28,9 @@ D6.consRFsum.init = function() {
 	//construction setting
 	this.consName = "consRFsum";      	//code name of this consumption 
 	this.consCode = "RF";              	//short code to access consumption, only set main consumption user for itemize
-    this.title = "refrigerator";				//consumption title name
+	this.title = "refrigerator";				//consumption title name
 	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
-    this.sumConsName = "consTotal";		//code name of consumption sum up include this
+	this.sumConsName = "consTotal";		//code name of consumption sum up include this
 	this.sumCons2Name = "";				//code name of consumption related to this
 	this.groupID = "3";					//number code in items
 	this.color = "#a0ffa0";				//color definition in graph
@@ -105,7 +108,7 @@ D6.consRFsum.equip = function( year, size ) {
 		}
 	};
 
-	return this.getEquipParameters( year, size, sizeThreshold, defEquip )
+	return this.getEquipParameters( year, size, sizeThreshold, defEquip );
 };
 
 
