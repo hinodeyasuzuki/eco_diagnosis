@@ -14,9 +14,11 @@
  * 								2016/04/12 ported to JavaScript
  */
 
-D6.acadd = {
+//resolve D6
+var D6 = D6||{};
 
-// getArray(param)  return paramArray
+D6.acadd = {
+/* getArray(param)  return paramArray
 //		param: prefecture(original)
 //
 //  return acadd[time_slot_index][heat_month_index]
@@ -41,18 +43,19 @@ D6.acadd = {
 //
 // used in Unit.setArea() function and set Unit.plusHeatFactor_mon
 //
+ */
 
 	//sample
 	factorPrefTimeMonth : [
-	[ [ 0, 0, 0, 0, 0, 0, 0],   //kobe
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0] ], 
+		[ [ 0, 0, 0, 0, 0, 0, 0],   //kobe
+			[ 0, 0, 0, 0, 0, 0, 0], 
+			[ 0, 0, 0, 0, 0, 0, 0], 
+			[ 0, 0, 0, 0, 0, 0, 0] ], 
 
-	[ [ 0.17, 0.16, 0.14, 0.12, 0.09, 0.06, 0.05],   //sapporo
-	  [ 0.06, 0.05, 0.04, 0.04, 0.03, 0.02, 0.01], 
-	  [ 0.09, 0.09, 0.07, 0.06, 0.04, 0.03, 0.02], 
-	  [ 0.16, 0.15, 0.13, 0.11, 0.09, 0.06, 0.04] ]
+		[ [ 0.17, 0.16, 0.14, 0.12, 0.09, 0.06, 0.05],   //sapporo
+			[ 0.06, 0.05, 0.04, 0.04, 0.03, 0.02, 0.01], 
+			[ 0.09, 0.09, 0.07, 0.06, 0.04, 0.03, 0.02], 
+			[ 0.16, 0.15, 0.13, 0.11, 0.09, 0.06, 0.04] ]
 	],
 
 

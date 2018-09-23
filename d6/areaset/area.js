@@ -20,7 +20,7 @@ D6.area = {
 	//	prefName[prefecture]
 	//
 	prefName : [ 
-		'hyogo',
+		"hyogo",
 		"hokkaido",	//1
 	],
 
@@ -37,12 +37,12 @@ D6.area = {
 	//		6:hot area in Japan(Okinawa)
 	//
 	prefHeatingLevel : [ 4,
-				1, 2, 2, 3, 2, 2, 3,
-				3, 3, 3, 4, 4, 4, 4,
-				3, 3, 3, 4, 4, 3, 4, 4, 4,
-				4, 4, 4, 4, 4, 4, 4,
-				4, 4, 4, 4, 4, 4, 4, 4, 5,
-				4, 4, 4, 4, 4, 5, 5, 6 ],
+		1, 2, 2, 3, 2, 2, 3,
+		3, 3, 3, 4, 4, 4, 4,
+		3, 3, 3, 4, 4, 3, 4, 4, 4,
+		4, 4, 4, 4, 4, 4, 4,
+		4, 4, 4, 4, 4, 4, 4, 4, 5,
+		4, 4, 4, 4, 4, 5, 5, 6 ],
 
 								
 	// CO2 emittion factor
@@ -55,7 +55,7 @@ D6.area = {
 	//		9:okinawa electric power company.
 	//
 	co2ElectCompanyUnit : [ 0.55, 0.55, 0.55, 0.55, 0.55, 0.55
-										, 0.55, 0.55, 0.55, 0.55, 0.55 ],
+		, 0.55, 0.55, 0.55, 0.55, 0.55 ],
 
 	//	electricity company code by prefecture
 	//
@@ -64,12 +64,12 @@ D6.area = {
 	// 0:hokkaido、1:tohoku 2:tokyo 3:chubu 4:hokuritu 5:kansai
 	// 6:tyugoku 7:shikoku 8:kyusyu 9:okinawa
 	prefToEleArea : [ 5,
-				0, 1, 1, 1, 1, 1, 1,
-				2, 2, 2, 2, 2, 2, 2,
-				1, 4, 4, 4, 2, 3, 3, 3, 3,
-				3, 5, 5, 5, 5, 5, 5,
-				6, 6, 6, 6, 6, 7, 7, 7, 7,
-				8, 8, 8, 8, 8, 8, 8, 9 ],
+		0, 1, 1, 1, 1, 1, 1,
+		2, 2, 2, 2, 2, 2, 2,
+		1, 4, 4, 4, 2, 3, 3, 3, 3,
+		3, 5, 5, 5, 5, 5, 5,
+		6, 6, 6, 6, 6, 7, 7, 7, 7,
+		8, 8, 8, 8, 8, 8, 8, 9 ],
 
 	//electricity supply company price ratio
 	electCompanyPrice : [
@@ -123,8 +123,8 @@ D6.area = {
 	//
 	prefTemplature : [
 
-	17.4	,	//hyogo
-	 9.4	,	//hokkaido
+		17.4	,	//hyogo
+		9.4	,	//hokkaido
 	],
 
 	// solar factor
@@ -133,8 +133,8 @@ D6.area = {
 	//
 	prefPVElectricity : [
 
-	4.04	,	//hyogo
-	3.95	,	//hokkaido
+		4.04	,	//hyogo
+		3.95	,	//hokkaido
 	],
 
 	
@@ -173,22 +173,22 @@ D6.area = {
 	//
 	// accons factor copy from D6.accons
 	airconFactor_mon :
-			  [ [ 0.66, 0.62, 0.59, 0.55, 0.50, 0.41, 0.37, 0.39, 0.36, 0.31, 0.26, 0.20 ],
-   				[ 0.43, 0.39, 0.37, 0.34, 0.30, 0.27, 0.26, 0.79, 0.75, 0.67, 0.59, 0.49 ],
-     			[ 0.47, 0.45, 0.42, 0.39, 0.35, 0.30, 0.29, 0.57, 0.55, 0.49, 0.43, 0.35 ],
-     			[ 0.62, 0.58, 0.55, 0.51, 0.47, 0.39, 0.35, 0.34, 0.32, 0.27, 0.23, 0.18 ] ],
+		[ [ 0.66, 0.62, 0.59, 0.55, 0.50, 0.41, 0.37, 0.39, 0.36, 0.31, 0.26, 0.20 ],
+			[ 0.43, 0.39, 0.37, 0.34, 0.30, 0.27, 0.26, 0.79, 0.75, 0.67, 0.59, 0.49 ],
+			[ 0.47, 0.45, 0.42, 0.39, 0.35, 0.30, 0.29, 0.57, 0.55, 0.49, 0.43, 0.35 ],
+			[ 0.62, 0.58, 0.55, 0.51, 0.47, 0.39, 0.35, 0.34, 0.32, 0.27, 0.23, 0.18 ] ],
 	// heat factor copy from D6.heatcons
 	heatFactor_mon:
-			  [ [ 0.64, 0.61, 0.60, 0.57, 0.53, 0.53, 0.44, 0.54, 0.54, 0.43, 0.36, 0.28 ],
-     			[ 0.48, 0.45, 0.42, 0.39, 0.34, 0.30, 0.30, 0.88, 0.85, 0.78, 0.70, 0.59 ],
-     			[ 0.52, 0.49, 0.47, 0.43, 0.39, 0.33, 0.32, 0.72, 0.70, 0.64, 0.56, 0.46 ],
-     			[ 0.62, 0.59, 0.57, 0.54, 0.50, 0.42, 0.38, 0.48, 0.45, 0.39, 0.32, 0.25 ] ],
+		[ [ 0.64, 0.61, 0.60, 0.57, 0.53, 0.53, 0.44, 0.54, 0.54, 0.43, 0.36, 0.28 ],
+			[ 0.48, 0.45, 0.42, 0.39, 0.34, 0.30, 0.30, 0.88, 0.85, 0.78, 0.70, 0.59 ],
+			[ 0.52, 0.49, 0.47, 0.43, 0.39, 0.33, 0.32, 0.72, 0.70, 0.64, 0.56, 0.46 ],
+			[ 0.62, 0.59, 0.57, 0.54, 0.50, 0.42, 0.38, 0.48, 0.45, 0.39, 0.32, 0.25 ] ],
 	// addac factor copy from D6.addac
 	plusHeatFactor_mon:  
-			  [ [ 0, 0, 0, 0, 0, 0, 0 ],
-     			[ 0, 0, 0, 0, 0, 0, 0 ],
-     			[ 0, 0, 0, 0, 0, 0, 0 ],
-     			[ 0, 0, 0, 0, 0, 0, 0 ] ],
+		[ [ 0, 0, 0, 0, 0, 0, 0 ],
+			[ 0, 0, 0, 0, 0, 0, 0 ],
+			[ 0, 0, 0, 0, 0, 0, 0 ],
+			[ 0, 0, 0, 0, 0, 0, 0 ] ],
 
 
 	// get electric power company from prefecture
@@ -226,7 +226,7 @@ D6.area = {
 		ret = new Array();
 
 		var id;
-		for ( i in this.energyCode2id) {
+		for ( var i in this.energyCode2id) {
 			id = this.energyCode2id[i];
 			ret[i] = this.prefKakeiEnergy[pref][id] 
 					* this.kakeiNumCoefficent[( num>6 ? 6 : num )-1][id]
@@ -414,8 +414,8 @@ D6.area = {
 	//季節別負荷係数
 	prefSeasonFactorArray : [
 
-	[ [ 1.1084, 1.3537, 2.5436, 0.9465 ], [ 0.8664, 0.9165, 0.3546, 0.9764 ], [ 1.0782, 0.6675, 0.0175, 1.1107 ] ],   //hyogo
-	[ [ 1.149, 1.1094, 1.8254, 0.9243 ], [ 0.9482, 0.9876, 0.8169, 1.0159 ], [ 0.8876, 0.8749, 0.2047, 1.0743 ] ],   //hokkaido
+		[ [ 1.1084, 1.3537, 2.5436, 0.9465 ], [ 0.8664, 0.9165, 0.3546, 0.9764 ], [ 1.0782, 0.6675, 0.0175, 1.1107 ] ],   //hyogo
+		[ [ 1.149, 1.1094, 1.8254, 0.9243 ], [ 0.9482, 0.9876, 0.8169, 1.0159 ], [ 0.8876, 0.8749, 0.2047, 1.0743 ] ],   //hokkaido
 
 	],
 
@@ -437,8 +437,8 @@ D6.area = {
 	//
 	getSeasonParam : function( pref ) {
 		var param = this.getSeasonFactor(pref);
-
-		ret = Array();
+		
+		var ret = Array();
 		ret["electricity"] = [ param[0][0], param[1][0], param[2][0] ];
 		ret["gas"] = [ param[0][1], param[1][1], param[2][1] ];
 		ret["kerosene"] = [ param[0][2], param[1][2], param[2][2] ];
@@ -464,12 +464,12 @@ D6.area = {
 	//			3:gasoline
 	//
 	kakeiNumCoefficent:
-			  [ [ 0.47, 0.52,  0.37, 0.45 ],
-				[ 0.86, 0.83,  0.90, 0.79 ],
-				[ 0.99, 1.00,  0.90, 0.98 ],
-				[ 1.07, 1.10,  0.85, 1.16 ],
-				[ 1.24, 1.17,  1.10, 1.26 ],
-				[ 1.55, 1.19,  1.67, 1.33 ]],
+		[ [ 0.47, 0.52,  0.37, 0.45 ],
+			[ 0.86, 0.83,  0.90, 0.79 ],
+			[ 0.99, 1.00,  0.90, 0.98 ],
+			[ 1.07, 1.10,  0.85, 1.16 ],
+			[ 1.24, 1.17,  1.10, 1.26 ],
+			[ 1.55, 1.19,  1.67, 1.33 ]],
 
 
 	//	urban / ural area fee per month
@@ -485,10 +485,10 @@ D6.area = {
 	//			1:ural
 	//
 	urbanCostCoefficient :
-			[ [ 8762, 9618 ],
-			  [ 6100, 5133 ],
-			  [ 828,  1898 ],
-			  [ 3415, 6228 ]],
+		[ [ 8762, 9618 ],
+			[ 6100, 5133 ],
+			[ 828,  1898 ],
+			[ 3415, 6228 ]],
 
 	// calc parameters depend on person and area 
 	//
@@ -540,32 +540,32 @@ D6.area = {
 
 		//month of heating / cooling
 		switch( this.heatingLevel ) {
-			case 1:
-				seasonMonth = { winter:8, spring:3, summer:1 };
-				break;
-			case 2:
-				seasonMonth = { winter:6, spring:4, summer:2 };
-				break;
-			case 3:
-				seasonMonth = { winter:5, spring:5, summer:2 };
-				break;
-			case 5:
-				seasonMonth = { winter:3, spring:5, summer:4 };
-				break;
-			case 6:
-				seasonMonth = { winter:2, spring:5, summer:5 };
-				break;
-			case 4:
-			default:
-				seasonMonth = { winter:4, spring:5, summer:3 };
-				break;
+		case 1:
+			this.seasonMonth = { winter:8, spring:3, summer:1 };
+			break;
+		case 2:
+			this.seasonMonth = { winter:6, spring:4, summer:2 };
+			break;
+		case 3:
+			this.seasonMonth = { winter:5, spring:5, summer:2 };
+			break;
+		case 5:
+			this.seasonMonth = { winter:3, spring:5, summer:4 };
+			break;
+		case 6:
+			this.seasonMonth = { winter:2, spring:5, summer:5 };
+			break;
+		case 4:
+		default:
+			this.seasonMonth = { winter:4, spring:5, summer:3 };
+			break;
 		}
 		
 		//calculate average cost
 		this.averageCostEnergy = this.getAverageCostEnergy( 
-						( numPerson<=0 ? 3 : numPerson ) ,
-						Math.floor(this.area), 
-						this.urban );
+			( numPerson<=0 ? 3 : numPerson ) ,
+			Math.floor(this.area), 
+			this.urban );
 		
 		//calculate average CO2
 		this.averageCO2Energy = [];
@@ -617,7 +617,7 @@ D6.area = {
 		var avCost = this.averageCostEnergy[energy_name];
 		var seasonArray = this.getSeasonFactor( this.area );
 
-		return avConst * seasonArray[seasonCode2id(season_name)][eid];
+		return avCost * seasonArray[this.seasonCode2id(season_name)][eid];
 	}
 	
 };

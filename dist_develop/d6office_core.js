@@ -14,9 +14,11 @@
  * 								2016/04/12 ported to JavaScript
  */
 
-D6.acadd = {
+//resolve D6
+var D6 = D6||{};
 
-// getArray(param)  return paramArray
+D6.acadd = {
+/* getArray(param)  return paramArray
 //		param: prefecture(original)
 //
 //  return acadd[time_slot_index][heat_month_index]
@@ -41,18 +43,19 @@ D6.acadd = {
 //
 // used in Unit.setArea() function and set Unit.plusHeatFactor_mon
 //
+ */
 
 	//sample
 	factorPrefTimeMonth : [
-	[ [ 0, 0, 0, 0, 0, 0, 0],   //kobe
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0], 
-	  [ 0, 0, 0, 0, 0, 0, 0] ], 
+		[ [ 0, 0, 0, 0, 0, 0, 0],   //kobe
+			[ 0, 0, 0, 0, 0, 0, 0], 
+			[ 0, 0, 0, 0, 0, 0, 0], 
+			[ 0, 0, 0, 0, 0, 0, 0] ], 
 
-	[ [ 0.17, 0.16, 0.14, 0.12, 0.09, 0.06, 0.05],   //sapporo
-	  [ 0.06, 0.05, 0.04, 0.04, 0.03, 0.02, 0.01], 
-	  [ 0.09, 0.09, 0.07, 0.06, 0.04, 0.03, 0.02], 
-	  [ 0.16, 0.15, 0.13, 0.11, 0.09, 0.06, 0.04] ]
+		[ [ 0.17, 0.16, 0.14, 0.12, 0.09, 0.06, 0.05],   //sapporo
+			[ 0.06, 0.05, 0.04, 0.04, 0.03, 0.02, 0.01], 
+			[ 0.09, 0.09, 0.07, 0.06, 0.04, 0.03, 0.02], 
+			[ 0.16, 0.15, 0.13, 0.11, 0.09, 0.06, 0.04] ]
 	],
 
 
@@ -84,9 +87,12 @@ D6.acadd = {
  *								2011/05/06 ported to ActionScript3
  * 								2016/04/12 ported to JavaScript
  */
- 
-D6.accons = {
 
+//resolve D6
+var D6 = D6||{};
+
+D6.accons = {
+/*
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //
@@ -106,17 +112,18 @@ D6.accons = {
 //				5:use heat for 6 months
 //				6:use heat for 8 months
 //
+ */
 
-factorPrefTimeMonth: [
-[ [ 0.69, 0.65, 0.6, 0.56, 0.5, 0.42, 0.38, 0.34, 0.33, 0.28, 0.23, 0.18],   //kobe
-  [ 0.45, 0.42, 0.39, 0.36, 0.32, 0.28, 0.27, 0.65, 0.63, 0.55, 0.48, 0.39], 
-  [ 0.53, 0.5, 0.46, 0.43, 0.38, 0.32, 0.31, 0.46, 0.44, 0.4, 0.34, 0.28], 
-  [ 0.68, 0.63, 0.59, 0.55, 0.5, 0.41, 0.37, 0.29, 0.28, 0.24, 0.2, 0.16] ], 
+	factorPrefTimeMonth: [
+		[ [ 0.69, 0.65, 0.6, 0.56, 0.5, 0.42, 0.38, 0.34, 0.33, 0.28, 0.23, 0.18],   //kobe
+			[ 0.45, 0.42, 0.39, 0.36, 0.32, 0.28, 0.27, 0.65, 0.63, 0.55, 0.48, 0.39], 
+			[ 0.53, 0.5, 0.46, 0.43, 0.38, 0.32, 0.31, 0.46, 0.44, 0.4, 0.34, 0.28], 
+			[ 0.68, 0.63, 0.59, 0.55, 0.5, 0.41, 0.37, 0.29, 0.28, 0.24, 0.2, 0.16] ], 
 
-[ [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.94, 0.77, 0.06, 0.05, 0.03, 0.02, 0.02],   //sapporo
-  [ 1.14, 1.13, 1.1, 1.05, 0.98, 0.8, 0.67, 0.2, 0.17, 0.13, 0.1, 0.08], 
-  [ 1.2, 1.19, 1.16, 1.13, 1.06, 0.88, 0.72, 0.1, 0.08, 0.05, 0.04, 0.03], 
-  [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.95, 0.79, 0.03, 0.02, 0.01, 0.01, 0.01] ] ], 
+		[ [ 1.24, 1.22, 1.21, 1.18, 1.13, 0.94, 0.77, 0.06, 0.05, 0.03, 0.02, 0.02],   //sapporo
+			[ 1.14, 1.13, 1.1, 1.05, 0.98, 0.8, 0.67, 0.2, 0.17, 0.13, 0.1, 0.08], 
+			[ 1.2, 1.19, 1.16, 1.13, 1.06, 0.88, 0.72, 0.1, 0.08, 0.05, 0.04, 0.03], 
+			[ 1.24, 1.22, 1.21, 1.18, 1.13, 0.95, 0.79, 0.03, 0.02, 0.01, 0.01, 0.01] ] ], 
   
 	getArray : function( prefParam ) {
 		var ret;
@@ -147,8 +154,11 @@ factorPrefTimeMonth: [
  * 								2016/04/12 ported to JavaScript
  */
  
-D6.acload = {
+//resolve D6
+var D6 = D6||{};
 
+D6.acload = {
+/*
 // getArray(param)  return paramArray
 //		param: prefecture(original)
 //
@@ -169,18 +179,18 @@ D6.acload = {
 //				6:use heat for 8 months
 //
 //
-
+ */
 	//sample
 	factorPrefTimeMonth: [
-	[ [ 0.66, 0.63, 0.6, 0.57, 0.52, 0.52, 0.44, 0.48, 0.48, 0.39, 0.33, 0.26],   //kobe
-	  [ 0.5, 0.47, 0.44, 0.41, 0.36, 0.31, 0.31, 0.78, 0.76, 0.69, 0.61, 0.51], 
-	  [ 0.56, 0.53, 0.5, 0.47, 0.42, 0.36, 0.34, 0.62, 0.6, 0.54, 0.47, 0.38], 
-	  [ 0.65, 0.62, 0.59, 0.56, 0.52, 0.43, 0.39, 0.41, 0.4, 0.34, 0.29, 0.22] ], 
+		[ [ 0.66, 0.63, 0.6, 0.57, 0.52, 0.52, 0.44, 0.48, 0.48, 0.39, 0.33, 0.26],   //kobe
+			[ 0.5, 0.47, 0.44, 0.41, 0.36, 0.31, 0.31, 0.78, 0.76, 0.69, 0.61, 0.51], 
+			[ 0.56, 0.53, 0.5, 0.47, 0.42, 0.36, 0.34, 0.62, 0.6, 0.54, 0.47, 0.38], 
+			[ 0.65, 0.62, 0.59, 0.56, 0.52, 0.43, 0.39, 0.41, 0.4, 0.34, 0.29, 0.22] ], 
 
-	[ [ 1.06, 1.05, 1.03, 1, 0.95, 0.95, 0.82, 0.09, 0.09, 0.05, 0.03, 0.02],   //sapporo
-	  [ 0.93, 0.92, 0.9, 0.87, 0.83, 0.7, 0.59, 0.27, 0.23, 0.18, 0.14, 0.11], 
-	  [ 0.99, 0.98, 0.96, 0.93, 0.88, 0.76, 0.64, 0.14, 0.11, 0.07, 0.05, 0.04], 
-	  [ 1.05, 1.04, 1.02, 0.99, 0.95, 0.83, 0.7, 0.04, 0.03, 0.02, 0.01, 0.01] ], ],
+		[ [ 1.06, 1.05, 1.03, 1, 0.95, 0.95, 0.82, 0.09, 0.09, 0.05, 0.03, 0.02],   //sapporo
+			[ 0.93, 0.92, 0.9, 0.87, 0.83, 0.7, 0.59, 0.27, 0.23, 0.18, 0.14, 0.11], 
+			[ 0.99, 0.98, 0.96, 0.93, 0.88, 0.76, 0.64, 0.14, 0.11, 0.07, 0.05, 0.04], 
+			[ 1.05, 1.04, 1.02, 0.99, 0.95, 0.83, 0.7, 0.04, 0.03, 0.02, 0.01, 0.01] ], ],
   
 	getArray : function( prefParam ) {
 		var ret;
@@ -217,7 +227,7 @@ D6.area = {
 	//	prefName[prefecture]
 	//
 	prefName : [ 
-		'hyogo',
+		"hyogo",
 		"hokkaido",	//1
 	],
 
@@ -234,12 +244,12 @@ D6.area = {
 	//		6:hot area in Japan(Okinawa)
 	//
 	prefHeatingLevel : [ 4,
-				1, 2, 2, 3, 2, 2, 3,
-				3, 3, 3, 4, 4, 4, 4,
-				3, 3, 3, 4, 4, 3, 4, 4, 4,
-				4, 4, 4, 4, 4, 4, 4,
-				4, 4, 4, 4, 4, 4, 4, 4, 5,
-				4, 4, 4, 4, 4, 5, 5, 6 ],
+		1, 2, 2, 3, 2, 2, 3,
+		3, 3, 3, 4, 4, 4, 4,
+		3, 3, 3, 4, 4, 3, 4, 4, 4,
+		4, 4, 4, 4, 4, 4, 4,
+		4, 4, 4, 4, 4, 4, 4, 4, 5,
+		4, 4, 4, 4, 4, 5, 5, 6 ],
 
 								
 	// CO2 emittion factor
@@ -252,7 +262,7 @@ D6.area = {
 	//		9:okinawa electric power company.
 	//
 	co2ElectCompanyUnit : [ 0.55, 0.55, 0.55, 0.55, 0.55, 0.55
-										, 0.55, 0.55, 0.55, 0.55, 0.55 ],
+		, 0.55, 0.55, 0.55, 0.55, 0.55 ],
 
 	//	electricity company code by prefecture
 	//
@@ -261,12 +271,12 @@ D6.area = {
 	// 0:hokkaido、1:tohoku 2:tokyo 3:chubu 4:hokuritu 5:kansai
 	// 6:tyugoku 7:shikoku 8:kyusyu 9:okinawa
 	prefToEleArea : [ 5,
-				0, 1, 1, 1, 1, 1, 1,
-				2, 2, 2, 2, 2, 2, 2,
-				1, 4, 4, 4, 2, 3, 3, 3, 3,
-				3, 5, 5, 5, 5, 5, 5,
-				6, 6, 6, 6, 6, 7, 7, 7, 7,
-				8, 8, 8, 8, 8, 8, 8, 9 ],
+		0, 1, 1, 1, 1, 1, 1,
+		2, 2, 2, 2, 2, 2, 2,
+		1, 4, 4, 4, 2, 3, 3, 3, 3,
+		3, 5, 5, 5, 5, 5, 5,
+		6, 6, 6, 6, 6, 7, 7, 7, 7,
+		8, 8, 8, 8, 8, 8, 8, 9 ],
 
 	//electricity supply company price ratio
 	electCompanyPrice : [
@@ -320,8 +330,8 @@ D6.area = {
 	//
 	prefTemplature : [
 
-	17.4	,	//hyogo
-	 9.4	,	//hokkaido
+		17.4	,	//hyogo
+		9.4	,	//hokkaido
 	],
 
 	// solar factor
@@ -330,8 +340,8 @@ D6.area = {
 	//
 	prefPVElectricity : [
 
-	4.04	,	//hyogo
-	3.95	,	//hokkaido
+		4.04	,	//hyogo
+		3.95	,	//hokkaido
 	],
 
 	
@@ -370,22 +380,22 @@ D6.area = {
 	//
 	// accons factor copy from D6.accons
 	airconFactor_mon :
-			  [ [ 0.66, 0.62, 0.59, 0.55, 0.50, 0.41, 0.37, 0.39, 0.36, 0.31, 0.26, 0.20 ],
-   				[ 0.43, 0.39, 0.37, 0.34, 0.30, 0.27, 0.26, 0.79, 0.75, 0.67, 0.59, 0.49 ],
-     			[ 0.47, 0.45, 0.42, 0.39, 0.35, 0.30, 0.29, 0.57, 0.55, 0.49, 0.43, 0.35 ],
-     			[ 0.62, 0.58, 0.55, 0.51, 0.47, 0.39, 0.35, 0.34, 0.32, 0.27, 0.23, 0.18 ] ],
+		[ [ 0.66, 0.62, 0.59, 0.55, 0.50, 0.41, 0.37, 0.39, 0.36, 0.31, 0.26, 0.20 ],
+			[ 0.43, 0.39, 0.37, 0.34, 0.30, 0.27, 0.26, 0.79, 0.75, 0.67, 0.59, 0.49 ],
+			[ 0.47, 0.45, 0.42, 0.39, 0.35, 0.30, 0.29, 0.57, 0.55, 0.49, 0.43, 0.35 ],
+			[ 0.62, 0.58, 0.55, 0.51, 0.47, 0.39, 0.35, 0.34, 0.32, 0.27, 0.23, 0.18 ] ],
 	// heat factor copy from D6.heatcons
 	heatFactor_mon:
-			  [ [ 0.64, 0.61, 0.60, 0.57, 0.53, 0.53, 0.44, 0.54, 0.54, 0.43, 0.36, 0.28 ],
-     			[ 0.48, 0.45, 0.42, 0.39, 0.34, 0.30, 0.30, 0.88, 0.85, 0.78, 0.70, 0.59 ],
-     			[ 0.52, 0.49, 0.47, 0.43, 0.39, 0.33, 0.32, 0.72, 0.70, 0.64, 0.56, 0.46 ],
-     			[ 0.62, 0.59, 0.57, 0.54, 0.50, 0.42, 0.38, 0.48, 0.45, 0.39, 0.32, 0.25 ] ],
+		[ [ 0.64, 0.61, 0.60, 0.57, 0.53, 0.53, 0.44, 0.54, 0.54, 0.43, 0.36, 0.28 ],
+			[ 0.48, 0.45, 0.42, 0.39, 0.34, 0.30, 0.30, 0.88, 0.85, 0.78, 0.70, 0.59 ],
+			[ 0.52, 0.49, 0.47, 0.43, 0.39, 0.33, 0.32, 0.72, 0.70, 0.64, 0.56, 0.46 ],
+			[ 0.62, 0.59, 0.57, 0.54, 0.50, 0.42, 0.38, 0.48, 0.45, 0.39, 0.32, 0.25 ] ],
 	// addac factor copy from D6.addac
 	plusHeatFactor_mon:  
-			  [ [ 0, 0, 0, 0, 0, 0, 0 ],
-     			[ 0, 0, 0, 0, 0, 0, 0 ],
-     			[ 0, 0, 0, 0, 0, 0, 0 ],
-     			[ 0, 0, 0, 0, 0, 0, 0 ] ],
+		[ [ 0, 0, 0, 0, 0, 0, 0 ],
+			[ 0, 0, 0, 0, 0, 0, 0 ],
+			[ 0, 0, 0, 0, 0, 0, 0 ],
+			[ 0, 0, 0, 0, 0, 0, 0 ] ],
 
 
 	// get electric power company from prefecture
@@ -423,7 +433,7 @@ D6.area = {
 		ret = new Array();
 
 		var id;
-		for ( i in this.energyCode2id) {
+		for ( var i in this.energyCode2id) {
 			id = this.energyCode2id[i];
 			ret[i] = this.prefKakeiEnergy[pref][id] 
 					* this.kakeiNumCoefficent[( num>6 ? 6 : num )-1][id]
@@ -611,8 +621,8 @@ D6.area = {
 	//季節別負荷係数
 	prefSeasonFactorArray : [
 
-	[ [ 1.1084, 1.3537, 2.5436, 0.9465 ], [ 0.8664, 0.9165, 0.3546, 0.9764 ], [ 1.0782, 0.6675, 0.0175, 1.1107 ] ],   //hyogo
-	[ [ 1.149, 1.1094, 1.8254, 0.9243 ], [ 0.9482, 0.9876, 0.8169, 1.0159 ], [ 0.8876, 0.8749, 0.2047, 1.0743 ] ],   //hokkaido
+		[ [ 1.1084, 1.3537, 2.5436, 0.9465 ], [ 0.8664, 0.9165, 0.3546, 0.9764 ], [ 1.0782, 0.6675, 0.0175, 1.1107 ] ],   //hyogo
+		[ [ 1.149, 1.1094, 1.8254, 0.9243 ], [ 0.9482, 0.9876, 0.8169, 1.0159 ], [ 0.8876, 0.8749, 0.2047, 1.0743 ] ],   //hokkaido
 
 	],
 
@@ -634,8 +644,8 @@ D6.area = {
 	//
 	getSeasonParam : function( pref ) {
 		var param = this.getSeasonFactor(pref);
-
-		ret = Array();
+		
+		var ret = Array();
 		ret["electricity"] = [ param[0][0], param[1][0], param[2][0] ];
 		ret["gas"] = [ param[0][1], param[1][1], param[2][1] ];
 		ret["kerosene"] = [ param[0][2], param[1][2], param[2][2] ];
@@ -661,12 +671,12 @@ D6.area = {
 	//			3:gasoline
 	//
 	kakeiNumCoefficent:
-			  [ [ 0.47, 0.52,  0.37, 0.45 ],
-				[ 0.86, 0.83,  0.90, 0.79 ],
-				[ 0.99, 1.00,  0.90, 0.98 ],
-				[ 1.07, 1.10,  0.85, 1.16 ],
-				[ 1.24, 1.17,  1.10, 1.26 ],
-				[ 1.55, 1.19,  1.67, 1.33 ]],
+		[ [ 0.47, 0.52,  0.37, 0.45 ],
+			[ 0.86, 0.83,  0.90, 0.79 ],
+			[ 0.99, 1.00,  0.90, 0.98 ],
+			[ 1.07, 1.10,  0.85, 1.16 ],
+			[ 1.24, 1.17,  1.10, 1.26 ],
+			[ 1.55, 1.19,  1.67, 1.33 ]],
 
 
 	//	urban / ural area fee per month
@@ -682,10 +692,10 @@ D6.area = {
 	//			1:ural
 	//
 	urbanCostCoefficient :
-			[ [ 8762, 9618 ],
-			  [ 6100, 5133 ],
-			  [ 828,  1898 ],
-			  [ 3415, 6228 ]],
+		[ [ 8762, 9618 ],
+			[ 6100, 5133 ],
+			[ 828,  1898 ],
+			[ 3415, 6228 ]],
 
 	// calc parameters depend on person and area 
 	//
@@ -737,32 +747,32 @@ D6.area = {
 
 		//month of heating / cooling
 		switch( this.heatingLevel ) {
-			case 1:
-				seasonMonth = { winter:8, spring:3, summer:1 };
-				break;
-			case 2:
-				seasonMonth = { winter:6, spring:4, summer:2 };
-				break;
-			case 3:
-				seasonMonth = { winter:5, spring:5, summer:2 };
-				break;
-			case 5:
-				seasonMonth = { winter:3, spring:5, summer:4 };
-				break;
-			case 6:
-				seasonMonth = { winter:2, spring:5, summer:5 };
-				break;
-			case 4:
-			default:
-				seasonMonth = { winter:4, spring:5, summer:3 };
-				break;
+		case 1:
+			this.seasonMonth = { winter:8, spring:3, summer:1 };
+			break;
+		case 2:
+			this.seasonMonth = { winter:6, spring:4, summer:2 };
+			break;
+		case 3:
+			this.seasonMonth = { winter:5, spring:5, summer:2 };
+			break;
+		case 5:
+			this.seasonMonth = { winter:3, spring:5, summer:4 };
+			break;
+		case 6:
+			this.seasonMonth = { winter:2, spring:5, summer:5 };
+			break;
+		case 4:
+		default:
+			this.seasonMonth = { winter:4, spring:5, summer:3 };
+			break;
 		}
 		
 		//calculate average cost
 		this.averageCostEnergy = this.getAverageCostEnergy( 
-						( numPerson<=0 ? 3 : numPerson ) ,
-						Math.floor(this.area), 
-						this.urban );
+			( numPerson<=0 ? 3 : numPerson ) ,
+			Math.floor(this.area), 
+			this.urban );
 		
 		//calculate average CO2
 		this.averageCO2Energy = [];
@@ -814,7 +824,7 @@ D6.area = {
 		var avCost = this.averageCostEnergy[energy_name];
 		var seasonArray = this.getSeasonFactor( this.area );
 
-		return avConst * seasonArray[seasonCode2id(season_name)][eid];
+		return avCost * seasonArray[this.seasonCode2id(season_name)][eid];
 	}
 	
 };
@@ -2286,10 +2296,10 @@ D6.calculateAll = function(){
 
 // atob, btoa is defined in windows. it doesn't work in web worker 
 if ( typeof ( atob) =="undefined" ) {
-	function atob(str){
+	atob = function(str){
 		return str;
 	};
-	function btoa(str){
+	btoa = function(str){
 		return str;
 	};
 };
@@ -2467,12 +2477,16 @@ var D6 = D6 || {};
 //  return
 //		graphItemize,graphMonthly,average,cons,measure
 D6.getAllResult = function(consName){
-	var ret = [];
+	var ret = {};
 	if ( consName ) {
 		if ( !D6.logicList[consName] ) consName = "consTotal";
 		this.nowConsPageName = consName;
+	} else {
+		consName = "consTotal";
 	}
-	consName = this.nowConsPageName;
+	//if( this.nowConsPageName ) {
+	//	consName = this.nowConsPageName;
+	//}
 
 	//get consCode
 	var consCode = D6.consListByName[consName][0].consCode;
@@ -2497,7 +2511,7 @@ D6.getAllResult = function(consName){
 // return
 //		you and average params
 D6.getAverage = function ( consCode ){
-	var ret = [];
+	var ret = {};
 	ret.you = D6.consShow[consCode].co2Original*12;		//yearly co2 emission
 	ret.after = D6.consShow[consCode].co2*12;			//yearly co2 after set measures
 	ret.av = D6.average.consList[consCode].co2*12;		//yearly average co2
@@ -2520,7 +2534,7 @@ D6.getAverage = function ( consCode ){
 //average compare result 
 D6.getAverage_graph = function()
 {		
-	var ret = [];
+	var ret = {};
 	ret.cost = [];
 	ret.co2 = [];
 
@@ -2530,13 +2544,13 @@ D6.getAverage_graph = function()
 	ret.co2[1].total = ret.co2[1].electricity + ret.co2[1].gas + ret.co2[1].kerosene + ret.co2[1].car;
 
 	//  co2[0], cost[0] user
-	ret.cost[0] = [];
+	ret.cost[0] = {};
 	ret.cost[0].electricity = D6.consTotal.priceEle;
 	ret.cost[0].gas = D6.consTotal.priceGas;
 	ret.cost[0].kerosene = D6.consTotal.priceKeros;
 	ret.cost[0].car = D6.consTotal.car * D6.Unit.price.gasoline;
 
-	ret.co2[0] = [];
+	ret.co2[0] = {};
 	ret.co2[0].electricity = D6.consTotal.electricity * D6.Unit.co2.electricity;
 	ret.co2[0].gas = D6.consTotal.gas * D6.Unit.co2.gas;
 	ret.co2[0].kerosene = D6.consTotal.kerosene * D6.Unit.co2.kerosene;
@@ -2552,13 +2566,13 @@ D6.getAverage_graph = function()
 //		ret[nowConsCode] : itemized data for table( all items )
 //
 D6.getItemize = function (consCode){
-	var ret = [];
+	var ret = {};
 	var cons;
 	var i = 0;
 
 	for ( var cid in D6.consList ) {
 		cons = D6.consList[cid];
-		ret[i] = [];
+		ret[i] = {};
 
 		//name
 		ret[i].title = cons.title;
@@ -2614,7 +2628,7 @@ D6.getItemizeGraph = function ( consCode, sort ){
 	};
 	var show = menu[(sort ? sort : "co2")];
 
-	var ret = [];
+	var ret = {};
 
 	//in function getItemizeGraph( return one target of graph data )
 	// params
@@ -2769,7 +2783,7 @@ D6.dataItemize = function()
 //		ret.data[]	graph data
 //		ret.yaxis	title
 D6.getMonthly  = function ( ){
-	var ret = [];
+	var ret = {};
 	var menu = {
 		co2: {sort:"co2", title:"kg", round:1, divide:1},
 		energy: {sort:"jules", title:"MJ", round:1, divide:1000},
@@ -2791,7 +2805,7 @@ D6.getMonthly  = function ( ){
 	for ( var m=1 ; m<=12 ; m++ ){
 		for ( e=0 ; e<ene1.length ;e++ ){
 			if ( !D6.consShow["TO"].monthlyPrice[ene1[e].ene] ) continue;
-			month[ri] = [];
+			month[ri] = {};
 			month[ri]["month"] = m;
 			month[ri][show.title] = Math.round(D6.consShow["TO"].monthlyPrice[ene1[e].ene][m-1]/show.divide*show.round)/show.round;
 			month[ri]["energyname"] = ene1[e].ene;
@@ -2823,7 +2837,7 @@ D6.getGid  = function( consName ) {
 //		co2,cost
 //
 D6.getCommonParameters = function(){
-	var ret = [];
+	var ret = {};
 	ret.co2Original = D6.consListByName["consTotal"][0].co2Original;
 	ret.co2 = D6.consListByName["consTotal"][0].co2;
 	ret.costOriginal = D6.consListByName["consTotal"][0].costOriginal;
@@ -3285,7 +3299,7 @@ var D6 = D6 || {};
 // return
 //		ret: subset of measureBase class
 D6.getMeasureDetail= function( mesid ) {
-	var ret = [];
+	var ret = {};
 	var mes = D6.measureList[mesid];
 		
 	ret.title = mes.title;
@@ -3370,7 +3384,7 @@ D6.getMeasure = function( consName, maxPrice, notSelected )
 		if ( mes.selected && notSelected == 1 ) continue;
 		if ( mes.priceNew > maxPrice ) continue;
 
-		ret[i] = [];
+		ret[i] = {};
 		ret[i].mesID = mes.mesID;
 		ret[i].title = mes.title;
 		ret[i].selected = mes.selected;
@@ -4320,7 +4334,7 @@ D6.getGid  = function( consName ) {
 //		co2,cost
 //
 D6.getCommonParameters = function(){
-	var ret = [];
+	var ret = {};
 	ret.co2Original = D6.consListByName["consTotal"][0].co2Original;
 	ret.co2 = D6.consListByName["consTotal"][0].co2;
 	ret.costOriginal = D6.consListByName["consTotal"][0].costOriginal;

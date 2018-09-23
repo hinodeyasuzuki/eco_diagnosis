@@ -14,10 +14,10 @@
 
 // atob, btoa is defined in windows. it doesn't work in web worker 
 if ( typeof ( atob) =="undefined" ) {
-	function atob(str){
+	atob = function(str){
 		return str;
 	};
-	function btoa(str){
+	btoa = function(str){
 		return str;
 	};
 };

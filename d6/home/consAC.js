@@ -62,7 +62,7 @@ D6.consAC.precalc = function() {
 	//prepare input value
 	this.acYear  = this.input( "i215" + this.subID, 6 );		//year of equipment
 	this.acPerf  = this.input( "i216" + this.subID, 2 );		//1:low energy 2:other
-	this.acFilter  = this.input( "i217" + this.subID,　-1 );	//cleaning action of filter
+	this.acFilter  = this.input( "i217" + this.subID, -1 );	//cleaning action of filter
 	this.roomSize = this.input( "i212" + this.subID, 12 );		//room size (m2)
 
 	var now = new Date();

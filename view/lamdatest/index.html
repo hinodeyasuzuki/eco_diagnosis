@@ -1,0 +1,116 @@
+<html>
+    <head>
+   // amazon lambdaテスト用
+
+    <script src="../../dist_develop/d6home_core.js" type="text/javascript"></script>
+    <script src="../../dist_develop/d6home_JP.js" type="text/javascript"></script>
+<!--
+    <script src="../../dist/d6home_core.min.js" type="text/javascript"></script>
+    <script src="../../dist/d6home_JP.min.js" type="text/javascript"></script>
+-->
+    </head>
+    <body>
+<script>
+//対策の最大数の制限
+function maxmeasure(n){
+    if ( ret.measure.length <= n ) return;
+    for( var i=ret.measure.length-1 ; i>=n ; i-- ){
+        delete ret.measure[i];
+    }
+}
+
+//基本構造構築
+D6.constructor();
+
+//構造の変更
+var cmd = {"get":{"all":1}};
+
+var key, key2;
+if( cmd.set && cmd.set.add ) {
+    for( key in cmd.set.add ){
+        for( key2 in cmd.set.add[key]){
+            D6.addConsSetting(key);
+        }
+    }
+}
+
+//変数の設定
+if( cmd.set && cmd.set.inp ) {
+    for( key in cmd.set.inp ){
+		D6.inSet(key,cmd.set.inp[key]);
+    }
+}
+
+//計算
+D6.calculateAll();
+
+//対策の追加
+if( cmd.set && cmd.set.measureadd ) {
+    for( key in cmd.set.measureadd ){
+		D6.measureAdd( cmd.set.measureadd[key] );
+    }
+    D6.calcMeasures(-1);
+}
+
+//取得データ
+var ret = {};
+if ( cmd.get.all ){
+    ret = D6.getAllResult();
+    //maxmeasure(15);
+} else {
+    //個別の取得
+    if ( !cmd.get.target || cmd.get.target.substr(0,4) != "cons" ) cmd.get.target = "consTotal";
+    if( cmd.get.common){
+        ret.common = D6.getCommonParameters();
+    }
+    if( cmd.get.monthly){
+        ret.monthly = D6.getMonthly();
+    }
+    if( cmd.get.average ){
+        ret.average = this.getAverage(cmd.get.target);
+    }
+    if( cmd.get.average_graph ){
+        ret.average_graph = this.getAverage_graph();
+    }
+    if( cmd.get.itemize ){
+        ret.itemize = this.getItemize(cmd.get.target);
+    }
+    if( cmd.get.itemize_graph ){
+        ret.itemize_graph = this.getItemizeGraph(cmd.get.target);
+    }
+    if( cmd.get.measure ){
+        ret.measure = this.getMeasure(cmd.get.target);
+        maxmeasure(15);
+    }
+    if( cmd.get.measure_all ){
+        ret.measure = this.getMeasure(cmd.get.target);
+    }
+    if( cmd.get.measure_detail ){
+        ret.measure_detail = D6.getMeasureDetail( cmd.get.detail );	
+    }
+    if( cmd.get.input_page ){
+        if ( cmd.get.input_page.substr(0,4) != "cons" ) cmd.get.input_page = cmd.get.target;
+        ret.input_page = D6.getInputPage( cmd.get.target, cmd.get.target );	
+    }
+}
+
+
+    console.log(ret);
+    console.log(JSON.stringify(ret));
+    /*
+        変換に問題なし。 []ではなく{}で定義する必要があった。
+
+        費用
+        lambda 0.3s程度　512mbCPU　で 40万秒/月　120万アクセス/月まで無料
+        lambda 呼び出し　100万件/月まで無料
+        転送　1GBを超えると $0.09/GB     全量60kB　100万件　60GB 600円
+
+        jsonを送り、jsonで受け取る
+        modelessの結果表示
+
+
+    */
+</script>
+
+    </body>
+</html>

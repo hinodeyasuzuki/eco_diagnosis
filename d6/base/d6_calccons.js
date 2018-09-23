@@ -252,7 +252,7 @@ D6.getGid  = function( consName ) {
 //		co2,cost
 //
 D6.getCommonParameters = function(){
-	var ret = [];
+	var ret = {};
 	ret.co2Original = D6.consListByName["consTotal"][0].co2Original;
 	ret.co2 = D6.consListByName["consTotal"][0].co2;
 	ret.costOriginal = D6.consListByName["consTotal"][0].costOriginal;

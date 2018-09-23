@@ -26,7 +26,7 @@ var D6 = D6 || {};
 // return
 //		ret: subset of measureBase class
 D6.getMeasureDetail= function( mesid ) {
-	var ret = [];
+	var ret = {};
 	var mes = D6.measureList[mesid];
 		
 	ret.title = mes.title;
@@ -111,7 +111,7 @@ D6.getMeasure = function( consName, maxPrice, notSelected )
 		if ( mes.selected && notSelected == 1 ) continue;
 		if ( mes.priceNew > maxPrice ) continue;
 
-		ret[i] = [];
+		ret[i] = {};
 		ret[i].mesID = mes.mesID;
 		ret[i].title = mes.title;
 		ret[i].selected = mes.selected;
