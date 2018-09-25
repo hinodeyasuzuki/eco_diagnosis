@@ -40,7 +40,7 @@ D6.scenario.areafix = function() {
 
 	//業種から季節別の係数を得る
 	D6.area.getSeasonParam = function( business ) {
-		ret = Array();
+		ret = {};
 		var p = D6.area.businessParams[business];
 		ret["electricity"] = [ p["winter"], p["spring"], p["summer"] ];
 		ret["gas"] = [ 1, 1, 1 ];
@@ -113,7 +113,7 @@ D6.scenario.areafix = function() {
 						D6.consShow["TO"].floor );
 		
 		//calculate average CO2
-		this.averageCO2Energy = [];
+		this.averageCO2Energy = {};
 		for( var i in this.averageCostEnergy ) {
 			this.averageCO2Energy[i] = 
 						D6.Unit.costToCons( this.averageCostEnergy[i] , i )

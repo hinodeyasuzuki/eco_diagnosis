@@ -1,7 +1,6 @@
 <html>
     <head>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<!--        <script src="../../view/lib/jquery/jquery.min.js" type="text/javascript"></script>-->
     </head>
     <body>
 
@@ -10,15 +9,17 @@
 
     <script>
         var cmd = {};
-        cmd.get = {"all":1};
+        cmd.get = {"itemize":1};
         cmd.set = {};
+        var data = JSON.stringify(cmd);
+        console.log(data);
         $.ajax({
-            url:'https://e440rtlcfb.execute-api.ap-northeast-1.amazonaws.com/default',
+            url:'https://31ivu1zdnh.execute-api.ap-northeast-1.amazonaws.com/default/diagnosis6',
             type:'POST',
-            headers: { "x-api-key": "7SSA3ZaUSX5hwsHICx7N8GBI3ZgVEDY8Sh2M0k4j" },
-            data:{"data":JSON.stringify(cmd)},
+//            headers: { x-api-key: "7SSA3ZaUSX5hwsHICx7N8GBI3ZgVEDY8Sh2M0k4j" },
+            data:data,
             dataType:'json', // 応答のデータの種類 (xml/html/script/json/jsonp/text)
-            contentType: "application/json",
+//            contentType: "application/json",
         })
         // Ajaxリクエストが成功した時発動
         .done( (data) => {

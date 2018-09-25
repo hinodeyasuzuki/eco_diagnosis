@@ -223,7 +223,7 @@ D6.area = {
 	//
 	getAverageCostEnergy: function( num, pref, urban ) {
 		var ret;
-		ret = new Array();
+		ret = {};
 
 		var id;
 		for ( var i in this.energyCode2id) {
@@ -568,7 +568,7 @@ D6.area = {
 			this.urban );
 		
 		//calculate average CO2
-		this.averageCO2Energy = [];
+		this.averageCO2Energy = {};
 		for( var i in this.averageCostEnergy ) {
 			this.averageCO2Energy[i] = 
 						D6.Unit.costToCons( this.averageCostEnergy[i] , i )

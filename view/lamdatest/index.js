@@ -1,29 +1,76 @@
-<html>
-    <head>
-   // amazon lambdaテスト用
 
-    <script src="../../dist_develop/d6home_core.js" type="text/javascript"></script>
-    <script src="../../dist_develop/d6home_JP.js" type="text/javascript"></script>
-<!--
-    <script src="../../dist/d6home_core.min.js" type="text/javascript"></script>
-    <script src="../../dist/d6home_JP.min.js" type="text/javascript"></script>
--->
-    </head>
-    <body>
-<script>
+
+/**
+ * Demonstrates a simple HTTP endpoint using API Gateway. You have full
+ * access to the request and response payload, including headers and
+ * status code.
+ *
+ * To scan a DynamoDB table, make a GET request with the TableName as a
+ * query string parameter. To put, update, or delete an item, make a POST,
+ * PUT, or DELETE request respectively, passing in the payload to the
+ * DynamoDB API as a JSON body.
+ */
+exports.handler = (event, context, callback) => {
+    //dummy('Received event:', JSON.stringify(event, null, 2));
+
+    const done = (err, res) => callback(null, {
+        statusCode: err ? '400' : '200',
+        body: err ? err.message : JSON.stringify(res),
+        headers: {
+            'Access-Control-Allow-Origin':'*',
+            'Content-Type': 'application/json'
+        },
+    });
+
+
+var dummy =function(){
+};
+
+//done(null,"test ok");
+
+/*
+    switch (event.httpMethod) { 
+        case 'DELETE':
+            dynamo.deleteItem(JSON.parse(event.body), done);
+            break;
+        case 'GET':
+            dynamo.scan({ TableName: event.queryStringParameters.TableName }, done);
+            break;
+        case 'POST':
+            dynamo.putItem(JSON.parse(event.body), done);
+            break;
+        case 'PUT':
+            dynamo.updateItem(JSON.parse(event.body), done);
+            break;
+        default:
+            done(new Error(`Unsupported method "${event.httpMethod}"`));
+    }
+ */  
+if ( !event.data ){
+    var cmd = { "get" : {"all" :1},"set":{} };
+} else {
+    var cmd = JSON.parse(event.data);
+}
+
+// D6
+//
+
+
 //対策の最大数の制限
 function maxmeasure(n){
     if ( ret.measure.length <= n ) return;
-    for( var i=ret.measure.length-1 ; i>=n ; i-- ){
-        delete ret.measure[i];
+    ret.measureorg = ret.measure;
+    ret.measure = [];
+    for( var i=ret.measureorg.length-1 ; i>=0 ; i-- ){
+        if ( i<n ){
+            ret.measure[i] =  ret.measureorg[i];
+        }
     }
+    delete ret.measureorg;
 }
 
 //基本構造構築
 D6.constructor();
-
-//構造の変更
-var cmd = {"get":{"itemize":1}};
 
 
 var key, key2;
@@ -36,7 +83,7 @@ if( cmd.set && cmd.set.add ) {
 }
 
 //変数の設定
-if( cmd.set && cmd.set.inp ) {
+if(cmd.set.inp ) {
     for( key in cmd.set.inp ){
 		D6.inSet(key,cmd.set.inp[key]);
     }
@@ -90,27 +137,13 @@ if ( cmd.get.all ){
         ret.measure_detail = D6.getMeasureDetail( cmd.get.detail );	
     }
     if( cmd.get.input_page ){
+        cmd.get.target = "consTotal";
         if ( cmd.get.input_page == 1 ) cmd.get.input_page = cmd.get.target;
         ret.input_page = D6.getInputPage( cmd.get.target, cmd.get.input_page );	
     }
 }
 
-    console.log(ret);
-    console.log(JSON.stringify(ret));
-    /*
-        変換に問題なし。 []ではなく{}で定義する必要があった。
+done(null ,ret);
 
-        費用
-        lambda 0.3s程度　512mbCPU　で 40万秒/月　120万アクセス/月まで無料
-        lambda 呼び出し　100万件/月まで無料
-        転送　1GBを超えると $0.09/GB     全量60kB　100万件　60GB 600円
-
-        jsonを送り、jsonで受け取る
-        modelessの結果表示
-
-
-    */
-</script>
-
-    </body>
-</html>
+        
+};

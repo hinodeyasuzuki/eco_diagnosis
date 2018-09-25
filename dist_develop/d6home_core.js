@@ -430,7 +430,7 @@ D6.area = {
 	//
 	getAverageCostEnergy: function( num, pref, urban ) {
 		var ret;
-		ret = new Array();
+		ret = {};
 
 		var id;
 		for ( var i in this.energyCode2id) {
@@ -2894,30 +2894,30 @@ var D6 = D6 || {};
 //		ret.addlist[]		addable equipment/room list
 //
 D6.getInputPage = function( consName,subName ) {
-	var ret = [];
-	var group = [];			//group name
-	var groupAddable = [];		//countable consumption list such as rooms/equipments
-	var subgroup = [];			//name of subgroup
-	var subguide = [];			//guidance to input for subgroup
-	var combos = [];			//input combobox html
+	var ret = {};
+	var group = {};			//group name
+	var groupAddable = {};		//countable consumption list such as rooms/equipments
+	var subgroup = {};			//name of subgroup
+	var subguide = {};			//guidance to input for subgroup
+	var combos = {};			//input combobox html
 	var definp;
 	//var pagename;
 	var subid = 0;
 	var subcode = "";
 	var cons = "";
-	var addlist = [];
+	var addlist = {};
 
 	//create input data for smartphone 
 	for( var c in D6.scenario.defEasyQues ){
 		var q = D6.scenario.defEasyQues[c];
 		subcode = q.cname;
 		group[q.cname] = q.title;
-		groupAddable[q.cname] = [];
-		addlist[q.cname] = [];
-		subgroup[q.cname] = [];
-		subguide[q.cname] = [];
-		combos[q.cname] = [];
-		subguide[q.cname][subcode] = [];
+		groupAddable[q.cname] = {};
+		addlist[q.cname] = {};
+		subgroup[q.cname] = {};
+		subguide[q.cname] = {};
+		combos[q.cname] = {};
+		subguide[q.cname][subcode] = {};
 		combos[q.cname][subcode] = [];
 
 		//only same to consName
@@ -2940,8 +2940,8 @@ D6.getInputPage = function( consName,subName ) {
 		group[cname] = D6.consShow[c].title;
 		groupAddable[cname] = [];
 		addlist[cname] = [];
-		subgroup[cname] = [];
-		subguide[cname] = [];
+		subgroup[cname] = {};
+		subguide[cname] = {};
 		combos[cname] = {};
 
 		// all check in doc.data.defInput[]
@@ -3017,7 +3017,6 @@ D6.getInputPage = function( consName,subName ) {
 	if ( !D6.logicList[consName] )consName = "consTotal";
 	ret.title = D6.logicList[consName].title;
 	ret.subName = subName;
-
 	return ret;
 };
 

@@ -553,7 +553,7 @@ D6.scenario =
 						D6.consShow["TO"].floor );
 		
 		//calculate average CO2
-		this.averageCO2Energy = [];
+		this.averageCO2Energy = {};
 		for( var i in this.averageCostEnergy ) {
 			this.averageCO2Energy[i] = 
 						D6.Unit.costToCons( this.averageCostEnergy[i] , i )

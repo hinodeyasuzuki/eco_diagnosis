@@ -1,0 +1,37 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Amazon Lambda 診断テスト</h1>
+    <div class="result">
+    </div>
+
+<script>
+
+    var inp = {};
+    var consCount = {};
+
+    var cmd = {};
+        cmd.get = {"all":1};
+        cmd.set = {};
+        var data = JSON.stringify(cmd);
+
+        $.ajax({
+            url:' https://31ivu1zdnh.execute-api.ap-northeast-1.amazonaws.com/default/diagnosis6/',
+            type:'POST',
+            data:data,
+            contentType:'application/json',
+            dataType:'json' // 応答のデータの種類 (xml/html/script/json/jsonp/text)
+        })
+        // Ajaxリクエスト成功
+        .done( (data) => {
+            if ( data.input_page ){
+                console.log( data.body.input_page);
+            }
+            $('.result').html(data);
+            console.log( data);
+        })
+</script>
+</body>
+</html>

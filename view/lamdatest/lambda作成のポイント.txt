@@ -1,0 +1,49 @@
+https://dev.classmethod.jp/cloud/aws/api-gateway/　がわかりやすい
+
+※node APIおまかせでやると、セキュリティなどがいろいろ要求されて何がポイントかわかりにくくなる。
+※値を返す方法だけ、コピーして使う
+
+■lambdaシンプルに
+　lambdaで　node.js作成。ロールは simple。これでも DBがついてくる。
+
+記述　
+exports.handler = (event, context, callback) => {
+    const done = (err, res) => callback(null, {
+    .
+    }
+.
+}
+
+event.data に ajaxで渡された data　の値が入るのでこれをparseして使う
+結果は done("",res) で返す。エラーの場合は、1つ目のパラメータ
+
+パラメータを設定してテストを行うと、lambda関数として適切か設定できる。
+
+■API gatewayを追加
+　新しいAPIを定義するのがいい。
+　
+　CROSを設定して、外部からアクセスできるようにする。ただし、ぜんぶAPIがわでやってくれる
+わけではなさそうで、
+
+        headers: {
+            'Access-Control-Allow-Origin':'*',
+            'Content-Type': 'application/json'
+        },
+
+　をlambda側に設定する。必要に応じて制限する。
+
+　APIコードを設定することもできる。（関係なさそう動かない）
+ POSTを明確に定義しておく
+ 
+
+ ■lambdaへのパラメータ渡しの問題
+ 　post からできない。data:JSON.stringify() だがこれが認識されない。
+ 
+■値を受け取ってからの JSON.parse が処理できない ところどころ []があるため？
+ 　→処理しなくてもいい
+
+■ローカルでは動くものの、Nodeでは　エラーとなる。 Object が定義されていない。
+　→単にペーストに失敗しているだけのよう
+
+■マッピングテンプレートで、POSTとNODEの橋渡しをする
+
