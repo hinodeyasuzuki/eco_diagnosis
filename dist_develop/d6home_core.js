@@ -775,7 +775,7 @@ D6.area = {
 			this.urban );
 		
 		//calculate average CO2
-		this.averageCO2Energy = [];
+		this.averageCO2Energy = {};
 		for( var i in this.averageCostEnergy ) {
 			this.averageCO2Energy[i] = 
 						D6.Unit.costToCons( this.averageCostEnergy[i] , i )
@@ -2925,6 +2925,7 @@ D6.getInputPage = function( consName,subName ) {
 			definp = D6.scenario.defInput[q.ques[i]];
 			if ( !definp && D6.debugMode ) console.log( "defEasyQues error no " + q.ques[i] + " in scenarioset" );
 			subgroup[q.cname][subcode] = q.title;
+			subguide[q.cname][subcode] = "";
 			if ( definp.varType == "String" ) {
 				combos[q.cname][subcode].push( this.createTextArea( q.ques[i] ) );
 			} else {
@@ -4916,13 +4917,13 @@ var D6 = D6||{};
 D6.scenario =
 {
 	//list of scenario
-	defCons : [],
-	defMeasures : [],
-	defEquipment : [],
-	defEquipmentSize : [],
-	defInput : [],
-	defSelectValue : [],
-	defSelectData : [],
+	defCons : {},
+	defMeasures : {},
+	defEquipment : {},
+	defEquipmentSize : {},
+	defInput : {},
+	defSelectValue : {},
+	defSelectData : {},
 
 	//series of questions 
 	defQuesOrder : [],
@@ -4932,7 +4933,7 @@ D6.scenario =
 	// return
 	//		logicList[]
 	getLogicList : function() {
-		var logicList = new Array();
+		var logicList = {};
 		
 		// in case of create new consumption class, write here to use in D6
 		// in some case, the order is important
@@ -4980,13 +4981,13 @@ D6.scenario =
 	//		defEquipment[]: 	setting of equipments --not use now--
 	//		defEquipmentSize[]: setting of equipment size --not use now--
 	setDefs : function() {
-		var defMeasures = [];
-		var defInput = [];
-		var defSelectValue = [];
-		var defSelectData = [];
+		var defMeasures = {};
+		var defInput = {};
+		var defSelectValue = {};
+		var defSelectData = {};
 		var defQuesOrder = [];
-		var defEquipment = [];
-		var defEquipmentSize = [];
+		var defEquipment = {};
+		var defEquipmentSize = {};
 
 		// defMeasures[measure] ------------------------------------------
 		//		measure : measure code (string) same to name below

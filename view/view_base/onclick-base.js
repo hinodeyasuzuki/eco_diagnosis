@@ -21,6 +21,7 @@
 inchange = function( id ){
 	var param = [];
 	param.id = id;
+	param.consName = tabNowName;
 	param.val = escapeHtml($("#" + id ).val());
 	if ( param.val == -1 || param.val === "" ){
 		$("#" + id ).removeClass("written");	

@@ -775,7 +775,7 @@ D6.area = {
 			this.urban );
 		
 		//calculate average CO2
-		this.averageCO2Energy = [];
+		this.averageCO2Energy = {};
 		for( var i in this.averageCostEnergy ) {
 			this.averageCO2Energy[i] = 
 						D6.Unit.costToCons( this.averageCostEnergy[i] , i )
@@ -2925,6 +2925,7 @@ D6.getInputPage = function( consName,subName ) {
 			definp = D6.scenario.defInput[q.ques[i]];
 			if ( !definp && D6.debugMode ) console.log( "defEasyQues error no " + q.ques[i] + " in scenarioset" );
 			subgroup[q.cname][subcode] = q.title;
+			subguide[q.cname][subcode] = "";
 			if ( definp.varType == "String" ) {
 				combos[q.cname][subcode].push( this.createTextArea( q.ques[i] ) );
 			} else {

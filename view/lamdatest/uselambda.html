@@ -1,37 +1,143 @@
 <html>
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js"></script>
+
+<style>
+.btn{
+    padding:5px;
+    margin:5px;
+    line-height:1.5em;
+    background-color:bisque;
+    cursor:pointer;
+}
+.btn:hover, .selected{
+    background-color:gold;
+}
+.tool-tips{
+    display:none;
+}
+table{
+    width:100%; 
+}
+</style>
 </head>
 <body>
     <h1>Amazon Lambda 診断テスト</h1>
-    <div class="result">
+    <div id="app">
+        <div>
+
+<span class="btn" @click="page=1" v-bind="{selected:(page==1)}">入力表示</span>
+<span class="btn" @click="page=2;get_result();" v-bind="{selected:(page==2)}">結果表示</span>
+
+<div id="pagetab">
+    <h2>{{input_page.title}}</h2>
+    <span class="btn" v-for="(value, key) in input_page.group" @click="get_input_ajax(key,key)" v-bind:class="{selected:(key==input_page.subName)}">
+        {{ value }}
+    </span>
+    <br>
+</div>
+
+<div v-if="page==1">
+    <div id="subgroup">
+        分野を選んでください：
+        <span v-for="(value, key) in input_page.subgroup">
+            <span v-if="key == input_page.subName">
+            <span class="btn" v-for="(value2, key2) in value" @click="subpage=key2"  v-bind:class="{selected:(key2==subpage)}">
+            {{ value2 }}
+            </span>
+            </span>
+        </span>
+        <br>
     </div>
 
+    <div id="inputs">
+        <span v-for="(value, key) in input_page.combos">
+            <span v-if="key == input_page.subName">
+                <span v-for="(value2, key2) in value">
+                    <span v-for="(value3, key3) in value2">
+                        <table v-html="value3" v-if="subpage==key2"></table>
+                    </span>
+                </span>
+            </span>
+        </span>
+        <br>
+    </div>
+</div>
+
+<div v-if="page==2">
+    <h2>結果</h2>
+
+    <div id="itemize">
+        <h3>内訳</h3>
+
+    </div>
+
+</div>
+
+
+        </div>
+    </div><!-- app -->
+
 <script>
+var app = new Vue({
+  el: '#app',
+  data: {
+    // Jsonデータ格納用
+    input_page: {
+    },
+    result: {
+    },
+    answer: {
+    },
+    cons_count: {
+    },
+    mes_selected:{
+    },
+    subpage:"",
+    page:1,
+    apiurl: "https://e440rtlcfb.execute-api.ap-northeast-1.amazonaws.com/default/diagnosis",
+  },
+  methods: {
+    // Ajax通信でJsonを取得し、特定のプロパティに格納する
+    // 取得したら GET_AJAX_COMPLETE で通知する
+    get_input_ajax(maintab, subtab) {
+      axios.post(this.apiurl,
+        {"get":{"input_page":subtab,"target":maintab}},
+      ).then((res) => {
+        var resjson = JSON.parse(res.data.body);
+        Vue.set(this, "input_page", resjson.input_page);
+        this.$emit('GET_AJAX_COMPLETE');
+      });
+    },
+    get_result(){
+      axios.post(this.apiurl,
+        {"get":{"all":1}},
+      ).then((res) => {
+        var resjson = JSON.parse(res.data.body);
+        Vue.set(this, "result", resjson);
+        this.$emit('GET_AJAX_COMPLETE');
+      });
+    },
+    get_scenario(){
+      axios.post(this.apiurl,
+        {"get":{"scenario":1}},
+      ).then((res) => {
+        var resjson = JSON.parse(res.data.body);
+		console.log(resjson.scenario);
+      });
+    },
+  },
+  created: function(){
+      this.get_input_ajax("consTotal","consTotal");
+      this.get_scenario();
+  }
+});
 
-    var inp = {};
-    var consCount = {};
+function inchange(inpid){
+}
 
-    var cmd = {};
-        cmd.get = {"all":1};
-        cmd.set = {};
-        var data = JSON.stringify(cmd);
-
-        $.ajax({
-            url:' https://31ivu1zdnh.execute-api.ap-northeast-1.amazonaws.com/default/diagnosis6/',
-            type:'POST',
-            data:data,
-            contentType:'application/json',
-            dataType:'json' // 応答のデータの種類 (xml/html/script/json/jsonp/text)
-        })
-        // Ajaxリクエスト成功
-        .done( (data) => {
-            if ( data.input_page ){
-                console.log( data.body.input_page);
-            }
-            $('.result').html(data);
-            console.log( data);
-        })
 </script>
 </body>
 </html>

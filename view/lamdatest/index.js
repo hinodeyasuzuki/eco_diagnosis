@@ -23,8 +23,6 @@ exports.handler = (event, context, callback) => {
     });
 
 
-var dummy =function(){
-};
 
 //done(null,"test ok");
 
@@ -46,17 +44,20 @@ var dummy =function(){
             done(new Error(`Unsupported method "${event.httpMethod}"`));
     }
  */  
-if ( !event.data ){
+
+//done( null,event["body-json"] );
+
+if ( event["body-json"] ){
+    var cmd = event["body-json"];
+}else{
     var cmd = { "get" : {"all" :1},"set":{} };
-} else {
-    var cmd = JSON.parse(event.data);
 }
 
-// D6
-//
 
+//var cmd = event.data;
 
-//対策の最大数の制限
+//d6
+
 function maxmeasure(n){
     if ( ret.measure.length <= n ) return;
     ret.measureorg = ret.measure;
@@ -83,7 +84,7 @@ if( cmd.set && cmd.set.add ) {
 }
 
 //変数の設定
-if(cmd.set.inp ) {
+if( cmd.set && cmd.set.inp ) {
     for( key in cmd.set.inp ){
 		D6.inSet(key,cmd.set.inp[key]);
     }
@@ -111,35 +112,59 @@ if ( cmd.get.all ){
     if( cmd.get.common){
         ret.common = D6.getCommonParameters();
     }
+	//月ごとの消費量
     if( cmd.get.monthly){
         ret.monthly = D6.getMonthly();
     }
+	//平均値
     if( cmd.get.average ){
         ret.average = D6.getAverage(cmd.get.target);
     }
+	//平均値に関するグラフ表示
     if( cmd.get.average_graph ){
         ret.average_graph = D6.getAverage_graph();
     }
+	//分野
     if( cmd.get.itemize ){
         ret.itemize = D6.getItemize(cmd.get.target);
     }
+	//分野グラフ
     if( cmd.get.itemize_graph ){
         ret.itemize_graph = D6.getItemizeGraph(cmd.get.target);
     }
+	//対策（最大15項目）
     if( cmd.get.measure ){
         ret.measure = D6.getMeasure(cmd.get.target);
         maxmeasure(15);
     }
+	//対策すべて
     if( cmd.get.measure_all ){
         ret.measure = D6.getMeasure(cmd.get.target);
     }
+	//個々の対策の詳細
     if( cmd.get.measure_detail ){
         ret.measure_detail = D6.getMeasureDetail( cmd.get.detail );	
     }
+	//入力ページ生成
     if( cmd.get.input_page ){
-        cmd.get.target = "consTotal";
         if ( cmd.get.input_page == 1 ) cmd.get.input_page = cmd.get.target;
         ret.input_page = D6.getInputPage( cmd.get.target, cmd.get.input_page );	
+    }
+	//データ構造
+    if( cmd.get.scenario ){
+        ret.scenario = D6.scenario;
+        ret.scenario.defInput = {};
+        ret.scenario.defSelectValue = {};
+        ret.scenario.defSelectData = {};
+        for( var key in D6.scenario.defInput ){
+            ret.scenario.defInput[key] = D6.scenario.defInput[key] ;	
+        }
+        for( key in D6.scenario.defSelectValue ){
+            ret.scenario.defSelectValue[key] = D6.scenario.defSelectValue[key];
+        }
+        for( key in D6.scenario.defSelectData ){
+            ret.scenario.defSelectData[key] = D6.scenario.defSelectData[key];
+        }
     }
 }
 

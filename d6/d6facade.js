@@ -260,7 +260,7 @@ D6.workercalc = function( command, param ){
 		D6.calculateAll();
 
 		//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-		result = D6.getAllResult();	//show result 
+		result = D6.getAllResult(param.consName);	//show result 
 		break;
 
 	case "inchange_only" :

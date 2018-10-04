@@ -23,13 +23,13 @@ var D6 = D6||{};
 D6.scenario =
 {
 	//list of scenario
-	defCons : [],
-	defMeasures : [],
-	defEquipment : [],
-	defEquipmentSize : [],
-	defInput : [],
-	defSelectValue : [],
-	defSelectData : [],
+	defCons : {},
+	defMeasures : {},
+	defEquipment : {},
+	defEquipmentSize : {},
+	defInput : {},
+	defSelectValue : {},
+	defSelectData : {},
 
 	//series of questions 
 	defQuesOrder : [],
@@ -39,7 +39,7 @@ D6.scenario =
 	// return
 	//		logicList[]
 	getLogicList : function() {
-		var logicList = new Array();
+		var logicList = {};
 		
 		// in case of create new consumption class, write here to use in D6
 		// in some case, the order is important
@@ -87,13 +87,13 @@ D6.scenario =
 	//		defEquipment[]: 	setting of equipments --not use now--
 	//		defEquipmentSize[]: setting of equipment size --not use now--
 	setDefs : function() {
-		var defMeasures = [];
-		var defInput = [];
-		var defSelectValue = [];
-		var defSelectData = [];
+		var defMeasures = {};
+		var defInput = {};
+		var defSelectValue = {};
+		var defSelectData = {};
 		var defQuesOrder = [];
-		var defEquipment = [];
-		var defEquipmentSize = [];
+		var defEquipment = {};
+		var defEquipmentSize = {};
 
 		// defMeasures[measure] ------------------------------------------
 		//		measure : measure code (string) same to name below
