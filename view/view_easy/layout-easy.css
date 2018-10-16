@@ -342,6 +342,12 @@ button, .button {
 	width:90%;
 }
 
+#step button{
+	width:15%;
+	padding-left:3px;
+	padding-right:3px;
+}
+
 
 #leanModalDialog{
   position:relative !important;
