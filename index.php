@@ -199,6 +199,7 @@ foreach ( $lang as $param => $value ) {
 	if ( substr($value,0,5) == "funct" ) {
 		$jssets .= "lang.".$param."=" . str_replace( "'", "\\'",$value ) .";\n";
 	} else {
+		//$jssets .= "lang.".$param."='" . str_replace( "'", "\\'",$value ) ."';\n";
 		$jssets .= "lang.".$param."='q@" . str_rot13(base64_encode(str_replace( "'", "\\'",str_replace( "\"", "\\\"", $value )))) ."';\n";
 	}
 }

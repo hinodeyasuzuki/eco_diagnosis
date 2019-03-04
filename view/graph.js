@@ -230,8 +230,8 @@ function graphCO2averageCommon( averageData, target ) {
 
 	var svgco2 = dimple.newSvg('#'+target, wid, hei);
 	var data = [
-		{ "user":lang.average, "CO2":Math.round(averageData.co2[1].total*12) },
-		{ "user":lang.youcall, "CO2":Math.round(averageData.co2[0].total*12) }
+		{ "user":lang.average, "CO2":Math.round(averageData.co2[0].total*12) },
+		{ "user":lang.youcall, "CO2":Math.round(averageData.co2[1].total*12) }
 	];
 	var chart = new dimple.chart(svgco2, data);
 

@@ -115,7 +115,7 @@ $(document).ready(function(){
 	$(".page").css({opacity: '1'});
 	
 	//language setting. function defined in createpage.js
-	languageset();	
+	languageset();
 
 	// check web-worker
 	if ( useWorker && window.Worker) {
