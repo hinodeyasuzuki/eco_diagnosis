@@ -86,31 +86,31 @@ modeChange = function( id ){
 	$('#top').hide();
 
 	switch( id ) {
-		case "m2":
-			//result page table
-			param.id = "i001";
-			param.val = escapeHtml($("#i001" ).val());
-			startCalc( "inchange", param );
-			break;
-		case "m3":
-			break;
-		case "m4":
-			break;
-		case "m5":
-			break;
-		case "m6":
-			break;
-		case "m7":
-			break;
-		case "m8":
-			break;
-		case "m9":
-			break;
-		case "m10":
-			//about this system
-			break;
-		default:
-			break;
+	case "m2":
+		//result page table
+		param.id = "i001";
+		param.val = escapeHtml($("#i001" ).val());
+		startCalc( "inchange", param );
+		break;
+	case "m3":
+		break;
+	case "m4":
+		break;
+	case "m5":
+		break;
+	case "m6":
+		break;
+	case "m7":
+		break;
+	case "m8":
+		break;
+	case "m9":
+		break;
+	case "m10":
+		//about this system
+		break;
+	default:
+		break;
 	} 
 };
 

@@ -142,8 +142,8 @@ function startCalc( val, command ){
 		//use worker
 		val.targetMode = targetMode;
 		worker.postMessage({ "command":command ,"val": val });
-				//call D6.workercalc in d6facade.js as worker 
-				//after worker getCalcResult() is called
+			//call D6.workercalc in d6facade.js as worker 
+			//after worker getCalcResult() is called
 		
 	} else {
 		//not use woker
@@ -171,126 +171,131 @@ getCalcResult = function( command, res ) {
 	};
 	switch( command ) {
 		
-		case "start":
-		case "addandstart":
-		case "tabclick":
-			inputHtml = createInputPage( res.inputPage );
-			$('#tab').html( inputHtml.menu );
-			$('#tabcontents').html( inputHtml.combo );
-			
-			$("#average").html(showAverageTable(res.average));
-			$("#cons").html(showItemizeTable(res.cons));
-			$("#measure").html("<h3>" + lang.effectivemeasures + "</h3>" + showMeasureTable(res.measure));
-			graphItemize( res.graphItemize );
-			graphMonthly( res.graphMonthly );
-			leanModalSet();
-			
-			//tab click method
-			$('#tab li').click(function() {
-				var index = $('#tab li').index(this);
-				var consname = $(this).prop( "id" );
-				tabclick(index, consname);
-			});			
-			tabset(tabNow);	
-
-			if ( localStorage.getItem('sindanOver15') ) {
-				$('.over15').toggle();
-			}
-			break;
+	case "start":
+	case "addandstart":
+	case "tabclick":
+		inputHtml = createInputPage( res.inputPage );
+		$('#tab').html( inputHtml.menu );
+		$('#tabcontents').html( inputHtml.combo );
 		
-		case "subtabclick":
-			inputHtml = createInputPage( res.inputPage );
-			$('#tabcontents').html( inputHtml.combo );
-			//sub tab click method : main tab is not changed
-			tabset(tabNow);
-			tabSubNowName = res.subName;
-			var page = tabNowName;
-			var subpage = tabSubNowName;
-			//$('li#subpage' + page + "-" + subpage ).css('display','block');
-			$('ul.submenu li' ).removeClass('select');
-			$('ul.submenu li#' + page + "-" + subpage ).addClass('select');
-
-			break;
+		$("#average").html(showAverageTable(res.average));
+		$("#cons").html(showItemizeTable(res.cons));
+		$("#measure").html("<h3>" + lang.effectivemeasures + "</h3>" + showMeasureTable(res.measure));
+		graphItemize( res.graphItemize );
+		graphMonthly( res.graphMonthly );
+		leanModalSet();
 		
-		case "modal":
-			$("#header")[0].scrollIntoView(true);
-			leanModalSet();
-			var modalHtml = createModalPage( res );
-			$("#modal-contents").html( modalHtml );
-			if ( typeof( modalJoy ) != 'undefined' ) {
-				if ( modalJoy == 1 ){
-					$(".modaljoyfull").show();
-					$(".modaladvice").hide();
-				}
-			}
-			break;
-			
-		case "inchange":
-		case "measureadd":
-		case "measuredelete":
-			$("#average").html(showAverageTable(res.average));
-			$("#cons").html(showItemizeTable(res.cons));
-			graphItemize( res.graphItemize );
-			graphMonthly( res.graphMonthly );
-			$("#measure").html("<h3>" + lang.effectivemeasures + "</h3>" + showMeasureTable(res.measure) );
-			leanModalSet();
-			if ( localStorage.getItem('sindanOver15') ) {
-				$('.over15').show();
-			}
-		case "measureadd_comment":
-			var redco2 = res.co2Original - res.co2;
-			var redcost = res.costOriginal - res.cost;
-			if( !isNaN(redco2) ) {
-				$("#totalReduceComment").html( lang.comment_combined_reduce( Math.round(redco2/res.co2Original*100), comma3(redcost*12), comma3(redco2*12)) );
-			} else {
-				$("#totalReduceComment").html("");
-			}
-			break;
+		//tab click method
+		$('#tab li').click(function() {
+			var index = $('#tab li').index(this);
+			var consname = $(this).prop( "id" );
+			tabclick(index, consname);
+		});			
+		tabset(tabNow);	
 
-		case "graphchange":
-			graphItemize( res );
-			break;
-			
-		case "add_demand":
-			$("div#inDemandSumup").html(showDemandSumupPage(res.demandin));
-			$("div#inDemandLog").html(showDemandLogPage(res.demandlog));
-			break;
+		if ( localStorage.getItem('sindanOver15') ) {
+			$('.over15').toggle();
+		}
+		break;
+	
+	case "subtabclick":
+		inputHtml = createInputPage( res.inputPage );
+		$('#tabcontents').html( inputHtml.combo );
+		//sub tab click method : main tab is not changed
+		tabset(tabNow);
+		tabSubNowName = res.subName;
+		var page = tabNowName;
+		var subpage = tabSubNowName;
+		//$('li#subpage' + page + "-" + subpage ).css('display','block');
+		$('ul.submenu li' ).removeClass('select');
+		$('ul.submenu li#' + page + "-" + subpage ).addClass('select');
 
-		case "demand":
-			$("div#inDemandSumup").html(showDemandSumupPage(res.demandin));
-			$("div#inDemandLog").html(showDemandLogPage(res.demandlog));
-			graphDemand( res.graph );
-			break;
-			
-		case "inchange_demand":
-			graphDemand( res.graph );
-			break;
-			
-		case "save":
-		case "save_noalert":
-		case "saveandgo":
-			localStorage.setItem('sindan'+ languageMode+ targetMode, res);
-			var resurl = "";
-			var url = location.protocol + "//" + location.hostname + ( location.pathname ? location.pathname  :  "/" );
-			var params = location.search;
-			if ( params ) {
-				var parray = params.split("data=");
-				resurl = url + parray[0] + "&data=" + res;
-			} else {
-				resurl = url + "?data=" + res;
+		break;
+	
+	case "modal":
+		$("#header")[0].scrollIntoView(true);
+		leanModalSet();
+		var modalHtml = createModalPage( res );
+		$("#modal-contents").html( modalHtml );
+		if ( typeof( modalJoy ) != 'undefined' ) {
+			if ( modalJoy == 1 ){
+				$(".modaljoyfull").show();
+				$(".modaladvice").hide();
 			}
-			
-			if ( command == "save" ) {
-				alert( lang.savetobrowser + lang.savedataisshown +"\n" + resurl );
+		}
+		break;
+
+	case "measuredetail":
+		var detailHtml = createModalPage( res );
+		$("#measuredetail").html( detailHtml );
+		break;
+
+	case "inchange":
+	case "measureadd":
+	case "measuredelete":
+		$("#average").html(showAverageTable(res.average));
+		$("#cons").html(showItemizeTable(res.cons));
+		graphItemize( res.graphItemize );
+		graphMonthly( res.graphMonthly );
+		$("#measure").html("<h3>" + lang.effectivemeasures + "</h3>" + showMeasureTable(res.measure) );
+		leanModalSet();
+		if ( localStorage.getItem('sindanOver15') ) {
+			$('.over15').show();
+		}
+	case "measureadd_comment":
+		var redco2 = res.co2Original - res.co2;
+		var redcost = res.costOriginal - res.cost;
+		if( !isNaN(redco2) ) {
+			$("#totalReduceComment").html( lang.comment_combined_reduce( Math.round(redco2/res.co2Original*100), comma3(redcost*12), comma3(redco2*12)) );
+		} else {
+			$("#totalReduceComment").html("");
+		}
+		break;
+
+	case "graphchange":
+		graphItemize( res );
+		break;
+		
+	case "add_demand":
+		$("div#inDemandSumup").html(showDemandSumupPage(res.demandin));
+		$("div#inDemandLog").html(showDemandLogPage(res.demandlog));
+		break;
+
+	case "demand":
+		$("div#inDemandSumup").html(showDemandSumupPage(res.demandin));
+		$("div#inDemandLog").html(showDemandLogPage(res.demandlog));
+		graphDemand( res.graph );
+		break;
+		
+	case "inchange_demand":
+		graphDemand( res.graph );
+		break;
+		
+	case "save":
+	case "save_noalert":
+	case "saveandgo":
+		localStorage.setItem('sindan'+ languageMode+ targetMode, res);
+		var resurl = "";
+		var url = location.protocol + "//" + location.hostname + ( location.pathname ? location.pathname  :  "/" );
+		var params = location.search;
+		if ( params ) {
+			var parray = params.split("data=");
+			resurl = url + parray[0] + "&data=" + res;
+		} else {
+			resurl = url + "?data=" + res;
+		}
+		
+		if ( command == "save" ) {
+			alert( lang.savetobrowser + lang.savedataisshown +"\n" + resurl );
+		}
+		if ( command == "saveandgo" ) {
+			if ( dispMode == 3 ) {
+				location.href="./?lang="+languageMode+"&v=2&intro=-1";
+			} else if ( dispMode == 2 ) {
+				location.href="./?lang="+languageMode+"&v=0&intro=-1";
 			}
-			if ( command == "saveandgo" ) {
-				if ( dispMode == 3 ) {
-					location.href="./?lang="+languageMode+"&v=2&intro=-1";
-				} else if ( dispMode == 2 ) {
-					location.href="./?lang="+languageMode+"&v=0&intro=-1";
-				}
-			}
-			break;
+		}
+		break;
 
 /*
 		case "savenew":
@@ -321,7 +326,7 @@ getCalcResult = function( command, res ) {
 			break;
 */
 
-		default:
+	default:
 	}
 };
 

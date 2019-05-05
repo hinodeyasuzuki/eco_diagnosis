@@ -27,7 +27,7 @@ if( strcmp($_SERVER['HTTP_HOST'] , 'localhost') == 0 ){
 	$config["topurl"]  = $config["baseurl"] . "base/";
 }else{
 	$config["basefolder"]  = "/home/hinodeya-ecolife/diagnosis/";
-	$config["baseurl"] = "http://www.hinodeya-ecolife.com/diagnosis/";
+	$config["baseurl"] = "https://www.hinodeya-ecolife.com/diagnosis/";
 	$config["topurl"]  = $config["baseurl"] . "base/";
 }
 

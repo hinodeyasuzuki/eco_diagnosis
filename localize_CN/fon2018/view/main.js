@@ -393,7 +393,7 @@ getCalcResult = function( command, res ) {
 				//if ( typeof(detailNextDiagnosisCode) != undefined ) {
 				//	location.href="./?lang="+languageMode+"&v="+detailNextDiagnosisCode+"&intro=-1";					
 				//}
-				location.href="http://www.hinodeya-ecolife.com/diagnosis/?v=2&lang=cn&intro=-1";					
+				location.href="https://www.hinodeya-ecolife.com/diagnosis/?v=2&lang=cn&intro=-1";					
 			}
 			break;
 

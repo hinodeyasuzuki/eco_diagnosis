@@ -24,7 +24,7 @@ $forceMode = 5;		//can be over rided 1:debug, 3:worker test, 4:packer test, 5;re
 //
 */
 
-//languageMode: ja, cn 2charactor
+//languageMode: ja, cn 2charactor ,  use as folder name
 $languageMode 	= ( isset($_GET["lang"]) ? substr($_GET["lang"], 0, 2) : 
 						( isset($_SESSION["language"]) ? $_SESSION["language"] :"ja" ) );
 
