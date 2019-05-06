@@ -6,62 +6,65 @@
 //
 // require php, and inluded by index.php
 //
-?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html lang="<?php echo $languageMode; ?>">
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="target-densitydpi=device-dpi, width=320, initial-scale=1.0, user-scalable=yes">
 	<link href="view/common.css" rel="stylesheet" type="text/css" />
 	<link href="view/view_button/layout-button.css" rel="stylesheet" type="text/css" />
 	<?php echo $alternate ?>
 	<title><?php echo $title;?></title>
 
-  </head>
+</head>
 
-  <body>
-  
+<body>
+
 	<div id="leanModalDialog" style="float:left;">
 		<input type="button" class="modal_close" value="<?php echo $lang['button_back'];?>" tabindex=0>
 		<div id="modal-contents"></div>
 	</div>
-		
+
 	<div class="contents">
 
 		<div id="header">
 			<h1><?php echo $title;?></h1>
 
-		　　<div style="text-align:right;position:relative;top:-20px;legt:20px;line-height:5px;">
+			　　<div style="text-align:right;position:relative;top:-20px;legt:20px;line-height:5px;">
 				<button class="menubutton" onclick="menuopen();"><?php echo $lang["button_menu"];?></button>
-		　　</div>
+				　　</div>
 
-		　　<div class="menu" style="text-align:right;display:none;position:relative;top:-20px;">
+			　　<div class="menu" style="text-align:right;display:none;position:relative;top:-20px;">
 				<button class="selected" id="m1" onclick="modeChange('m1');"><?php echo $lang["button_top"];?></button>
 				<button id="m2" onclick="modeChange('m4');"><?php echo $lang["button_input"];?></button>
 				<button id="m3" onclick="modeChange('m3');"><?php echo $lang["button_measures"];?></button>
-			<?php if ( $targetMode == 2 ){ 
+				<?php if ( $targetMode == 2 ){ 
 				//this is only for business
 			?>
 				<button id='m6' onclick="modeChange('m6');">デマンド機種</button>
 				<button id='m7' onclick="modeChange('m7');">デマンド1日分</button>
 				<button id='m8' onclick="modeChange('m8');">デマンド積上げ</button>
 				<button id='m9' onclick="modeChange('m9');">デマンド日変化</button>
-			<?php } ?>
+				<?php } ?>
 				<button id="btnsave" onclick="dataSave();"><?php echo $lang["button_save"];?></button>
 				<button id="btnclear" onclick="dataClear();"><?php echo $lang["button_clear"];?></button>
 				<button id="m10" onclick="modeChange('m10');"><?php echo $lang["button_about"];?></button>
-		　　</div>
+				　　</div>
 		</div>
 
 		<div class="preloader">
 			<p>now loading diagnosis system</p>
 		</div>
-	
+
 		<div class="contents" style="display:none;">
-			<div class="page" id="p1" >						
+			<div class="page" id="p1">
 				<p><?php echo $lang["home_button_intro1"];?></p>
 				<p><?php echo $lang["home_button_intro2"];?></p>
 				<button class="next" onclick="modeChange('m4');"><?php echo $lang["home_button_startdiagnosis"];?></button>
-				<button class="next"><a href="./?lang=<?php echo $languageMode; ?>&v=4" target="_blank"><?php echo $lang["home_button_about"];?></a></button>
+				<button class="next"><a href="./?lang=<?php echo $languageMode; ?>&v=4"
+						target="_blank"><?php echo $lang["home_button_about"];?></a></button>
 			</div>
 
 			<div class="page" id="p2">
@@ -76,11 +79,14 @@
 			<div class="page" id="p3">
 				<h2 class="constitle"></h2>
 				<div class="menuresult" id="result">
-					<button class="next" id="mr1" onclick="resultChange('r1');"><?php echo $lang["home_button_average"];?></button>
-					<button class="next" id="mr3" onclick="resultChange('r3');"><?php echo $lang["home_button_monthly"];?></button>
-					<button class="next" id="mr5" onclick="resultChange('r5');"><?php echo $lang["home_button_measure"];?></button>
+					<button class="next" id="mr1"
+						onclick="resultChange('r1');"><?php echo $lang["home_button_average"];?></button>
+					<button class="next" id="mr3"
+						onclick="resultChange('r3');"><?php echo $lang["home_button_monthly"];?></button>
+					<button class="next" id="mr5"
+						onclick="resultChange('r5');"><?php echo $lang["home_button_measure"];?></button>
 				</div>
-			  
+
 				<div class="result" id="r1">
 					<p><?php echo $lang["home_button_resultmessage"];?></p>
 					<select id="graphChange" onchange="graphChange();">
@@ -91,14 +97,14 @@
 					<div id="graph"></div>
 					<div id="average"></div>
 				</div>
-				
+
 				<div class="result" id="r2">
 				</div>
 
 				<div class="result" id="r3">
 					<div id="graphMonthly"></div>
 				</div>
-				
+
 				<div class="result" id="r4">
 					<div id="cons"></div>
 				</div>
@@ -110,15 +116,15 @@
 						<button style='color:blue;' onclick="over15show();">[<?php echo $lang["button_showall"];?>]</button>
 					</div>
 				</div>
-				
+
 				<button class="next" id="mr1" onclick="resultChange('r1');"><?php echo $lang["home_button_average"];?></button>
 				<button class="next" id="mr3" onclick="resultChange('r3');"><?php echo $lang["home_button_monthly"];?></button>
 				<button class="next" id="mr5" onclick="resultChange('r5');"><?php echo $lang["home_button_measure"];?></button>
 			</div>
-			
+
 			<div class="page" id="p4">
 				<h2 class="constitle"></h2>
-				<div id="quescontents" ></div>
+				<div id="quescontents"></div>
 				<hr>
 				<button class="next" onclick="quesone_prev();"><?php echo $lang["button_prev"];?></button>
 				<button class="next" onclick="quesone_next();"><?php echo $lang["button_next"];?></button>
@@ -134,29 +140,29 @@
 				<button class="next" onclick="modeChange('m2');"><?php echo $lang["button_queslist"];?></button>
 				<button class="next" onclick="modeChange('m3');"><?php echo $lang["button_calcresult"];?></button>
 			</div>
-			
+
 			<div class="page" id="p6">
 				<div id="inDemandSumup"></div>
 				<button class="next" onclick="modeChange('m8');">デマンド結果をみる</button>
 			</div>
-			
+
 			<div class="page" id="p7">
 				<div id="inDemandLog"></div>
 				<button class="next" onclick="modeChange('m9');">デマンドグラフをみる</button>
 			</div>
-			
+
 			<div class="page" id="p8">
 				<div id="graphDemandSumup"></div>
 				<button class="next" onclick="modeChange('m6');">機器入力</button>
 				<button class="next" onclick="modeChange('m7');">デマンド入力</button>
 			</div>
-			
+
 			<div class="page" id="p9">
 				<div id="graphDemandLog"></div>
 				<button class="next" onclick="modeChange('m6');">機器入力</button>
 				<button class="next" onclick="modeChange('m7');">デマンド入力</button>
 			</div>
-			
+
 			<div class="page" id="p10">
 				<p><?php echo $opendate;?></p>
 				<?php
@@ -164,10 +170,10 @@
 				?>
 				<button class="next" onclick="modeChange('m2'); return false;"><?php echo $lang["button_back"];?></button>
 			</div>
-				
+
 		</div>
 	</div>
-	
+
 	<?php
 		echo $jssets;
 		echo $scripts;
@@ -177,5 +183,6 @@
 
 	<script src="view/view_button/onclick-button.js" type="text/javascript"></script>
 
-  </body>
+</body>
+
 </html>

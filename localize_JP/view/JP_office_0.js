@@ -1,5 +1,5 @@
-/* diagnosis design setting focus on questions and measures  
-*/
+/* diagnosis design setting focus on questions and measures
+ */
 
 //prohibit questions numbers as array i***
 var prohibitQuestions = [];
@@ -20,7 +20,5 @@ defInput[0] = ["i002", "title", "standalone or apartment?"];
 defInput[1] = ["i061", "title", "monthly electricity charge"];
 */
 
-//global 
+//global
 //var showMeasureTable_Max = 40;	//createpage.js showMeasureTable() max result
-
-

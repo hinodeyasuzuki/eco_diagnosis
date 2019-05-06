@@ -55,13 +55,13 @@ $forceMode 		= ( isset($_GET["fm"]) ? (int)($_GET["fm"]) : $forceMode );
 $data 			= ( isset($_GET["data"]) ? $_GET["data"] : "" );
 
 // dont show average
-$hideAverage 	= ( isset($_GET["hideaverage"]) ? $_GET["hideaverage"] : 0 );
+$hideAverage 	= ( isset($_GET["hideaverage"]) ? $_GET["hideaverage"]*1 : 0 );
 
 // dont show price/cost
-$hidePrice 	= ( isset($_GET["hideprice"]) ? $_GET["hideprice"] : 0 );
+$hidePrice 	= ( isset($_GET["hideprice"]) ? $_GET["hideprice"]*1 : 0 );
 
 // measure show number
-$messhownumber 	= ( isset($_GET["messhownumber"]) ? $_GET["messhownumber"] : 7 );
+$messhownumber 	= ( isset($_GET["messhownumber"]) ? $_GET["messhownumber"]*1 : 7 );
 
 
 //parameters set =======================================================
@@ -283,9 +283,9 @@ if ( $introMode == 1 ) {
 	<link href='view/lib/intro.js/introjs.min.css' rel='stylesheet' type='text/css' />\n
 	<script src='view/lib/intro.js/intro.min.js' type='text/javascript'></script>\n
 	<script>
-	$(function(){
+	window.onload = function(){
 		introJs().start();
-	});
+	};
 	</script>\n";
 } else if ( $introMode == -1 || $targetMode == 2 ) {
 	//not show introduction
@@ -293,10 +293,10 @@ if ( $introMode == 1 ) {
 	//not show introduction page
 	$scripts .="\n
 	<script>
-	$(function(){
+	window.onload = function(){
 		$('#top').show();
 		$('#divco2').hide();
-	});
+	};
 	</script>\n";
 	
 }

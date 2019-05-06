@@ -1,12 +1,12 @@
 /**
-* Home-Eco Diagnosis for JavaScript
-* 
-* onlick.js: key input for PC system
-* 
-* 
-* @author SUZUKI Yasufumi	Hinodeya Insititute for Ecolife.co.ltd. 2016/12/13
-* 
-*/
+ * Home-Eco Diagnosis for JavaScript
+ *
+ * onlick.js: key input for PC system
+ *
+ *
+ * @author SUZUKI Yasufumi	Hinodeya Insititute for Ecolife.co.ltd. 2016/12/13
+ *
+ */
 
 // call startCalc in main.js , in order to execute D6.workercalc in d6facade.js
 // result is dealed in main.js
@@ -25,52 +25,46 @@ var budget = 10000;
 //		id : input ID, "i" + 3-5 number
 // set
 //		in other page, execute inchange
-inchange = function( id ){
+inchange = function(id) {
 	var param = {};
 	param.id = id;
-	param.val = escapeHtml($("#" + id ).val());
-	if ( param.val == -1 || param.val === "" ){
-		$("#" + id ).removeClass("written");	
+	param.val = escapeHtml($("#" + id).val());
+	if (param.val == -1 || param.val === "") {
+		$("#" + id).removeClass("written");
 	} else {
-		$("#" + id ).addClass("written");	
+		$("#" + id).addClass("written");
 	}
-	startCalc( "inchange", param );
+	startCalc("inchange", param);
 };
-
-
 
 //graphChange() -----------------------------------------
 // 		change graph type
-graphChange = function(){
-	var param={};
+graphChange = function() {
+	var param = {};
 	param.graph = $("#graphChange").val();
 	graphNow = param.graph;
-	startCalc( "graphchange", param );
+	startCalc("graphchange", param);
 };
 
-
-	
 //dataSave() -------------------------------------------
 //		save input data
-dataSave = function(){
-	startCalc( "save", "" );
+dataSave = function() {
+	startCalc("save", "");
 };
-	
+
 //dataClear() ------------------------------------------
 //		clear saved data, after confirm
-dataClear = function(){
-	if ( confirm( lang.dataClear ) ) {
-		localStorage.removeItem('sindan'+ targetMode);
+dataClear = function() {
+	if (confirm(lang.dataClear)) {
+		localStorage.removeItem("sindan" + targetMode);
 		location.reload();
 	}
 };
 
-
 // detail step
-function saveandgo(){
-	startCalc( "saveandgo", "" );
-};
-
+function saveandgo() {
+	startCalc("saveandgo", "");
+}
 
 //================ after D6 calculation action ===================================
 
@@ -78,19 +72,19 @@ function saveandgo(){
 //		change display mode for smartphone
 // parameters
 //		id : code "m1" to "m5" (string)
-modeChange = function( id ){
-	var param={};
+modeChange = function(id) {
+	var param = {};
 
 	$(".page").hide();
-	$( "#p" + id.substr(1,10) ).show();	
-	$('#top').hide();
+	$("#p" + id.substr(1, 10)).show();
+	$("#top").hide();
 
-	switch( id ) {
+	switch (id) {
 	case "m2":
 		//result page table
 		param.id = "i001";
-		param.val = escapeHtml($("#i001" ).val());
-		startCalc( "inchange", param );
+		param.val = escapeHtml($("#i001").val());
+		startCalc("inchange", param);
 		break;
 	case "m3":
 		break;
@@ -111,9 +105,5 @@ modeChange = function( id ){
 		break;
 	default:
 		break;
-	} 
+	}
 };
-
-
-
-

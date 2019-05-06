@@ -213,7 +213,7 @@ $lang['home_easy_step4']='対策';
 $lang['home_easy_toptitle']='家の光熱費を安くしてみませんか';
 $lang['home_easy_top1']='　日本では「省エネ」が誤解されています。決して「がまんする」ものではなく、より生活を豊かにするものです。光熱費も安くなり、生活が快適になり、それで未来の子どもたちのためにもなります。';
 $lang['home_easy_top2']='　かんたんな質問で、あなたの生活にあった対策を示します。3分間でできるエコチェックしてみてください。';
-$lang['home_easy_top3sm']='※完全無料です。名前やメールアドレスなど、あなたを特定する情報の入力は必要ありません。<br>※この診断ソフトは、計算ロジック自体を端末にダウンロードして行うため、入力した値を利用端末以外に送ることはありません。<br>※このページは利用状況を把握するためにGoogle Analiticsを使用しています。';
+$lang['home_easy_top3sm']='※ご利用は無料です。<br>※名前やメールアドレスなど、あなたを特定する情報の入力は必要ありません。また端末にダウンロードして動作するため、入力した値を利用端末以外に送ることはありません。<br>※このページは利用状況を把握するためにGoogle Analiticsを使用しています。';
 $lang['home_easy_top_button_start']='診断をはじめる';
 $lang['home_easy_top_button_about']='　解説　';
 
@@ -260,7 +260,7 @@ $lang['home_action_good_point']='良い点';
 $lang['home_action_bad_point']='改善点';
 
 //--99 list page-----------------
-$lang['home_list_message']='この中からあなたにあった対策を厳選します';
+$lang['home_list_message']='家庭で有効な対策です。この中からあなたにあった対策を厳選します。';
 
 //--createpage-----------------
 
@@ -323,5 +323,13 @@ $lang['home_lifegame_button_sel3b']='';
 //----------8 uchieco web -----------------------------------------------
 $lang['home_uchieco_title']='うちエコキッズWEB診断';
 
+$lang['home_uchieco_complete']='達成済み';
+$lang['home_uchieco_reducepercent']='%減';
+$lang['home_uchieco_question']='質問';
+$lang['home_uchieco_questionlist']='質問一覧';
+$lang['home_uchieco_average']='平均比較';
+$lang['home_uchieco_target']='CO2削減目標';
+$lang['home_uchieco_itemize']='CO2排出の内訳';
+$lang['home_uchieco_measure']='CO2削減対策と効果';
 
 

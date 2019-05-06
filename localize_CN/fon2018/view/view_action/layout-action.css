@@ -34,12 +34,10 @@ div.leftmenu {
 	display: block;
 	width:30%;
 	min-width: 280px;
-	vertical-align: top;
 }
 
 div.result {
 	display: block;
-	vertical-align: top;
 	background: #efe;
 }
 
@@ -47,7 +45,6 @@ div.mesmenu {
 	display: block;
 	width:38%;
 	min-width: 330px;
-	vertical-align: top;
 	background: #efe;
 }
 
@@ -187,7 +184,7 @@ a:hover {
 }
 
 
-/*=========== input are　=========== */
+/*=========== input areã€€=========== */
 
 div.inputarea{
 	width:60%;

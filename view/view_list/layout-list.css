@@ -4,60 +4,56 @@ D6 design
 *********************************************************************/
 
 /* ============= layout ===================== */
-body{
-	font-size:1.0em;
+body {
+  font-size: 1em;
 }
 #onemeasure {
-	margin:30px;
-	padding:5px;
-	width:70%;
-	border: 5px solid #999; 
-	border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px; 
+  margin: 30px;
+  padding: 5px;
+  width: 70%;
+  border: 5px solid #999;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
 }
 
 #mesimg {
   padding: 5px;
   float: right;
-  max-width:200px;
+  max-width: 200px;
 }
 
-.large{
-	width:30% !important;
-
+.large {
+  width: 30% !important;
 }
 
-.button{
-	width:80%;
-	margin-left:10%;
-	text-align:center;
-	background-color:SpringGreen;
-	padding:5px;
+.button {
+  width: 80%;
+  margin-left: 10%;
+  text-align: center;
+  background-color: SpringGreen;
+  padding: 5px;
 }
 
 /* =========== smart phone ============ */
 @media only screen and (max-width: 600px) {
+  h1 {
+    font-size: 1.6em;
+    margin-bottom: 10px;
+  }
 
-h1{
-	font-size:1.6em;
-	margin-bottom:10px;
-}
+  div {
+    padding: 0px;
+    margin: 0px;
+  }
+  #onemeasure {
+    padding: 0px;
+    margin: 0px;
+    width: 96%;
+  }
 
-div {
-	padding:0px;
-	margin:0px;
-}
-#onemeasure {
-	padding:0px;
-	margin:0px;
-	width:96%;
-}
-
-.button{
-	width:70% !important;
-	margin-bottom:10px;;
-
-}
-
+  .button {
+    width: 70% !important;
+    margin-bottom: 10px;
+  }
 }

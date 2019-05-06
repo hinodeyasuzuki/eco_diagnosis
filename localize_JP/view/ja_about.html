@@ -1,83 +1,91 @@
-﻿			<h2>省エネ診断の使い方について</h2>
+<h2>省エネ診断の使い方について</h2>
 <p>　この省エネ診断は、だれでも無償でご利用いただけます。あなたの生活に合わせて、効果的な対策を計算して提案します。省エネを進めていくヒントとしてご活用ください。</p>
 <p>　お勧めの対策を提案するもので、削減効果など保証するものではありません。</p>
 
 <h3>おすすめの診断画面</h3>
 <div>
-<p>　同じ診断内容ですが、3種類のデザインがあります。</p>
-<p style="line-height:1.8em;"><a class="button" href="./?lang=ja&v=3">　簡易版　</a>　6-7の質問で簡単に診断ができます（スマホ可）。</p>
-<p style="line-height:1.8em;"><a class="button" href="./?lang=ja&v=6">　エコレベル診断　</a>　あなたのエコレベルを診断します（スマホ可）。</p>
-<p style="line-height:1.8em;"><a class="button" href="./?lang=ja&v=2">一覧画面版</a>　診断の概要を見通したい場合におすすめです。</p>
-<p style="line-height:1.8em;"><a class="button" href="./?lang=ja&v=0">　詳細版　</a>　最大限詳しい診断をしたい場合におすすめです。</p>
-<p>　いずれも、記入したデータを引き継ぎながら、より詳細な診断に進むことができます。</p>
+	<p>　同じ診断内容ですが、3種類のデザインがあります。</p>
+	<p style="line-height:1.8em;"><a class="button" href="./?lang=ja&v=3">　簡易版　</a>　6-7の質問で簡単に診断ができます（スマホ可）。</p>
+	<p style="line-height:1.8em;"><a class="button" href="./?lang=ja&v=6">　エコレベル診断　</a>　あなたのエコレベルを診断します（スマホ可）。</p>
+	<p style="line-height:1.8em;"><a class="button" href="./?lang=ja&v=2">一覧画面版</a>　診断の概要を見通したい場合におすすめです。</p>
+	<p style="line-height:1.8em;"><a class="button" href="./?lang=ja&v=0">　詳細版　</a>　最大限詳しい診断をしたい場合におすすめです。</p>
+	<p>　いずれも、記入したデータを引き継ぎながら、より詳細な診断に進むことができます。</p>
 </div>
 <p>&nbsp;</p>
 
 <h3>診断結果の内容</h3>
 <ul>
-<li>対策：<a href="./">約70項目用意してある対策</a>を計算し、あなたの家庭にとって有効なCO2削減対策を選び出します。CO2削減量だけでなく、光熱費の削減量も合わせて示しますので、取り組みを考える参考にしてください。<a href="./?v=2">一覧画面版</a>と<a href="./?v=0">詳細版</a>では、対策を組み合わせて選ぶことができ、家庭でどこまで削減ができるのかシミュレーションをすることもできます。</li>
-<li>比較：同じ家族人数、地域の家庭とくらべて、エネルギー消費が多いのか少ないのか、比較することができます。似た環境の世帯が100世帯あった場合に、何位なのかも示します。</li>
-<li>内訳：家庭の中の何が主なCO2排出の原因なのかを推計します。多い用途について、対策をすると効果的です。</li>
+	<li>対策：<a
+			href="./">約70項目用意してある対策</a>を計算し、あなたの家庭にとって有効なCO2削減対策を選び出します。CO2削減量だけでなく、光熱費の削減量も合わせて示しますので、取り組みを考える参考にしてください。<a
+			href="./?v=2">一覧画面版</a>と<a href="./?v=0">詳細版</a>では、対策を組み合わせて選ぶことができ、家庭でどこまで削減ができるのかシミュレーションをすることもできます。</li>
+	<li>比較：同じ家族人数、地域の家庭とくらべて、エネルギー消費が多いのか少ないのか、比較することができます。似た環境の世帯が100世帯あった場合に、何位なのかも示します。</li>
+	<li>内訳：家庭の中の何が主なCO2排出の原因なのかを推計します。多い用途について、対策をすると効果的です。</li>
 </ul>
 
-			<h2>起動パラメータ</h2>
+<h2>起動パラメータ</h2>
 <p>　パラメータを追記することで、多様なデザイン・用途の診断が可能です。現時点で設定しているものを以下に記載します。</p>
 <form action="./" method="get">
-<ul>
-	<li><label for="t">診断対象：</label>
-	<select id="t" name="t">
-		<option value="1" selected>家庭の省エネ診断</option>
-		<option value="2">事業所の省エネ診断(日本のみ)</option>
-	</select>
-	</li>
+	<ul>
+		<li><label for="t">診断対象：</label>
+			<select id="t" name="t">
+				<option value="1" selected>家庭の省エネ診断</option>
+				<option value="2">事業所の省エネ診断(日本のみ)</option>
+			</select>
+		</li>
 
-	<li><label for="v">画面モード：</label>
-	<select id="v" name="v">
-		<option value="3">簡易版</option>
-		<option value="6">エコレベル診断</option>
-		<option value="2" selected>一覧画面版</option>
-		<option value="0">詳細版</option>
-		<option value="1">ボタン操作版</option>
-	</select>
-	</li>
+		<li><label for="v">画面モード：</label>
+			<select id="v" name="v">
+				<option value="3">簡易版</option>
+				<option value="6">エコレベル診断</option>
+				<option value="2" selected>一覧画面版</option>
+				<option value="0">詳細版</option>
+				<option value="1">ボタン操作版</option>
+			</select>
+		</li>
 
-	<li><label for="intro">操作の簡易な解説：</label>
-	<select id="intro" name="intro">
-		<option value="0" selected>なし</option>
-		<option value="1">あり（1画面集約版のみ）</option>
-	</select>
-	</li>
+		<li><label for="intro">操作の簡易な解説：</label>
+			<select id="intro" name="intro">
+				<option value="0" selected>なし</option>
+				<option value="1">あり（1画面集約版のみ）</option>
+			</select>
+		</li>
 
-	<li><label for="lang">言語・地域設定：</label>
-	<select id="lang" name="lang">
-		<option value="ja" selected>日本語</option>
-		<option value="en">英語（日本地域設定）</option>
-		<option value="fr">フランス語（日本地域設定）</option>
-		<option value="zh" >中国語（中国地域設定）</option>
-	</select>
-	</li>
+		<li><label for="lang">言語・地域設定：</label>
+			<select id="lang" name="lang">
+				<option value="ja" selected>日本語</option>
+				<option value="en">英語（日本国内）</option>
+				<option value="fr">フランス</option>
+				<option value="zh">中国</option>
+			</select>
+		</li>
 
-	<li><label for="translate">google翻訳：</label>
-	<select id="translate" name="translate">
-		<option value="0" selected>なし</option>
-		<option value="1" >あり</option>
-	</select>
-	</li>
+		<li><label for="translate">google翻訳：</label>
+			<select id="translate" name="translate">
+				<option value="0" selected>なし</option>
+				<option value="1">あり</option>
+			</select>
+		</li>
 
-</ul>
-<input type="submit" name="submit" value="診断を開始する">
+	</ul>
+	<input type="submit" name="submit" value="診断を開始する">
 </form>
 
-<p>　そのほか、<a href="./" target="_blank">./?data=***</a> GET形式で、保存データの文字列を渡すことで、入力データを渡して診断結果を得られます。「保存」ボタンを押すとダイアログで表示されます。</p>
+<p>　そのほか、<a href="./" target="_blank">./?data=***</a>
+	GET形式で、保存データの文字列を渡すことで、入力データを渡して診断結果を得られます。「保存」ボタンを押すとダイアログで表示されます。</p>
 
-			<h2>省エネ診断についての技術解説</h2>
-<p>　この診断は<a href="https://www.hinodeya-ecolife.com">有限会社ひのでやエコライフ研究所 ( Hinodeya Institute for Ecolife co. )</a>が提供しています。現在環境省で進められている「うちエコ診断」の計算ロジックを基本から見直したもので、多言語など柔軟なシステムに対応できるように設計しています。</p>
-<p>　家庭や事業所のエネルギー利用状況に応じて、有効な対策は異なってきます。わかる範囲で回答いただくことで、より家庭の状況のあった分析と対策提案が可能となります。ただし、わからない項目については無理に回答する必要はありません。利用状況を推測するロジックを通じて、無理に回答しなくても、適切な対策が提案されるようになっています。</p>
-<p>　動作モデルを提案しているものであり、提案内容については入力に応じておおむね適切な数値の算出を行っていますが、精度や動作の保証はありません。不適切な提案や数値が出力された場合には、ご連絡いただければ幸いです。診断ロジックを精査したシステムについては別途開発に応じます。</p>
+<h2>省エネ診断についての技術解説</h2>
+<p>　この診断は<a href="https://www.hinodeya-ecolife.com">有限会社ひのでやエコライフ研究所 ( Hinodeya Institute for Ecolife co.
+		)</a>が提供しています。現在環境省で進められている「うちエコ診断」の計算ロジックを基本から見直したもので、多言語など柔軟なシステムに対応できるように設計しています。</p>
+<p>
+	　家庭や事業所のエネルギー利用状況に応じて、有効な対策は異なってきます。わかる範囲で回答いただくことで、より家庭の状況のあった分析と対策提案が可能となります。ただし、わからない項目については無理に回答する必要はありません。利用状況を推測するロジックを通じて、無理に回答しなくても、適切な対策が提案されるようになっています。
+</p>
+<p>
+	　動作モデルを提案しているものであり、提案内容については入力に応じておおむね適切な数値の算出を行っていますが、精度や動作の保証はありません。不適切な提案や数値が出力された場合には、ご連絡いただければ幸いです。診断ロジックを精査したシステムについては別途開発に応じます。
+</p>
 
 
 
-			<h2>開発記録</h2>
+<h2>開発記録</h2>
 <p>2011年1月17日　診断プラットホームの開発プロジェクトを開始</p>
 <p>2011年5月6日　ActionScrpt3によるプラットホーム初動作版</p>
 <p>2014年2月17日　用語の整理</p>
@@ -104,5 +112,4 @@
 <p>2017年12月20日　オープンソース化に向けたコード整理。</p>
 <p>2018年3月15日　言語設定の外部化強化。</p>
 <p>2018年4月12日　電気がマイナスになりにくい補正、キッズ版。</p>
-
-
+<p>2019年5月6日　グラフ数値表示、tween表示等。</p>

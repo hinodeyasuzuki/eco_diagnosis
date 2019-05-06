@@ -5,12 +5,20 @@
 var prohibitQuestions = [];
 
 //allow questions numbers. use this setting when prohibitQuestions is null.
-var allowedQuestions = ['i021', 'i001', 'i002','i061','i063','i075'
+var allowedQuestions = [
+	"i021",
+	"i001",
+	"i002",
+	"i061",
+	"i063",
+	"i075",
+	"i202",
+	"i205"
 ];
 
 //prohibit measures codes as array m*****
 //var prohibitMeasures = ["mTOsolar"];	//example
-var prohibitMeasures = ["mHWshowerTime30","mTVradio"];
+var prohibitMeasures = ["mHWshowerTime30", "mTVradio"];
 
 //allow measures codes. use this setting when prohibitMeasures is null.
 var allowedMeasures = [];
@@ -22,7 +30,5 @@ defInput[0] = ["i002", "title", "standalone or apartment?"];
 defInput[1] = ["i061", "title", "monthly electricity charge"];
 */
 
-//global 
-var showMeasureTable_Max = 7;	//createpage.js showMeasureTable() max result
-
-
+//global
+var showMeasureTable_Max = 7; //createpage.js showMeasureTable() max result

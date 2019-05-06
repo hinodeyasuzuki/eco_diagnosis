@@ -1,19 +1,18 @@
 /**
-* Home-Eco Diagnosis for JavaScript
-* 
-* onlick.js: key input for PC system
-* 
-* 
-* @author SUZUKI Yasufumi	Hinodeya Insititute for Ecolife.co.ltd. 2016/12/13
-* 
-*/
+ * Home-Eco Diagnosis for JavaScript
+ *
+ * onlick.js: key input for PC system
+ *
+ *
+ * @author SUZUKI Yasufumi	Hinodeya Insititute for Ecolife.co.ltd. 2016/12/13
+ *
+ */
 
 // call startCalc in main.js , in order to execute D6.workercalc in d6facade.js
 // result is dealed in main.js
 
 //------- view depend action ---------------
 var detailNextDiagnosisCode = 0;
-
 
 //================ button action ===================================
 
@@ -24,22 +23,21 @@ var detailNextDiagnosisCode = 0;
 // set
 //		in demand page, execute inchange_demand
 //		in other page, execute inchange
-inchange = function( id ){
+inchange = function(id) {
 	var param = {};
 	param.id = id;
-	param.val = escapeHtml($("#" + id ).val());
-	if ( param.val == -1 || param.val === "" ){
-		$("#" + id ).removeClass("written");	
+	param.val = escapeHtml($("#" + id).val());
+	if (param.val == -1 || param.val === "") {
+		$("#" + id).removeClass("written");
 	} else {
-		$("#" + id ).addClass("written");	
+		$("#" + id).addClass("written");
 	}
-	if ( mainTab == "demand" ) {
-		startCalc( "add_demand", param );
+	if (mainTab == "demand") {
+		startCalc("add_demand", param);
 	} else {
-		startCalc( "inchange", param );
+		startCalc("inchange", param);
 	}
 };
-
 
 //measureadddelete(mid) ------------------------------------
 //		adopt or release measure as selectedlist and calculate
@@ -48,67 +46,68 @@ inchange = function( id ){
 // set
 //		checked, execute measureadd
 //		released, execute measuredelete
-measureadddelete = function( mid ){
+measureadddelete = function(mid) {
 	var param = {};
 	param.mid = mid;
-	if ( $("#messel" + mid ).prop('checked') ) {
-		startCalc( "measureadd", param );
+	if ($("#messel" + mid).prop("checked")) {
+		startCalc("measureadd", param);
 	} else {
-		startCalc( "measuredelete", param );
+		startCalc("measuredelete", param);
 	}
 };
 
-
 // addroom( consName ) -----------------------------------------
-//		add one room or equipment and calculate 
+//		add one room or equipment and calculate
 // parameters
-//		consName: consumption code of room or equipment 
+//		consName: consumption code of room or equipment
 // set
 //		in demand page, execute add_demand
 //		in other page, execute addandstart
-addroom = function( consName ){
+addroom = function(consName) {
 	var param = {};
-	param.rdata = localStorage.getItem('sindan' + targetMode );
+	param.rdata = localStorage.getItem("sindan" + targetMode);
 	param.consName = consName;
 	param.subName = consName;
-	if ( mainTab == "demand" ) {
-		startCalc( "add_demand", param );
+	if (mainTab == "demand") {
+		startCalc("add_demand", param);
 	} else {
-		startCalc( "addandstart", param );
+		startCalc("addandstart", param);
 	}
 };
-
 
 //tabclick( index, consName ) --------------------------------
 //		change consumption group and prepare questions
 // parameters
 //		index :		tab index to highlight
 //		consName:  	display consumption code, if not null call D6 to get html
-tabclick = function( index, consName ) {
-	tabset( index );
+tabclick = function(index, consName) {
+	tabset(index);
 
 	//in case of change tab
-	if ( consName ) {
+	if (consName) {
 		var param = {};
 		param.consName = consName;
 		param.subName = consName;
 		tabNowIndex = index;
 		tabNowName = consName;
-		startCalc( "tabclick", param );
+		startCalc("tabclick", param);
 	}
-
 };
 
 //tabset( index ) ------------------------------------------
 //		highlight tab
-tabset = function( index ) {
+tabset = function(index) {
 	tabNow = index;
 	//contents
-	$('li.inppage').css('display','none');
-	$('li.inppage').eq(index).css('display','block');
+	$("li.inppage").css("display", "none");
+	$("li.inppage")
+		.eq(index)
+		.css("display", "block");
 	//tab
-	$('#tab>li').removeClass('select');
-	$('#tab>li').eq(index).addClass('select');	
+	$("#tab>li").removeClass("select");
+	$("#tab>li")
+		.eq(index)
+		.addClass("select");
 };
 
 //subtabclick( page, subpage ) --------------------------------
@@ -116,43 +115,39 @@ tabset = function( index ) {
 // parameters
 //		page :		code of consumption belongs to
 //		subpage:  	target consumption code
-subtabclick = function( page, subpage ){
+subtabclick = function(page, subpage) {
 	var param = {};
 	param.consName = page;
 	param.subName = subpage;
 
-	startCalc( "subtabclick", param );
+	startCalc("subtabclick", param);
 };
-
 
 //graphChange() -----------------------------------------
 // 		change graph type
-graphChange = function(){
-	var param={};
+graphChange = function() {
+	var param = {};
 	param.graph = $("#graphChange").val();
 	graphNow = param.graph;
-	startCalc( "graphchange", param );
+	startCalc("graphchange", param);
 };
 
-
-	
 //dataSave() -------------------------------------------
 //		save input data
-dataSave = function(){
-	startCalc( "save", "" );
+dataSave = function() {
+	startCalc("save", "");
 };
 
 // detail step
-function saveandgo(){
-	startCalc( "saveandgo", "" );
-};
-
+function saveandgo() {
+	startCalc("saveandgo", "");
+}
 
 //dataClear() ------------------------------------------
 //		clear saved data, after confirm
-dataClear = function(){
-	if ( confirm( lang.dataClear ) ) {
-		localStorage.removeItem('sindan'+ targetMode);
+dataClear = function() {
+	if (confirm(lang.dataClear)) {
+		localStorage.removeItem("sindan" + targetMode);
 		location.reload();
 	}
 };
@@ -173,55 +168,50 @@ dataClear = function(){
 	);
 */
 
-
 //================ after D6 calculation action ===================================
 
 //modeChange(id) -------------------------------------------------
 //		change display mode
 // parameters
 //		id : code "m1" to "m3" (string)
-modeChange = function( id ){
+modeChange = function(id) {
 	var param = {};
 	$(".inmode").removeClass("selected");
-	$("#"+id).addClass('selected');
+	$("#" + id).addClass("selected");
 
-	$('#about').css('display','none');
-	$('#divelec').css('display','none');
-	$('#divco2').css('display','none');
-	$('#top').hide();
-	
-	if ( id == "m1" ){
+	$("#about").css("display", "none");
+	$("#divelec").css("display", "none");
+	$("#divco2").css("display", "none");
+	$("#top").hide();
+
+	if (id == "m1") {
 		//input mode
-		$('#divco2').css('display','inline-block');
-		$('.leftmenu').css('display','inline-block');
-		$('.result').css('display','inline-block');
-		$('.mesmenu').css('display','none');
+		$("#divco2").css("display", "inline-block");
+		$(".leftmenu").css("display", "inline-block");
+		$(".result").css("display", "inline-block");
+		$(".mesmenu").css("display", "none");
 		mainTab = "cons";
 		pageMode = "m1";
-		startCalc( "tabclick", param );
+		startCalc("tabclick", param);
 		tabset(tabNowIndex, tabNowName);
-				
-	} else if ( id == "m2" ){
+	} else if (id == "m2") {
 		//measures select mode
-		$('#divco2').css('display','inline-block');
-		$('.leftmenu').css('display','inline-block');
-		$('.result').css('display','inline-block');
-		$('.mesmenu').css('display','inline-block');						
+		$("#divco2").css("display", "inline-block");
+		$(".leftmenu").css("display", "inline-block");
+		$(".result").css("display", "inline-block");
+		$(".mesmenu").css("display", "inline-block");
 		mainTab = "cons";
 		pageMode = "m2";
-
-	} else if ( id == "m4" ){
+	} else if (id == "m4") {
 		//about
-		$('#about').css('display','inline-block');
-
+		$("#about").css("display", "inline-block");
 	} else {
-		$('#divelec').css('display','inline-block');
-		$('.leftmenu').css('display','inline-block');
-		$('.result').css('display','inline-block');
+		$("#divelec").css("display", "inline-block");
+		$(".leftmenu").css("display", "inline-block");
+		$(".result").css("display", "inline-block");
 		startCalc("demand", "");
 		mainTab = "demand";
-	};
+	}
 };
 
 pageMode = "m2";
-

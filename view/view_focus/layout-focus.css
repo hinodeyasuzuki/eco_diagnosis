@@ -5,218 +5,215 @@ D6 design
 
 /*--layout----------------------------------------------------------*/
 body {
-	font-size:80%;
-	-webkit-touch-callout: none; /* Disable Android and iOS callouts*/
+  font-size: 80%;
+  -webkit-touch-callout: none; /* Disable Android and iOS callouts*/
 }
 
-p{
-	line-height:1.2em;
-	margin:8px;
+p {
+  line-height: 1.2em;
+  margin: 8px;
 }
 
 .info p {
-	line-height:16px;
+  line-height: 16px;
 }
 
-a:visited{
-	color:#00f;
+a:visited {
+  color: #00f;
 }
 
 a.button {
-	color:#000;
+  color: #000;
 }
-
-
 
 /* ============= 左右 ===================== */
 div.leftmenu {
-	display: inline-block;
-	width:29%;
-	min-width: 240px;
-	vertical-align: top;
+  display: inline-block;
+  width: 29%;
+  min-width: 240px;
+  vertical-align: top;
 }
 
 div.result {
-	display: inline-block;
-	width:31%;
-	min-width: 260px;
-	vertical-align: top;
-	background: #efe;
+  display: inline-block;
+  width: 31%;
+  min-width: 260px;
+  vertical-align: top;
+  background: #efe;
 }
 
 div.mesmenu {
-	display: inline-block;
-	width:37%;
-	min-width: 300px;
-	padding : 0px;
-	vertical-align: top;
-	background: #efe;
+  display: inline-block;
+  width: 37%;
+  min-width: 300px;
+  padding: 0px;
+  vertical-align: top;
+  background: #efe;
 }
 
 div#measure {
-	padding : 5px;
+  padding: 5px;
 }
-
 
 /***ボタン*******/
 
 .large {
-	display:inline-block;
-	text-align:center;
-	vertical-align:middle;
-	width:200px;
-	height:40px;
-	line-height: 1.3em;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  width: 200px;
+  height: 40px;
+  line-height: 1.3em;
 }
-
 
 .button:hover {
-	color:#fafafa;
-	background:#009800!important;
+  color: #fafafa;
+  background: #009800 !important;
 }
 
-.colortop{
-	background-color:#f8cbff;
+.colortop {
+  background-color: #f8cbff;
 }
 
 .colorback {
-	background-color:#f8fbcf;
+  background-color: #f8fbcf;
 }
 a:hover {
-	color:#5a9aba;
+  color: #5a9aba;
 }
 
 span.selected {
-	background:#1a5a9a;
-	color:#fff;
+  background: #1a5a9a;
+  color: #fff;
 }
-
 
 /***    警告  ***/
 div.alert {
-	width: 90%;
-	text-align:center;
-	background:#ff0000;
-	color:#fff;
-	height:30px;
-	margin:5px;
+  width: 90%;
+  text-align: center;
+  background: #ff0000;
+  color: #fff;
+  height: 30px;
+  margin: 5px;
 }
 
-textarea{
-	font-size:10px;
+textarea {
+  font-size: 10px;
 }
 
-div.info{
-	display:none;
+div.info {
+  display: none;
 }
-
 
 .inmode {
-	background-color : #ddd;
+  background-color: #ddd;
 }
 
 .inmode .select {
-	background-color : #ff8;
+  background-color: #ff8;
 }
 
 /*========== タブメニュー =========== */
-#tab,ul.submenu{
-	overflow:hidden;
-	display:none;
+#tab,
+ul.submenu {
+  overflow: hidden;
+  display: none;
 }
 
-#tabcontents li{
-	background:#efe; 
-	padding:5px;
-	list-style-type:none;
+#tabcontents li {
+  background: #efe;
+  padding: 5px;
+  list-style-type: none;
 }
 
-	 
-#tab li, #tabcontents li ul.submenu li{
-	background:#afa; 
-	padding:5px 10px; 
-	float:left; 
-	margin-right:1px;
-	list-style-type:none;
-	cursor: pointer;
+#tab li,
+#tabcontents li ul.submenu li {
+  background: #afa;
+  padding: 5px 10px;
+  float: left;
+  margin-right: 1px;
+  list-style-type: none;
+  cursor: pointer;
 }
 
-#tab li:hover,#tabcontents li ul.submenu li:hover{
-	background:#dfd;
+#tab li:hover,
+#tabcontents li ul.submenu li:hover {
+  background: #dfd;
 }
 
-#tab li.select, #tabcontents li ul.submenu li.select{
-	background:#efe;
+#tab li.select,
+#tabcontents li ul.submenu li.select {
+  background: #efe;
 }
 
 .hide {
-	display:none;
+  display: none;
 }
 
-
-ul { 
-	margin-top:0px;
-	margin-bottom:0px;
-	padding:0px;
+ul {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding: 0px;
 }
-li { 
-	margin-top:0px;
-	margin-bottom:0px;
+li {
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
-#about ul{
-	padding:30px;
+#about ul {
+  padding: 30px;
 }
 
 /*=========== 入力欄　=========== */
-input, select{
-	width:130px;
+input,
+select {
+  width: 130px;
 }
 
-input[type=checkbox]{
-	width:20px;
+input[type="checkbox"] {
+  width: 20px;
 }
 
-
-table.demandtable input, 
+table.demandtable input,
 table.demandtable select {
-	width:65px;
+  width: 65px;
 }
 
 table.demandtable td {
-	white-space: nowrap;
+  white-space: nowrap;
 }
 
 /*=========== 結果　=========== */
-div#graph,div#average,div#cons,div#measure{
-	padding:5px;
+div#graph,
+div#average,
+div#cons,
+div#measure {
+  padding: 5px;
 }
 
-div#graph tr,div#average tr, div#cons tr,div#measure tr{
-	background-color:#FFFFFF;
+div#graph tr,
+div#average tr,
+div#cons tr,
+div#measure tr {
+  background-color: #ffffff;
 }
 
-tr.messelected{
-	background-color:#FFFF88 !important;
+tr.messelected {
+  background-color: #ffff88 !important;
 }
 
 td.conscolor {
-	border-left:5px solid;
+  border-left: 5px solid;
 }
-
-
 
 /* =========== スマホ画面 ============ */
 @media only screen and (max-width: 600px) {
+  div#graphMonthly {
+    width: 95%;
+  }
 
-div#graphMonthly{
-	width:95%;
-}
-
-
-#step span{
-	padding-left:5px;
-	padding-right:5px;
-}
-
+  #step span {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
 }

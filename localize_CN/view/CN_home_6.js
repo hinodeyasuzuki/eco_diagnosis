@@ -1,5 +1,5 @@
-/* diagnosis design setting focus on questions and measures  
-*/
+/* diagnosis design setting focus on questions and measures
+ */
 
 //prohibit questions numbers as array i***
 var prohibitQuestions = [];
@@ -9,7 +9,7 @@ var allowedQuestions = [];
 
 //prohibit measures codes as array m*****
 //var prohibitMeasures = ["mTOsolar"];	//example
-var prohibitMeasures = ["mHWshowerTime30","mTVradio"];
+var prohibitMeasures = ["mHWshowerTime30", "mTVradio"];
 
 //allow measures codes. use this setting when prohibitMeasures is null.
 var allowedMeasures = [];
@@ -22,7 +22,5 @@ defInput[4] = ["i075", "title",  "选择的约一个月的汽油（轻油费）�
 */
 defInput[1] = ["i061", "title", "每个月的电费"];
 
-//global 
-var showMeasureTable_Max = 7;	//createpage.js showMeasureTable() max result
-
-
+//global
+var showMeasureTable_Max = 7; //createpage.js showMeasureTable() max result

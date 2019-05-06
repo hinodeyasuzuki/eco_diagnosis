@@ -1,5 +1,5 @@
-﻿/* 2017/12/16  version 1.0
- * coding: utf-8, Tab as 4 spaces
+/* 2017/12/16  version 1.0
+ * coding: utf-8
  * 
  * Home Energy Diagnosis System Ver.6
  * scenariofix.js 

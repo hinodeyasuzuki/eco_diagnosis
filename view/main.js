@@ -1,16 +1,16 @@
-﻿/**
-* Home-Eco Diagnosis for JavaScript
-* 
-* view/main.js:  Main Class to use d6 package
-* 
-* in this routine, cannot access D6, can access html DOM
-* 	- on loaded action
-* 	- call D6 routine through web-worker
-* 	- callback action by web-worker
-* 
-* @author SUZUKI Yasufumi	2016/05/23
-* 
-*/
+/**
+ * Home-Eco Diagnosis for JavaScript
+ *
+ * view/main.js:  Main Class to use d6 package
+ *
+ * in this routine, cannot access D6, can access html DOM
+ * 	- on loaded action
+ * 	- call D6 routine through web-worker
+ * 	- callback action by web-worker
+ *
+ * @author SUZUKI Yasufumi	2016/05/23
+ *
+ */
 
 /*
 	1) click function is listed in each view in view/onclick*.js and call startCalc(param, command ) in d6facade.js
@@ -47,21 +47,21 @@
 */
 
 var commandset = {
-	"start" : {
-		recalc : true,
-		draw_tab : true,
-		draw_inputPage : true,
-		draw_buttonInputPage : true,
-		draw_graphAverage : true,
-		draw_tableAverage : true,
-		draw_graphMonthly : true,
-		draw_graphItemize : true,
-		draw_tableMeasures : true,
+	start: {
+		recalc: true,
+		draw_tab: true,
+		draw_inputPage: true,
+		draw_buttonInputPage: true,
+		draw_graphAverage: true,
+		draw_tableAverage: true,
+		draw_graphMonthly: true,
+		draw_graphItemize: true,
+		draw_tableMeasures: true
 	}
 };
 
 //useWorker,debugMode is set in php files
-var includejs = ( useCode==2 ? includesumjs : includeminjs);
+var includejs = useCode == 2 ? includesumjs : includeminjs;
 
 //worker parameters
 var worker = "";
@@ -70,18 +70,18 @@ var param = "";
 //display state initialize
 var tabNow = "";
 
-var tabNowName = "easy01";		// default page 
-var tabSubNowName = "easy01";	// default sub page
-var showPageName = lang.startPageName;	// title of default page
+var tabNowName = "easy01"; // default page
+var tabSubNowName = "easy01"; // default sub page
+var showPageName = lang.startPageName; // title of default page
 var tabSubNow = tabNowName + "-" + tabSubNowName;
 var showOver15 = false;
 
 var tabNowIndex = 0;
 var tabSubNowCode = "";
 
-var graphNow = "co2";			// graph unit, "co2", "jules" or "price"
-var mainTab = "cons";			// main tab mode , "cons" or "demand"
-var pageMode = "m1";			// "m1":input page ,"m2":measures page
+var graphNow = "co2"; // graph unit, "co2", "jules" or "price"
+var mainTab = "cons"; // main tab mode , "cons" or "demand"
+var pageMode = "m1"; // "m1":input page ,"m2":measures page
 
 // diagnosis question and measures,  set in localize_*/focussetting
 var prohibitQuestions = [];
@@ -90,108 +90,110 @@ var prohibitMeasures = [];
 var allowedMeasures = [];
 
 //common view set
-$(".page").css({opacity: '0.0'});
+$(".page").css({ opacity: "0.0" });
 
 // start parameters set depend on views
-onloadStartParamsSet = function(param){
+onloadStartParamsSet = function(param) {
 	return param;
 };
 
 // enable to use worker in local environment
 var newWorker = function(relativePath) {
-  try {
-    return newWorkerViaBlob(relativePath);
-  } catch (e) {
-    return new Worker(relativePath);
-  }
+	try {
+		return newWorkerViaBlob(relativePath);
+	} catch (e) {
+		return new Worker(relativePath);
+	}
 };
 
 // initialize after html and scripts are loaded ========================================
-$(document).ready(function(){
-	
+$(document).ready(function() {
 	//common start condition design
 	$(".preloader").hide();
 	$(".contents").show();
-	$(".page").css({opacity: '1'});
-	
+	$(".page").css({ opacity: "1" });
+
 	//language setting. function defined in createpage.js
 	languageset();
 
 	// check web-worker
-	if ( useWorker && window.Worker) {
+	if (useWorker && window.Worker) {
 		try {
-			worker = new newWorker( includejs );
+			worker = new newWorker(includejs);
 
 			// call back by web-worker
-			worker.onmessage = function (event) {
-				getCalcResult( event.data.command, event.data.result );
+			worker.onmessage = function(event) {
+				getCalcResult(event.data.command, event.data.result);
 			};
 
-			worker.addEventListener=("error",function(event){
+			worker.addEventListener = ("error",
+			function(event) {
 				_output.textContent = event.data;
-			},false);
-			
-		} catch(e) {
+			},
+			false);
+		} catch (e) {
 			//no web-worker, in case of local environment
 			useWorker = false;
 			includejs = " [use each js] ";
-			
-			var script = document.createElement('script');
-			script.type = 'text/javascript';
-			script.src = includemincore;
-			document.getElementsByTagName('head')[0].appendChild(script);
-			
-			var script2 = document.createElement('script');
-			script2.type = 'text/javascript';
-			script2.src = includeminlocalize;
-			window.setTimeout( function() {document.getElementsByTagName('head')[0].appendChild(script2); }, 100 );
-			
-			window.setTimeout( function() { startCalc( "start", param ) }, 1000 );
-		}
 
+			var script = document.createElement("script");
+			script.type = "text/javascript";
+			script.src = includemincore;
+			document.getElementsByTagName("head")[0].appendChild(script);
+
+			var script2 = document.createElement("script");
+			script2.type = "text/javascript";
+			script2.src = includeminlocalize;
+			window.setTimeout(function() {
+				document.getElementsByTagName("head")[0].appendChild(script2);
+			}, 100);
+
+			window.setTimeout(function() {
+				startCalc("start", param);
+			}, 1000);
+		}
 	} else {
 		//no web-worker
 		useWorker = false;
 		includejs = " [use each js] ";
-	};
+	}
 
 	//clear measures number limit
-	localStorage.removeItem('sindanOver15');
+	localStorage.removeItem("sindanOver15");
 
 	startInit();
 });
 
 //D6 initialize
-function startInit(){
+function startInit() {
 	//default setting
 	var param = {};
-	if ( typeof(paramdata) !="undefined" && paramdata ) {
+	if (typeof paramdata != "undefined" && paramdata) {
 		param.rdata = paramdata;
 	} else {
-		param.rdata = localStorage.getItem('sindan' + languageMode+ targetMode );
-		if ( debugMode ) console.log( "data loaded from localStorage" );
+		param.rdata = localStorage.getItem("sindan" + languageMode + targetMode);
+		if (debugMode) console.log("data loaded from localStorage");
 	}
-	
+
 	//start page
 	param.consName = tabNowName;
 	param.subName = tabSubNowName;
-	param.prohibitQuestions = prohibitQuestions;	//focus questions
+	param.prohibitQuestions = prohibitQuestions; //focus questions
 	param.allowedQuestions = allowedQuestions;
-	param.defInput = (typeof(defInput) =="undefined" ? "" : defInput);
-	param.debugMode = ( debugMode ? 1 : 2 );	//set to D6
+	param.defInput = typeof defInput == "undefined" ? "" : defInput;
+	param.debugMode = debugMode ? 1 : 2; //set to D6
 	param.dispMode = dispMode;
 	param.targetMode = targetMode;
 	param.focusMode = focusMode;
 	param.countfix_pre_after = lang.countfix_pre_after;
 
 	if (debugMode) console.log(param);
-	
+
 	//initialize d6
-	if ( useWorker || typeof(D6) !="undefined") {
-		startCalc( "start", param );
+	if (useWorker || typeof D6 != "undefined") {
+		startCalc("start", param);
 	}
 }
-
 
 // startCalc( command, param )  ---------------------------------------
 //		select worker or non-worker function , and start calculation
@@ -203,27 +205,25 @@ function startInit(){
 // set
 //		after both web-worker or workercalc, getCalcResult() work to show display
 //
-function startCalc( command, param ){
-	if ( useWorker ){
+function startCalc(command, param) {
+	if (useWorker) {
 		//use worker
 		param.targetMode = targetMode;
 
-		//call D6.workercalc in d6facade.js as worker 
+		//call D6.workercalc in d6facade.js as worker
 		//after worker getCalcResult() is called
-		worker.postMessage({ "command":command ,"param": param });
-		
+		worker.postMessage({ command: command, param: param });
 	} else {
 		//not use woker
 		D6.targetMode = targetMode;
 
 		//directry call function same as worker
-		var ret = D6.workercalc( command, param );
-		
-		//expressly call getCalcResult()
-		getCalcResult( command, ret );		
-	}
-};
+		var ret = D6.workercalc(command, param);
 
+		//expressly call getCalcResult()
+		getCalcResult(command, ret);
+	}
+}
 
 // getCalcResult( command, res ) ----------------------------------------------
 //		common page generator
@@ -237,169 +237,177 @@ function startCalc( command, param ){
 //		none
 // set
 //		none
-getCalcResult = function( command, res ) {
-	function isset( data ){
-		return ( typeof( data ) != 'undefined' );
-	};
+getCalcResult = function(command, res) {
+	function isset(data) {
+		return typeof data != "undefined";
+	}
 
 	var mestitle = "<h3>" + lang.effectivemeasures + "</h3>";
-	switch( command ) {
-		
-		case "start":
-		case "addandstart":
-		case "tabclick":
-			// display input and result as start mode
-			
-			//display tabs, input page
-			inputHtml = createInputPage( res.inputPage );
-			$('#tab').html( inputHtml.menu );
-			$('#tabcontents').html( inputHtml.combo );
+	switch (command) {
+	case "start":
+	case "addandstart":
+	case "tabclick":
+		// display input and result as start mode
 
-			//display results
-			$("#average").html( showAverageTable(res.average) );
-			$("#cons").html( showItemizeTable(res.itemize) );
-			$("#measure").html( mestitle + showMeasureTable(res.measure) );
-			leanModalSet();
+		//display tabs, input page
+		inputHtml = createInputPage(res.inputPage);
+		$("#tab").html(inputHtml.menu);
+		$("#tabcontents").html(inputHtml.combo);
 
-			//display graph
-			graphItemize( res.itemize_graph );
-			graphMonthly( res.monthly );
-			
-			//tab click method
-			$('#tab li').click(function() {
-				var index = $('#tab li').index(this);
-				var consname = $(this).prop( "id" );
+		//display results
+		$("#average").html(showAverageTable(res.average));
+		$("#cons").html(showItemizeTable(res.itemize));
+		$("#measure").html(mestitle + showMeasureTable(res.measure));
+		leanModalSet();
+
+		//display graph
+		graphItemize(res.itemize_graph);
+		graphMonthly(res.monthly);
+
+		//tab click method
+		$("#tab li").click(function() {
+			var index = $("#tab li").index(this);
+			var consname = $(this).prop("id");
+			tabclick(index, consname);
+		});
+		$("#tab li").keypress(function(e) {
+			if (e.keyCode != 9) {
+				var index = $("#tab li").index(this);
+				var consname = $(this).prop("id");
 				tabclick(index, consname);
-			});			
-			$('#tab li').keypress(function(e) {
-				if ( e.keyCode != 9 ){ 
-					var index = $('#tab li').index(this);
-					var consname = $(this).prop( "id" );
-					tabclick(index, consname);
-				}
-			});			
-			tabset(tabNow);	
-
-			if ( showOver15 ) {
-				$('#itemize').removeClass("limit");
 			}
-			
-			//debug
-			if( debugMode ) {
-				console.log( "return parameters from d6 worker----" );
-				console.log( res );
-			}
-			break;
-		
-		case "subtabclick":
-			//sub tab click method : main tab is not changed
-			inputHtml = createInputPage( res.inputPage );
-			$('#tabcontents').html( inputHtml.combo );
-			tabset(tabNow);
+		});
+		tabset(tabNow);
 
-			tabSubNowName = res.subName;
+		if (showOver15) {
+			$("#itemize").removeClass("limit");
+		}
 
-			$('ul.submenu li' ).removeClass('select');
-			$('ul.submenu li#' + tabNowName + "-" + tabSubNowName ).addClass('select');
+		//debug
+		if (debugMode) {
+			console.log("return parameters from d6 worker----");
+			console.log(res);
+		}
+		break;
 
-			break;
-		
-		case "modal":
-			//show modal page for measure detail
-			$("#header")[0].scrollIntoView(true);
-			leanModalSet();
-			
-			//create modal page
-			var modalHtml = createModalPage( res.measure_detail );
-			$("#modal-contents").html( modalHtml );
-			if ( typeof( modalJoy ) != 'undefined' && modalJoy == 1 ){
-				$(".modaljoyfull").show();
-				$(".modaladvice").hide();
-			}
-			break;
-			
-		case "inchange":
-		case "measureadd":
-		case "measuredelete":
-			//in case of input change
-			
-			//change result
-			$("#average").html( showAverageTable(res.average) );
-			$("#cons").html( showItemizeTable(res.itemize) );
-			graphItemize( res.itemize_graph );
-			graphMonthly( res.monthly );
-			
-			//change measure list
-			$("#measure").html(mestitle + showMeasureTable(res.measure) );
-			leanModalSet();
-			if ( showOver15 ) {
-				$('#itemize').removeClass("limit");
-			}
-			
-			//comment
-			$("#totalReduceComment").html( showMeasureTotalMessage( res.common ) );
-			break;
+	case "subtabclick":
+		//sub tab click method : main tab is not changed
+		inputHtml = createInputPage(res.inputPage);
+		$("#tabcontents").html(inputHtml.combo);
+		tabset(tabNow);
 
-		case "measureadd_comment":		//view_action,view_easy
-			//comment
-			$("#totalReduceComment").html( showMeasureTotalMessage( res.common ) );
-			break;
+		tabSubNowName = res.subName;
 
-		case "graphchange":
-			graphItemize( res.itemize_graph );
-			break;
-			
-		case "add_demand":			//view_base
-			$("div#inDemandSumup").html( showDemandSumupPage(res.demandin) );
-			$("div#inDemandLog").html( showDemandLogPage(res.demandlog) );
-			break;
+		$("ul.submenu li").removeClass("select");
+		$("ul.submenu li#" + tabNowName + "-" + tabSubNowName).addClass("select");
 
-		case "demand":				//view_base
-			$("div#inDemandSumup").html( showDemandSumupPage(res.demandin) );
-			$("div#inDemandLog").html( showDemandLogPage(res.demandlog) );
-			graphDemand( res.graphDemand );
-			break;
-			
-		case "inchange_demand":		//view_base
-			graphDemand( res.graphDemand );
-			break;
-			
-		case "evaluateaxis":		//view_action
-			showEvaluateAxis( res.evaluateAxis );
-			if ( typeof(evaluateaxisNextMode) != undefined ) {
-				modeChange(evaluateaxisNextMode);
-			}
-			break;
-			
-		case "save":
-		case "save_noalert":
-		case "saveandgo":
-			localStorage.setItem('sindan'+ languageMode+ targetMode, res);
-			var resurl = "";
-			var url = location.protocol + "//" + location.hostname + ( location.pathname ? location.pathname  :  "/" );
-			var params = location.search;
-			if ( params ) {
-				var parray = params.split("data=");
-				resurl = url + parray[0] + "&data=" + res;
-			} else {
-				resurl = url + "?data=" + res;
-			}
-			
-			if ( command == "save" ) {
-				alert( lang.savetobrowser + lang.savedataisshown +"\n" + resurl );
-			}
-			if ( command == "saveandgo" ) {
-				//go to detail design
-				if ( typeof(detailNextDiagnosisCode) != undefined ) {
-					location.href="./?lang="+languageMode+"&v="+detailNextDiagnosisCode+"&intro=-1";					
-				}
-			}
-			break;
+		break;
 
-		case "common":
-			result_action(res);		//define in each view page as js file
-			break;
-/*
+	case "modal":
+		//show modal page for measure detail
+		$("#header")[0].scrollIntoView(true);
+		leanModalSet();
+
+		//create modal page
+		var modalHtml = createModalPage(res.measure_detail);
+		$("#modal-contents").html(modalHtml);
+		if (typeof modalJoy != "undefined" && modalJoy == 1) {
+			$(".modaljoyfull").show();
+			$(".modaladvice").hide();
+		}
+		break;
+
+	case "inchange":
+	case "measureadd":
+	case "measuredelete":
+		//in case of input change
+
+		//change result
+		$("#average").html(showAverageTable(res.average));
+		$("#cons").html(showItemizeTable(res.itemize));
+		graphItemize(res.itemize_graph);
+		graphMonthly(res.monthly);
+
+		//change measure list
+		$("#measure").html(mestitle + showMeasureTable(res.measure));
+		leanModalSet();
+		if (showOver15) {
+			$("#itemize").removeClass("limit");
+		}
+
+		//comment
+		$("#totalReduceComment").html(showMeasureTotalMessage(res.common));
+		break;
+
+	case "measureadd_comment": //view_action,view_easy
+		//comment
+		$("#totalReduceComment").html(showMeasureTotalMessage(res.common));
+		break;
+
+	case "graphchange":
+		graphItemize(res.itemize_graph);
+		break;
+
+	case "add_demand": //view_base
+		$("div#inDemandSumup").html(showDemandSumupPage(res.demandin));
+		$("div#inDemandLog").html(showDemandLogPage(res.demandlog));
+		break;
+
+	case "demand": //view_base
+		$("div#inDemandSumup").html(showDemandSumupPage(res.demandin));
+		$("div#inDemandLog").html(showDemandLogPage(res.demandlog));
+		graphDemand(res.graphDemand);
+		break;
+
+	case "inchange_demand": //view_base
+		graphDemand(res.graphDemand);
+		break;
+
+	case "evaluateaxis": //view_action
+		showEvaluateAxis(res.evaluateAxis);
+		if (typeof evaluateaxisNextMode != undefined) {
+			modeChange(evaluateaxisNextMode);
+		}
+		break;
+
+	case "save":
+	case "save_noalert":
+	case "saveandgo":
+		localStorage.setItem("sindan" + languageMode + targetMode, res);
+		var resurl = "";
+		var url =
+				location.protocol +
+				"//" +
+				location.hostname +
+				(location.pathname ? location.pathname : "/");
+		var params = location.search;
+		if (params) {
+			var parray = params.split("data=");
+			resurl = url + parray[0] + "&data=" + res;
+		} else {
+			resurl = url + "?data=" + res;
+		}
+
+		if (command == "save") {
+			alert(lang.savetobrowser + lang.savedataisshown + "\n" + resurl);
+		}
+		if (command == "saveandgo") {
+			//go to detail design
+			if (typeof detailNextDiagnosisCode != undefined) {
+				location.href =
+						"./?lang=" +
+						languageMode +
+						"&v=" +
+						detailNextDiagnosisCode +
+						"&intro=-1";
+			}
+		}
+		break;
+
+	case "common":
+		result_action(res); //define in each view page as js file
+		break;
+		/*
 		case "savenew":
 			//save new , not use for IE9,safari
 			var dat  = new Date();
@@ -428,23 +436,17 @@ getCalcResult = function( command, res ) {
 			break;
 */
 
-		default:
+	default:
 	}
 	afterworker(res);
 };
 
 //after worker result function. depend on view function. override in each view
-afterworker = function(res){
-};
+afterworker = function(res) {};
 
 //top page button click to start
-function top2start(){
-	$('#top').hide();
-	$('#divco2').show();
-	startCalc( 'graphchange', param );
-};
-
-
-
-
-
+function top2start() {
+	$("#top").hide();
+	$("#divco2").show();
+	startCalc("graphchange", param);
+}

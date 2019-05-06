@@ -6,70 +6,65 @@ D6 design
 /*--layout----------------------------------------------------------*/
 
 body {
-	font-size:100%;
-	margin:0px;
-	line-height:1.7em;
+  font-size: 100%;
+  margin: 0px;
+  line-height: 1.7em;
 }
 
-p{
-	line-height:1.2em;
-	margin:8px;
+p {
+  line-height: 1.2em;
+  margin: 8px;
 }
 
 .info p {
-	line-height:16px;
+  line-height: 16px;
 }
 
-
 div.page {
-	margin:10px;
+  margin: 10px;
 }
 
 /*--common----------------------------------------------------------*/
 h1 {
-	margin:0px;
-	padding:0px;
-	padding-left:20px;
-	padding-top:10px;
-	line-height:120%;
-	background-color:#FFC;
+  margin: 0px;
+  padding: 0px;
+  padding-left: 20px;
+  padding-top: 10px;
+  line-height: 120%;
+  background-color: #ffc;
 }
 
 h2 {
-	border-bottom: 3px solid #007700;
-	background-color:#9f9;
-	padding:2px 4px 4px 4px;
-	margin-top:5px;
-	margin-bottom:5px;
-
+  border-bottom: 3px solid #007700;
+  background-color: #9f9;
+  padding: 2px 4px 4px 4px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 h3 {
-	margin-top:10px;
-	margin-bottom:3px;
-	width:98%;
-	background-color:#ecffec;
-	border-left: 6px solid #afa;
+  margin-top: 10px;
+  margin-bottom: 3px;
+  width: 98%;
+  background-color: #ecffec;
+  border-left: 6px solid #afa;
 }
 
-
-h2{
-	background-color:rgba( 255, 255, 255, 0.7 );
+h2 {
+  background-color: rgba(255, 255, 255, 0.7);
 }
 
-select{
-	font-size:110%;
+select {
+  font-size: 110%;
 }
 
 /*** button *******/
 
-
 button.large {
-	display:inline-block;
-	text-align:center;
-	font-size : 120%;
-	vertical-align:middle;
-	width:50%;
-	line-height: 1.5em;
+  display: inline-block;
+  text-align: center;
+  font-size: 120%;
+  vertical-align: middle;
+  width: 50%;
+  line-height: 1.5em;
 }
-

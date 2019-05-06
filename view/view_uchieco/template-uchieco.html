@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // Home-Eco Diagnosis for JavaScript
 //
 // view/template.html
@@ -6,18 +6,20 @@
 //
 // require php, and inluded by index.php
 //
-?><!DOCTYPE html>
+?>
+<!DOCTYPE html>
 <html lang="<?php echo $languageMode; ?>">
-  <head>
+
+<head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="target-densitydpi=device-dpi, width=320, initial-scale=1.0, user-scalable=yes">
 	<link href="view/common.css" rel="stylesheet" type="text/css" />
 	<link href="view/view_uchieco/layout-uchieco.css" rel="stylesheet" type="text/css" />
 	<?php echo $alternate ?>
 	<title><?php echo $lang["home_uchieco_title"];?></title>
-  </head>
+</head>
 
-  <body>
+<body>
 	<div class="contents">
 
 		<div id="header">
@@ -26,7 +28,6 @@
 			<div align="center" class="step">
 				<button id="s4" onclick="modeChange('m4');">1質問</button>>
 				<button id="s5" onclick="modeChange('m5');">2比較</button>>
-<!--				<button id="s6" onclick="modeChange('m6');">3目標</button>>-->
 				<button id="s7" onclick="modeChange('m7');">3内訳</button>>
 				<button id="s8" onclick="modeChange('m8');">4対策</button>
 			</div>
@@ -36,32 +37,37 @@
 				<div id="modal-contents"></div>
 			</div>
 		</div>
-		
+
 		<div class="preloader">
-			<p>now loading diagnosis system</p>
+			<p>now loading diagnosis system...</p>
 		</div>
-	
+
 		<div class="contents" style="display:none;">
-		
-			<div class="page" id="p1" >						
+
+			<div class="page" id="p1">
 				<h2>ようこそ、うちエコキッズWEB簡易チェックへ</h2>
 				<p>家の「どこから」「どれだけ」CO2が出ているかを調べることで、効果的な削減プランを明らかにします。</p>
 				<button class="next" id="newstart" onclick="modeChange('m2a');">新たにはじめる</button>
-				<button class="next" id="previousstart" onclick="modeChange('m2');" style="display:none;">以前のデータを使う</button>
+				<button class="next" id="previousstart" onclick="modeChange('m2');"
+					style="display:none;">以前のデータを使う</button>
 				<button class="next" onclick="modeChange('ma');">診断の流れをみる</button>
 				<p style="font-size:80%;">※Google Analyticsを用いたアクセス解析を行っています。</p>
 			</div>
 
-			<div class="page" id="p2" >						
+			<div class="page" id="p2">
 				<h2>回答のしかた</h2>
-				<p>これから家族の人数・光熱費・家電の使用状況・ライフスタイルなど、22項目の質問をします。もっともあてはまる選択肢のボタンを押して、回答してください。わからない場合には、質問を飛ばしても構いません。ご回答後、診断結果が表示されます。</p>
+				<p class="left">
+					これから家族の人数・光熱費・家電の使用状況・ライフスタイルなど、21項目の質問をします。<br>
+					もっともあてはまる選択肢のボタンを押して、回答してください。<br>
+					わからない場合には、質問を飛ばしても構いません。ご回答後、診断結果が表示されます。
+				</p>
 				<button class="next" onclick="modeChange('m3');">質問に進む</button>
 			</div>
 
 			<div class="page" id="p3">
 				<!--質問-->
 				<h2 class="constitle"></h2>
-				<div id="quescontents" ></div>
+				<div id="quescontents"></div>
 				<hr>
 				<button class="next" onclick="quesone_prev();"><?php echo $lang["button_prev"];?></button>
 				<button class="next" onclick="quesone_next();"><?php echo $lang["button_next"];?></button>
@@ -74,11 +80,12 @@
 				<p>これらの質問に回答することで、家庭の詳しい分析ができます。</p>
 				<button class="next" onclick="modeChange('m3');">１問ずつ回答する</button>
 				<ul id='tabcontents'></ul>
-				<button class="next" onclick="modeChange('m5');">平均比較の結果をみる</button>
+				<button class="next" onclick="modeChange('m5');">次へ＞平均比較の結果をみる</button>
+				<button class="small" onclick="window.print();">印刷</button>
 			</div>
-				
+
 			<div class="page" id="p5">
-<!--				<h2>平均比較</h2>-->
+				<!--				<h2>平均比較</h2>-->
 				<p>光熱費とCO2排出量を平均値と比較してみましょう。何が多い/少ないでしょうか。光熱費は1ヶ月の平均金額（円）、CO2排出量は年間の量（kg）です。</p>
 				<div class="sm100" style="width:65%;float:left;">
 					<div id="graphEnergy"></div>
@@ -88,45 +95,52 @@
 					<div id="graphCO2average"></div>
 					<p id="co2Comment"></p>
 				</div>
-<!--				<span class="next" onclick="modeChange('m6');">CO2削減目標</span>-->
-				<button class="next" onclick="modeChange('m7');">どこからCO2がでている？</button>
+				<!--				<span class="next" onclick="modeChange('m6');">CO2削減目標</span>-->
+				<button class="next" onclick="modeChange('m7');">次へ＞どこからCO2がでている？</button>
+				<button class="small" onclick="window.print();">印刷</button>
 				<div style="clear:both"></div>
 			</div>
-			
+
 			<div class="page" id="p6">
-<!--				<h2>CO2削減目標</h2>-->
+				<!--				<h2>CO2削減目標</h2>-->
 				<p>将来的に大幅にCO2を削減する必要があります。どこまで減らすことにチャレンジしますか？</p>
-				<div class="sm100" style="width:30%;float:left;"><div id="graphCO2average2"></div></div>
+				<div class="sm100" style="width:30%;float:left;">
+					<div id="graphCO2average2"></div>
+				</div>
 				<div class="sm100" style="width:65%;float:left;">
-				<p>下のボタンを選んで進んでください。</p>
-				<table style="border:none;">
-				<tr>
-					<td rowspan="2">平均（2013年）比較の削減目標</td><td colspan="2" style="text-align:right">あなたの現状　<span id="co2younow" class="bold"></span>kg</td>
-				</tr>
-				<tr>
-					<td>CO2排出量</td><td>あなたの現状からの削減</td>
-				</tr>
-				<tr>
-					<td><button class="next" onclick="modeChange('m7');">2015年レベル</button><br>2013年レベルでは地球温暖化を止めることはできません</td>
-					<td><span class="bold" id="co2-0"></span>kg</td>
-					<td><span class="red" id="co2-0rate"></span></td>
-				</tr>
-				<tr>
-					<td><button class="next" onclick="modeChange('m7');">26%減</button><br>日本の2020年の削減目標です</td>
-					<td><span class="bold" id="co2-26"></span>kg</td>
-					<td><span class="red" id="co2-26rate"></span></td>
-				</tr>
-				<tr>
-					<td><button class="next" onclick="modeChange('m7');">40%減</button><br>日本の2030年の削減目標です</td>
-					<td><span class="bold" id="co2-40"></span>kg</td>
-					<td><span class="red" id="co2-40rate"></span></td>
-				</tr>
-				<tr>
-					<td><button class="next" onclick="modeChange('m7');">80%減</button><br>日本の2050年の削減目標です</td>
-					<td><span class="bold" id="co2-80"></span>kg</td>
-					<td><span class="red" id="co2-80rate"></span></td>
-				</tr>
-				</table>
+					<p>下のボタンを選んで進んでください。</p>
+					<table style="border:none;">
+						<tr>
+							<td rowspan="2">平均（2013年）比較の削減目標</td>
+							<td colspan="2" style="text-align:right">あなたの現状　<span id="co2younow" class="bold"></span>kg
+							</td>
+						</tr>
+						<tr>
+							<td>CO2排出量</td>
+							<td>あなたの現状からの削減</td>
+						</tr>
+						<tr>
+							<td><button class="next"
+									onclick="modeChange('m7');">2013年レベル</button><br>2013年レベルでは地球温暖化を止めることはできません</td>
+							<td><span class="bold" id="co2-0"></span>kg</td>
+							<td><span class="red" id="co2-0rate"></span></td>
+						</tr>
+						<tr>
+							<td><button class="next" onclick="modeChange('m7');">26%減</button><br>日本の2020年の削減目標です</td>
+							<td><span class="bold" id="co2-26"></span>kg</td>
+							<td><span class="red" id="co2-26rate"></span></td>
+						</tr>
+						<tr>
+							<td><button class="next" onclick="modeChange('m7');">40%減</button><br>日本の2030年の削減目標です</td>
+							<td><span class="bold" id="co2-40"></span>kg</td>
+							<td><span class="red" id="co2-40rate"></span></td>
+						</tr>
+						<tr>
+							<td><button class="next" onclick="modeChange('m7');">80%減</button><br>日本の2050年の削減目標です</td>
+							<td><span class="bold" id="co2-80"></span>kg</td>
+							<td><span class="red" id="co2-80rate"></span></td>
+						</tr>
+					</table>
 				</div>
 				<div style="clear:both"></div>
 			</div>
@@ -139,16 +153,22 @@
 					<hr>
 					<div id="graph2comment"></div>
 				</div>
-				<div class="sm100"  style="width:50%;float:left;"><div id="graph2"></div></div>
-				<button class="next" onclick="modeChange('m8');">CO2削減対策と効果</button>
+				<div class="sm100" style="width:50%;float:left;">
+					<div id="graph2"></div>
+				</div>
+				<button class="next" onclick="modeChange('m8');">次へ＞CO2削減対策と効果</button>
+				<button class="small" onclick="window.print();">印刷</button>
 				<div style="clear:both"></div>
 			</div>
 
 			<div class="page" id="p8">
-<!--				<h2>CO2削減対策と効果</h2>-->
+				<!--				<h2>CO2削減対策と効果</h2>-->
 				<p>あなたの家庭においてCO2削減効果が大きい対策を示してます。年間の数値です。</p>
 				<p>取り組めそうな対策の「選択」をクリックしてください。複数選ぶことができ、その組み合わせでの削減量を検討できます。</p>
-				<div class="sm100"  style="width:40%;float:left;"><div id="graph"></div><div id="totalReduceComment" style="text-align:left;"></div></div>
+				<div class="sm100" style="width:40%;float:left;">
+					<div id="graph"></div>
+					<div id="totalReduceComment" style="text-align:left;"></div>
+				</div>
 
 				<div class="sm100" style="width:55%;float:left;">
 					<div class="life" style="text-align:left;">
@@ -157,9 +177,12 @@
 						<button class="tab" id="L0" onclick="changeLifeStyle('0');">機器導入</button>
 					</div>
 					<div id="measure"></div>
-					<div style="text-align:right;"><button id="moreMeasure" class="tab" onclick="changeLength()">もっと表示する</button></div>
+					<div style="text-align:right;"><button id="moreMeasure" class="tab"
+							onclick="changeLength()">もっと表示する</button>
+					</div>
 				</div>
 				<button class="next" onclick="modeChange('m9');">診断を終了</button>
+				<button class="small" onclick="window.print();">印刷</button>
 				<div style="clear:both"></div>
 			</div>
 
@@ -168,37 +191,38 @@
 				<p>あなたのパソコンに一時的に保存がされていますので、次回始めるときには、この結果を呼び出すことができます。</p>
 				<p>削除して新たに診断をする場合には、<button class="next" onclick="dataClear();">新たに診断をはじめる</button>を押してください。</p>
 			</div>
-			
+
 			<div class="page" id="pa">
 				<h2>診断の流れ</h2>
 				<div style="text-align:left">
-				<div class="box">
-					<p>STEP1　質問項目に答える</p>
-					<p>　設問には選択項目をクリックすることで答えていきます。わからない設問はとばし、結果をみることもできます。</p>
-				</div>
-				<div class="box">
-					<p>STEP2　平均値との比較</p>
-					<p>　自宅と平均のCO2排出量を比較して見ることで、自分の立ち位置を把握します。</p>
-	<!--
+					<div class="box">
+						<p>STEP1　質問項目に答える</p>
+						<p>　設問には選択項目をクリックすることで答えていきます。わからない設問はとばし、結果をみることもできます。</p>
+					</div>
+					<div class="box">
+						<p>STEP2　平均値との比較</p>
+						<p>　自宅と平均のCO2排出量を比較して見ることで、自分の立ち位置を把握します。</p>
+						<!--
 					<p>STEP3　CO2削減目標の決定</p>
 					<p>　将来達成すべきCO2削減量を把握し、自宅での削減目標を決定します。</p>
 	-->
+					</div>
+					<div class="box">
+						<p>STEP3　CO2排出の内訳</p>
+						<p>　CO2が「どこから」「どれだけ」出ているのかが分かる内訳グラフが示されます。</p>
+					</div>
+					<div class="box">
+						<p>STEP4　CO2削減対策と効果</p>
+						<p>　CO2削減対策が示され、削減効果・対策支援情報を確認できます。</p>
+					</div>
 				</div>
-				<div class="box">
-					<p>STEP3　CO2排出の内訳</p>
-					<p>　CO2が「どこから」「どれだけ」出ているのかが分かる内訳グラフが示されます。</p>
-				</div>
-				<div class="box">
-					<p>STEP4　CO2削減対策と効果</p>
-					<p>　CO2削減対策が示され、削減効果・対策支援情報を確認できます。</p>
-				</div>
-				</div>
-				<button class="next" onclick="modeChange('m1'); return false;"><?php echo $lang["button_back"];?></button>
+				<button class="next"
+					onclick="modeChange('m1'); return false;"><?php echo $lang["button_back"];?></button>
 			</div>
-				
+
 		</div>
 	</div>
-	
+
 	<?php
 		echo $jssets;
 		echo $scripts;
@@ -208,5 +232,6 @@
 
 	<script src="view/view_uchieco/onclick-uchieco.js" type="text/javascript"></script>
 
-  </body>
+</body>
+
 </html>

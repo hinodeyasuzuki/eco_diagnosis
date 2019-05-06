@@ -1,5 +1,5 @@
-/* diagnosis design setting focus on questions and measures  
-*/
+/* diagnosis design setting focus on questions and measures
+ */
 
 //prohibit questions numbers as array i***
 var prohibitQuestions = [];
@@ -12,5 +12,3 @@ var prohibitMeasures = [];
 
 //allow measures codes. use this setting when prohibitMeasures is null.
 var allowedMeasures = [];
-
-
