@@ -53,7 +53,9 @@ D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
 	// step 1 : implementation of logics ------------------------
 	if ( !notinit ) {
 		D6.scenario.setDefs();		//set questions and measures
+
 		D6.scenario.areafix();		//fix by area
+
 		for ( var d in defInput ) {
 			if ( defInput[d][2]) {
 				D6.scenario.defInput[defInput[d][0]][defInput[d][1]] = defInput[d][2];
@@ -102,8 +104,12 @@ D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
 				for ( j = 0 ; j <= tlogic.orgCopyNum ; j++ ) {		// #0 is residue			
 					//implementation in consList
 					consList[D6.consCount] = D6.object( tlogic );	// set copy
-					consList[D6.consCount].setsubID( j );
-					
+					//consList[D6.consCount].setsubID( j );
+					consList[D6.consCount].subID = j;
+					if ( consList[D6.consCount].titleList ){
+						consList[D6.consCount].title = consList[D6.consCount].titleList[j];
+					}
+								
 					//another access path
 					D6.consListByName[tlogic.consName].push( consList[ D6.consCount ] );
 					D6.consCount++;
@@ -266,7 +272,7 @@ D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
 	//set easy question list
 	var ilist = [];
 	if ( D6.scenario.defEasyQues ) {
-		for( var i in D6.scenario.defEasyQues[0].ques ) {
+		for( i in D6.scenario.defEasyQues[0].ques ) {
 			if ( isProhivitedQuestion( D6.scenario.defEasyQues[0].ques[i] ) ) continue;
 			ilist.push( D6.scenario.defEasyQues[0].ques[i] );
 		}
@@ -321,7 +327,6 @@ D6.addConsSetting = function(consName) {
 		// for example rooms, both heating and cooling has relationship
 		// see also consAC.js
 		pname = D6.logicList[cons].consAddSet;
-
 		for ( var t in pname ){
 			if ( pname[t] == consName || cons == consName ){
 				D6.logicList[cons].orgCopyNum = D6.logicList[cons].orgCopyNum + 1;

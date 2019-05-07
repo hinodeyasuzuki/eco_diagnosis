@@ -3756,10 +3756,9 @@ D6.getEvaluateAxisPoint = function( target,inpListDefCode ) {
  * addMeasureEachCons()			add measure definition
  * addConsSetting()				add consumption definition 
  */
- 
-//resolve D6
-var D6 = D6||{};
 
+//resolve D6
+var D6 = D6 || {};
 
 /* setscenario -------------------------------------------------------------
  * 		set scenario by definition and create logic structure
@@ -3774,26 +3773,26 @@ var D6 = D6||{};
  *		-link to consList, consListByName, consShow
  *		-each consumption instance include measures, sumCons, subCons etc.
  */
-D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
-	var i,j;
+D6.setscenario = function(prohibitQuestions, allowedQuestions, defInput) {
+	var i, j;
 	var notinit = false;
 
-	if ( prohibitQuestions == "add"){
+	if (prohibitQuestions == "add") {
 		notinit = true;
 	}
-	if ( !prohibitQuestions ) {
-		prohibitQuestions =[];
+	if (!prohibitQuestions) {
+		prohibitQuestions = [];
 	}
-	if ( !allowedQuestions ) {
-		allowedQuestions =[];
+	if (!allowedQuestions) {
+		allowedQuestions = [];
 	}
 
 	// step 1 : implementation of logics ------------------------
-	if ( !notinit ) {
-		D6.scenario.setDefs();		//set questions and measures
-		D6.scenario.areafix();		//fix by area
-		for ( var d in defInput ) {
-			if ( defInput[d][2]) {
+	if (!notinit) {
+		D6.scenario.setDefs(); //set questions and measures
+		D6.scenario.areafix(); //fix by area
+		for (var d in defInput) {
+			if (defInput[d][2]) {
 				D6.scenario.defInput[defInput[d][0]][defInput[d][1]] = defInput[d][2];
 			}
 		}
@@ -3803,47 +3802,47 @@ D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
 
 	// step 2 : Implementation of consumption class -----------
 	//
-	D6.consCount = 0;	//counter for consList
+	D6.consCount = 0; //counter for consList
 	var logic;
 	var tlogic;
 
 	//create consumption class by logic, children of consTotal
-	for( logic in D6.logicList ) {
+	for (logic in D6.logicList) {
 		tlogic = D6.logicList[logic];
-		D6.consListByName[tlogic.consName] = [];	//list by consName
+		D6.consListByName[tlogic.consName] = []; //list by consName
 
-		if ( tlogic.sumConsName == "consTotal" || tlogic.consName == "consTotal" ) {
-				
+		if (tlogic.sumConsName == "consTotal" || tlogic.consName == "consTotal") {
 			//fisrt set to consList
-			consList[ D6.consCount ] = tlogic;
-				
+			consList[D6.consCount] = tlogic;
+
 			//set another access path
-			D6.consShow[ tlogic.consCode ] = consList[ D6.consCount ];
-			D6.consListByName[tlogic.consName].push( consList[ D6.consCount ] );
+			D6.consShow[tlogic.consCode] = consList[D6.consCount];
+			D6.consListByName[tlogic.consName].push(consList[D6.consCount]);
 			D6.consCount++;
 		}
 	}
 
 	//create consumption class,  grandson of consTotal
 	//  create grandson after children
-	for( logic in D6.logicList ) {
-		tlogic = D6.logicList[logic];								//shortcut
+	for (logic in D6.logicList) {
+		tlogic = D6.logicList[logic]; //shortcut
 
 		//not direct connect to consTotal
 		//implement by each equips/rooms
-		if ( tlogic.sumConsName != "consTotal" && tlogic.consName != "consTotal" ) {
-			if ( tlogic.orgCopyNum == 0 ) {
+		if (tlogic.sumConsName != "consTotal" && tlogic.consName != "consTotal") {
+			if (tlogic.orgCopyNum == 0) {
 				consList[D6.consCount] = tlogic;
-				D6.consListByName[tlogic.consName].push( consList[ D6.consCount ] );
+				D6.consListByName[tlogic.consName].push(consList[D6.consCount]);
 				D6.consCount++;
 			} else {
-				for ( j = 0 ; j <= tlogic.orgCopyNum ; j++ ) {		// #0 is residue			
+				for (j = 0; j <= tlogic.orgCopyNum; j++) {
+					// #0 is residue
 					//implementation in consList
-					consList[D6.consCount] = D6.object( tlogic );	// set copy
-					consList[D6.consCount].setsubID( j );
-					
+					consList[D6.consCount] = D6.object(tlogic); // set copy
+					consList[D6.consCount].setsubID(j);
+
 					//another access path
-					D6.consListByName[tlogic.consName].push( consList[ D6.consCount ] );
+					D6.consListByName[tlogic.consName].push(consList[D6.consCount]);
 					D6.consCount++;
 				}
 			}
@@ -3853,18 +3852,18 @@ D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
 	// step 3 : resolve relation between consumption classes -------------
 	var cons;
 	var partconsTemp;
-	var partCons;		//partition side classes to this class
-	var partCons2nd;	//2nd partition side classes to this class
+	var partCons; //partition side classes to this class
+	var partCons2nd; //2nd partition side classes to this class
 
-	for ( i=0 ; i< consList.length ; i++ ){
+	for (i = 0; i < consList.length; i++) {
 		//create relation by each cons in consList
 		cons = consList[i];
 		cons.measures = [];
 		cons.partCons = [];
 
 		//get instance of sum side class
-		cons.sumCons = this.getTargetConsList( cons.sumConsName );
-		cons.sumCons2 = this.getTargetConsList( cons.sumCons2Name );
+		cons.sumCons = this.getTargetConsList(cons.sumConsName);
+		cons.sumCons2 = this.getTargetConsList(cons.sumCons2Name);
 
 		//get instance of part side class
 		//    part side is not defined in this class definition, so check each
@@ -3872,67 +3871,59 @@ D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
 		partCons = [];
 		partCons2nd = [];
 
-		for ( j=0 ; j<consList.length ; j++ ) {
+		for (j = 0; j < consList.length; j++) {
 			//check each cons in consList which is part side
 			partconsTemp = consList[j];
 
 			// if sum part is defined as this class
-			if ( partconsTemp.sumConsName === cons.consName ) {
-
+			if (partconsTemp.sumConsName === cons.consName) {
 				//countable rooms/equips or not
-				if ( partconsTemp.orgCopyNum >= 1 ) {
-				
-					if ( cons.orgCopyNum >= 1 ) {
+				if (partconsTemp.orgCopyNum >= 1) {
+					if (cons.orgCopyNum >= 1) {
 						//if this cons is countable, add only same id
-						if ( cons.subID == partconsTemp.subID ){
+						if (cons.subID == partconsTemp.subID) {
 							cons.partConsName = partconsTemp.consName;
-							partCons.push( partconsTemp );
+							partCons.push(partconsTemp);
 						}
-						
 					} else {
 						//this cons is not countable add each cons as partcons
 						cons.partConsName = partconsTemp.consName;
-						partCons.push( partconsTemp );
+						partCons.push(partconsTemp);
 					}
-					
 				} else {
 					//not countable add first cons as partCons
-					partCons.push( partconsTemp );
+					partCons.push(partconsTemp);
 				}
 			}
 
 			// if second sum part is defined as this class
-			if ( partconsTemp.sumCons2Name == cons.consName ) {
-
+			if (partconsTemp.sumCons2Name == cons.consName) {
 				//countable rooms/equips or not
-				if ( partconsTemp.orgCopyNum >= 1 ) {
-
+				if (partconsTemp.orgCopyNum >= 1) {
 					//if this cons is countable, add only same id
-					if ( cons.orgCopyNum >= 1 ) {
-						if ( cons.subID == partconsTemp.subID ){
+					if (cons.orgCopyNum >= 1) {
+						if (cons.subID == partconsTemp.subID) {
 							cons.partCons2Name = partconsTemp.consName;
-							partCons2nd.push( partconsTemp );
+							partCons2nd.push(partconsTemp);
 						}
-							
 					} else {
 						cons.partCons2Name = partconsTemp.consName;
-						partCons2nd.push( partconsTemp );
+						partCons2nd.push(partconsTemp);
 					}
-					
 				} else {
 					//not countable add first cons as partCons
-					partCons2nd.push( partconsTemp );
+					partCons2nd.push(partconsTemp);
 				}
 			}
 		}
 
-		//set to this cons 
-		if ( partCons.length >= 1 ) {
+		//set to this cons
+		if (partCons.length >= 1) {
 			cons.partCons = partCons;
 		} else {
 			cons.partCons = "";
 		}
-		if ( partCons2nd.length >= 1 ) {
+		if (partCons2nd.length >= 1) {
 			cons.partCons2 = partCons2nd;
 		} else {
 			cons.partCons2 = "";
@@ -3940,35 +3931,35 @@ D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
 	}
 
 	// step 4 : Implementation of measures -----------------------
-	this.mesCount = 0;			//counter of measures 
+	this.mesCount = 0; //counter of measures
 
 	//add measures to each cons class
-	for ( i in consList ){
-		this.addMeasureEachCons( consList[i] );
+	for (i in consList) {
+		this.addMeasureEachCons(consList[i]);
 	}
 
 	// in case of calculate by months, questions should be divided to months
 	//	and need dataset of temperature, solar, average consumptions etc.
 
 	// step 5 : set questions/inputs --------------------------
-	
-	//function to check is prohibited
-	var isProhivitedQuestion = function( iname ) {
-		// definition in EXCEL
-		if ( iname["cons"] == "" ) return true;
 
-		if ( prohibitQuestions.length <= 0 ) {
-			if ( allowedQuestions.length <= 0 ) {
+	//function to check is prohibited
+	var isProhivitedQuestion = function(iname) {
+		// definition in EXCEL
+		if (iname["cons"] == "") return true;
+
+		if (prohibitQuestions.length <= 0) {
+			if (allowedQuestions.length <= 0) {
 				return false;
 			} else {
-				if ( allowedQuestions.indexOf(iname) >= 0 ) {
+				if (allowedQuestions.indexOf(iname) >= 0) {
 					return false;
 				} else {
 					return true;
 				}
 			}
 		} else {
-			if ( prohibitQuestions.indexOf(iname) >= 0 ) {
+			if (prohibitQuestions.indexOf(iname) >= 0) {
 				return true;
 			} else {
 				return false;
@@ -3979,43 +3970,41 @@ D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
 	var iname;
 
 	// loop each input definition
-	for ( iname in D6.scenario.defInput ) {
+	for (iname in D6.scenario.defInput) {
 		//check is prohibited
-		if ( isProhivitedQuestion( iname ) ) continue;
+		if (isProhivitedQuestion(iname)) continue;
 
 		var defInp = D6.scenario.defInput[iname];
 		logic = D6.logicList[defInp.cons];
 
 		// if input has relation to consumption
-		if ( logic ) {
-			if ( logic.orgCopyNum > 0 ) {
-				//in case of countable consumption 
-				for ( j=0 ; j<logic.orgCopyNum ; j++ ) {
+		if (logic) {
+			if (logic.orgCopyNum > 0) {
+				//in case of countable consumption
+				for (j = 0; j < logic.orgCopyNum; j++) {
 					//create one question as "iname + [1-n]"
-					D6.inSet( iname+(j+1),defInp.defaultValue );
+					D6.inSet(iname + (j + 1), defInp.defaultValue);
 				}
 			} else {
 				//create one question
-				D6.inSet( iname, defInp.defaultValue);
+				D6.inSet(iname, defInp.defaultValue);
 			}
 		}
 	}
-		
+
 	//set easy question list
 	var ilist = [];
-	if ( D6.scenario.defEasyQues ) {
-		for( var i in D6.scenario.defEasyQues[0].ques ) {
-			if ( isProhivitedQuestion( D6.scenario.defEasyQues[0].ques[i] ) ) continue;
-			ilist.push( D6.scenario.defEasyQues[0].ques[i] );
+	if (D6.scenario.defEasyQues) {
+		for (var i in D6.scenario.defEasyQues[0].ques) {
+			if (isProhivitedQuestion(D6.scenario.defEasyQues[0].ques[i])) continue;
+			ilist.push(D6.scenario.defEasyQues[0].ques[i]);
 		}
 		D6.scenario.defEasyQues[0].ques = [];
-		for ( i in ilist ) {
-			D6.scenario.defEasyQues[0].ques.push( ilist[i] );
+		for (i in ilist) {
+			D6.scenario.defEasyQues[0].ques.push(ilist[i]);
 		}
 	}
-
 };
-
 
 // addMeasureEachCons(cons)-----------------------------
 //		add measures related to one consumption
@@ -4026,17 +4015,19 @@ D6.setscenario = function( prohibitQuestions, allowedQuestions, defInput ){
 //		none
 // set
 //		set new measures to cons.measures
-D6.addMeasureEachCons = function( cons ) {
-	for ( var mesname in D6.scenario.defMeasures ) {
-		if ( cons.consName != D6.scenario.defMeasures[mesname].refCons ) continue;
+D6.addMeasureEachCons = function(cons) {
+	for (var mesname in D6.scenario.defMeasures) {
+		if (cons.consName != D6.scenario.defMeasures[mesname].refCons) continue;
 		this.measureList[this.mesCount] = D6.object(D6.MeasureBase);
-		this.measureList[this.mesCount].Constructor( cons, D6.scenario.defMeasures[mesname], this.mesCount );
+		this.measureList[this.mesCount].Constructor(
+			cons,
+			D6.scenario.defMeasures[mesname],
+			this.mesCount
+		);
 		cons.measures[mesname] = this.measureList[this.mesCount];
 		this.mesCount++;
 	}
 };
-
-
 
 // addConsSetting( consName ) ------------------------------------------------
 //		add consumption instance of countable rooms/equipments
@@ -4054,31 +4045,31 @@ D6.addConsSetting = function(consName) {
 
 	//check consAddSet in each logicList[]
 	var rend = false;
-	for ( cons in D6.logicList ){
+	for (cons in D6.logicList) {
 		// same target is listed in consAddSet
 		// for example rooms, both heating and cooling has relationship
 		// see also consAC.js
 		pname = D6.logicList[cons].consAddSet;
 
-		for ( var t in pname ){
-			if ( pname[t] == consName || cons == consName ){
+		for (var t in pname) {
+			if (pname[t] == consName || cons == consName) {
 				D6.logicList[cons].orgCopyNum = D6.logicList[cons].orgCopyNum + 1;
-				for ( var s in pname ){
-					D6.logicList[pname[s]].orgCopyNum = D6.logicList[pname[s]].orgCopyNum + 1;
+				for (var s in pname) {
+					D6.logicList[pname[s]].orgCopyNum =
+						D6.logicList[pname[s]].orgCopyNum + 1;
 				}
 				rend = true;
 				break;
 			}
 		}
-		if ( rend ) break;
+		if (rend) break;
 	}
 
-	if ( !rend ){
+	if (!rend) {
 		// no consAddSet, ordinal addition
 		D6.logicList[consName].orgCopyNum = D6.logicList[consName].orgCopyNum + 1;
 	}
 };
-	
 
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
@@ -4965,6 +4956,7 @@ D6.scenario = {
 		logicList["consCKcook"] = D6.consCKcook;
 		logicList["consCKrice"] = D6.consCKrice;
 		logicList["consCKsum"] = D6.consCKsum;
+		logicList["consOTother"] = D6.consOTother;
 
 		return logicList;
 	},
@@ -9011,5 +9003,101 @@ D6.consCKcook.calc = function() {
 
 D6.consCKcook.calcMeasure = function() {
 };
+
+
+
+/* 2017/12/10  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * consOTother.js 
+ * 
+ * calculate consumption and measures other electronics in your hourse
+ * total use
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ * 								2019/04/28 			original
+ */
+
+//resolve D6
+var D6 = D6||{};
+
+//Inherited class of D6.ConsBase
+D6.consOTother = D6.object( D6.ConsBase );
+
+//initialize
+D6.consOTother.init = function() {
+	//construction setting
+	this.consName = "consOTother";      	//code name of this consumption 
+	this.consCode = "OT";              	//short code to access consumption, only set main consumption user for itemize
+	this.title = "others";				//consumption title name
+	this.orgCopyNum = 1;                //original copy number in case of countable consumption, other case set 0
+	this.sumConsName = "";	        	//code name of consumption sum up include this
+	this.sumCons2Name = "consTotal";				//code name of consumption related to this
+	this.groupID = "9";					//number code in items
+	this.color = "#a9a9a9";				//color definition in graph
+
+	this.residueCalc = "no";			//evaluate residue as #0 or not	no/sumup/yes
+
+	//guide message in input page
+	this.inputGuide = "usage of other electronics";
+
+	//機器の情報
+	//0:名前 1:ワット数　2:使用時間（時間/日）　3:使用日(日/年）→初期値　4:コメント
+	this.eq_list = [
+		["ノートパソコン", 20, 2, 365, "使用時の消費電力は、ラベル表示より小さくなります。" ],
+		["デスクトップパソコン", 200, 2, 365, "ノートパソコンのほうが消費電力が少なくなります。" ],
+		["インターネットモデム", 10, 24, 365, "モデム、ルータなど複数の機器がある場合があります。" ],
+		["電話・FAX", 5, 24, 365, "消費電力はもっと少ないタイプもあります。" ],
+		["携帯電話充電", 5, 1, 365, "充電器の待機電力はほとんどありません。" ],
+		["据置ゲーム機", 100, 4, 365, "これ以外にテレビの電気がかかります。携帯型のほうが消費電力が少なくなります。" ],
+		["携帯ゲーム機", 5, 4, 365, "ゲームを使用する時間で換算しています。電池駆動のため省エネの工夫がされています。" ],
+		["録画機器", 30, 4, 365, "通常は待機電力は小さいですが、「瞬間起動」を設定していると稼働中と同じくらい消費します。" ],
+		["炊飯器", 500, 1, 365, "2合を2回炊く設定です。まる1日保温を続けると同じ程度の電気を消費してしまいます。" ],
+		["電子レンジ", 1000, 0.17, 365, "消費電力は大きいですが、使用時間が短く、活用することで省エネにすることもできます。" ],
+		["掃除機", 500, 0.17, 365, "強弱の設定により消費電力が大きく変わる機種もあります。" ],
+		["除湿機", 500, 6, 104, "エアコンの除湿より効率は悪くなっています。" ],
+		["加湿機", 100, 6, 182, "断熱が弱い家では、使い過ぎると窓や壁で結露を起こす危険があります。" ],
+		["空気清浄機", 20, 24, 365, "長時間使用することで、多くの電気を消費する傾向があります。" ],
+		["ヘアドライヤー", 1000, 0.17, 365, "消費電力が大きい機器です。タオルでよく拭いてから使うと少なくなります。" ],
+		["換気扇", 30, 8, 365, "長時間使用することで、多くの電気を消費する傾向があります。" ],
+		["換気システム", 50, 24, 365, "長時間使用することで、多くの電気を消費する傾向があります。" ],
+		["浄化槽ポンプ", 50, 24, 365, "長時間使用することで、多くの電気を消費する傾向があります。" ],
+		["熱帯魚水槽", 50, 24, 365, "長時間使用することで、多くの電気を消費する傾向があります。" ],
+		["パイプ凍結防止", 100, 12, 104, "水道管の破裂を防ぐためですが、断熱材を十分に使うなどで消費電力を減らすこともできます。" ],
+		["そのほか", 5, 0.03, 1, "考えられるものを試してみてください。" ]
+	];
+	this.subName = " ";
+};
+D6.consOTother.init();
+
+
+D6.consOTother.precalc = function( ) {
+	this.clear();
+	this.name =this.input( "i653" + this.subID, "" );				//watt
+	this.watt =this.input( "i654" + this.subID, 0 );				//watt
+	this.hour =this.input( "i655" + this.subID, 0 );				//use hour / day
+	this.month =this.input( "i656" + this.subID, 0 );				//use month
+	this.reduceRate =this.input( "i657" + this.subID, 0 )/10;				//reduce rate
+};
+
+D6.consOTother.calc = function( ) {
+	this.electricity = this.watt * this.hour * this.month/12 * 30 /1000;	//kWh/month
+};
+
+D6.consOTother.calcMeasure = function( ) {
+
+	//mOTother
+	this.measures["mOTother"].calcReduceRate( this.reduceRate );
+	if ( this.reduceRate == 1 ){
+		this.measures["mOTother"].title = this.name + "を使用しない";
+	} else {
+		this.measures["mOTother"].title = this.name + "の使用を" + this.reduceRate * 10 + "割減らす";
+	}
+
+};
+
 
 

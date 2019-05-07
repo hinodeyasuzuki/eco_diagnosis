@@ -24,18 +24,17 @@
 var D6 = D6||{};
 
 
-// calcMeasures(gid)  calculate all measures -----------------------------
-//
-// parameters
-//		gid		groupid, -1 is total
-// return
-//		measure array defined in calcMeasuresOne
-//
-// once clear selected measures, and set select and calculate one by one
-//
+/* calcMeasures(gid)  calculate all measures -----------------------------
+ *
+ * parameters
+ *		gid		groupid, -1 is total
+ * return
+ *		measure array defined in calcMeasuresOne
+ *
+ * once clear selected measures, and set select and calculate one by one
+ */
 D6.calcMeasures = function( gid ) {
 	var ret;
-	var calcfg = false;
 	var i;
 	var mid, mlistid, mes;
 
@@ -90,24 +89,19 @@ D6.calcMeasures = function( gid ) {
 		}
 	}
 	this.resMeasure = ret2;
-	if ( D6.debugMode ) {
-		console.log( "measure calculate in d6.js calcMeasures() --- " );
-		console.log( ret2 );
-		console.log( "d6--- " );
-		console.log( D6 );
-	}
+
 	return ret2;
 };
 
 
-// calcMeasuresLifestyle(gid)  
-//		calculate all measures and select lifestyle --------
-//
-// parameters
-//		gid		groupid, -1 is total
-// return
-//		measure array defined in calcMeasuresOne
-//
+/* calcMeasuresLifestyle(gid)  
+ *		calculate all measures and select lifestyle --------
+ *
+ * parameters
+ *		gid		groupid, -1 is total
+ * return
+ *		measure array defined in calcMeasuresOne
+ */
 D6.calcMeasuresLifestyle = function( gid ) {
 	var onemes;
 	var retLife = new Array();
@@ -123,14 +117,14 @@ D6.calcMeasuresLifestyle = function( gid ) {
 };
 	
 
-// calcMeasuresNotLifestyle(gid)  
-//		calculate all measures and select not lifestyle --------
-//
-// parameters
-//		gid		groupid, -1 is total
-// return
-//		measure array defined in calcMeasuresOne
-//
+/* calcMeasuresNotLifestyle(gid)  
+ *		calculate all measures and select not lifestyle --------
+ *
+ * parameters
+ *		gid		groupid, -1 is total
+ * return
+ *		measure array defined in calcMeasuresOne
+ */
 D6.calcMeasuresNotLifestyle = function( gid ) {
 	var onemes;
 	var retLife = [];
@@ -146,16 +140,16 @@ D6.calcMeasuresNotLifestyle = function( gid ) {
 };
 
 
-// calcMeasuresOne(gid)  
-//		calculate all measures in temporal selection --------
-//
-// parameters
-//		gid		groupid, -1 is total
-// return
-//		measure array include mesID,groupID and lifestyle
-//
-// called by calcMeasures
-//
+/* calcMeasuresOne(gid)  
+ *		calculate all measures in temporal selection --------
+ *
+ * parameters
+ *		gid		groupid, -1 is total
+ * return
+ *		measure array include mesID,groupID and lifestyle
+ *
+ * called by calcMeasures
+ */
 D6.calcMeasuresOne = function( gid ) {
 	var ret;								//return
 	//var topList;							//list of measures id
@@ -205,13 +199,13 @@ D6.calcMeasuresOne = function( gid ) {
 
 
 
-// clearSelectedMeasures(gid)  clear all selection and calculate all --------
-//
-// parameters
-//		gid		groupid, -1 is total
-// return
-//		measure array defined in calcMeasuresOne
-//
+/* clearSelectedMeasures(gid)  clear all selection and calculate all --------
+ *
+ * parameters
+ *		gid		groupid, -1 is total
+ * return
+ *		measure array defined in calcMeasuresOne
+ */
 D6.clearSelectedMeasures = function( gid ) {
 	var ret;
 
@@ -232,15 +226,15 @@ D6.clearSelectedMeasures = function( gid ) {
 };
 
 	
-// calcMaxMeasuresList(gid)
-//		automatic select max combination measures --------
-//
-// parameters
-//		gid		groupid, -1 is total
-//		count	max selected number
-// return
-//		measure array defined in calcMeasuresOne
-//
+/* calcMaxMeasuresList(gid)
+ *		automatic select max combination measures --------
+ *
+ * parameters
+ *		gid		groupid, -1 is total
+ *		count	max selected number
+ * return
+ *		measure array defined in calcMeasuresOne
+ */
 D6.calcMaxMeasuresList = function( gid, count )
 {
 	var resultCalc;
@@ -255,7 +249,7 @@ D6.calcMaxMeasuresList = function( gid, count )
 	var sumCOST = 0;
 		
 	if( typeof(gid) == "undefined" ) gid = -1;
-	if( typeof(count) == "undefined" || count<1 ) count = 15;
+	if( typeof(count) == "undefined" || count<1 ) count = 100;
 		
 	//clear all selection
 	resultCalc = this.clearSelectedMeasures( gid );

@@ -33,6 +33,7 @@ var D6 = D6||{};
 //		halfVal replaced value
 //
 D6.toHalfWidth = function(strVal){
+	/*
 	if ( !strVal ) return strVal;
 	var halfVal = strVal.replace(/[！-～]/g,
 		function( tmpStr ) {
@@ -41,6 +42,8 @@ D6.toHalfWidth = function(strVal){
 		}
 	);
 	return halfVal;
+	*/
+	return strVal;
 };
 
 	
@@ -56,16 +59,16 @@ D6.toHalfWidth = function(strVal){
 //	set "ary" sorted
 //
 D6.ObjArraySort = function(ary, key, order) {
-    var reverse = 1;
-    if(order && order.toLowerCase() == "desc") 
-        reverse = -1;
-    ary.sort(function(a, b) {
-	        if(a[key] < b[key])
-	        return -1 * reverse;
-        else if(a[key] == b[key])
-	            return 0;
-        else
-            return 1 * reverse;
-    });
+	var reverse = 1;
+	if(order && order.toLowerCase() == "desc") 
+		reverse = -1;
+	ary.sort(function(a, b) {
+		if(a[key] < b[key])
+			return -1 * reverse;
+		else if(a[key] == b[key])
+			return 0;
+		else
+			return 1 * reverse;
+	});
 };
 

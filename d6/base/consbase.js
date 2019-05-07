@@ -97,7 +97,7 @@ D6.ConsBase.init = function(){
 
 	// in case of monthly calculation
 	this.consSumMonth  = function( source, month ) {
-		for (var i in Unit.co2 ) {
+		for (var i in D6.Unit.co2 ) {
 			this[i] += source[i] * month;
 		}
 		this.co2 += source.co2 * month;
@@ -267,7 +267,7 @@ D6.ConsBase.init = function(){
 	this.input = function( InDataCode, defaultData ) {
 		var ret;
 		//return only average if average mode
-		if ( D6.averageMode ) {
+		if ( D6.averageMode && !(InDataCode =="i021" || InDataCode =="i022" || InDataCode =="i023" || InDataCode =="i001" ) ) {
 			if ( D6.scenario.defCalcAverage.indexOf( InDataCode ) == -1 ){
 				return defaultData;
 			}

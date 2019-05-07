@@ -59,6 +59,7 @@ grunt.initConfig({
 					'd6/home/consCKpot.js',
 					'd6/home/consCKrice.js',
 					'd6/home/consCKcook.js',
+					'd6/home/consOTother.js',
 				]
 			}
         },

@@ -30,6 +30,10 @@ var D6 = D6||{};
 //
 D6.inSet = function ( id, val ){
 	var inpIdDef = id.substr( 0,4 );
+	if ( !D6.scenario.defInput[inpIdDef] ){
+		console.log("ERROR: inSet input code: " + id + " val:" + val);
+		return;
+	}
 	if ( D6.scenario.defInput[inpIdDef].varType == "String" || 
 		D6.scenario.defInput[inpIdDef].varType == "Boolean"
 	) {	

@@ -78,6 +78,18 @@ D6.Energy = {
 		}
 	},
 
+	calcHeat: function(apf) {
+		var kcal = 0;
+		for (var i in D6.Unit.co2 ) {
+			if ( i=="electricity") {
+				kcal += this[i] * D6.Unit.calorie[i] / apf;
+			} else {
+				kcal += this[i] * D6.Unit.calorie[i];
+			}
+		}
+		return kcal;
+	},
+
 	//calcCost() ----------------------------------------
 	//		calculate total cost
 	calcCost: function() {
@@ -119,7 +131,8 @@ D6.Energy = {
 		this.co2 = source.co2;
 		this.jules = source.jules;
 		this.cost = source.cost;
-		this.endEnergy = source.endEnergy;
+		//this.endEnergy = ( source.endEnergy ? source.endEnergy : 0 );
+		// 190327 calc by energy consumption in each consumption class 
 	},
 
 	//sub( target ) ---------------------------------------------
@@ -131,7 +144,7 @@ D6.Energy = {
 		this.co2 -= target.co2;
 		this.jules -= target.jules;
 		this.cost -= target.cost;
-		this.endEnergy -= target.endEnergy;
+		//this.endEnergy -= ( target.endEnergy ? target.endEnergy : 0 );
 	},
 
 	//add( target ) ---------------------------------------------
@@ -143,7 +156,7 @@ D6.Energy = {
 		this.co2 += target.co2;
 		this.jules += target.jules;
 		this.cost += target.cost;
-		this.endEnergy += target.endEnergy;
+		//this.endEnergy += ( target.endEnergy ? target.endEnergy : 0 );
 	},
 	
 	//isSame(target) -------------------------------------------

@@ -71,6 +71,7 @@ D6.scenario = {
 		logicList["consCKcook"] = D6.consCKcook;
 		logicList["consCKrice"] = D6.consCKrice;
 		logicList["consCKsum"] = D6.consCKsum;
+		logicList["consOTother"] = D6.consOTother;
 
 		return logicList;
 	},

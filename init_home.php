@@ -47,6 +47,7 @@ function getlogiclist( $area )  {
 	<script src="'.$area.'/home/consCKpot.js" type="text/javascript"></script>
 	<script src="'.$area.'/home/consCKrice.js" type="text/javascript"></script>
 	<script src="'.$area.'/home/consCKcook.js" type="text/javascript"></script>
+	<script src="'.$area.'/home/consOTother.js" type="text/javascript"></script>
 	';
 }
 

@@ -52,7 +52,7 @@ $translateMode 	= ( isset($_GET["translate"]) ? (int)($_GET["translate"]) : 0 );
 $forceMode 		= ( isset($_GET["fm"]) ? (int)($_GET["fm"]) : $forceMode );
 
 // initial data set
-$data 			= ( isset($_GET["data"]) ? $_GET["data"] : "" );
+$data 			= ( isset($_GET["data"]) ? strip_tags($_GET["data"]) : "" );
 
 // dont show average
 $hideAverage 	= ( isset($_GET["hideaverage"]) ? $_GET["hideaverage"]*1 : 0 );

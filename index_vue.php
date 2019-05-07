@@ -15,7 +15,7 @@
 //develop mode parameters  =======================================================
 session_start();
 date_default_timezone_set("Asia/Tokyo");
-$forceMode = 5;		//can be over rided 1:debug, 3:worker test, 4:packer test, 5;release
+$forceMode = 1;		//can be over rided 1:debug, 3:worker test, 4:packer test, 5;release
 
 /*
 //display mode setting by get parameters ==============================================================
@@ -53,7 +53,7 @@ $translateMode 	= ( isset($_GET["translate"]) ? (int)($_GET["translate"]) : 0 );
 $forceMode 		= ( isset($_GET["fm"]) ? (int)($_GET["fm"]) : $forceMode );
 
 // initial data set
-$data 			= ( isset($_GET["data"]) ? $_GET["data"] : "" );
+$data 			= ( isset($_GET["data"]) ? strip_tags($_GET["data"]) : "" );
 
 // dont show average
 $hideAverage 	= ( isset($_GET["hideaverage"]) ? $_GET["hideaverage"]*1 : 0 );
@@ -181,7 +181,7 @@ if ( $targetMode == 1 ){
 
 //set common parameters and javascript files------------------------------
 $jssets = "<script>var targetMode=" . $targetMode 
-			. ";var debugMode=" . $debugMode 
+			. ";var debugmode=" . $debugMode 
 			. ";var dispMode=" . $dispMode 
 			. ";var languageMode='" . $languageMode . "'"
 			. ";var focusMode=" . $focusMode 
@@ -224,7 +224,7 @@ if ( $translateMode == 0 ) {
 		}
 	</script>
 	<script type='text/javascript' src='//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit'>
-	</script>\n";
+	</script>";
 }
 
 
@@ -247,11 +247,12 @@ if ( $lang["pageLanguage"] == "zh-CN" || strcmp($_SERVER['HTTP_HOST'] , 'localho
 
 //design base scripts -----------------------------------------
 $scripts  .='
-	<script src="view/lib/vue/vue.min.js" type="text/javascript"></script>
+	<script src="view/lib/vue/vue.develop.js" type="text/javascript"></script>
 	<script src="view/lib/jquery/jquery.min.js" type="text/javascript"></script>
+	<script src="view/graph.js"></script>
 	<script src="view/lib/D3/d3.min.js"></script>
 	<script src="view/lib/dimple-js/dimple.v2.3.0.min.js"></script>
-	<!--[if lte IE 10]><script>alert("Sorry, this page does not work under IE10.\n Please use IE11 up, chrome, Edge, Firefox or safari.");</script><![endif]-->\n';
+	<!--[if lte IE 10]><script>alert("Sorry, this page does not work under IE10.\n Please use IE11 up, chrome, Edge, Firefox or safari.");</script><![endif]-->';
 
 
 // question fix --------------------------------------------------------
@@ -272,31 +273,6 @@ if ( $useCode==1 ) {
 }
 //in case of worker, no need to include in html.
 
-
-// show introduction/tutorial  --------------------------------------------------
-if ( $introMode == 1 ) {
-	//show tutorial
-	$scripts .="\n
-	<link href='view/lib/intro.js/introjs.min.css' rel='stylesheet' type='text/css' />\n
-	<script src='view/lib/intro.js/intro.min.js' type='text/javascript'></script>\n
-	<script>
-	windows.onload = function(){
-		introJs().start();
-	};
-	</script>\n";
-} else if ( $introMode == -1 || $targetMode == 2 ) {
-	//not show introduction
-} else {
-	//not show introduction page
-	$scripts .="\n
-	<script>
-	windows.onload = function(){
-		$('#top').show();
-		$('#divco2').hide();
-	};
-	</script>\n";
-	
-}
 
 // load dataset --------------------------------------------------
 if ( $data ) {
@@ -369,7 +345,7 @@ switch( $dispMode ) {
 	case 99:
 	default:
 		//measure list
-		include "vue/v99_list/template-list.html";
+		include "vue/v1_equip/equip.html";
 }
 
 

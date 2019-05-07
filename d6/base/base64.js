@@ -12,12 +12,12 @@
  * 								2016/04/12 original to JavaScript
  */
 
-// atob, btoa is defined in windows. it doesn't work in web worker 
-if ( typeof ( atob) =="undefined" ) {
-	atob = function(str){
+// atob, btoa is defined in windows. it doesn't work in web worker
+if (typeof atob == "undefined") {
+	atob = function(str) {
 		return str;
 	};
-	btoa = function(str){
+	btoa = function(str) {
 		return str;
 	};
-};
+}

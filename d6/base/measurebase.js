@@ -2,7 +2,7 @@
  * coding: utf-8, Tab as 4 spaces
  * 
  * Home Energy Diagnosis System Ver.6
- * measurebase.js 
+ * measurebase.js  
  * 
  *  MeasureBase Class, effect and detail of measures
  * 
@@ -77,6 +77,7 @@ D6.MeasureBase.init = function() {
 	this.costChange = 0;			//cost change include base charge yen/year
 	this.costTotalChange = 0;		//cost change include base charge and install cost
 	this.payBackYear = 0;			//pay back year of install cost
+	this.easyness = 0;				//easyness 1-5
 	
 	//merit through this measure, in default no selected situation
 	this.co2ChangeOriginal = 0;			//CO2 emission change, minus is saving kg/year
@@ -116,10 +117,15 @@ D6.MeasureBase.Constructor = function( consInstance, mdef, mesIDP ) {
 	this.lifeTime = mdef["lifeTime"];
 	this.priceOrg = mdef["price"];
 	this.groupID = this.cons.groupID;
+	this.subID = this.cons.subID;
 	this.lifestyle = mdef["lifestyle"];
 	this.advice = mdef["advice"];
 	this.joyfull = mdef["joyfull"];
 	this.figNum = mdef["figNum"];
+	this.priceNew = mdef["price"];
+	this.priceOrg = mdef["price"];
+	this.easyness = mdef["easyness"];
+	this.relation = mdef["relation"];
 };
 
 
@@ -140,6 +146,7 @@ D6.MeasureBase.clearMeasure = function() {
 	this.available = false;
 	this.costUnique = 0;
 	this.priceOrg = 0;
+	this.price = 0;
 		
 	this.clear();
 };
@@ -148,6 +155,7 @@ D6.MeasureBase.clearMeasure = function() {
 D6.MeasureBase.calcSave = function() {
 	//calculate CO2
 	this.calcCO2();
+
 	this.co2Change = this.co2 - this.cons.co2;
 		
 	//weighted value include CO2 and easiness  
@@ -171,6 +179,16 @@ D6.MeasureBase.calcSave = function() {
 		this.costChange = 0;
 	}
 
+	//save as original value if no measure is selected
+	if ( D6.isOriginal ) {
+		this.co2Original = this.co2;
+		this.costOriginal = this.cost;
+		this.co2ChangeOriginal = this.co2Change;
+		this.costChangeOriginal = this.costChange;
+		this.co2ChangeW1Original = this.co2ChangeW1;
+		this.co2ChangeW2Original = this.co2ChangeW2;
+	}	
+
 	//calculate total cost include install cost
 	if ( this.priceNew == 0 ) this.priceNew = this.priceOrg;
 	if ( this.priceNew >= 0 && this.lifeTime > 0 )
@@ -181,20 +199,16 @@ D6.MeasureBase.calcSave = function() {
 		if ( this.costChange > 0 ) {
 			this.payBackYear = 999;
 		} else {
-			this.payBackYear = Math.min( Math.round( -this.priceNew / this.costChange / 12 ), 999 );
+			this.payBackYear = Math.min( Math.round( -this.priceNew / this.costChangeOriginal / 12 ), 999 );
 		}
 	} else {
 		this.costTotalChange = this.costChange;
 	}
 
-	//save as original value if no measure is selected
 	if ( D6.isOriginal ) {
-		this.co2ChangeOriginal = this.co2Change;
-		this.costChangeOriginal = this.costChange;
 		this.costTotalChangeOriginal = this.costTotalChange;
-		this.co2ChangeW1Original = this.co2ChangeW1;
-		this.co2ChangeW2Original = this.co2ChangeW2;
 	}	
+
 };
 
 
@@ -211,8 +225,8 @@ D6.MeasureBase.calcReduceRate = function( reduceRate ) {
 
 //calculate saving amount of selected energy by reduction rate
 D6.MeasureBase.calcReduceRateOne =  function( target, reduceRate ) {
-	this[target] = this.cons[target];
-	this.multiply( 1 - reduceRate );
+	this.copy( this.cons );
+	this[target] = this.cons[target] * ( 1- reduceRate);
 };
 
 //expand reduction rate to sub category
@@ -248,7 +262,7 @@ D6.MeasureBase.calc = function() {
 
 //sum up 12 months, in case of calculate by month
 D6.MeasureBase.measureSumMonth = function( source, month ) {
-	for (var i in Unit.co2 ) {
+	for (var i in this.Unit.co2 ) {
 		this[i] += source[i] * month;
 	}
 	this.co2 += source.co2 * month;
@@ -261,6 +275,15 @@ D6.MeasureBase.measureSumMonth = function( source, month ) {
 	this.costChangeOriginal += source.costChangeOriginal * month;
 	this.costTotalChangeOriginal += source.costTotalChangeOriginal * month;
 };
+
+//room/equip name set
+//部屋や機器が複数ある場合には何番目かを示す。
+D6.MeasureBase.setRoomTitle = function( subname ){
+	this.title = subname + "の" + this.title;
+	this.titleShort = this.titleShort + "(" + subname + ")";
+
+};
+	
 
 
 

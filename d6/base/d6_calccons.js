@@ -24,24 +24,33 @@
 var D6 = D6||{};
 
 
-// calcCons() -------------------------------------------------------
-//		calculate consumption in consumption instance
-// 
+/* calcCons() -------------------------------------------------------
+ *		calculate consumption in consumption instance
+ */ 
 D6.calcCons = function() {
-	var i;
+	var i,j;
 
 	//area parameters set
 	D6.area.setCalcBaseParams();
 
 	//pre calculation such as common parameters setting
-	for ( i=0 ; i<D6.consList.length ; i++ ) {
-		this.consList[i].precalc();
+	//priority 1-3 / none
+	for (j=1 ; j<=4 ; j++ ){
+		for ( i=0 ; i<D6.consList.length ; i++ ) {
+			if ( this.consList[i].calcpriority == j || ( j==4 && !this.consList[i].calcpriority ) ) {
+				this.consList[i].precalc();
+			}
+		}
 	}
-		
 	//calculate each consumption at first time
-	for ( i=0 ; i<D6.consList.length ; i++ ) {
-		this.consList[i].calc();
-		this.consList[i].calcCO2();
+	//priority 1-3 / none
+	for (j=1 ; j<=4 ; j++ ){
+		for ( i=0 ; i<D6.consList.length ; i++ ) {
+			if ( this.consList[i].calcpriority == j || ( j==4 && !this.consList[i].calcpriority ) ) {
+				this.consList[i].calc();
+				this.consList[i].calcCO2();
+			}
+		}
 	}
 
 	//calculate 2nd step 
@@ -62,14 +71,19 @@ D6.calcCons = function() {
 			this.consList[i].co2Original = this.consList[i].co2;
 			this.consList[i].costOriginal = this.consList[i].cost;
 			this.consList[i].julesOriginal = this.consList[i].jules;
+			this.consList[i].electricityOriginal = this.consList[i].electricity;
+			this.consList[i].gasOriginal = this.consList[i].gas;
+			this.consList[i].keroseneOriginal = this.consList[i].kerosene;
+			this.consList[i].carOriginal = this.consList[i].car;
 		}
 	}
 };
 	
 
-//calcConsAdjust() --------------------------------------------------
-//		adjust among each consumption
-//		called from calcCons()
+/* calcConsAdjust() --------------------------------------------------
+ *		adjust among each consumption
+ *		called from calcCons()
+ */
 D6.calcConsAdjust = function() {		
 	var ci, i, j;
 	var consNum;
@@ -148,9 +162,9 @@ D6.calcConsAdjust = function() {
 
 	//parameters existence of extinct total data
 	var nodataTotal = this.consShow["TO"].noConsData;
-		
-	//residue is more than 10% of electricity
-	energySum.electricity += this.consShow["TO"].electricity * 0.1;
+
+	//residue is more than 20% of electricity
+	energySum.electricity += this.consShow["TO"].electricity * 0.2;
 		
 	//execute adjust
 	if ( !nodataTotal ) {
@@ -161,21 +175,28 @@ D6.calcConsAdjust = function() {
 			} else {
 				this.energyAdj[j] = this.consShow["TO"][j] / energySum[j];
 				if ( typeof(this.consShow["TO"].noPriceData[j]) !== "undefined" && this.consShow["TO"].noPriceData[j] ) {
-					if ( this.energyAdj[j] < 0.5 ) {
-						this.consShow["TO"][j] *= 0.5 / this.energyAdj[j];
-						this.energyAdj[j] = 0.5;
-					}
-					if ( this.energyAdj[j] > 2 && j != "electricity" ) {
-						this.consShow["TO"][j] *= 2 / this.energyAdj[j];
-						this.energyAdj[j] = 2;
+					if ( !D6.averageMode ) {
+						//価格データがない場合totalは補正しない
+						//本来ならあまりに大幅な補正が必要なときにはtotalの数値を変更するが、ここでは平均値も算出するために補正が不要
+						if ( this.energyAdj[j] < 0.25 ) {
+							this.consShow["TO"][j] *= 0.25 / this.energyAdj[j];
+							this.energyAdj[j] = 0.25;
+						}
+						if ( this.energyAdj[j] > 4 && j != "electricity" ) {
+							this.consShow["TO"][j] *= 4 / this.energyAdj[j];
+							this.energyAdj[j] = 4;
+						}
 					}
 				}
-				if ( j != "electricity" ) {
-					// adjust electricity not to be minus but residue is OK
-					this.energyAdj[j] = Math.max( 0.2, Math.min( 1.5, this.energyAdj[j] ) );
+				if ( j == "electricity" ) {
+					// adjust is less than triple and more than 0.2 times
+					this.energyAdj[j] = Math.max( 0.2, Math.min( 5, this.energyAdj[j] ) );
+				} else if ( j == "water" ) {
+					this.consShow["TO"][j] = energySum[j];
+					this.energyAdj[j] = 1;
 				} else {
-					// adjust is less than triple and more than 0.3 times
-					this.energyAdj[j] = Math.max( 0.3, Math.min( 3, this.energyAdj[j] ) );
+					// adjust electricity not to be minus but residue is OK
+					this.energyAdj[j] = Math.max( 0.2, Math.min( 2.5, this.energyAdj[j] ) );
 				}
 			}
 		}
@@ -198,18 +219,18 @@ D6.calcConsAdjust = function() {
 				this.consShow["TO"][j] = energySum[j];
 			}
 		}
-		this.consShow["TO"].calcCO2();
 	}
+	this.consShow["TO"].calcCO2();	//consTotalのCO2計算しなおし
 };
 
 
-// getTargetConsList(consName)  getter consumption object ------------------
-//
-// parameters
-//		consName	consumption name
-// retrun
-//		consumption object / object array
-//
+/* getTargetConsList(consName)  getter consumption object ------------------
+ *
+ * parameters
+ *		consName	consumption name
+ * retrun
+ *		consumption object / object array
+ */
 D6.getTargetConsList  = function( consName )
 {
 	var i,c=0;
@@ -233,33 +254,17 @@ D6.getTargetConsList  = function( consName )
 	return ret;
 };
 
-// getGid(consName)  getter group id of consumption ------------------
-//
-// parameters
-//		consName	consumption name
-// retrun
-//		groupID		0-9
-//
+/* getGid(consName)  getter group id of consumption ------------------
+ *
+ * parameters
+ *		consName	consumption name
+ * retrun
+ *		groupID		0-9
+ */
 D6.getGid  = function( consName ) {
 	return D6.logicList[consName].groupID;
 };
 	
-
-	
-// getCommonParameters()  getter common result parameters such as co2 ------------------
-//
-// retrun
-//		co2,cost
-//
-D6.getCommonParameters = function(){
-	var ret = {};
-	ret.co2Original = D6.consListByName["consTotal"][0].co2Original;
-	ret.co2 = D6.consListByName["consTotal"][0].co2;
-	ret.costOriginal = D6.consListByName["consTotal"][0].costOriginal;
-	ret.cost = D6.consListByName["consTotal"][0].cost;
-		
-	return ret;
-};
 
 
 

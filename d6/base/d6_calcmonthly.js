@@ -21,7 +21,7 @@ D6.calcMonthly = function( ave, season, monthly, seasonPatternP, energyCode ) {
 	// next  use seasonPattern
 
 	var month2season = [ 0, 0, 0, 1, 1, 1, 2, 2, 2, 1, 1, 0 ];
-	var seasonPatternCons = [ 0, 0, 0 ];
+	var seasonPatternCons = [ 0, 0, 0 ];	//winter, spring, summer
 	var seasonPattern = [ 0, 0, 0 ];
 	var seasonCount = [ 0, 0, 0 ];
 	var seasonCons = [ 0, 0, 0 ];
@@ -99,6 +99,7 @@ D6.calcMonthly = function( ave, season, monthly, seasonPatternP, energyCode ) {
 				ave2count++;
 			}
 		}
+
 		ave2 /= ave2count;
 		ave = ave2;
 		season[0] = ( season[0] == -1 ? ave * seasonPattern[0] : season[0] );

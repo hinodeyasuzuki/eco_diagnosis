@@ -15,9 +15,20 @@
  * tableMeasuresDetail()	for debug
  * tableMeasuresSimple()
  * getMeasureTable()
+ * getMeasure_title()
  */
 
 var D6 = D6 || {};
+
+D6.getMeasure_title= function( mes ) {
+	if ( mes.cons.consName =="consOTother" ){
+		return mes.title;
+	} else {
+		return ( mes.cons.targetCall ? ( mes.cons.targetCall + "の" ) : 
+			( mes.subID ? ( mes.subID + mes.cons.countCall + "の" ) : "" ) ) 
+			+ mes.title;
+	}
+};
 
 // getMeasureDetail(mesid) ---------------------------------------
 //		detail data about measures
@@ -28,15 +39,17 @@ var D6 = D6 || {};
 D6.getMeasureDetail= function( mesid ) {
 	var ret = {};
 	var mes = D6.measureList[mesid];
-		
-	ret.title = mes.title;
-	ret.titleShort = mes.titleShort;
+	ret.title = D6.getMeasure_title(mes);
+	ret.titleShort = mes.titleShort + ( mes.subID ? "(" + (mes.targetCall ? mes.targetCall : mes.subID + mes.cons.countCall) + ")" : "" );
 	ret.measureName = mes.measureName;
 	ret.mesID = mes.mesID;
 	ret.groupID = mes.groupID;
+	ret.subID = mes.subID;
 	ret.consName = mes.cons.consName;
 	ret.figNum = mes.figNum;
 	ret.advice = mes.advice;
+	ret.relation = mes.relation;
+	ret.subsidy = mes.subsidy;
 	ret.joyfull = mes.joyfull;
 	ret.total = mes.cons.total;
 	ret.co2Total = D6.consShow["TO"].co2Original;
@@ -67,6 +80,21 @@ D6.getMeasureDetail= function( mesid ) {
 	ret.kerosene = mes.kerosene;
 	ret.water = mes.water;
 
+	ret.cons = {};
+	ret.cons.title = mes.cons.title;
+	ret.cons.consCode = mes.cons.consCode;
+	ret.cons.co2 = mes.cons.co2;
+	ret.cons.co2Original = mes.cons.co2Original;
+	ret.cons.cost = mes.cons.cost;
+	ret.cons.costOriginal = mes.cons.costOriginal;
+
+	ret.cons.electricity = mes.cons.electricity;
+	ret.cons.gas = mes.cons.gas;
+	ret.cons.car = mes.cons.car;
+	ret.cons.kerosene = mes.cons.kerosene;
+	ret.cons.water = mes.cons.water;
+
+	
 	return ret;
 };
 
@@ -94,7 +122,7 @@ D6.getMeasure = function( consName, maxPrice, notSelected )
 	for ( var mid in mesidArray ) {
 		cid = mesidArray[mid].mesID;
 		mes = D6.measureList[cid];
-			
+
 		// not to show defined in EXCEL
 		if ( mes.title == "" || mes.title.substr(0,1)=="#" ) continue;
 			
@@ -113,23 +141,32 @@ D6.getMeasure = function( consName, maxPrice, notSelected )
 
 		ret[i] = {};
 		ret[i].mesID = mes.mesID;
-		ret[i].title = mes.title;
+		ret[i].title = D6.getMeasure_title(mes);
 		ret[i].selected = mes.selected;
 		ret[i].consName = consName;
 		ret[i].groupID = mes.groupID;
 		ret[i].measureName = mes.measureName;
+		ret[i].consCode = mes.cons.consCode;
 		ret[i].consconsName = mes.cons.consName;
 		ret[i].conssumConsName = mes.cons.sumConsName;
 		ret[i].conssumCons2Name = mes.cons.sumCons2Name;
+		ret[i].conssumCons3Name = mes.cons.sumCons3Name;
+		ret[i].co2Original = mes.cons.co2Original;
 		ret[i].co2Change = mes.co2Change;
 		ret[i].co2ChangeOriginal = mes.co2ChangeOriginal;
+		ret[i].costOriginal = mes.cons.costOriginal;
 		ret[i].costChangeOriginal = mes.costChangeOriginal;
 		ret[i].conssubID = mes.cons.subID;
 		ret[i].consmesTitlePrefix = mes.cons.mesTitlePrefix;
 		ret[i].relation = relation;
 		ret[i].payBackYear = mes.payBackYear;
 		ret[i].lifeTime = mes.lifeTime;
+		ret[i].easyness = mes.easyness;
+		ret[i].priceNew = mes.priceNew;
 		ret[i].lifestyle = mes.lifestyle;
+		ret[i].disable = mes.disable;			//consTotal
+		ret[i].relation = mes.relation;
+
 		if ( mes.cons.color || mes.cons.consName=="consTOTAL"){
 			ret[i].color = mes.cons.color;
 		} else {

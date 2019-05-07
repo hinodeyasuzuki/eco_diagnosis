@@ -1,0 +1,92 @@
+<html>
+
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="target-densitydpi=device-dpi, width=320, initial-scale=1.0, user-scalable=yes">
+	<link href="view/common.css" rel="stylesheet" type="text/css" />
+	<title>追加</title>
+</head>
+
+<body>
+
+	<div id="app">
+
+		<ul v-for="cons in defCons">
+			<li>{{cons.title}}<button v-if="cons.orgCopyNum>=1" @click="addcons(cons.title, cons.consName);">追加</button>
+			</li>
+		</ul>
+		<div id=" graphCO2average">
+		</div>
+
+	</div>
+
+
+	<?php
+		echo $jssets;
+		echo $scripts;
+		echo $jsgoogle;
+		echo $jsgoogle_analytics;
+	?>
+
+	<script src="./vue/v1_equip/d6calc.js"></script>
+	<script src="./vue/v1_equip/equip.js"></script>
+
+	<script>
+		//Vueの定義
+		var app = new Vue({
+			el: ' #app', //Vue変数 
+			data: {
+				co2: 0, reduceCO2: 0, cost: 0, reduceCost: 0, //画面定義 
+				defInput: {}, //入力定義 ixxxごと
+				defSelectValue: {}, //選択肢表示値 ixxxに変換 
+				defSelectData: {}, //選択肢選択値 ixxxに変換 
+				defCons: {}, //消費クラス（追加定義）の入力定義
+				defConsMeasures: {}, //消費クラスの提案リスト定義 
+				defConsThema: {}, //家で気になるところ定義 defInputGroup で定義 
+				defConsShow: {}, //分野定義 
+				selects: {},
+				eqlist: {},
+				important_items: {},
+				rank100: 1,
+				averageComment: "",
+				averageCO2Comment: "",
+				pageResult: {},
+
+				measures: [],
+				measures_selectafter: [],
+				measures_selectalready: [],
+				measures_selectno: [],
+			},
+			methods: {
+				addcons: function (title, consName) {
+					callGetResult(
+						{
+							"get": { "all": 1 }
+							, "set": { "add": [consName] }
+						}
+					);
+				}
+
+			},
+			created: function () {
+
+			},
+			computed: {
+
+			},
+			watch: {
+
+			}
+		}); //初期ロード時設定
+		window.onload = function () {
+			$(window).on("beforeunload", function () {
+				file.saveToLocal(); //文字指定はIEしかサポートしていない return "診断を終了しますがよろしいですか？　ページを移動する場合には、ページ内のボタンやメニューを使ってください。"
+			}); //初期データ読み込み 
+			var param = {};
+			param["get"] = { "scenario": 1 };
+			callGetScenario(param);
+		}; 
+	</script>
+</body>
+
+</html>
