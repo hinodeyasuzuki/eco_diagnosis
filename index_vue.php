@@ -147,7 +147,7 @@ $scripts = "";
 
 //base D6 scripts (common) in case useCode==1
 $include_common  ='
-	<script src="d6/d6facade.js" type="text/javascript"></script>
+	<!--<script src="d6/d6facade.js" type="text/javascript"></script>-->
 	<script src="d6/base/objectcreate.js" type="text/javascript"></script>
 	<script src="d6/base/energy.js" type="text/javascript"></script>
 	<script src="d6/base/consbase.js" type="text/javascript"></script>

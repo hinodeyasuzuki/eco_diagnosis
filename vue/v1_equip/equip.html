@@ -4,18 +4,23 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="target-densitydpi=device-dpi, width=320, initial-scale=1.0, user-scalable=yes">
 	<link href="view/common.css" rel="stylesheet" type="text/css" />
-	<title>追加</title>
+	<title>ペンギン風機器追加</title>
 </head>
 
 <body>
 
-	<div id="app">
+	<div id="app" class=" v-cloak">
 
-		<ul v-for="cons in defCons">
-			<li>{{cons.title}}<button v-if="cons.orgCopyNum>=1" @click="addcons(cons.title, cons.consName);">追加</button>
+		<ul v-for="(cons,key) in equipCons">
+			<li>{{cons.name}} {{cons.count ? cons.num + " " + cons.count : (cons.num ? "使う" : "")}}
+				{{cons.co2 ? Math.round(cons.co2) : 0}}kg
+				<button v-if="!cons.count"
+					@click="togglecons(cons.name, cons.cons,key);">{{cons.num ? "使わない" : "使う"}}</button>
+				<button v-if="cons.count" @click="addcons(cons.name, cons.cons,key);">ふやす</button>
+				<button v-if="cons.count && cons.num" @click="delcons(cons.name, cons.cons,key);">へらす</button>
 			</li>
 		</ul>
-		<div id=" graphCO2average">
+		<div id="graphCO2average">
 		</div>
 
 	</div>
@@ -36,6 +41,32 @@
 		var app = new Vue({
 			el: ' #app', //Vue変数 
 			data: {
+				equipCons: [
+					{ cons: "consTV", name: "テレビ", count: "台", num: 0 },
+					{ cons: "consOTother", name: "ノートパソコン", count: "台", num: 0 },
+					{ cons: "consOTother", name: "デスクトップパソコン", count: "台", num: 0 },
+					{ cons: "consOTother", name: "据置ゲーム機", count: "台", num: 0 },
+					{ cons: "consOTother", name: "インターネットモデム", count: "", num: 0 },
+					{ cons: "consLI", name: "照明", count: "部屋", num: 0 },
+					{ cons: "consRF", name: "冷蔵庫", count: "台", num: 0 },
+					{ cons: "consDRsum", name: "洗濯機", count: "", num: 0 },
+					{ cons: "consACheat", name: "暖房", count: "部屋", num: 0 },
+					{ cons: "consACcool", name: "冷房", count: "部屋", num: 0 },
+					{ cons: "consOTother", name: "扇風機", count: "台", num: 0 },
+					{ cons: "consHWtub", name: "風呂", count: "", num: 0 },
+					{ cons: "consHWshower", name: "シャワー", count: "", num: 0 },
+					{ cons: "consOTother", name: "ドライヤー", count: "台", num: 0 },
+					{ cons: "consCKsum", name: "コンロ", count: "", num: 0 },
+					{ cons: "consOTother", name: "電子レンジ", count: "", num: 0 },
+					{ cons: "consOTother", name: "炊飯器", count: "", num: 0 },
+					{ cons: "consOTother", name: "トースター", count: "", num: 0 },
+					{ cons: "consOTother", name: "ポット", count: "", num: 0 },
+					{ cons: "consOTother", name: "掃除機", count: "", num: 0 },
+					{ cons: "consOTother", name: "ドライヤー", count: "", num: 0 },
+					{ cons: "consOTother", name: "熱帯魚水槽", count: "台", num: 0 },
+					{ cons: "consCR", name: "車", count: "台", num: 0 }
+				],
+
 				co2: 0, reduceCO2: 0, cost: 0, reduceCost: 0, //画面定義 
 				defInput: {}, //入力定義 ixxxごと
 				defSelectValue: {}, //選択肢表示値 ixxxに変換 
@@ -46,6 +77,7 @@
 				defConsShow: {}, //分野定義 
 				selects: {},
 				eqlist: {},
+				cons_count: {},
 				important_items: {},
 				rank100: 1,
 				averageComment: "",
@@ -58,15 +90,72 @@
 				measures_selectno: [],
 			},
 			methods: {
-				addcons: function (title, consName) {
-					callGetResult(
-						{
-							"get": { "all": 1 }
-							, "set": { "add": [consName] }
-						}
-					);
-				}
+				addcons: function (title, consName, key) {
+					var add = 0;
+					Vue.set(this.equipCons[key], "num", this.equipCons[key].num + 1);
+					if (this.cons_count[key] < this.equipCons[key].num) {
+						Vue.set(this.cons_count, key, this.equipCons[key].num);
+					}
+					if (!D6.consListByName[consName][this.equipCons[key].num]) {
+						add = 1;
+					}
+					equipadd(consName, key, this.equipCons[key].num, add);	//機器追加
+				},
+				delcons: function (title, consName, key) {
+					Vue.set(this.equipCons[key], "num", this.equipCons[key].num - 1);
+					equipdel(consName, key, this.equipCons[key].num + 1);	//機器削除
+				},
 
+				togglecons: function (title, consName, key) {
+					Vue.set(this.equipCons[key], "num", 1 - this.equipCons[key].num);
+					if (this.equipCons[key].num == 0) {
+						equipdel(consName, key, 1);	//機器削除
+
+					} else {
+						equipadd(consName, key, 1, 0);	//機器追加
+
+					}
+
+				},
+				calcco2: function () {//機器ごとのCO2の計算をして、設定する
+					var co2;
+					for (var k in this.equipCons) {
+						co2 = 0;
+						switch (this.equipCons[k].cons) {
+							case "consTV":
+								co2 = D6.consTVsum.co2 - D6.consListByName["consTV"][0].co2;
+								break;
+							case "consOTother":
+								for (var k2 in D6.consListByName["consOTother"]) {
+									var c = D6.consListByName["consOTother"][k2];
+									if (c.name == this.equipCons[k].name) {
+										co2 += c.co2;
+									}
+								}
+								break;
+							case "consLI":
+								co2 = D6.consLIsum.co2 - D6.consListByName["consLI"][0].co2;
+								break;
+							case "consRF":
+								co2 = D6.consRFsum.co2 - D6.consListByName["consRF"][0].co2;
+								break;
+							case "consACheat":
+								co2 = D6.consHTsum.co2 - D6.consListByName["consACheat"][0].co2;
+								break;
+							case "consACcool":
+								co2 = D6.consCOsum.co2 - D6.consListByName["consACcool"][0].co2;
+								break;
+							case "consHWtub":
+							case "consHWshower":
+							case "consDRsum":
+							case "consCKsum":
+								co2 = D6[this.equipCons[k].cons].co2;
+								break;
+
+						}
+						Vue.set(this.equipCons[k], "co2", co2 * 12);
+					}
+				}
 			},
 			created: function () {
 
@@ -85,6 +174,8 @@
 			var param = {};
 			param["get"] = { "scenario": 1 };
 			callGetScenario(param);
+			D6.fg_calccons_not_calcConsAdjust = true;
+			equipinit();
 		}; 
 	</script>
 </body>

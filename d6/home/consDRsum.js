@@ -24,59 +24,64 @@
  */
 
 //resolve D6
-var D6 = D6||{};
+var D6 = D6 || {};
 
 //Inherited class of D6.ConsBase
-D6.consDRsum = D6.object( D6.ConsBase );
+D6.consDRsum = D6.object(D6.ConsBase);
 
 D6.consDRsum.init = function() {
-	this.whWash = 100;					// only wash wh/day in case of 3 persons
-	this.whDry = 1000;					// use dry wh/day in case of 3 persons
+	this.whWash = 100; // only wash wh/day in case of 3 persons
+	this.whDry = 1000; // use dry wh/day in case of 3 persons
 
-	this.reduceRateHeatPump = 0.65;		//reduce rate by heatpump type
-	this.res2Freq = [ 0, 1, 0.5, 0.2, 0.07, 0 ];
+	this.reduceRateHeatPump = 0.65; //reduce rate by heatpump type
+	this.res2Freq = [0, 1, 0.5, 0.2, 0.07, 0];
 
 	//construction setting
-	this.consName = "consDRsum";    	//code name of this consumption 
-	this.consCode = "DR";            	//short code to access consumption, only set main consumption user for itemize
-	this.title = "laundry washing";			//consumption title name
-	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
-	this.groupID = "5";					//number code in items
-	this.color = "#00ffff";				//color definition in graph
+	this.consName = "consDRsum"; //code name of this consumption
+	this.consCode = "DR"; //short code to access consumption, only set main consumption user for itemize
+	this.title = "laundry washing"; //consumption title name
+	this.orgCopyNum = 0; //original copy number in case of countable consumption, other case set 0
+	this.groupID = "5"; //number code in items
+	this.color = "#00ffff"; //color definition in graph
 
-	this.sumConsName = "consTotal";		//code name of consumption sum up include this
-	this.sumCons2Name = "";				//code name of consumption related to this
+	this.sumConsName = "consTotal"; //code name of consumption sum up include this
+	this.sumCons2Name = ""; //code name of consumption related to this
 
 	//guide message in input page
 	this.inputGuide = "How to use the cleaner, washing machine and clothes dryer";
 };
 D6.consDRsum.init();
 
-
 D6.consDRsum.precalc = function() {
 	this.clear();
 
-	this.dryUse = this.input( "i401", 0 );		//use dryer or not
-	this.person = D6.consShow["TO"].person;		//person number
+	this.dryUse = this.input("i401", 0); //use dryer or not
+	this.washFreq = this.input("i403", 1); //use dryer or not
+	this.person = D6.consShow["TO"].person; //person number
 };
 
 D6.consDRsum.calc = function() {
 	//rate of dry
-	this.rateDry = ( this.whDry * this.res2Freq[this.dryUse] ) / ( this.whWash + this.whDry * this.res2Freq[this.dryUse] );
+	this.rateDry =
+		this.whDry *
+		this.res2Freq[this.dryUse] /
+		(this.whWash + this.whDry * this.res2Freq[this.dryUse]);
 
 	//electricity kWh/month
-	this.electricity = ( this.whWash + this.whDry * this.res2Freq[this.dryUse] ) / 1000
-									* this.person / 3 
-									* 30;
+	this.electricity =
+		(this.whWash * this.washFreq + this.whDry * this.res2Freq[this.dryUse]) /
+		1000 *
+		this.person /
+		3 *
+		30;
 };
 
 D6.consDRsum.calcMeasure = function() {
 	//mDRheatPump
-	this.measures["mDRheatPump"].calcReduceRate( this.rateDry * this.reduceRateHeatPump );
-	
+	this.measures["mDRheatPump"].calcReduceRate(
+		this.rateDry * this.reduceRateHeatPump
+	);
+
 	//mDRsolar
-	this.measures["mDRsolar"].calcReduceRate( this.rateDry );
-		
+	this.measures["mDRsolar"].calcReduceRate(this.rateDry);
 };
-
-

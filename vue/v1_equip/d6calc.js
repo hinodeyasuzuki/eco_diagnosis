@@ -1,7 +1,7 @@
 // work on both amazon Lambda and local
 //　HTML(JS)から呼び出される計算ロジック（ファサード） d6calc()
 //
-// d6calc 			共通D6ルーチン呼び出し facade
+// d6calc 			共通D6ルーチン呼び出し facadeの代わり
 //
 // callGetScenario 	シナリオ受信
 // callGetResult　	結果の取得
@@ -142,8 +142,8 @@ function callGetResult(params) {
 		graphCO2average(result.average_graph);
 		graphItemize(result.itemize_graph);
 		Vue.set(app, "rank100", result.average.rank100);
-		Vue.set(app, "averageComment", createAverageComment(result.average_graph));
-		Vue.set(app, "averageCO2Comment", createAverageCO2Comment(result.average));
+		//Vue.set(app, "averageComment", createAverageComment(result.average_graph));
+		//Vue.set(app, "averageCO2Comment", createAverageCO2Comment(result.average));
 	});
 }
 
