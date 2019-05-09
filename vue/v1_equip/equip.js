@@ -192,12 +192,14 @@ function equipinit(consName, clistid) {
 	D6.doc.data["i403"] = 0; //洗濯頻度
 	D6.doc.data["i502"] = 0; //不在部屋照明
 	D6.doc.data["i7111"] = 0; //冷蔵庫使用
-	D6.doc.data["i2611"] = 0; //冷房時間
+	D6.doc.data["i2711"] = 0; //冷房時間
 	D6.doc.data["i2351"] = 0; //冷房時間
 	D6.doc.data["i106"] = 0; //シャワー時間
 	D6.doc.data["i105"] = 0; //シャワー時間
+	D6.doc.data["i112"] = 0; //シャワー出るまで
 	D6.doc.data["i104"] = 0; //湯はり
 	D6.doc.data["i103"] = 0; //湯はり
+	D6.doc.data["i802"] = 0; //エネルギー割
 
 	var param = {};
 	param["get"] = { all: 1 };
@@ -208,6 +210,12 @@ function equipinit(consName, clistid) {
 
 //機器を追加する
 function equipadd(consName, clistid, count, add) {
+	if (add) {
+		callGetResult({
+			get: { all: 1 },
+			set: { add: [consName] }
+		});
+	}
 	switch (consName) {
 	case "consTV":
 		D6.doc.data["i633" + count] = 6; //時間
@@ -224,9 +232,11 @@ function equipadd(consName, clistid, count, add) {
 		D6.doc.data["i711" + count] = 10; //年数
 		break;
 	case "consACcool":
-		D6.doc.data["i261" + count] = 4; //使用時間
+		D6.doc.data["i271" + count] = 4; //使用時間
+		if (D6.doc.data["i235" + count] == -1) D6.doc.data["i235" + count] = 0; //使用時間
 		break;
 	case "consACheat":
+		if (D6.doc.data["i271" + count] == -1) D6.doc.data["i271" + count] = 0; //使用時間
 		D6.doc.data["i235" + count] = 6; //使用時間
 		break;
 	case "consHWshower":
@@ -236,6 +246,9 @@ function equipadd(consName, clistid, count, add) {
 	case "consHWtub":
 		D6.doc.data["i104"] = -1; //湯
 		D6.doc.data["i103"] = -1; //湯
+		break;
+	case "consCKcook":
+		D6.doc.data["i802"] = 7; //エネルギー割
 		break;
 	case "consOTother":
 		var ename = app.equipCons[clistid].name;
@@ -250,22 +263,37 @@ function equipadd(consName, clistid, count, add) {
 				break;
 			}
 		}
-		D6.doc.data["i654" + count] = watt;
-		D6.doc.data["i655" + count] = hr;
-		D6.doc.data["i656" + count] = day;
+		if (add != 1) {
+			var c = 0;
+			for (var k in D6.consListByName["consOTother"]) {
+				if (D6.consListByName["consOTother"][k].name == ename) {
+					c++;
+					if (c == count) {
+						//対象の消費の場合
+						D6.doc.data["i653" + k] = ename;
+						D6.doc.data["i654" + k] = watt;
+						D6.doc.data["i655" + k] = hr;
+						D6.doc.data["i656" + k] = day / 12;
+						break;
+					}
+				}
+			}
+		} else {
+			console.log(clistid);
+			console.log(ename);
+			var k = D6.consListByName["consOTother"].length - 2;
+			D6.doc.data["i653" + k] = ename;
+			D6.doc.data["i654" + k] = watt;
+			D6.doc.data["i655" + k] = hr;
+			D6.doc.data["i656" + k] = day / 12;
+		}
 		break;
 	}
-	if (add) {
-		callGetResult({
-			get: { all: 1 },
-			set: { add: [consName], inp: D6.doc.data }
-		});
-	} else {
-		callGetResult({
-			get: { all: 1 },
-			set: { inp: D6.doc.data }
-		});
-	}
+
+	//値だけ取得
+	callGetResult({
+		get: { all: 1 }
+	});
 	app.calcco2();
 }
 
@@ -285,7 +313,7 @@ function equipdel(consName, clistid, count) {
 		D6.doc.data["i711" + count] = 0; //年数
 		break;
 	case "consACcool":
-		D6.doc.data["i261" + count] = 0; //使用時間
+		D6.doc.data["i271" + count] = 0; //使用時間
 		break;
 	case "consACheat":
 		D6.doc.data["i235" + count] = 0; //使用時間
@@ -298,8 +326,20 @@ function equipdel(consName, clistid, count) {
 		D6.doc.data["i104"] = 0; //湯
 		D6.doc.data["i103"] = 0; //湯
 		break;
+	case "consCKcook":
+		D6.doc.data["i802"] = 0; //エネルギー割
+		break;
 	case "consOTother":
-		D6.doc.data["i655" + count] = 0;
+		var ename = app.equipCons[clistid].name;
+		var c = 0;
+		for (var k in D6.consListByName["consOTother"]) {
+			if (D6.consListByName["consOTother"][k].name == ename) {
+				c++;
+				if (c == count) {
+					D6.doc.data["i655" + k] = 0;
+				}
+			}
+		}
 		break;
 	}
 	callGetResult({

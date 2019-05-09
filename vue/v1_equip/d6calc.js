@@ -205,11 +205,16 @@ var d6calc = function(cmd) {
 	}
 
 	//設定：部屋等の追加（単体）変数名の配列
+	var bk = {};
+	for (var k in D6.doc.data) bk[k] = D6.doc.data[k];	//addで保存データが消えてしまう
 	if (cmd.set && cmd.set.add) {
 		for (key in cmd.set.add) {
 			D6.addConsSetting(cmd.set.add[key]);
+			//initialize datasets without scenarioset
+			D6.setscenario("add");
 		}
 	}
+	for (var k in bk) D6.doc.data[k] = bk[k];
 
 	//設定：変数の設定（単体）
 	if (cmd.set && cmd.set.inp) {

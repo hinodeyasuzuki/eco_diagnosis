@@ -243,6 +243,7 @@ getCalcResult = function(command, res) {
 	}
 
 	var mestitle = "<h3>" + lang.effectivemeasures + "</h3>";
+	
 	switch (command) {
 	case "start":
 	case "addandstart":

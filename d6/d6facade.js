@@ -16,7 +16,6 @@
  * 
  */
 
-
 /*
  * work as D6 facade on web-worker. Call such functions through this onmessage() call.
  *
@@ -100,7 +99,7 @@ D6.getAllResult(consName)			get total result
 //
 // return value
 //	result.command			command to call
-//  result.errormessage		error message if not null 
+//  result.errormessage		error message if not null
 //	result.monthly
 //	result.itemize
 //	result.measure
@@ -109,95 +108,95 @@ D6.getAllResult(consName)			get total result
 //
 // make html at ay generator
 
-
-
 //resolve D6 -------------------------------------
-var D6 = D6||{};
-
+var D6 = D6 || {};
 
 // onmessage(event) function called as worker ========================================
 //
-onmessage = function (event) {
-  
+onmessage = function(event) {
 	var param = event.data.param;
-	if ( !event.data.param ) {
+	if (!event.data.param) {
 		param = "";
 	}
-	if ( typeof(param.targetMode) != "undefined" ){
+	if (typeof param.targetMode != "undefined") {
 		D6.targetMode = param.targetMode;
-	};
-	var result = D6.workercalc( event.data.command, param );
+	}
+	var result = D6.workercalc(event.data.command, param);
 
 	//return to main.js
 	try {
-		postMessage({ 
-			"command": event.data.command,
-			"result": result
-		}, "http://" + window.location.hostname);
-	} catch(e) {
-		postMessage({ 
-			"command": event.data.command,
-			"result": result
+		postMessage(
+			{
+				command: event.data.command,
+				result: result
+			},
+			"http://" + window.location.hostname
+		);
+	} catch (e) {
+		postMessage({
+			command: event.data.command,
+			result: result
 		});
-		
-	};
-	
+	}
 };
-
 
 // workercalc(command, param)  simulating worker for non worker ========================
 // parameters
 // 		command: command code(string)
 // 		param: parameters array
 //
-D6.workercalc = function( command, param ){
+D6.workercalc = function(command, param) {
 	var result = {};
 	var ad;
-	
-	switch( command ) {
-	case "start" :
+
+	switch (command) {
+	case "start":
 		//program setting , execute only once.
 		D6.viewparam = D6.viewparam || {};
 		D6.viewparam.ode = param.ode;
 		D6.viewparam.focusMode = param.focusMode;
 		D6.viewparam.countfix_pre_after = param.countfix_pre_after;
-		
+
 		//set debug mode
-		if ( param.debugMode && param.debugMode == 1 ){
+		if (param.debugMode && param.debugMode == 1) {
 			D6.debugMode = true;
 		} else {
 			D6.debugMode = false;
 		}
 
 		//initialize D6 datasets
-		D6.constructor(param.prohibitQuestions, param.allowedQuestions, param.defInput);
+		D6.constructor(
+			param.prohibitQuestions,
+			param.allowedQuestions,
+			param.defInput
+		);
 
 		// set file data
-		if ( typeof(param.rdata) != "undefined" && param.rdata ) {
+		if (typeof param.rdata != "undefined" && param.rdata) {
 			try {
-				D6.doc.loadDataSet( decodeURIComponent(escape(atob(param.rdata))) );
-			} catch(e){
+				D6.doc.loadDataSet(decodeURIComponent(escape(atob(param.rdata))));
+			} catch (e) {
 				//console.log("load data error");
 			}
 		}
-		
+
 		//calculation
 		D6.calculateAll();
 
 		//get initial page as consTotal
 		//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-		result = D6.getAllResult( "consTotal" );
+		result = D6.getAllResult("consTotal");
 
 		//create input componets
-		result.inputPage = D6.getInputPage(param.consName,param.subName);
+		result.inputPage = D6.getInputPage(param.consName, param.subName);
 
 		//button selection
-		result.quesone = D6.getFirstQues(param.consName,param.subName);
+		result.quesone = D6.getFirstQues(param.consName, param.subName);
 
 		//debug
-		if ( D6.debugMode ) {
-			console.log( "d6 construct value ----" );
-			console.log( D6 );
+		if (D6.debugMode) {
+			console.log("d6 construct value ----");
+			console.log(D6);
 		}
 
 		break;
@@ -213,8 +212,11 @@ D6.workercalc = function( command, param ){
 		D6.setscenario("add");
 
 		//filed data set
-		if ( typeof(param.rdata) != "undefined"  ) {
-			D6.doc.loadDataSet( decodeURIComponent(escape(atob(param.rdata))), "add" );
+		if (typeof param.rdata != "undefined") {
+			D6.doc.loadDataSet(
+				decodeURIComponent(escape(atob(param.rdata))),
+				"add"
+			);
 		}
 
 		//calculate
@@ -224,15 +226,15 @@ D6.workercalc = function( command, param ){
 		var showName = D6.consListByName[param.consName][0].sumConsName;
 
 		//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-		result = D6.getAllResult(showName );
+		result = D6.getAllResult(showName);
 
 		//create input components
-		result.inputPage = D6.getInputPage(showName,param.subName);
+		result.inputPage = D6.getInputPage(showName, param.subName);
 
 		break;
 
-	case "tabclick" :
-		//menu selected / main cons change		
+	case "tabclick":
+		//menu selected / main cons change
 
 		//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
 		result = D6.getAllResult(param.consName);
@@ -245,125 +247,129 @@ D6.workercalc = function( command, param ){
 
 		break;
 
-	case "subtabclick" :
+	case "subtabclick":
 		//create input componets / sub cons change
 		result.inputPage = D6.getInputPage(param.consName, param.subName);
 		result.subName = param.subName;
 		break;
 
-	case "inchange" :
+	case "inchange":
 		//in case of changing input value, recalc.
-		D6.inSet(param.id,param.val);
-		if ( param.id == D6.scenario.measuresSortChange ){
-			D6.sortTarget =  D6.scenario.measuresSortTarget[param.val < 0 ? 0:param.val];
+		D6.inSet(param.id, param.val);
+		if (param.id == D6.scenario.measuresSortChange) {
+			D6.sortTarget =
+					D6.scenario.measuresSortTarget[param.val < 0 ? 0 : param.val];
 		}
 		D6.calculateAll();
 
 		//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-		result = D6.getAllResult(param.consName);	//show result 
+		result = D6.getAllResult(param.consName); //show result
 		break;
 
-	case "inchange_only" :
+	case "inchange_only":
 		//in case of changing input value.
-		D6.inSet(param.id,param.val);
+		D6.inSet(param.id, param.val);
 		result = "ok";
 		break;
 
-	case "quesone_next" : 
+	case "quesone_next":
 		result.quesone = D6.getNextQues();
 		break;
-		
-	case "quesone_prev" : 
+
+	case "quesone_prev":
 		result.quesone = D6.getPrevQues();
 		break;
-		
-	case "quesone_set" : 
-		D6.inSet(param.id,param.val);
+
+	case "quesone_set":
+		D6.inSet(param.id, param.val);
 		result.quesone = D6.getNextQues();
 		break;
-		
-	case "recalc" :
+
+	case "recalc":
 		//only recalc no graph data
 		D6.calculateAll();
 
 		result = D6.getAllResult(param.consName);
-		
+
 		//create input componets
-		result.inputPage = D6.getInputPage(param.consName,param.subName);
+		result.inputPage = D6.getInputPage(param.consName, param.subName);
 		break;
 
-	case "pagelist" :
+	case "pagelist":
 		//create itemize list
-		result.inputPage = D6.getInputPage(param.consName,param.subName);
+		result.inputPage = D6.getInputPage(param.consName, param.subName);
 		break;
-		
-	case "measureadd" :
-	case "measureadd_comment" :
-		//add measure to select list 
-		D6.measureAdd( param.mid );
+
+	case "measureadd":
+	case "measureadd_comment":
+		//add measure to select list
+		D6.measureAdd(param.mid);
 		D6.calcMeasures(-1);
 
 		//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
 		result = D6.getAllResult();
 		break;
 
-	case "measuredelete" :
+	case "measuredelete":
 		//delete measure from select list
-		D6.measureDelete( param.mid  );
+		D6.measureDelete(param.mid);
 		D6.calcMeasures(-1);
 
 		//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
 		result = D6.getAllResult();
 		break;
 
-	case "graphchange" :
+	case "graphchange":
 		//change graph
 		result.itemize_graph = D6.getItemizeGraph("", param.graph);
 		break;
 
-	case "evaluateaxis" :
+	case "evaluateaxis":
 		//calc evaluate axis point
 		result.evaluateAxis = D6.getEvaluateAxisPoint("", param.subName);
 		break;
 
-	case "add_demand" :
+	case "add_demand":
 		// add equipment to demand graph
 		var serialize = D6.doc.serialize();
 		param.rdata = btoa(unescape(encodeURIComponent(serialize)));
-		
+
 		D6.addConsSetting(param.consName);
-		
+
 		//initialize datasets
 		D6.setscenario("add");
 
 		//filedataset
-		if ( param.rdata ) {
-			D6.doc.loadDataSet( decodeURIComponent(escape(atob(param.rdata))), "add" );
+		if (param.rdata) {
+			D6.doc.loadDataSet(
+				decodeURIComponent(escape(atob(param.rdata))),
+				"add"
+			);
 		}
 		//--continue to demand command
 
-	case "demand" :
+	case "demand":
 		//create input componets and graph for demand page
 		result.demandin = D6.getInputDemandSumup();
 		result.demandlog = D6.getInputDemandLog();
 		result.graphDemand = D6.getDemandGraph();
 		break;
-		
-	case "inchange_demand" :
-		D6.inSet(param.id,param.val);
+
+	case "inchange_demand":
+		D6.inSet(param.id, param.val);
 		result.graphDemand = D6.getDemandGraph();
 		break;
-		
-	case "modal" :
+
+	case "modal":
 		//ay detail information about measure, modal dialog
-		var id =param.mid;
-		result.measure_detail = D6.getMeasureDetail( id );	
+		var id = param.mid;
+		result.measure_detail = D6.getMeasureDetail(id);
 		break;
 
-	case "save" :
-	case "savenew" :
-	case "saveandgo" :
-	case "save_noalert" :
+	case "save":
+	case "savenew":
+	case "saveandgo":
+	case "save_noalert":
 		//save data
 		var serialize = D6.doc.serialize();
 		result = btoa(unescape(encodeURIComponent(serialize)));
@@ -372,72 +378,78 @@ D6.workercalc = function( command, param ){
 	case "load":
 		break;
 
-	case "getinputpage" :
+	case "getinputpage":
 		//create input componets
-		result.inputPage = D6.getInputPage(param.consName,param.subName);
+		result.inputPage = D6.getInputPage(param.consName, param.subName);
 		break;
 
-	case "getqueslist" :
+	case "getqueslist":
 		//return question list
 		result.queslist = D6.getQuesList();
 		break;
 
-	case "common" :
+	case "common":
 		//common action to get full data set----------------------------------
-		var measurechange  = false;
+		var measurechange = false;
 		//construct d6 senario
-		if ( typeof(param.construct) != "undefined" && param.construct ) {
-			D6.constructor(param.prohibitQuestions, param.allowedQuestions, param.defInput);
+		if (typeof param.construct != "undefined" && param.construct) {
+			D6.constructor(
+				param.prohibitQuestions,
+				param.allowedQuestions,
+				param.defInput
+			);
 		}
 		//file data load
-		if ( typeof(param.rdata) != "undefined" && param.rdata ) {
+		if (typeof param.rdata != "undefined" && param.rdata) {
 			try {
-				D6.doc.loadDataSet( decodeURIComponent(escape(atob(param.rdata))) );
-			} catch(e){
+				D6.doc.loadDataSet(decodeURIComponent(escape(atob(param.rdata))));
+			} catch (e) {
 				//console.log("load data error");
 			}
 		}
 		//set one input data
-		if ( typeof(param.id) != "undefined" && param.id ) {
-			D6.inSet(param.id,param.val);
+		if (typeof param.id != "undefined" && param.id) {
+			D6.inSet(param.id, param.val);
 		}
 		//set array data
-		if ( typeof(param.inputs) != "undefined" && param.inputs) {
-			for ( var inp in param.inputs ) {
+		if (typeof param.inputs != "undefined" && param.inputs) {
+			for (var inp in param.inputs) {
 				D6.inSet(param.inputs[inp].id, param.inputs[inp].val);
 			}
 		}
 		//measure select
-		if ( typeof(param.addmeasureid) != "undefined" && param.addmeasureid) {
-			D6.measureAdd( param.addmeasureid );
+		if (typeof param.addmeasureid != "undefined" && param.addmeasureid) {
+			D6.measureAdd(param.addmeasureid);
 			measurechange = true;
 		}
-		if ( typeof(param.deletemeasureid) != "undefined" && param.deletemeasureid) {
-			D6.measureDelete( param.deletemeasureid );
+		if (
+			typeof param.deletemeasureid != "undefined" &&
+				param.deletemeasureid
+		) {
+			D6.measureDelete(param.deletemeasureid);
 			measurechange = true;
 		}
 
 		//calculate and return
-		if ( measurechange ) {
+		if (measurechange) {
 			D6.calcMeasures(-1);
 			result = D6.getAllResult();
-		} else if ( typeof(param.calc) != "undefined" || param.calc ) {
+		} else if (typeof param.calc != "undefined" || param.calc) {
 			D6.calculateAll(-1);
 		}
 
 		//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
-		if ( typeof(param.getresult) != "undefined" || param.getresult ) {
+		if (typeof param.getresult != "undefined" || param.getresult) {
 			result = D6.getAllResult();
 		}
 		//create input components
-		if ( typeof(param.getinput) != "undefined" || param.getinput ) {
-			result.inputPage = D6.getInputPage(param.consName,param.subName);
+		if (typeof param.getinput != "undefined" || param.getinput) {
+			result.inputPage = D6.getInputPage(param.consName, param.subName);
 		}
 		break;
 
 	default:
-	};
-	
+	}
+
 	return result;
 };
-

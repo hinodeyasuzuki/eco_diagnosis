@@ -24,54 +24,51 @@
  */
 
 //resolve D6
-var D6 = D6||{};
+var D6 = D6 || {};
 
 //Inherited class of D6.ConsBase
-D6.consCKcook = D6.object( D6.ConsBase );
+D6.consCKcook = D6.object(D6.ConsBase);
 
 //initialize
 D6.consCKcook.init = function() {
-	this.consEnergyStat = 840000;		//statistical cooking energy (kcal/year) EDMC Japan
-	this.efficentEL = 2;				//coefficient of IH compare to heat type
+	this.consEnergyStat = 840000; //statistical cooking energy (kcal/year) EDMC Japan
+	this.efficentEL = 2; //coefficient of IH compare to heat type
 
 	//construction setting
-	this.consName = "consCKcook";    	//code name of this consumption 
-	this.consCode = "CK";            	//short code to access consumption, only set main consumption user for itemize
-	this.title = "Cooking";				//consumption title name
-	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
-	this.groupID = "4";					//number code in items
-	this.color = "#ffe4b5";				//color definition in graph
+	this.consName = "consCKcook"; //code name of this consumption
+	this.consCode = "CK"; //short code to access consumption, only set main consumption user for itemize
+	this.title = "Cooking"; //consumption title name
+	this.orgCopyNum = 0; //original copy number in case of countable consumption, other case set 0
+	this.groupID = "4"; //number code in items
+	this.color = "#ffe4b5"; //color definition in graph
 
-	this.sumConsName = "consCKsum";		//code name of consumption sum up include this
-	this.sumCons2Name = "";				//code name of consumption related to this
+	this.sumConsName = "consCKsum"; //code name of consumption sum up include this
+	this.sumCons2Name = ""; //code name of consumption related to this
 
 	//guide message in input page
 	this.inputGuide = "How to use cooking to focus on the stove";
 };
 D6.consCKcook.init();
 
-
 D6.consCKcook.precalc = function() {
 	this.clear();
 
 	//prepare input value
-	this.equipHW = this.input( "i101", 2 );			//energy source of bath
-	this.equipCK = this.input( "i801", -1 );		//energy source of cooking
-	this.person = this.input( "i001", 3 );			//member of family
+	this.equipHW = this.input("i101", 2); //energy source of bath
+	this.equipCK = this.input("i801", -1); //energy source of cooking
+	this.freq10 = this.input("i802", 7); //frequency
+	this.person = this.input("i001", 3); //member of family
 };
 
 D6.consCKcook.calc = function() {
-	this.priceGas = D6.consShow["TO"].priceGas;		//gas fee
+	this.priceGas = D6.consShow["TO"].priceGas; //gas fee
 
 	//calc cooking energy by number of person
-	this.consEnergy = this.consEnergyStat * this.person / 3;
+	this.consEnergy = this.consEnergyStat * this.person / 3 * this.freq10 / 10;
 
-	if ( this.equipCK == -1 ) {
+	if (this.equipCK == -1) {
 		//cocking energy source estimate by hotwater source
-		if ( this.equipHW == 5 
-			|| this.equipHW == 6 
-			|| this.priceGas == 0 
-		) {
+		if (this.equipHW == 5 || this.equipHW == 6 || this.priceGas == 0) {
 			//2:electricity
 			this.equipCK = 2;
 		} else {
@@ -79,17 +76,14 @@ D6.consCKcook.calc = function() {
 			this.equipCK = 1;
 		}
 	}
-	if ( this.equipCK == 2) {
+	if (this.equipCK == 2) {
 		//use electricity for cooking (kWh/month)
-		this.electricity = this.consEnergy / 12 / this.efficentEL 
-											/ D6.Unit.calorie.electricity;
+		this.electricity =
+			this.consEnergy / 12 / this.efficentEL / D6.Unit.calorie.electricity;
 	} else {
 		//use gas for cooking (m3/month)
 		this.gas = this.consEnergy / 12 / D6.Unit.calorie.gas;
 	}
 };
 
-D6.consCKcook.calcMeasure = function() {
-};
-
-
+D6.consCKcook.calcMeasure = function() {};

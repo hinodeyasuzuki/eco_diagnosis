@@ -1,0 +1,16 @@
+〇違い
+　viewでは main.js（そのオーバーライドとしてフォルダ内のonclick*.js ）の startCalcで計算
+    getCalcResult（ローカルの場合）、webworker を通じて
+    D6の　d6facade.js　を呼び出していた
+    workerで呼び出す場合もあれば、同じ読み込みで行う場合もある
+
+　Vueでは、uchiecoと同様に、d6calc.jsの
+    callGetScenario,callGetResult,callGetDetail,callSetMeasureSelChange の取得3種類ですべてを取得し
+    必要なものをVueで表示する形式とする。
+    いずれも d6calc(param)を　呼び出して実行させている。
+    workerを使わずに、実行時に読み込む（fm=1,2,4に相当）
+
+    取得後の動作が違うだけで、送信する情報は set オブジェクトで一斉に送る。
+
+
+

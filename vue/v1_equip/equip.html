@@ -5,23 +5,47 @@
 	<meta name="viewport" content="target-densitydpi=device-dpi, width=320, initial-scale=1.0, user-scalable=yes">
 	<link href="view/common.css" rel="stylesheet" type="text/css" />
 	<title>ペンギン風機器追加</title>
+	<style>
+		.equip li {
+			clear: both;
+		}
+
+		.equip li span {
+			float: left;
+			width: 10%;
+		}
+
+		.equip li span.title {
+			width: 20%;
+			max-width: 150px;
+		}
+	</style>
 </head>
 
 <body>
 
 	<div id="app" class=" v-cloak">
 
-		<ul v-for="(cons,key) in equipCons">
-			<li>{{cons.name}} {{cons.count ? cons.num + " " + cons.count : (cons.num ? "使う" : "")}}
-				{{cons.co2 ? Math.round(cons.co2) : 0}}kg
-				<button v-if="!cons.count"
-					@click="togglecons(cons.name, cons.cons,key);">{{cons.num ? "使わない" : "使う"}}</button>
-				<button v-if="cons.count" @click="addcons(cons.name, cons.cons,key);">ふやす</button>
-				<button v-if="cons.count && cons.num" @click="delcons(cons.name, cons.cons,key);">へらす</button>
+		<p>CO2:{{Math.round(co2*12)}}kg 平均{{Math.round(average*12)}}kg ペンギン {{penguin}}</p>
+		<ul v-for="(cons,key) in equipCons" class="equip">
+			<li>
+				<span class="title">{{cons.name}}</span>
+				<span>
+					{{cons.count ? cons.num + " " + cons.count : (cons.num ? "使う" : "-")}}
+				</span>
+				<span>
+					{{cons.co2 ? Math.round(cons.co2) : 0}}kg
+				</span>
+				<span>
+					<button v-if="!cons.count && !cons.num" @click="togglecons(cons.name, cons.cons,key);">使う</button>
+					<button v-if="cons.count" @click="addcons(cons.name, cons.cons,key);">ふやす</button>
+				</span>
+				<span>
+					<button v-if="!cons.count && cons.num" @click="togglecons(cons.name, cons.cons,key);">使わない</button>
+					<button v-if="cons.count && cons.num" @click="delcons(cons.name, cons.cons,key);">へらす</button>
+				</span>
 			</li>
 		</ul>
-		<div id="graphCO2average">
-		</div>
 
 	</div>
 
@@ -42,29 +66,28 @@
 			el: ' #app', //Vue変数 
 			data: {
 				equipCons: [
-					{ cons: "consTV", name: "テレビ", count: "台", num: 0 },
-					{ cons: "consOTother", name: "ノートパソコン", count: "台", num: 0 },
-					{ cons: "consOTother", name: "デスクトップパソコン", count: "台", num: 0 },
-					{ cons: "consOTother", name: "据置ゲーム機", count: "台", num: 0 },
-					{ cons: "consOTother", name: "インターネットモデム", count: "", num: 0 },
-					{ cons: "consLI", name: "照明", count: "部屋", num: 0 },
-					{ cons: "consRF", name: "冷蔵庫", count: "台", num: 0 },
-					{ cons: "consDRsum", name: "洗濯機", count: "", num: 0 },
-					{ cons: "consACheat", name: "暖房", count: "部屋", num: 0 },
-					{ cons: "consACcool", name: "冷房", count: "部屋", num: 0 },
-					{ cons: "consOTother", name: "扇風機", count: "台", num: 0 },
-					{ cons: "consHWtub", name: "風呂", count: "", num: 0 },
-					{ cons: "consHWshower", name: "シャワー", count: "", num: 0 },
-					{ cons: "consOTother", name: "ドライヤー", count: "台", num: 0 },
-					{ cons: "consCKsum", name: "コンロ", count: "", num: 0 },
-					{ cons: "consOTother", name: "電子レンジ", count: "", num: 0 },
-					{ cons: "consOTother", name: "炊飯器", count: "", num: 0 },
-					{ cons: "consOTother", name: "トースター", count: "", num: 0 },
-					{ cons: "consOTother", name: "ポット", count: "", num: 0 },
-					{ cons: "consOTother", name: "掃除機", count: "", num: 0 },
-					{ cons: "consOTother", name: "ドライヤー", count: "", num: 0 },
-					{ cons: "consOTother", name: "熱帯魚水槽", count: "台", num: 0 },
-					{ cons: "consCR", name: "車", count: "台", num: 0 }
+					{ cons: "consTV", name: "テレビ", count: "台", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "ノートパソコン", count: "台", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "デスクトップパソコン", count: "台", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "据置ゲーム機", count: "台", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "インターネットモデム", count: "", num: 0, maxnum: 0 },
+					{ cons: "consLI", name: "照明", count: "部屋", num: 0, maxnum: 0 },
+					{ cons: "consRF", name: "冷蔵庫", count: "台", num: 0, maxnum: 0 },
+					{ cons: "consDRsum", name: "洗濯機", count: "", num: 0, maxnum: 0 },
+					{ cons: "consACheat", name: "暖房", count: "部屋", num: 0, maxnum: 0 },
+					{ cons: "consACcool", name: "冷房", count: "部屋", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "扇風機", count: "台", num: 0, maxnum: 0 },
+					{ cons: "consHWtub", name: "風呂", count: "", num: 0, maxnum: 0 },
+					{ cons: "consHWshower", name: "シャワー", count: "", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "ヘアドライヤー", count: "台", num: 0, maxnum: 0 },
+					{ cons: "consCKcook", name: "コンロ", count: "", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "電子レンジ", count: "", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "炊飯器", count: "", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "トースター", count: "", num: 0, maxnum: 0 },
+					{ cons: "consCKpot", name: "ポット", count: "", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "掃除機", count: "", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "熱帯魚水槽", count: "台", num: 0, maxnum: 0 },
+					{ cons: "consCR", name: "車", count: "台", num: 0, maxnum: 0 }
 				],
 
 				co2: 0, reduceCO2: 0, cost: 0, reduceCost: 0, //画面定義 
@@ -78,11 +101,14 @@
 				selects: {},
 				eqlist: {},
 				cons_count: {},
+				other_count: 0,
 				important_items: {},
 				rank100: 1,
 				averageComment: "",
 				averageCO2Comment: "",
 				pageResult: {},
+				average: 0,
+
 
 				measures: [],
 				measures_selectafter: [],
@@ -93,10 +119,17 @@
 				addcons: function (title, consName, key) {
 					var add = 0;
 					Vue.set(this.equipCons[key], "num", this.equipCons[key].num + 1);
-					if (this.cons_count[key] < this.equipCons[key].num) {
+					if (!this.cons_count[key] || this.cons_count[key] < this.equipCons[key].num) {
+						//最大値保存（品目ごと）
 						Vue.set(this.cons_count, key, this.equipCons[key].num);
+						if (consName == "consOTother") {
+							//その他では品目ごと超えたら追加
+							add = 1;
+						}
 					}
+
 					if (!D6.consListByName[consName][this.equipCons[key].num]) {
+						//その他以外は、消費クラス数で追加
 						add = 1;
 					}
 					equipadd(consName, key, this.equipCons[key].num, add);	//機器追加
@@ -107,24 +140,27 @@
 				},
 
 				togglecons: function (title, consName, key) {
+					var add = 0;
 					Vue.set(this.equipCons[key], "num", 1 - this.equipCons[key].num);
 					if (this.equipCons[key].num == 0) {
 						equipdel(consName, key, 1);	//機器削除
 
 					} else {
-						equipadd(consName, key, 1, 0);	//機器追加
-
+						if (this.cons_count[key] != 1) {
+							add = 1;
+						}
+						Vue.set(this.cons_count, key, 1);
+						console.log(add);
+						equipadd(consName, key, 1, add);	//機器追加
 					}
 
 				},
 				calcco2: function () {//機器ごとのCO2の計算をして、設定する
 					var co2;
+					var co2sum = 0;
 					for (var k in this.equipCons) {
 						co2 = 0;
 						switch (this.equipCons[k].cons) {
-							case "consTV":
-								co2 = D6.consTVsum.co2 - D6.consListByName["consTV"][0].co2;
-								break;
 							case "consOTother":
 								for (var k2 in D6.consListByName["consOTother"]) {
 									var c = D6.consListByName["consOTother"][k2];
@@ -133,34 +169,39 @@
 									}
 								}
 								break;
+							case "consTV":
 							case "consLI":
-								co2 = D6.consLIsum.co2 - D6.consListByName["consLI"][0].co2;
-								break;
 							case "consRF":
-								co2 = D6.consRFsum.co2 - D6.consListByName["consRF"][0].co2;
-								break;
 							case "consACheat":
-								co2 = D6.consHTsum.co2 - D6.consListByName["consACheat"][0].co2;
-								break;
 							case "consACcool":
-								co2 = D6.consCOsum.co2 - D6.consListByName["consACcool"][0].co2;
+								for (var k2 in D6.consListByName[this.equipCons[k].cons]) {
+									if (k2 > 0) {
+										co2 += D6.consListByName[this.equipCons[k].cons][k2].co2;
+									}
+								}
 								break;
 							case "consHWtub":
 							case "consHWshower":
 							case "consDRsum":
-							case "consCKsum":
+							case "consCKcook":
 								co2 = D6[this.equipCons[k].cons].co2;
 								break;
 
 						}
 						Vue.set(this.equipCons[k], "co2", co2 * 12);
+						co2sum += (co2 ? co2 : 0);
 					}
+					Vue.set(this, "co2", co2sum);
+					Vue.set(this, "average", D6.consTotal.co2Original);
 				}
 			},
 			created: function () {
 
 			},
 			computed: {
+				penguin: function () {
+					return Math.round((this.average * 2 - this.co2) / this.average * 10);
+				}
 
 			},
 			watch: {
