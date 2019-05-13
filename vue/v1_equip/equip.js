@@ -295,10 +295,41 @@ function equipadd(consName, clistid, count, add) {
 	}
 
 	//値だけ取得
+	equipCalc();
+}
+
+//計算だけする
+function equipCalc() {
+	app.calcco2();
+	var oldco2 = app.co2;
+	var oldpenguin = app.penguin;
+	//値だけ取得
 	callGetResult({
 		get: { all: 1 }
 	});
 	app.calcco2();
+	console.log(oldco2);
+	//変更点の表示
+	var changemessage = "";
+	if (oldco2 != app.co2) {
+		changemessage =
+			Math.round(Math.abs(app.co2 - oldco2) * 12) +
+			"kg " +
+			(app.co2 > oldco2 ? "増加" : "削減");
+		if (oldpenguin != app.penguin) {
+			changemessage +=
+				" ペンギンが" +
+				Math.abs(app.penguin - oldpenguin) +
+				"匹 " +
+				(app.penguin > oldpenguin ? "復活" : "転落");
+		}
+	}
+	Vue.set(app, "message", changemessage);
+	setTimeout(closeMessage, 5000);
+}
+
+function closeMessage() {
+	Vue.set(app, "message", "");
 }
 
 //機器を外す
@@ -349,9 +380,5 @@ function equipdel(consName, clistid, count) {
 		}
 		break;
 	}
-	callGetResult({
-		get: { all: 1 },
-		set: { inp: D6.doc.data }
-	});
-	app.calcco2();
+	equipCalc();
 }

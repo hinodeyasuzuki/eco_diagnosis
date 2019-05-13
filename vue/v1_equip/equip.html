@@ -6,6 +6,10 @@
 	<link href="view/common.css" rel="stylesheet" type="text/css" />
 	<title>ペンギン風機器追加</title>
 	<style>
+		[v-cloak] {
+			display: none
+		}
+
 		.equip li {
 			clear: both;
 		}
@@ -24,35 +28,54 @@
 			width: 40%;
 			max-width: 350px;
 		}
+
+		.fade-enter-active,
+		.fade-leave-active {
+			transition: opacity .5s;
+		}
+
+		.fade-enter,
+		.fade-leave-to
+
+		/* .fade-leave-active below version 2.1.8 */
+			{
+			opacity: 0;
+		}
 	</style>
 </head>
 
 <body>
 
-	<div id="app" class=" v-cloak">
+	<div id="app" v-cloak>
 
-		<p>CO2:{{Math.round(co2*12)}}kg 平均{{Math.round(average*12)}}kg ペンギン {{penguin}}</p>
+		<p>CO2:{{Math.round(co2*12)}}kg 平均{{Math.round(average*12)}}kg ペンギン {{penguin}}
+			<transition name="fade"><b style="background-color:#fbb" v-if="message">{{message}}</b></transition>
+		</p>
 
-		<div style="background-color:aqua" v-if="inshow">
-			<ol class="inputlist">
-				<li v-for="(inpone, key) in inp" v-if="key">
-					<span tabindex="0" class="spanclick tooltip">
-						{{defInput[key.substr(0,4)].title}}
-						<span class="tooltiptext">{{defInput[key.substr(0,4)].text}}</span>
-					</span>
+		<transition name="fade">
+			<div style="background-color:#cff;padding:10px;" v-if="inshow">
+				<h2>{{equipname}}</h2>
+				<ol class="inputlist">
+					<li v-for="(inpone, key) in inp" v-if="key">
+						<span tabindex="0" class="spanclick tooltip">
+							{{defInput[key.substr(0,4)].title}}
+							<span class="tooltiptext">{{defInput[key.substr(0,4)].text}}</span>
+						</span>
 
-					<span class="selection">
-						<select v-model="inp[key]">
-							<option v-for="v in defSelectValue[key.substr(0,4)]" v-if="v" :value="defSelectValue[key.substr(0,4)][v]">
-								{{v}}
-							</option>
-						</select>
-					</span>
-					<br>
-				</li>
-			</ol>
-			<input type="button" @click="clearinp" value="消す">
-		</div>
+						<span class="selection">
+							<select v-model="inp[key]">
+								<option v-for="(v,k2) in defSelectValue[key.substr(0,4)]" v-if="v"
+									:value="defSelectData[key.substr(0,4)][k2]">
+									{{v}}
+								</option>
+							</select>
+						</span>
+						<br>
+					</li>
+				</ol>
+				<input type="button" @click="clearinp" value="設定する">
+			</div>
+		</transition>
 
 		<ul v-for="(cons,key) in equipCons" class="equip">
 			<li>
@@ -66,14 +89,17 @@
 				<span>
 					<button v-if="!cons.count && !cons.num" @click="togglecons(cons.name, cons.cons,key);">使う</button>
 					<button v-if="cons.count" @click="addcons(cons.name, cons.cons,key);">ふやす</button>
+					&nbsp;
 				</span>
 				<span>
 					<button v-if="!cons.count && cons.num" @click="togglecons(cons.name, cons.cons,key);">使わない</button>
 					<button v-if="cons.count && cons.num" @click="delcons(cons.name, cons.cons,key);">へらす</button>
+					&nbsp;
 				</span>
 				<span class="buttons">
 					<template v-for="id in cons.num">
-						<button @click="showinput( cons,key,id);">{{cons.count ? id + cons.count : cons.name}}</button>
+						<button
+							@click="showinput( cons,key,id);">{{cons.count ? id + cons.count + "目" : cons.name}}</button>
 					</template>
 				</span>
 			</li>
@@ -97,6 +123,7 @@
 		var app = new Vue({
 			el: ' #app', //Vue変数 
 			data: {
+				//表示機器
 				equipCons: [	//consid: consOTotherの場合のcons.subID
 					{ cons: "consTV", name: "テレビ", count: "台", num: 0, maxnum: 0, ques: ["i631", "i632", "i633"] },
 					{ cons: "consOTother", name: "録画機器", count: "台", num: 0, maxnum: 0 },
@@ -127,10 +154,15 @@
 					{ cons: "consCR", name: "車", count: "台", num: 0, maxnum: 0 }
 				],
 
-				inshow: false,
-				input_codes: ["i101"],
 
 				co2: 0, reduceCO2: 0, cost: 0, reduceCost: 0, //画面定義 
+
+				//選択画面
+				inshow: false,
+				input_codes: ["i101"],
+				equipname: "",
+				message: "",
+				inp: {},
 				defInput: {}, //入力定義 ixxxごと
 				defSelectValue: {}, //選択肢表示値 ixxxに変換 
 				defSelectData: {}, //選択肢選択値 ixxxに変換 
@@ -138,6 +170,7 @@
 				defConsMeasures: {}, //消費クラスの提案リスト定義 
 				defConsThema: {}, //家で気になるところ定義 defInputGroup で定義 
 				defConsShow: {}, //分野定義 
+
 				selects: {},
 				eqlist: {},
 				cons_count: {},
@@ -148,8 +181,6 @@
 				averageCO2Comment: "",
 				pageResult: {},
 				average: 0,
-				inp: {},
-
 
 				measures: [],
 				measures_selectafter: [],
@@ -247,7 +278,12 @@
 				//ボタンをおして入力ダイアログを表示
 				// key:equip配列の番号、id:equipの中の番号
 				showinput(cons, key, id) {
+					for (var k in app.inp) {
+						D6.doc.data[k] = app.inp[k];
+					}
 					Vue.set(app, "inp", {});	//現在表示されているものを消す
+					equipCalc();
+
 					//inp[i***]	に D6.doc.dataの値をコピー　終了時に反映させる
 					var subID = "";
 					var c = 0;
@@ -269,9 +305,12 @@
 					}
 					//n台目、消費番号c
 					for (var k in cons.ques) {
-						Vue.set(this.inp, cons.ques[k] + subID, D6.doc.data[cons.ques[k] + subID]);
+						var dat = D6.doc.data[cons.ques[k] + subID];
+						Vue.set(this.inp, cons.ques[k] + subID, dat ? dat : -1);
 					}
 					Vue.set(this, "inshow", true);
+					Vue.set(this, "equipname", cons.name + (cons.count ? (" " + subID + cons.count + "目") : ""));
+					console.log(this.inp);
 				},
 
 				//入力画面を消す
@@ -281,7 +320,7 @@
 						D6.doc.data[k] = app.inp[k];
 					}
 					Vue.set(app, "inp", {});
-
+					equipCalc();
 				}
 
 			},
@@ -307,6 +346,7 @@
 			callGetScenario(param);
 			D6.fg_calccons_not_calcConsAdjust = true;
 			equipinit();
+			Vue.set(app, "co2", 0);
 		}; 
 	</script>
 </body>
