@@ -1,14 +1,14 @@
 /* 2017/12/10  version 1.0
  * coding: utf-8, Tab as 4 spaces
- * 
+ *
  * Home Energy Diagnosis System Ver.6
- * consOTother.js 
- * 
+ * consOTother.js
+ *
  * calculate consumption and measures other electronics in your hourse
  * total use
- * 
+ *
  * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
+ *
  * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
  * 								2019/04/28 			original
  */
@@ -97,6 +97,13 @@ D6.consOTother.init = function() {
 			"消費電力は大きいですが、使用時間が短く、活用することで省エネにすることもできます。"
 		],
 		[
+			"トースター",
+			1000,
+			0.17,
+			365,
+			"消費電力は大きいですが、使用時間が短くなっています。"
+		],
+		[
 			"掃除機",
 			500,
 			0.17,
@@ -168,7 +175,7 @@ D6.consOTother.init();
 
 D6.consOTother.precalc = function() {
 	this.clear();
-	this.name = this.input("i653" + this.subID, ""); //watt
+	this.name = this.input("i653" + this.subID, ""); //name
 	this.watt = this.input("i654" + this.subID, 0); //watt
 	this.hour = this.input("i655" + this.subID, 0); //use hour / day
 	this.month = this.input("i656" + this.subID, 0); //use month
@@ -176,7 +183,7 @@ D6.consOTother.precalc = function() {
 };
 
 D6.consOTother.calc = function() {
-	this.electricity = this.watt * this.hour * this.month / 12 * 30 / 1000; //kWh/month
+	this.electricity = (((this.watt * this.hour * this.month) / 12) * 30) / 1000; //kWh/month
 };
 
 D6.consOTother.calcMeasure = function() {

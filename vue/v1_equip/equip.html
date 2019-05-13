@@ -19,6 +19,11 @@
 			width: 20%;
 			max-width: 150px;
 		}
+
+		.equip li span.buttons {
+			width: 40%;
+			max-width: 350px;
+		}
 	</style>
 </head>
 
@@ -27,6 +32,28 @@
 	<div id="app" class=" v-cloak">
 
 		<p>CO2:{{Math.round(co2*12)}}kg 平均{{Math.round(average*12)}}kg ペンギン {{penguin}}</p>
+
+		<div style="background-color:aqua" v-if="inshow">
+			<ol class="inputlist">
+				<li v-for="(inpone, key) in inp" v-if="key">
+					<span tabindex="0" class="spanclick tooltip">
+						{{defInput[key.substr(0,4)].title}}
+						<span class="tooltiptext">{{defInput[key.substr(0,4)].text}}</span>
+					</span>
+
+					<span class="selection">
+						<select v-model="inp[key]">
+							<option v-for="v in defSelectValue[key.substr(0,4)]" v-if="v" :value="defSelectValue[key.substr(0,4)][v]">
+								{{v}}
+							</option>
+						</select>
+					</span>
+					<br>
+				</li>
+			</ol>
+			<input type="button" @click="clearinp" value="消す">
+		</div>
+
 		<ul v-for="(cons,key) in equipCons" class="equip">
 			<li>
 				<span class="title">{{cons.name}}</span>
@@ -43,6 +70,11 @@
 				<span>
 					<button v-if="!cons.count && cons.num" @click="togglecons(cons.name, cons.cons,key);">使わない</button>
 					<button v-if="cons.count && cons.num" @click="delcons(cons.name, cons.cons,key);">へらす</button>
+				</span>
+				<span class="buttons">
+					<template v-for="id in cons.num">
+						<button @click="showinput( cons,key,id);">{{cons.count ? id + cons.count : cons.name}}</button>
+					</template>
 				</span>
 			</li>
 		</ul>
@@ -65,20 +97,25 @@
 		var app = new Vue({
 			el: ' #app', //Vue変数 
 			data: {
-				equipCons: [
-					{ cons: "consTV", name: "テレビ", count: "台", num: 0, maxnum: 0 },
+				equipCons: [	//consid: consOTotherの場合のcons.subID
+					{ cons: "consTV", name: "テレビ", count: "台", num: 0, maxnum: 0, ques: ["i631", "i632", "i633"] },
+					{ cons: "consOTother", name: "録画機器", count: "台", num: 0, maxnum: 0 },
 					{ cons: "consOTother", name: "ノートパソコン", count: "台", num: 0, maxnum: 0 },
 					{ cons: "consOTother", name: "デスクトップパソコン", count: "台", num: 0, maxnum: 0 },
 					{ cons: "consOTother", name: "据置ゲーム機", count: "台", num: 0, maxnum: 0 },
 					{ cons: "consOTother", name: "インターネットモデム", count: "", num: 0, maxnum: 0 },
-					{ cons: "consLI", name: "照明", count: "部屋", num: 0, maxnum: 0 },
-					{ cons: "consRF", name: "冷蔵庫", count: "台", num: 0, maxnum: 0 },
+					{ cons: "consLI", name: "照明", count: "部屋", num: 0, maxnum: 0, ques: ["i512", "i513", "i514", "i515"] },
+					{ cons: "consRF", name: "冷蔵庫", count: "台", num: 0, maxnum: 0, ques: ["i711", "i712", "i713", "i714", "i715", "i716", "i721"] },
 					{ cons: "consDRsum", name: "洗濯機", count: "", num: 0, maxnum: 0 },
-					{ cons: "consACheat", name: "暖房", count: "部屋", num: 0, maxnum: 0 },
-					{ cons: "consACcool", name: "冷房", count: "部屋", num: 0, maxnum: 0 },
-					{ cons: "consOTother", name: "扇風機", count: "台", num: 0, maxnum: 0 },
-					{ cons: "consHWtub", name: "風呂", count: "", num: 0, maxnum: 0 },
+					{ cons: "consACheat", name: "暖房", count: "部屋", num: 0, maxnum: 0, ques: ["i212", "i213", "i214", "i215", "i216", "i217", "i231", "i232", "i233", "i234", "i235"] },
+					{ cons: "consACcool", name: "冷房", count: "部屋", num: 0, maxnum: 0, ques: ["i212", "i215", "i216", "i217", "i271", "i273", "i274"] },
+					{ cons: "consOTother", name: "除湿器", count: "台", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "加湿器", count: "台", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "空気清浄機", count: "台", num: 0, maxnum: 0 },
+					//	{ cons: "consOTother", name: "扇風機", count: "台", num: 0, maxnum: 0 },
+					{ cons: "consHWtub", name: "風呂", count: "", num: 0, maxnum: 0, ques: ["i101", "i103", "i104", "i105", "i106", "i112", "i116"] },
 					{ cons: "consHWshower", name: "シャワー", count: "", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "換気扇", count: "台", num: 0, maxnum: 0 },
 					{ cons: "consOTother", name: "ヘアドライヤー", count: "台", num: 0, maxnum: 0 },
 					{ cons: "consCKcook", name: "コンロ", count: "", num: 0, maxnum: 0 },
 					{ cons: "consOTother", name: "電子レンジ", count: "", num: 0, maxnum: 0 },
@@ -89,6 +126,9 @@
 					{ cons: "consOTother", name: "熱帯魚水槽", count: "台", num: 0, maxnum: 0 },
 					{ cons: "consCR", name: "車", count: "台", num: 0, maxnum: 0 }
 				],
+
+				inshow: false,
+				input_codes: ["i101"],
 
 				co2: 0, reduceCO2: 0, cost: 0, reduceCost: 0, //画面定義 
 				defInput: {}, //入力定義 ixxxごと
@@ -108,6 +148,7 @@
 				averageCO2Comment: "",
 				pageResult: {},
 				average: 0,
+				inp: {},
 
 
 				measures: [],
@@ -116,8 +157,10 @@
 				measures_selectno: [],
 			},
 			methods: {
+
+				//機器を増やす
 				addcons: function (title, consName, key) {
-					var add = 0;
+					var add = 0;	//D6クラスに消費クラスを伝えるかどうか
 					Vue.set(this.equipCons[key], "num", this.equipCons[key].num + 1);
 					if (!this.cons_count[key] || this.cons_count[key] < this.equipCons[key].num) {
 						//最大値保存（品目ごと）
@@ -134,11 +177,15 @@
 					}
 					equipadd(consName, key, this.equipCons[key].num, add);	//機器追加
 				},
+
+				//機器削減
+				//削減については、利用量を0として、単に消費として表示をしないだけ。
 				delcons: function (title, consName, key) {
 					Vue.set(this.equipCons[key], "num", this.equipCons[key].num - 1);
 					equipdel(consName, key, this.equipCons[key].num + 1);	//機器削除
 				},
 
+				//使用している/していないの選択
 				togglecons: function (title, consName, key) {
 					var add = 0;
 					Vue.set(this.equipCons[key], "num", 1 - this.equipCons[key].num);
@@ -150,11 +197,12 @@
 							add = 1;
 						}
 						Vue.set(this.cons_count, key, 1);
-						console.log(add);
 						equipadd(consName, key, 1, add);	//機器追加
 					}
 
 				},
+
+				//機器のCO2計算（すべて）
 				calcco2: function () {//機器ごとのCO2の計算をして、設定する
 					var co2;
 					var co2sum = 0;
@@ -184,6 +232,7 @@
 							case "consHWshower":
 							case "consDRsum":
 							case "consCKcook":
+							case "consCKpot":
 								co2 = D6[this.equipCons[k].cons].co2;
 								break;
 
@@ -193,7 +242,48 @@
 					}
 					Vue.set(this, "co2", co2sum);
 					Vue.set(this, "average", D6.consTotal.co2Original);
+				},
+
+				//ボタンをおして入力ダイアログを表示
+				// key:equip配列の番号、id:equipの中の番号
+				showinput(cons, key, id) {
+					Vue.set(app, "inp", {});	//現在表示されているものを消す
+					//inp[i***]	に D6.doc.dataの値をコピー　終了時に反映させる
+					var subID = "";
+					var c = 0;
+					if (cons.cons == "consOTother") {
+						//otherの場合には番号がずれる
+						var ename = app.equipCons[key].name;
+						for (var k in D6.consListByName["consOTother"]) {
+							if (D6.consListByName["consOTother"][k].name == ename) {
+								c++;
+								if (c == id) {
+									subID = parseInt(k);
+								}
+							}
+						}
+						cons.ques = ["i654", "i655", "i656"];
+					} else if (cons.count) {
+						//カウンタブルの場合
+						subID = 0 + id;	//+1にしないとエラー　バグ
+					}
+					//n台目、消費番号c
+					for (var k in cons.ques) {
+						Vue.set(this.inp, cons.ques[k] + subID, D6.doc.data[cons.ques[k] + subID]);
+					}
+					Vue.set(this, "inshow", true);
+				},
+
+				//入力画面を消す
+				clearinp() {
+					Vue.set(app, "inshow", false);
+					for (var k in app.inp) {
+						D6.doc.data[k] = app.inp[k];
+					}
+					Vue.set(app, "inp", {});
+
 				}
+
 			},
 			created: function () {
 

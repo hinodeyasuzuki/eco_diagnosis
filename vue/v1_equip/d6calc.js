@@ -24,23 +24,28 @@ function callGetScenario(params) {
 		Vue.set(app.defInput, k, resjson.scenario.defInput[k]);
 		var keysel = resjson.scenario.defInput[k].inputType;
 		//選択肢のkey は defInputに合わせる
-		if (resjson.scenario.defInput[k].selectData)
-			Vue.set(app.defSelectData, k, resjson.scenario.defInput[k].selectData);
-		if (resjson.scenario.defInput[k].selectValue)
-			Vue.set(app.defSelectValue, k, resjson.scenario.defInput[k].selectValue);
-		if (resjson.scenario.defInput[k].selectValue) {
-			Vue.set(app.selects, k, []);
-			for (var k2 in resjson.scenario.defInput[k].selectValue) {
-				var item = resjson.scenario.defInput[k].selectValue[k2];
-				if (item !== "" && item != "選んで下さい" && item != "選んでください") {
-					app.selects[k].push({
-						label: item,
-						code: resjson.scenario.defInput[k].selectData[k2]
-					});
-				}
-			}
-		}
+		if (resjson.scenario.defSelectData)
+			Vue.set(app.defSelectData, k, resjson.scenario.defSelectData[k]);
+		if (resjson.scenario.defSelectValue)
+			Vue.set(app.defSelectValue, k, resjson.scenario.defSelectValue[k]);
+		/*
+      if (resjson.scenario.defInput[k].selectValue) {
+      Vue.set(app.selects, k, []);
+      for (var k2 in resjson.scenario.defInput[k].selectValue) {
+        var item = resjson.scenario.defInput[k].selectValue[k2];
+        if (item !== "" && item != "選んで下さい" && item != "選んでください") {
+          app.selects[k].push({
+            label: item,
+            code: resjson.scenario.defInput[k].selectData[k2]
+          });
+        }
+      }
+    }
+    */
 	}
+
+	console.log(resjson);
+
 	for (var k in resjson.scenario.defConsShow) {
 		if (k == "" || k == "TO") continue; //全体の時には分野一覧に表示
 		Vue.set(app.defConsShow, k, resjson.scenario.defConsShow[k]);
@@ -206,7 +211,7 @@ var d6calc = function(cmd) {
 
 	//設定：部屋等の追加（単体）変数名の配列
 	var bk = {};
-	for (var k in D6.doc.data) bk[k] = D6.doc.data[k];	//addで保存データが消えてしまう
+	for (var k in D6.doc.data) bk[k] = D6.doc.data[k]; //addで保存データが消えてしまう
 	if (cmd.set && cmd.set.add) {
 		for (key in cmd.set.add) {
 			D6.addConsSetting(cmd.set.add[key]);
@@ -311,6 +316,17 @@ var d6calc = function(cmd) {
 		if (cmd.get.scenario) {
 			ret.scenario = {};
 			ret.scenario.defInput = D6.scenario.defInput;
+			ret.scenario.defSelectValue = {};
+			for (var k in D6.scenario.defSelectValue) {
+				ret.scenario.defSelectValue["i" + k.substr(3, 6)] =
+					D6.scenario.defSelectValue[k];
+			}
+			ret.scenario.defSelectData = {};
+			for (var k in D6.scenario.defSelectData) {
+				ret.scenario.defSelectData["i" + k.substr(3, 6)] =
+					D6.scenario.defSelectData[k];
+			}
+
 			//消費量
 			var cshow = {};
 			for (var key in D6.consShow) {

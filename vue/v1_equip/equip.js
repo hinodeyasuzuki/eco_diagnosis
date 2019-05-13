@@ -200,6 +200,7 @@ function equipinit(consName, clistid) {
 	D6.doc.data["i104"] = 0; //湯はり
 	D6.doc.data["i103"] = 0; //湯はり
 	D6.doc.data["i802"] = 0; //エネルギー割
+	D6.doc.data["i821"] = 0; //ポット保温時間
 
 	var param = {};
 	param["get"] = { all: 1 };
@@ -249,6 +250,9 @@ function equipadd(consName, clistid, count, add) {
 		break;
 	case "consCKcook":
 		D6.doc.data["i802"] = 7; //エネルギー割
+		break;
+	case "consCKpot":
+		D6.doc.data["i821"] = 6; //時間
 		break;
 	case "consOTother":
 		var ename = app.equipCons[clistid].name;
@@ -328,6 +332,9 @@ function equipdel(consName, clistid, count) {
 		break;
 	case "consCKcook":
 		D6.doc.data["i802"] = 0; //エネルギー割
+		break;
+	case "consCKpot":
+		D6.doc.data["i821"] = 0; //時間
 		break;
 	case "consOTother":
 		var ename = app.equipCons[clistid].name;
