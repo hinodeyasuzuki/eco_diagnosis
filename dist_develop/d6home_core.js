@@ -1346,98 +1346,94 @@ D6.Energy = {
  */
 
 //resolve D6
-var D6 = D6||{};
+var D6 = D6 || {};
 
 //Inherited class of D6.Energy
-D6.ConsBase = D6.object(D6.Energy);		//base class is energy
+D6.ConsBase = D6.object(D6.Energy); //base class is energy
 
-D6.ConsBase.init = function(){
+D6.ConsBase.init = function() {
 	//----------- declare instanses ---------------------------
 
-
-	this.measures = [];				//related instanses of measure
-									// name of related measures is declared in each consumption definition
+	this.measures = []; //related instanses of measure
+	// name of related measures is declared in each consumption definition
 	//names, codes
-	this.title = "";				//caption of this consumption
-	this.consName = "consXX";		//name of consumption "cons" +  2 charactors
-	this.consCode = "";				//code of consumption written in 2 charactors
-	this.subID = 0;					//id in same kind of consumtion, rooms or equipments
-	this.groupID = 0;				//consumption group id
-	this.inputGuide = "";			//guide message for input
+	this.title = ""; //caption of this consumption
+	this.consName = "consXX"; //name of consumption "cons" +  2 charactors
+	this.consCode = ""; //code of consumption written in 2 charactors
+	this.subID = 0; //id in same kind of consumtion, rooms or equipments
+	this.groupID = 0; //consumption group id
+	this.inputGuide = ""; //guide message for input
 
 	//structure
-	this.consShow = [];				//other main consumption instances list
-	this.sumCons = "";				//sum side consumption instance
-	this.sumCons2 = "";				//sum related side of consumption
-	this.sumConsName = "";			//sum side consumption name
-	this.sumCons2Name = "";			//sum related side of consumption name
-	this.partCons = [];				//part side consumption instances
-	this.partCons2 = [];			//part related side consumption instance
-	this.partConsName = "";			//part side name
-	this.partCons2Name = "";		//part related side name
-	this.residueCalc = "yes";		//calc residue in this brother consumption ( yes or not)
+	this.consShow = []; //other main consumption instances list
+	this.sumCons = ""; //sum side consumption instance
+	this.sumCons2 = ""; //sum related side of consumption
+	this.sumConsName = ""; //sum side consumption name
+	this.sumCons2Name = ""; //sum related side of consumption name
+	this.partCons = []; //part side consumption instances
+	this.partCons2 = []; //part related side consumption instance
+	this.partConsName = ""; //part side name
+	this.partCons2Name = ""; //part related side name
+	this.residueCalc = "yes"; //calc residue in this brother consumption ( yes or not)
 
 	//calclation parameters
-	this.performance = "";			//performance factor
-	this.mainSource = "";			//main energy source 
-	this.co2Original = "";			//CO2 in case of no measures are selected
-	this.costOriginal = "";			//cost in case of no measures are selected
-	this.julesOriginal = "";		//energy consumption in case of no measures are selected
+	this.performance = ""; //performance factor
+	this.mainSource = ""; //main energy source
+	this.co2Original = ""; //CO2 in case of no measures are selected
+	this.costOriginal = ""; //cost in case of no measures are selected
+	this.julesOriginal = ""; //energy consumption in case of no measures are selected
 
 	//display
-	this.color = "";				//fill color in graph
+	this.color = ""; //fill color in graph
 
 	//type of calclation
-	this.total = false;				//in case of reprezent all of related consumption 
-									// for example, tv consumption not each equipments but total.
-	this.orgCopyNum = 0;			//count of same consumption 
-	this.addable = "";				//in case of add consumption set this postfix 
-	
-	//--------- calclation of consumption ---------------------------------	
+	this.total = false; //in case of reprezent all of related consumption
+	// for example, tv consumption not each equipments but total.
+	this.orgCopyNum = 0; //count of same consumption
+	this.addable = ""; //in case of add consumption set this postfix
+
+	//--------- calclation of consumption ---------------------------------
 	// pre calculation
-	this.precalc = function(){
+	this.precalc = function() {
 		this.clear();
 	};
 
 	// calculation
-	this.calc = function(){
+	this.calc = function() {
 		this.clear();
 	};
-	
+
 	//dummy definition, main routine is defined in each consumption class
-	this.calc2nd = function(){
-	};
+	this.calc2nd = function() {};
 
 	//calculation adjust
-	this.calcAdjust = function( energyAdj ) {
-		this.multiplyArray( energyAdj );	//main adjust
-		
+	this.calcAdjust = function(energyAdj) {
+		this.multiplyArray(energyAdj); //main adjust
+
 		//add adjust for some calculation
-		this.calcAdjustStrategy( energyAdj );
+		this.calcAdjustStrategy(energyAdj);
 	};
 
-	//dummy definition, add adjust 
-	this.calcAdjustStrategy = function( energyAdj ) {
-	};
+	//dummy definition, add adjust
+	this.calcAdjustStrategy = function(energyAdj) {};
 
 	// in case of monthly calculation
-	this.consSumMonth  = function( source, month ) {
-		for (var i in D6.Unit.co2 ) {
+	this.consSumMonth = function(source, month) {
+		for (var i in D6.Unit.co2) {
 			this[i] += source[i] * month;
 		}
 		this.co2 += source.co2 * month;
 		this.cost += source.cost * month;
 	};
 
-	//--------- calculation of each measures ---------------------------------	
+	//--------- calculation of each measures ---------------------------------
 
 	//main calculation of measures , defined in each classes
-	this.calcMeasure = function() {
-	};
+	this.calcMeasure = function() {};
 
 	//measures initialize, fit to consumption
 	this.calcMeasureInit = function() {
-		for ( var mes in this.measures ) {
+		for (var mes in this.measures) {
 			//set reduction zero
 			this.measures[mes].setzero();
 		}
@@ -1445,180 +1441,227 @@ D6.ConsBase.init = function(){
 
 	// when select measure, reduce consumption with related consumption link
 	//		called by addReduction in measures files
-	//		originalConsName: consumption name of original in chain 
+	//		originalConsName: consumption name of original in chain
 	//		sourceConsName: consumption name called by
-	this.addReductionMargin = function( margin, originalConsName, sourceConsName ) {
+	this.addReductionMargin = function(margin, originalConsName, sourceConsName) {
 		var ccons;
 		var pcons;
 		var fromPart;
 
 		//execute reduction of consumption
-		this.add( margin );
-		this.calcCO2();		//calculate CO2, cost and energy
+		this.add(margin);
+		this.calcCO2(); //calculate CO2, cost and energy
 		this.calcCost();
 		this.calcJules();
 
 		//reduction chain in use of relation
-		if ( sourceConsName == "" ){
+		if (sourceConsName == "") {
 			sourceConsName = originalConsName;
 		}
 
 		//sum side of reduction
-		if ( this.sumConsName != sourceConsName 
-			&& this.sumConsName != originalConsName 
-		) { 
+		if (
+			this.sumConsName != sourceConsName &&
+			this.sumConsName != originalConsName
+		) {
 			// if the direction is not called by
 			ccons = this.sumCons;
-			if ( ccons ) {
-				if ( ccons[this.subID] ) {
-					ccons[this.subID].addReductionMargin( margin, originalConsName, this.consName );
+			if (ccons) {
+				if (ccons[this.subID]) {
+					ccons[this.subID].addReductionMargin(
+						margin,
+						originalConsName,
+						this.consName
+					);
 				} else {
-					ccons.addReductionMargin( margin, originalConsName, this.consName );
+					ccons.addReductionMargin(margin, originalConsName, this.consName);
 				}
 			}
 		}
 
 		//sum related side of reduction
-		if ( this.sumCons2Name != "" 
-			&& this.sumCons2Name != sourceConsName 
-			&& this.sumCons2Name != originalConsName 
-		) { 
+		if (
+			this.sumCons2Name != "" &&
+			this.sumCons2Name != sourceConsName &&
+			this.sumCons2Name != originalConsName
+		) {
 			// if the direction is not called by
 			ccons = this.sumCons2;
-			if ( ccons ) {
-				if ( ccons[this.subID] ) {
-					ccons[this.subID].addReductionMargin( margin, originalConsName, this.consName );
+			if (ccons) {
+				if (ccons[this.subID]) {
+					ccons[this.subID].addReductionMargin(
+						margin,
+						originalConsName,
+						this.consName
+					);
 				} else {
-					ccons.addReductionMargin( margin, originalConsName, this.consName );
+					ccons.addReductionMargin(margin, originalConsName, this.consName);
 				}
 			}
 		}
 
 		//part side reduction
-		if ( this.consCode != "TO" ){
+		if (this.consCode != "TO") {
 			// total consumption is excluded
 
-			//part side 
+			//part side
 			fromPart = false;
-			for( pcons in this.partCons ) {
-				if ( this.partCons[pcons].consName == sourceConsName 
-					|| this.partCons[pcons].consName == originalConsName 
+			for (pcons in this.partCons) {
+				if (
+					this.partCons[pcons].consName == sourceConsName ||
+					this.partCons[pcons].consName == originalConsName
 				) {
-					//in case of looped 
+					//in case of looped
 					fromPart = true;
 				}
 			}
-			if ( !fromPart && this.partCons.length > 0 ) {
+			if (!fromPart && this.partCons.length > 0) {
 				// step to detail sub part calclation
-				this.addReductionMargin2Part( this.partCons, margin, originalConsName, this.consName );
+				this.addReductionMargin2Part(
+					this.partCons,
+					margin,
+					originalConsName,
+					this.consName
+				);
 			}
 
 			//part related side
 			fromPart = false;
-			for( pcons in this.partCons2 ) {
-				if ( this.partCons2[pcons].consName == sourceConsName 
-					|| this.partCons2[pcons].consName == originalConsName 
+			for (pcons in this.partCons2) {
+				if (
+					this.partCons2[pcons].consName == sourceConsName ||
+					this.partCons2[pcons].consName == originalConsName
 				) {
 					fromPart = true;
 				}
 			}
-			if ( !fromPart && this.partCons2.length > 0 ) {
+			if (!fromPart && this.partCons2.length > 0) {
 				// step to detail sub part calclation
-				this.addReductionMargin2Part( this.partCons2, margin, originalConsName, this.consName );
+				this.addReductionMargin2Part(
+					this.partCons2,
+					margin,
+					originalConsName,
+					this.consName
+				);
 			}
 		}
 	};
 
 	//calclate to sub part reduction, take rate of each sub consumption for consern
-	this.addReductionMargin2Part = function( pconsList, margin, originalConsName, sourceConsName ) {
+	this.addReductionMargin2Part = function(
+		pconsList,
+		margin,
+		originalConsName,
+		sourceConsName
+	) {
 		var submargin = D6.object(D6.Energy);
 		var pcons;
-		
-		if ( pconsList.length > 1 ) {
+
+		if (pconsList.length > 1) {
 			//sum of part side consumptions
 			var sumCo2 = 0;
-			for( pcons in pconsList ) {
-				if ( !isNaN(pconsList[pcons].co2) ) {
+			for (pcons in pconsList) {
+				if (!isNaN(pconsList[pcons].co2)) {
 					sumCo2 += pconsList[pcons].co2;
 				}
 			}
 
 			//chech if objects not matrix
-			if ( pconsList[0].orgCopyNum >= 1 &&
+			if (
+				pconsList[0].orgCopyNum >= 1 &&
 				pconsList[0].subID != pconsList[1].subID
 			) {
 				//in case of matrix,  devide reduction acrding to consumption amount
-				for( pcons in pconsList ) {
-					if ( pconsList[pcons].co2 > 0 ) {
-						submargin.copy( margin );
-						submargin.multiply( pconsList[pcons].co2 / sumCo2 );
+				for (pcons in pconsList) {
+					if (pconsList[pcons].co2 > 0) {
+						submargin.copy(margin);
+						submargin.multiply(pconsList[pcons].co2 / sumCo2);
 
-						//calc next relation 
-						pconsList[pcons].addReductionMargin( submargin, originalConsName, this.consName );
+						//calc next relation
+						pconsList[pcons].addReductionMargin(
+							submargin,
+							originalConsName,
+							this.consName
+						);
 					}
 				}
-			
 			} else {
 				//in case of objects
 				//	親のmeasuresについて、pconsListにリストされているconsNameが存在する場合
 				//	分割側の消費量を、対策の消費量とする（もう一度親を計算する） consAC
-				//		例： mes["consACCool"] = ***; を 消費クラスで定義	
+				//		例： mes["consACCool"] = ***; を 消費クラスで定義
 				//親のIDがある場合にはそのsubIDを用いる（冷暖房部屋など）
-				for( pcons in pconsList ) {
-					if ( pconsList[pcons].co2 > 0 ) {
-						if ( pconsList[pcons].consAddSet ) {
+				for (pcons in pconsList) {
+					if (pconsList[pcons].co2 > 0) {
+						if (pconsList[pcons].consAddSet) {
 							//devide method is defined in consAddSet
-							for ( var pmes in this.measures ){
+							for (var pmes in this.measures) {
 								var mes = this.measures[pmes];
-								if ( mes.selected && mes[pconsList[pcons].consName] ){
-									submargin.copy( mes[pconsList[pcons].consName] );
-									submargin.sub( pconsList[pcons] );
-									pconsList[pcons].addReductionMargin( submargin, originalConsName, this.consName );
+								if (mes.selected && mes[pconsList[pcons].consName]) {
+									submargin.copy(mes[pconsList[pcons].consName]);
+									submargin.sub(pconsList[pcons]);
+									pconsList[pcons].addReductionMargin(
+										submargin,
+										originalConsName,
+										this.consName
+									);
 								}
 							}
-						} else{
+						} else {
 							// not defined
-							submargin.copy( margin );
-							submargin.multiply( pconsList[pcons].co2 / sumCo2 );
-							pconsList[pcons].addReductionMargin( submargin, originalConsName, this.consName );
+							submargin.copy(margin);
+							submargin.multiply(pconsList[pcons].co2 / sumCo2);
+							pconsList[pcons].addReductionMargin(
+								submargin,
+								originalConsName,
+								this.consName
+							);
 						}
 					}
 				}
 			}
 		}
 	};
-	
+
 	//set input data
-	this.input = function( InDataCode, defaultData ) {
+	this.input = function(InDataCode, defaultData) {
 		var ret;
 		//return only average if average mode
-		if ( D6.averageMode && !(InDataCode =="i021" || InDataCode =="i022" || InDataCode =="i023" || InDataCode =="i001" ) ) {
-			if ( D6.scenario.defCalcAverage.indexOf( InDataCode ) == -1 ){
+		if (
+			D6.averageMode &&
+			!(
+				InDataCode == "i021" ||
+				InDataCode == "i022" ||
+				InDataCode == "i023" ||
+				InDataCode == "i001"
+			)
+		) {
+			if (D6.scenario.defCalcAverage.indexOf(InDataCode) == -1) {
 				return defaultData;
 			}
 		}
-		
+
 		var InData = D6.doc.data[InDataCode];
-		if ( typeof InData === "undefined" || InData == -1 || InData === "" ) {
+		if (typeof InData === "undefined" || InData == -1 || InData === "") {
 			//in  InData compare, user  === instead of ==
 			ret = defaultData;
 		} else {
 			ret = InData;
-			if ( D6.scenario.defInput[InDataCode.substr(0,4)].varType == "Number" ) {
+			if (D6.scenario.defInput[InDataCode.substr(0, 4)].varType == "Number") {
 				//convert to number
 				ret = parseFloat(ret);
 			}
 		}
 		return ret;
 	};
-	
+
 	//set 2seasons input data
-	this.input2seasons = function( InDataCode1, InDataCode2, defaultData ) {
+	this.input2seasons = function(InDataCode1, InDataCode2, defaultData) {
 		var ret = [];
-		var r0 = this.input( InDataCode1, -1 );
-		var r1 = this.input( InDataCode2, r0 );
-		if ( r0 == -1 ) {
-			if ( r1 == -1 ) {
+		var r0 = this.input(InDataCode1, -1);
+		var r1 = this.input(InDataCode2, r0);
+		if (r0 == -1) {
+			if (r1 == -1) {
 				r0 = r1 = defaultData;
 			} else {
 				r0 = r1;
@@ -1626,18 +1669,17 @@ D6.ConsBase.init = function(){
 		}
 		ret[0] = r0;
 		ret[1] = r1;
-
-		return ret;		
+		return ret;
 	};
 
 	//get equip parameters
-	this.getEquipParameters = function( year, size, sizeThreshold, defEquip ) {
+	this.getEquipParameters = function(year, size, sizeThreshold, defEquip) {
 		var ret = {};
-		
+
 		//get definisiton by size
 		var sizeCode = sizeThreshold[0];
-		for( var sizeTmp in sizeThreshold ) {
-			if ( size > sizeThreshold[sizeTmp] *1.001 ) {
+		for (var sizeTmp in sizeThreshold) {
+			if (size > sizeThreshold[sizeTmp] * 1.001) {
 				continue;
 			} else {
 				sizeCode = sizeThreshold[sizeTmp];
@@ -1646,34 +1688,36 @@ D6.ConsBase.init = function(){
 		}
 		var defs = defEquip[sizeCode];
 
-		// get parameters by year 
+		// get parameters by year
 		var justbefore = -9999;
 		var justafter = 99999;
-		for( var defone in defs ) {
-			if ( year <= defone ) {
-				if ( defone < justafter ) justafter = defone;
+		for (var defone in defs) {
+			if (year <= defone) {
+				if (defone < justafter) justafter = defone;
 			} else {
-				if ( defone > justbefore ) justbefore = defone;
+				if (defone > justbefore) justbefore = defone;
 			}
 		}
-		for ( var parameters in defs[justbefore] ) {
-			ret[parameters] = ( (justafter - year) * defs[justbefore][parameters]
-							+ (year - justbefore) * defs[justafter][parameters] ) / (justafter - justbefore);
+		for (var parameters in defs[justbefore]) {
+			ret[parameters] =
+				((justafter - year) * defs[justbefore][parameters] +
+					(year - justbefore) * defs[justafter][parameters]) /
+				(justafter - justbefore);
 		}
 		return ret;
 	};
-	
+
 	//room/equip id
-	this.setsubID = function( num ) {
+	this.setsubID = function(num) {
 		this.subID = num;
-		if ( this.titleList ){
+		if (this.titleList) {
 			this.title = this.titleList[num];
 		}
 	};
 
 	//is this measure selected?
-	this.isSelected = function( mName ){
-		if ( !this.measures[mName] ) {
+	this.isSelected = function(mName) {
+		if (!this.measures[mName]) {
 			return false;
 		} else {
 			return this.measures[mName].selected;
@@ -1682,20 +1726,17 @@ D6.ConsBase.init = function(){
 
 	//get size rank
 	//	val : value, thresholdList: list of value to get rank
-	this.getIndex = function( val, thresholdList ) {
-		for( var i=0 ; i<thresholdList.length ; i++ ){
-			if ( val < thresholdList[i] ){
+	this.getIndex = function(val, thresholdList) {
+		for (var i = 0; i < thresholdList.length; i++) {
+			if (val < thresholdList[i]) {
 				return i;
 			}
 		}
 		return thresholdList.length;
 	};
-
-
 };
 
 D6.ConsBase.init();
-
 
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
@@ -5887,25 +5928,24 @@ D6.consTotal.calcMeasure = function( ) {
  */
 
 //resolve D6
-var D6 = D6||{};
+var D6 = D6 || {};
 
 //Inherited class of D6.ConsBase
-D6.consHWsum = D6.object( D6.ConsBase );
-
+D6.consHWsum = D6.object(D6.ConsBase);
 
 //initialize-------------------------------
 D6.consHWsum.init = function() {
 	//construction setting
-	this.consName = "consHWsum";   	 	//code name of this consumption 
-	this.consCode = "HW";            	//short code to access consumption, only set main consumption user for itemize
-	this.title = "hot water supply";				//consumption title name
-	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
-	this.groupID = "1";					//number code in items
-	this.color = "#ffb700";				//color definition in graph
-	this.countCall = "";				//how to point n-th equipment
+	this.consName = "consHWsum"; //code name of this consumption
+	this.consCode = "HW"; //short code to access consumption, only set main consumption user for itemize
+	this.title = "hot water supply"; //consumption title name
+	this.orgCopyNum = 0; //original copy number in case of countable consumption, other case set 0
+	this.groupID = "1"; //number code in items
+	this.color = "#ffb700"; //color definition in graph
+	this.countCall = ""; //how to point n-th equipment
 
-	this.sumConsName = "consTotal";		//code name of consumption sum up include this
-	this.sumCons2Name = "";				//code name of consumption related to this
+	this.sumConsName = "consTotal"; //code name of consumption sum up include this
+	this.sumCons2Name = ""; //code name of consumption related to this
 
 	//guide message in input page
 	this.inputGuide = "how to use hot water supply in general";
@@ -5913,86 +5953,87 @@ D6.consHWsum.init = function() {
 	this.hwEnergy = 0;
 
 	// parameters setting in this consumption
-	this.waterTemp = 18;				//temperature of water degree-C
-	this.hotWaterTemp = 42;				//hot water temperature degree-C
-	this.tabWaterLitter = 200;			//tab hot water amount L
-	this.showerWaterLitterUnit = 10;	//shower speed L/min
-	this.reduceRateShowerHead = 0.3;	//reduce rate by saving shower head
-	this.showerWaterMinutes = 5;		//shower time min/person
-	this.otherWaterLitter = 50;			//other amount of hot water L/day
-	this.tankLossWatt = 100;			//keep tank hot energy
-	this.tabTemplatureDown = 2;			//temperature down in tab water degree-C/hour
-	this.tabTemplatureInsulationDown = 0.5;	//temperature down in insulated tab degree-C/hour
+	this.waterTemp = 18; //temperature of water degree-C
+	this.hotWaterTemp = 42; //hot water temperature degree-C
+	this.tabWaterLitter = 200; //tab hot water amount L
+	this.showerWaterLitterUnit = 10; //shower speed L/min
+	this.reduceRateShowerHead = 0.3; //reduce rate by saving shower head
+	this.showerWaterMinutes = 5; //shower time min/person
+	this.otherWaterLitter = 50; //other amount of hot water L/day
+	this.tankLossWatt = 100; //keep tank hot energy
+	this.tabTemplatureDown = 2; //temperature down in tab water degree-C/hour
+	this.tabTemplatureInsulationDown = 0.5; //temperature down in insulated tab degree-C/hour
 
-	this.performanceGas = 0.73;			//efficient of ordinal gas heater
-	this.performanceEcojozu = 0.877;	//efficient of good gas heater
-	this.performanceElec = 0.8;			//efficient of electric heater
-	this.performanceEcocute = 3;		//efficient of heat pump heater
-	this.performanceEnefarmEle = 0.289;	//efficient of electricity generation of co-generator
-	this.performanceEnefarmHW = 0.33;	//efficient of heat supply of co-generator
-	this.performanceKeepWithTank = 0.6;	//efficient of keep tab temperature with stock hot water
-	
-	this.reduceRateSaveMode = 0.2;		//reduce rate to use electric heater with saving mode
-	this.reduceRateSolar = 0.4;			//reduce rate to use solar heater
-	this.reduceRateSolarSystem = 0.5;	//reduce rate to use solar heating system
+	this.performanceGas = 0.73; //efficient of ordinal gas heater
+	this.performanceEcojozu = 0.877; //efficient of good gas heater
+	this.performanceElec = 0.8; //efficient of electric heater
+	this.performanceEcocute = 3; //efficient of heat pump heater
+	this.performanceEnefarmEle = 0.289; //efficient of electricity generation of co-generator
+	this.performanceEnefarmHW = 0.33; //efficient of heat supply of co-generator
+	this.performanceKeepWithTank = 0.6; //efficient of keep tab temperature with stock hot water
 
-	this.warmerElec_kWh_y = 200;		//hot seat of toilet kWh/year
-	this.water_m3_d = 0.1;				//water use for toilet m3/person/day
+	this.reduceRateSaveMode = 0.2; //reduce rate to use electric heater with saving mode
+	this.reduceRateSolar = 0.4; //reduce rate to use solar heater
+	this.reduceRateSolarSystem = 0.5; //reduce rate to use solar heating system
+
+	this.warmerElec_kWh_y = 200; //hot seat of toilet kWh/year
+	this.water_m3_d = 0.1; //water use for toilet m3/person/day
 
 	this.reduceRateKeepStop;
 };
-D6.consHWsum.init();	// initialize when this class is loaded
+D6.consHWsum.init(); // initialize when this class is loaded
 
-
-//change Input data to local value 
+//change Input data to local value
 D6.consHWsum.precalc = function() {
 	this.clear();
 
 	// use answers for calclation
-	this.person =this.input( "i001", 3 );				//person number
-	this.housetype =this.input( "i002", 1 );			//structure of house
-	this.prefecture =this.input( "i021", 13 );			//prefecture
-	this.solarHeater =this.input( "i102", 3 );			//solar heater
-	this.heatArea = D6.area.getHeatingLevel(this.prefecture);	//heating level
-	this.tabDayWeek =this.input( "i103", 
-		( this.heatArea == 1 || this.heatArea == 6 ? 2 : 6 )
-	);													//use tab day day/week
-	this.tabDayWeekSummer =this.input( "i104", 2 );		//use tab day in summer day/week
+	this.person = this.input("i001", 3); //person number
+	this.housetype = this.input("i002", 1); //structure of house
+	this.prefecture = this.input("i021", 13); //prefecture
+	this.solarHeater = this.input("i102", 3); //solar heater
+	this.heatArea = D6.area.getHeatingLevel(this.prefecture); //heating level
+	this.tabDayWeek = this.input(
+		"i103",
+		this.heatArea == 1 || this.heatArea == 6 ? 2 : 6
+	); //use tab day day/week
+	this.tabDayWeekSummer = this.input("i104", 2); //use tab day in summer day/week
+	var ret = this.input2seasons(
+		"i105",
+		"i106",
+		this.showerWaterMinutes * this.person
+	);
+	this.showerMinutes = ret[0]; //shower time min/day
+	this.showerMinutesSummer = ret[1]; //shower time in summer min/day
+	this.showerHotTimeSpan = this.input("i112", 10); //time(seconds) to pour Hot Water
 
-	var ret = this.input2seasons( "i105", "i106", this.showerWaterMinutes * this.person );
-	this.showerMinutes = ret[0];				//shower time min/day
-	this.showerMinutesSummer = ret[1];			//shower time in summer min/day
+	this.savingShower = this.input("i116", -1); //saving shower head
+	this.tabKeepHeatingTime = this.input("i108", this.person > 1 ? 3 : 0); //keep time to tab hot hour/day
 
-	this.showerHotTimeSpan = this.input( "i112", 10 );	//time(seconds) to pour Hot Water
+	this.keepMethod2 = this.input("i111", 5); //keep hot method 2
+	this.keepMethod = this.input("i110", this.keepMethod2); //keep hot method
+	this.tabInsulation = this.input("i117", -1); //tab insulation
+	this.tabHeight = this.input("i107", 8); //height of tab hot water 0-10
 
-	this.savingShower =this.input( "i116", -1 );		//saving shower head 
-	this.tabKeepHeatingTime =this.input( "i108"
-		, (this.person > 1 ? 3 : 0 ) );					//keep time to tab hot hour/day
+	this.equipType = this.input("i101", -1); //type of heater
+	this.priceGas = D6.consShow["TO"].priceGas; //gas fee yen/month
+	this.priceKeros = D6.consShow["TO"].priceKeros; //kerosene price yen/month
 
-	this.keepMethod2 =this.input( "i111", 5 );			//keep hot method 2
-	this.keepMethod =this.input( "i110", this.keepMethod2 );	//keep hot method 
-	this.tabInsulation =this.input( "i117", -1 );		//tab insulation
-	this.tabHeight =this.input( "i107", 8 );			//height of tab hot water 0-10
-	
-	this.equipType = this.input( "i101", -1 );			//type of heater
-	this.priceGas = D6.consShow["TO"].priceGas;			//gas fee yen/month
-	this.priceKeros = D6.consShow["TO"].priceKeros;		//kerosene price yen/month
+	this.dresserMonth = this.input("i114", 4); //months of use hot water for dresser month
+	this.dishWashMonth = this.input("i115", 4); //months of use hot water for dish wash month / 99 is machine
+	this.dishWashWater = this.input("i113", 3); //use cold water for dish wash 1every day - 4 not
+	this.heaterPerformance = this.input("i121", 2); //performance of heater 1good  3bad
+	this.cookingFreq = this.input("i802", 6); //frequency of cooking 0-10
 
-	this.dresserMonth = this.input( "i114", 4 );		//months of use hot water for dresser month
-	this.dishWashMonth = this.input( "i115", 4 );		//months of use hot water for dish wash month / 99 is machine
-	this.dishWashWater = this.input( "i113", 3 );		//use cold water for dish wash 1every day - 4 not
-	this.heaterPerformance = this.input( "i121", 2 );	//performance of heater 1good  3bad
-	this.cookingFreq = this.input( "i802", 6 );			//frequency of cooking 0-10
-	
-	this.keepSeason =this.input( "i131", 2 );			//use keep toilet seat hot 1:everyday - 4not use
+	this.keepSeason = this.input("i131", 2); //use keep toilet seat hot 1:everyday - 4not use
 };
 
 // calculation of this consumption ------------------------------------
-D6.consHWsum.calc = function() {		
+D6.consHWsum.calc = function() {
 	// guess equip type
-	if ( this.equipType <= 0 ) {
-		if ( this.priceGas == 0 ) {
-			if ( this.priceKeros > 3000 ) {
+	if (this.equipType <= 0) {
+		if (this.priceGas == 0) {
+			if (this.priceKeros > 3000) {
 				this.equipType = 3;
 			} else {
 				this.equipType = 5;
@@ -6001,16 +6042,16 @@ D6.consHWsum.calc = function() {
 			this.equipType = 1;
 		}
 	}
-	
+
 	//good type
-	if ( this.equipType == 1 && this.heaterPerformance == 1 ) {
+	if (this.equipType == 1 && this.heaterPerformance == 1) {
 		this.equipType == 2;
 	}
-	if ( this.equipType == 5 && this.heaterPerformance == 1 ) {
+	if (this.equipType == 5 && this.heaterPerformance == 1) {
 		this.equipType == 6;
 	}
 	//bad type
-	if ( this.equipType == 2 && this.heaterPerformance == 3 ) {
+	if (this.equipType == 2 && this.heaterPerformance == 3) {
 		this.equipType == 1;
 	}
 
@@ -6018,130 +6059,179 @@ D6.consHWsum.calc = function() {
 	this.waterTemp = D6.area.getWaterTemplature();
 
 	//adjust by solar heater
-	this.waterTemp = ( this.solarHeater == 1 ? 0.4 * this.hotWaterTemp + 0.6 * this.waterTemp : 
-		( this.solarHeater == 2 ? 0.15 * this.hotWaterTemp + 0.85 * this.waterTemp : this.waterTemp ) );
+	this.waterTemp =
+		this.solarHeater == 1
+			? 0.4 * this.hotWaterTemp + 0.6 * this.waterTemp
+			: this.solarHeater == 2
+				? 0.15 * this.hotWaterTemp + 0.85 * this.waterTemp
+				: this.waterTemp;
 
 	// estimate amount of hot water used as shower litter/day
-	this.showerWaterLitter = 
-			( ( this.showerMinutes * ( 12 -D6.area.seasonMonth.summer )  +
-				this.showerMinutesSummer * D6.area.seasonMonth.summer ) 
-				/ 12 
-				* ( this.savingShower == 1  ?  1 - this.reduceRateShowerHead: 1 ) 
-				+ this.showerHotTimeSpan / 60 * 5 )		//	5 times
-				* this.showerWaterLitterUnit ;
+	this.showerWaterLitter =
+		((this.showerMinutes * (12 - D6.area.seasonMonth.summer) +
+			this.showerMinutesSummer * D6.area.seasonMonth.summer) /
+			12 *
+			(this.savingShower == 1 ? 1 - this.reduceRateShowerHead : 1) +
+			this.showerHotTimeSpan / 60 * 5) * //	5 times
+		this.showerWaterLitterUnit;
 
 	// estimate amount of hot water used in tub	litter/day
-	this.consHWtubLitter = this.tabWaterLitter * this.tabHeight  / 10 * 
-					( this.tabDayWeek * ( 12 -D6.area.seasonMonth.summer ) 
-						+ this.tabDayWeekSummer * D6.area.seasonMonth.summer ) / 12 / 7;
-	
+	this.consHWtubLitter =
+		this.tabWaterLitter *
+		this.tabHeight /
+		10 *
+		(this.tabDayWeek * (12 - D6.area.seasonMonth.summer) +
+			this.tabDayWeekSummer * D6.area.seasonMonth.summer) /
+		12 /
+		7;
+
 	// sum hot water use litter/day
-	this.allLitter =  
-					(	this.consHWtubLitter
-						+ this.showerWaterLitter
-						+ this.otherWaterLitter ) ;	
+	this.allLitter =
+		this.consHWtubLitter + this.showerWaterLitter + this.otherWaterLitter;
 
 	// tap water heating energy   kcal/month
-	this.heatTapEnergy = this.allLitter * ( this.hotWaterTemp - this.waterTemp ) * 365 / 12;
-	
+	this.heatTapEnergy =
+		this.allLitter * (this.hotWaterTemp - this.waterTemp) * 365 / 12;
+
 	// tab keep energy kcal/month
-	this.tabKeepEnergy = this.consHWtubLitter * this.tabKeepHeatingTime *365 / 12
-					*  ( ( this.tabInsulation == 1 || this.tabInsulation == 2 ) ? this.tabTemplatureInsulationDown : this.tabTemplatureDown )
-					/ ( ( this.equipType == 4 || this.equipType ==5 ) ? this.performanceKeepWithTank : 1 )
-					* this.keepMethod / 10;
+	this.tabKeepEnergy =
+		this.consHWtubLitter *
+		this.tabKeepHeatingTime *
+		365 /
+		12 *
+		(this.tabInsulation == 1 || this.tabInsulation == 2
+			? this.tabTemplatureInsulationDown
+			: this.tabTemplatureDown) /
+		(this.equipType == 4 || this.equipType == 5
+			? this.performanceKeepWithTank
+			: 1) *
+		this.keepMethod /
+		10;
 
 	// heating energy   kcal/month
 	this.heatEnergy = this.heatTapEnergy + this.tabKeepEnergy;
 	this.hwEnergy = this.heatEnergy;
 
 	// ratio of tub
-	this.consHWtubRate = this.consHWtubLitter / this.allLitter  + ( this.tabKeepEnergy / this.heatEnergy );
+	this.consHWtubRate =
+		this.consHWtubLitter / this.allLitter +
+		this.tabKeepEnergy / this.heatEnergy;
 
 	// ratio of shower
-	this.consHWshowerRate = this.showerWaterLitter / this.allLitter * ( this.heatTapEnergy /  this.heatEnergy );
+	this.consHWshowerRate =
+		this.showerWaterLitter /
+		this.allLitter *
+		(this.heatTapEnergy / this.heatEnergy);
 
 	// ratio of dresser
-	this.consHWdresserRate = this.otherWaterLitter / 2 / this.allLitter * ( this.heatTapEnergy /  this.heatEnergy )
-										* this.dresserMonth / 6;
+	this.consHWdresserRate =
+		this.otherWaterLitter /
+		2 /
+		this.allLitter *
+		(this.heatTapEnergy / this.heatEnergy) *
+		this.dresserMonth /
+		6;
 
 	// ratio of dish wash
-	this.consHWdishwashRate = this.otherWaterLitter / 2 / this.allLitter * ( this.heatTapEnergy /  this.heatEnergy )
-										* ( this.dishWashMonth == 99 ? 1 : this.dishWashMonth / 6 )
-										* ( 4 - this.dishWashWater ) / 2
-										* this.cookingFreq / 6;
+	this.consHWdishwashRate =
+		this.otherWaterLitter /
+		2 /
+		this.allLitter *
+		(this.heatTapEnergy / this.heatEnergy) *
+		(this.dishWashMonth == 99 ? 1 : this.dishWashMonth / 6) *
+		(4 - this.dishWashWater) /
+		2 *
+		this.cookingFreq /
+		6;
 
 	// estimate loss energy when stored in tank  kcal/month
-	this.tanklossEnergy = this.tankLossWatt / 1000 * D6.Unit.calorie.electricity * 365 / 12;
-
+	this.tanklossEnergy =
+		this.tankLossWatt / 1000 * D6.Unit.calorie.electricity * 365 / 12;
 
 	// Heater Equip Type
-	switch ( this.equipType ) {
+	switch (this.equipType) {
 	case 1:
 		//gas heater
 		this.mainSource = "gas";
-		this[this.mainSource] = this.heatEnergy / this.performanceGas 
-					/ D6.Unit.calorie[this.mainSource];
+		this[this.mainSource] =
+				this.heatEnergy /
+				this.performanceGas /
+				D6.Unit.calorie[this.mainSource];
 		break;
 	case 2:
 		//high efficient gas heater
 		this.mainSource = "gas";
-		this[this.mainSource] = this.heatEnergy / this.performanceEcojozu 
-					/ D6.Unit.calorie[this.mainSource];
+		this[this.mainSource] =
+				this.heatEnergy /
+				this.performanceEcojozu /
+				D6.Unit.calorie[this.mainSource];
 		break;
 	case 3:
 		//kerosene heater
 		this.mainSource = "kerosene";
-		this[this.mainSource] = this.heatEnergy / this.performanceGas 
-					/ D6.Unit.calorie[this.mainSource];
+		this[this.mainSource] =
+				this.heatEnergy /
+				this.performanceGas /
+				D6.Unit.calorie[this.mainSource];
 		break;
 	case 4:
 		//high efficient kerosene heate
 		this.mainSource = "kerosene";
-		this[this.mainSource] = this.heatEnergy / this.performanceEcojozu 
-					/ D6.Unit.calorie[this.mainSource];
+		this[this.mainSource] =
+				this.heatEnergy /
+				this.performanceEcojozu /
+				D6.Unit.calorie[this.mainSource];
 		break;
 	case 5:
 		//electricity heater
 		this.mainSource = "electricity";
-		this[this.mainSource] = ( this.heatEnergy + this.tanklossEnergy  )
-					/ this.performanceElec / D6.Unit.calorie[this.mainSource];
+		this[this.mainSource] =
+				(this.heatEnergy + this.tanklossEnergy) /
+				this.performanceElec /
+				D6.Unit.calorie[this.mainSource];
 		break;
 	case 6:
 		//heat pump heater
 		this.mainSource = "electricity";
-		this[this.mainSource] = ( this.heatEnergy + this.tanklossEnergy ) 
-					/ this.performanceEcocute / D6.Unit.calorie[this.mainSource];
+		this[this.mainSource] =
+				(this.heatEnergy + this.tanklossEnergy) /
+				this.performanceEcocute /
+				D6.Unit.calorie[this.mainSource];
 		break;
 	case 7:
 	case 8:
 	default:
 		this.mainSource = "gas";
-		this.gas = this.heatEnergy / this.performanceEcojozu 
-			/ D6.Unit.calorie.gas;
+		this.gas =
+				this.heatEnergy / this.performanceEcojozu / D6.Unit.calorie.gas;
 	}
-	
+
 	//toilet
-	this.electricity += this.warmerElec_kWh_y / 12 * (4-this.keepSeason)/3;
-	this.water += this.water_m3_d * this.person *30;
-	
+	this.electricity += this.warmerElec_kWh_y / 12 * (4 - this.keepSeason) / 3;
+	this.water += this.water_m3_d * this.person * 30;
+
 	//reduce rate by use shower
-	this.reduceRateShowerTime = 1 / ( this.showerMinutes / this.person - 1 ) * this.consHWshowerRate;
-	
-	//reduce rate by stop keep hot 
-	this.reduceRateTabKeep = this.tabKeepEnergy / ( this.heatEnergy *  this.consHWtubLitter / this.allLitter );
-	
-	//reduce rate by insulation tab 
-	this.reduceRateInsulation = ( (this.tabInsulation == 1 || this.tabInsulation == 2 ) ? 0 : 
-		this.reduceRateTabKeep 
-			* (this.tabTemplatureDown - this.tabTemplatureInsulationDown ) / this.tabTemplatureDown );
+	this.reduceRateShowerTime =
+		1 / (this.showerMinutes / this.person - 1) * this.consHWshowerRate;
+
+	//reduce rate by stop keep hot
+	this.reduceRateTabKeep =
+		this.tabKeepEnergy /
+		(this.heatEnergy * this.consHWtubLitter / this.allLitter);
+
+	//reduce rate by insulation tab
+	this.reduceRateInsulation =
+		this.tabInsulation == 1 || this.tabInsulation == 2
+			? 0
+			: this.reduceRateTabKeep *
+			  (this.tabTemplatureDown - this.tabTemplatureInsulationDown) /
+			  this.tabTemplatureDown;
 
 	//reduce rate by use shower in summer
 	var ssummer = this.tabDayWeekSummer * D6.area.seasonMonth.summer;
-	var snsummer = this.tabDayWeek * ( 12 -D6.area.seasonMonth.summer );
-	this.reduceRateStopTabSummer = ssummer / ( ssummer + snsummer );
-
+	var snsummer = this.tabDayWeek * (12 - D6.area.seasonMonth.summer);
+	this.reduceRateStopTabSummer = ssummer / (ssummer + snsummer);
 };
-
 
 // calclate measures ----------------------------------------------
 //		calculate co2/cost saving related to this consumption
@@ -6153,95 +6243,100 @@ D6.consHWsum.calc = function() {
 //		calclate result in this.measures[] also link to D6.measuresList[]
 D6.consHWsum.calcMeasure = function() {
 	var goodPerformance = false;
-		
+
 	// installed good performance equipments
-	if ( this.isSelected( "mHWecocute" ) 
-		|| this.isSelected( "mHWecofeel" )
+	if (
+		this.isSelected("mHWecocute") ||
+		this.isSelected("mHWecofeel") ||
 		//|| this.isSelected( "mHWecojoze" )
-		|| this.isSelected( "mHWenefarm" )
+		this.isSelected("mHWenefarm")
 	) {
 		goodPerformance = true;
 	}
 
 	//endEnergy adjust with installed measures 170426
-	var endEnergyNow = this.hwEnergy  * this.co2 / this.co2Original;
-	if ( (  this.equipType == -1 
-			|| this.equipType == 1
-			|| this.equipType == 3 
-			|| this.equipType == 5 )
-		&& !goodPerformance
+	var endEnergyNow = this.hwEnergy * this.co2 / this.co2Original;
+	if (
+		(this.equipType == -1 ||
+			this.equipType == 1 ||
+			this.equipType == 3 ||
+			this.equipType == 5) &&
+		!goodPerformance
 	) {
 		//mHWecocute
-		if( this.housetype == 1 ) {		
-			this.measures[ "mHWecocute"] .clear();
-			this.measures[ "mHWecocute" ].nightelectricity =  
-					( endEnergyNow+ this.tanklossEnergy ) 
-						/ this.performanceEcocute / D6.Unit.calorie.nightelectricity;
+		if (this.housetype == 1) {
+			this.measures["mHWecocute"].clear();
+			this.measures["mHWecocute"].nightelectricity =
+				(endEnergyNow + this.tanklossEnergy) /
+				this.performanceEcocute /
+				D6.Unit.calorie.nightelectricity;
 		}
-		
+
 		//mHWecofeel
-		if ( this.equipType == 3 ) {
-			this.measures[ "mHWecofeel" ].clear();
-			this.measures[ "mHWecofeel" ].kerosene = endEnergyNow
-						/ this.performanceEcojozu / D6.Unit.calorie.kerosene;
+		if (this.equipType == 3) {
+			this.measures["mHWecofeel"].clear();
+			this.measures["mHWecofeel"].kerosene =
+				endEnergyNow / this.performanceEcojozu / D6.Unit.calorie.kerosene;
 		}
-			
+
 		//mHWecojoze
-		this.measures[ "mHWecojoze" ].clear();
-		this.measures[ "mHWecojoze" ].gas = endEnergyNow
-						/ this.performanceEcojozu / D6.Unit.calorie.gas;
+		this.measures["mHWecojoze"].clear();
+		this.measures["mHWecojoze"].gas =
+			endEnergyNow / this.performanceEcojozu / D6.Unit.calorie.gas;
 
 		//mHWenefarm
-		if( this.housetype == 1 ) {
-			this.measures[ "mHWenefarm" ].clear();
-			//electricity generation 
-			var notCoGenerationEnergy = 500 * 1000 / 12;	//	kcal/month
-			var coGenerationEnergy  = endEnergyNow - notCoGenerationEnergy;
-			
-			this.measures[ "mHWenefarm" ].gas = 
-						( 
-							coGenerationEnergy / this.performanceEnefarmHW 
-							+ notCoGenerationEnergy / this.performanceEcojozu
-						) / D6.Unit.calorie.gas;
+		if (this.housetype == 1) {
+			this.measures["mHWenefarm"].clear();
+			//electricity generation
+			var notCoGenerationEnergy = 500 * 1000 / 12; //	kcal/month
+			var coGenerationEnergy = endEnergyNow - notCoGenerationEnergy;
 
-			this.measures[ "mHWenefarm" ].electricity = - coGenerationEnergy 
-						/ this.performanceEnefarmHW * this.performanceEnefarmEle 
-						/ D6.Unit.calorie.electricity;
+			this.measures["mHWenefarm"].gas =
+				(coGenerationEnergy / this.performanceEnefarmHW +
+					notCoGenerationEnergy / this.performanceEcojozu) /
+				D6.Unit.calorie.gas;
+
+			this.measures["mHWenefarm"].electricity =
+				-coGenerationEnergy /
+				this.performanceEnefarmHW *
+				this.performanceEnefarmEle /
+				D6.Unit.calorie.electricity;
 		}
 	}
 
 	//mHWsaveMode
-	if ( this.equipType == 6 || this.equipType == 5  ){
-		this.measures[ "mHWsaveMode" ].calcReduceRate( this.reduceRateSaveMode );
+	if (this.equipType == 6 || this.equipType == 5) {
+		this.measures["mHWsaveMode"].calcReduceRate(this.reduceRateSaveMode);
 	}
 
-	var rejectSolarSelect = false;		//can or not to install solar heater
-	if ( this.isSelected( "mHWecocute" ) 
-		|| this.isSelected( "mHWenefarm" )
-		|| this.isSelected( "mHWsolarSystem" )
-		|| this.isSelected( "mHWsolarHeater" )
+	var rejectSolarSelect = false; //can or not to install solar heater
+	if (
+		this.isSelected("mHWecocute") ||
+		this.isSelected("mHWenefarm") ||
+		this.isSelected("mHWsolarSystem") ||
+		this.isSelected("mHWsolarHeater")
 	) {
 		//tank type or co generation type
 		rejectSolarSelect = true;
 	}
-		
-	if ( this.equipType != 5 
-		&& this.equipType != 6 
-		&& !rejectSolarSelect 
-		&& this.housetype == 1 
+
+	if (
+		this.equipType != 5 &&
+		this.equipType != 6 &&
+		!rejectSolarSelect &&
+		this.housetype == 1
 	) {
-		this.measures[ "mHWsolarHeater" ].calcReduceRate( this.reduceRateSolar );
-		this.measures[ "mHWsolarSystem" ].calcReduceRate( this.reduceRateSolarSystem );
+		this.measures["mHWsolarHeater"].calcReduceRate(this.reduceRateSolar);
+		this.measures["mHWsolarSystem"].calcReduceRate(this.reduceRateSolarSystem);
 	}
 };
 
-//hot water energy is also adjusted 
-D6.consHWsum.calcAdjustStrategy = function( energyAdj ){
+//hot water energy is also adjusted
+D6.consHWsum.calcAdjustStrategy = function(energyAdj) {
 	this.heatEnergy *= energyAdj[this.mainSource];
 	this.tanklossEnergy *= energyAdj[this.mainSource];
 	this.hwEnergy *= energyAdj[this.mainSource];
 };
-
 
 /* 2017/12/15  version 1.0
  * coding: utf-8, Tab as 4 spaces
@@ -7862,132 +7957,131 @@ D6.consRFsum.equip = function( year, size ) {
  */
 
 //resolve D6
-var D6 = D6||{};
+var D6 = D6 || {};
 
 //Inherited class of D6.consRFsum
-D6.consRF = D6.object( D6.consRFsum );
+D6.consRF = D6.object(D6.consRFsum);
 
 //initialize
 D6.consRF.init = function() {
-	this.consYear = 650;                //ordinal electricity consumption per year(kWh/year)
-	this.consYearAdvanced = 300;        //energy saving type (kWh/year)
-	this.reduceRateWall = 0.1;          //reduction rate through make space between wall and refrigerator
-	this.reduceRateTemplature = 0.12;   //reduction rate through set saving temperature
-	
-	//construction setting
-	this.consName = "consRF";           //code name of this consumption 
-	this.consCode = "";                 //short code to access consumption, only set main consumption user for itemize
-	this.title = "refrigerator";		//consumption title name
-	this.orgCopyNum = 1;                //original copy number in case of countable consumption, other case set 0
-	this.addable = "refrigerator";		//the name of object shown as add target
-	this.groupID = "3";					//number code in items
-	this.color = "#a0ffa0";				//color definition in graph
-	this.countCall = "th";				//how to point n-th equipment
+	this.consYear = 650; //ordinal electricity consumption per year(kWh/year)
+	this.consYearAdvanced = 300; //energy saving type (kWh/year)
+	this.reduceRateWall = 0.1; //reduction rate through make space between wall and refrigerator
+	this.reduceRateTemplature = 0.12; //reduction rate through set saving temperature
 
-	this.sumConsName = "consRFsum";		//code name of consumption sum up include this
-	this.sumCons2Name = "";				//code name of consumption related to this
+	//construction setting
+	this.consName = "consRF"; //code name of this consumption
+	this.consCode = ""; //short code to access consumption, only set main consumption user for itemize
+	this.title = "refrigerator"; //consumption title name
+	this.orgCopyNum = 1; //original copy number in case of countable consumption, other case set 0
+	this.addable = "refrigerator"; //the name of object shown as add target
+	this.groupID = "3"; //number code in items
+	this.color = "#a0ffa0"; //color definition in graph
+	this.countCall = "th"; //how to point n-th equipment
+
+	this.sumConsName = "consRFsum"; //code name of consumption sum up include this
+	this.sumCons2Name = ""; //code name of consumption related to this
 
 	//guide message in input page
 	this.inputGuide = "How to use each refrigerator";
 };
 D6.consRF.init();
 
-
 D6.consRF.precalc = function() {
 	this.clear();
 
 	//prepare input value
-	this.year = this.input( "i711" + this.subID, 8 );		//equipment year
-	this.type = this.input( "i712" + this.subID, 1 );		//type
-	this.size = this.input( "i713" + this.subID, 350 );		//size (L)
-	this.templature = this.input( "i714" + this.subID, 4 );	//setting of temprature
-	this.full = this.input( "i715" + this.subID, 4 );		//stuffing too much
-	this.space = this.input( "i716" + this.subID, 3 );		//space beteween wall and refragerator
-	this.performance = this.input( "i721", 2 );				//performance
-	
+	this.year = this.input("i711" + this.subID, 8); //equipment year
+	this.type = this.input("i712" + this.subID, 1); //type
+	this.size = this.input("i713" + this.subID, 350); //size (L)
+	this.templature = this.input("i714" + this.subID, 4); //setting of temprature
+	this.full = this.input("i715" + this.subID, 4); //stuffing too much
+	this.space = this.input("i716" + this.subID, 3); //space beteween wall and refragerator
+	this.performance = this.input("i721", 2); //performance
+
 	var d = new Date();
 	this.nowEquip = this.equip(d.getFullYear() - this.year, this.size);
 	this.newEquip = this.equip(d.getFullYear(), this.size);
-
 };
 
-D6.consRF.calc = function( ) {
+D6.consRF.calc = function() {
 	// now consumption (kWh/year)
-	this.consYear = this.nowEquip.pf2 * ( this.type == 2 ? 2 : 1 );
-	
+	this.consYear = this.nowEquip.pf2 * (this.type == 2 ? 2 : 1);
+
 	//new type of refregerator(kWh/year)
-	this.consYearAdvanced =  this.newEquip.pf1 * ( this.type == 2 ? 2 : 1 );
+	this.consYearAdvanced = this.newEquip.pf1 * (this.type == 2 ? 2 : 1);
 
 	//reduction rate to replace new one
 	this.reduceRateChange = this.consYearAdvanced / this.consYear;
 
 	// set 0-th equipment charactrictic to refregerator
-	if ( this.subID == 0 ) {
-		if ( this.input( "i7111" , -1 ) < 0  && this.input( "i7131" , -1 ) < 0 ){
+	if (this.subID == 0) {
+		if (this.input("i7111", -1) < 0 && this.input("i7131", -1) < 0) {
 			//in case of no input set 0-th data as sumup by count
-			this.electricity =  this.consYear * this.count / 12;
+			this.electricity = this.consYear * this.count / 12;
 		} else {
 			this.electricity = 0;
 		}
 		return;
 	}
 
-	if ( this.subID > 0 && 
-		this.input( "i711" + this.subID, -1 ) < 0 && 
-		this.input( "i713" + this.subID, -1 ) < 0 
-	){
+	if (
+		this.subID > 0 &&
+		this.input("i711" + this.subID, -1) < 0 &&
+		this.input("i713" + this.subID, -1) < 0
+	) {
 		//not calculate of no input
 		return;
 	}
 
 	//monthly electricity consumption (kWh/month)
-	this.electricity =  this.consYear / 12;	
+	this.electricity = this.consYear / 12;
 
 	//fix in case of stuffing too much
-	this.electricity = this.electricity 
-				* ( this.full ==3 ? 1.1 : ( this.full == 1 ? 0.9 : 1 ) );
-		
+	this.electricity =
+		this.electricity * (this.full == 3 ? 1.1 : this.full == 1 ? 0.9 : 1);
+
 	//fix in case of no space
-	this.electricity = this.electricity 
-				* ( this.space ==1 ? 0.95 : ( this.space==2 ? 1.05 : 1 ) );
+	this.electricity =
+		this.electricity * (this.space == 1 ? 0.95 : this.space == 2 ? 1.05 : 1);
 
 	//fix by temperature
-	this.electricity = this.electricity 
-				* ( this.templature ==1 ? 1.1 : ( this.templature==3 ? 0.95 : 1 ) );
-	
+	this.electricity =
+		this.electricity *
+		(this.templature == 1 ? 1.1 : this.templature == 3 ? 0.95 : 1);
+
 	//fix by performance
-	this.electricity = this.electricity 
-				* ( this.performance ==1 ? 0.8 : ( this.performance==3 ? 1.2 : 1 ) );
+	this.electricity =
+		this.electricity *
+		(this.performance == 1 ? 0.8 : this.performance == 3 ? 1.2 : 1);
+
+	if (this.year == 0) this.electricity = 0;
 };
 
-
-D6.consRF.calcMeasure = function( ) {
+D6.consRF.calcMeasure = function() {
 	//mRFreplace
-	this.measures["mRFreplace"].calcReduceRate( this.reduceRateChange );
+	this.measures["mRFreplace"].calcReduceRate(this.reduceRateChange);
 
 	//mRFtemplature
-	if ( this.templature != 3 ) {
-		this.measures["mRFtemplature"].calcReduceRate( this.reduceRateTemplature );
+	if (this.templature != 3) {
+		this.measures["mRFtemplature"].calcReduceRate(this.reduceRateTemplature);
 	}
 
 	//mRFwall
-	if ( this.space != 1 ){
-		this.measures["mRFwall"].calcReduceRate( this.reduceRateWall );
+	if (this.space != 1) {
+		this.measures["mRFwall"].calcReduceRate(this.reduceRateWall);
 	}
 
 	//mRFstop
-	if ( this.count > 1 ) {
-		if ( this.subID == 0 ){
+	if (this.count > 1) {
+		if (this.subID == 0) {
 			//in case of rough estimation
-			this.measures["mRFstop"].calcReduceRate( 1 / this.count );
+			this.measures["mRFstop"].calcReduceRate(1 / this.count);
 		} else {
 			this.measures["mRFstop"].electricity = 0;
 		}
 	}
 };
-
-
-
 
 /* 2017/12/15  version 1.0
  * coding: utf-8, Tab as 4 spaces
@@ -8289,60 +8383,56 @@ D6.consLI.calcMeasure = function() {
  */
 
 //resolve D6
-var D6 = D6||{};
+var D6 = D6 || {};
 
 //Inherited class of D6.consTVsum
-D6.consTVsum = D6.object( D6.ConsBase );
+D6.consTVsum = D6.object(D6.ConsBase);
 
 //初期設定値
 D6.consTVsum.init = function() {
-	this.watt = 100;					//electricity consumption default W
+	this.watt = 100; //electricity consumption default W
 
-	this.reduceRateRadio = 0.5;			//reduce rate by change to radio
-	this.reduceRateBright = 0.2;		//reduce rate by change brightness
+	this.reduceRateRadio = 0.5; //reduce rate by change to radio
+	this.reduceRateBright = 0.2; //reduce rate by change brightness
 
 	//construction setting
-	this.consName = "consTVsum";    	//code name of this consumption 
-	this.consCode = "TV";            	//short code to access consumption, only set main consumption user for itemize
-	this.title = "TV";					//consumption title name
-	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
-	this.groupID = "7";					//number code in items
-	this.color = "#00ff00";				//color definition in graph
+	this.consName = "consTVsum"; //code name of this consumption
+	this.consCode = "TV"; //short code to access consumption, only set main consumption user for itemize
+	this.title = "TV"; //consumption title name
+	this.orgCopyNum = 0; //original copy number in case of countable consumption, other case set 0
+	this.groupID = "7"; //number code in items
+	this.color = "#00ff00"; //color definition in graph
 
-	this.sumConsName = "consTotal";		//code name of consumption sum up include this
-	this.sumCons2Name = "";				//code name of consumption related to this
-	this.residueCalc = "sumup";			//calculate type of residue	no/sumup/yes
+	this.sumConsName = "consTotal"; //code name of consumption sum up include this
+	this.sumCons2Name = ""; //code name of consumption related to this
+	this.residueCalc = "sumup"; //calculate type of residue	no/sumup/yes
 
 	//guide message in input page
 	this.inputGuide = "how to use TV totally";
 };
 D6.consTVsum.init();
 
-
 D6.consTVsum.calc = function() {
-	this.useTime =this.input( "i601", 8.5 );	//time to use hour
+	this.useTime = this.input("i601", 8.5); //time to use hour
 
 	//electiricy kWh/month
-	this.electricity =  this.watt / 1000 * this.useTime * 30;	
+	this.electricity = this.watt / 1000 * this.useTime * 30;
 };
 
 D6.consTVsum.calc2nd = function() {
-	var electricity = this.electricity;	 		//backup
+	var electricity = this.electricity; //backup
 	this.clear();
 
 	//add each terevition
-	for( var id in this.partCons ) {
-		this.add( this.partCons[id] );
+	for (var id in this.partCons) {
+		this.add(this.partCons[id]);
 	}
-	
+
 	//use total electricity if sum of TV is smaller
-	if ( electricity > this.electricity ){
+	if (electricity > this.electricity) {
 		this.electricity = electricity;
 	}
-
 };
-
-
 
 /*performance and price of equipment
  * 	parameter
@@ -8355,69 +8445,64 @@ D6.consTVsum.calc2nd = function() {
  *		ret.pf1 : performance of good one
  *		ret.pf2 : performance of ordninal one
  */
-D6.consTVsum.equip = function( year, size ) {
-	var sizeThreshold = [ 20, 30, 40, 50, 60, 120 ];	//last is maxsize
+D6.consTVsum.equip = function(year, size) {
+	var sizeThreshold = [20, 30, 40, 50, 60, 120]; //last is maxsize
 
 	//definition of equip [size][year][code]
 	//	code: pf1,pf2 performance 1 is good one
 	//				pr1,pr2 price 1 is good one
 	var defEquip = {
-		20 : {
-			1900 : { "pf1" : 100, "pf2" : 150, "pr1" : 500000, "pr2" : 400000 } ,
-			1995 : { "pf1" : 50, "pf2" : 100, "pr1" : 50000, "pr2" : 40000 } ,
-			2005 : { "pf1" : 40, "pf2" : 80, "pr1" : 40000, "pr2" : 30000 } ,
-			2015 : { "pf1" : 30, "pf2" : 50, "pr1" : 30000, "pr2" : 25000 } ,
-			2030 : { "pf1" : 20, "pf2" : 30, "pr1" : 30000, "pr2" : 25000 } 
+		20: {
+			1900: { pf1: 100, pf2: 150, pr1: 500000, pr2: 400000 },
+			1995: { pf1: 50, pf2: 100, pr1: 50000, pr2: 40000 },
+			2005: { pf1: 40, pf2: 80, pr1: 40000, pr2: 30000 },
+			2015: { pf1: 30, pf2: 50, pr1: 30000, pr2: 25000 },
+			2030: { pf1: 20, pf2: 30, pr1: 30000, pr2: 25000 }
 		},
-		30 : {
-			1900 : { "pf1" : 150, "pf2" : 300, "pr1" : 500000, "pr2" : 400000 } ,
-			1995 : { "pf1" : 80, "pf2" : 150, "pr1" : 80000, "pr2" : 60000 } ,
-			2005 : { "pf1" : 50, "pf2" : 100, "pr1" : 50000, "pr2" : 40000 } ,
-			2015 : { "pf1" : 40, "pf2" : 60, "pr1" : 40000, "pr2" : 35000 } ,
-			2030 : { "pf1" : 30, "pf2" : 40, "pr1" : 40000, "pr2" : 35000 } 
+		30: {
+			1900: { pf1: 150, pf2: 300, pr1: 500000, pr2: 400000 },
+			1995: { pf1: 80, pf2: 150, pr1: 80000, pr2: 60000 },
+			2005: { pf1: 50, pf2: 100, pr1: 50000, pr2: 40000 },
+			2015: { pf1: 40, pf2: 60, pr1: 40000, pr2: 35000 },
+			2030: { pf1: 30, pf2: 40, pr1: 40000, pr2: 35000 }
 		},
-		40 : {
-			1900 : { "pf1" : 400, "pf2" : 500, "pr1" : 500000, "pr2" : 400000 } ,
-			1995 : { "pf1" : 300, "pf2" : 500, "pr1" : 200000, "pr2" : 150000 } ,
-			2005 : { "pf1" : 100, "pf2" : 200, "pr1" : 120000, "pr2" : 100000 } ,
-			2015 : { "pf1" : 60, "pf2" : 120, "pr1" : 100000, "pr2" : 80000 } ,
-			2030 : { "pf1" : 40, "pf2" : 80, "pr1" : 80000, "pr2" : 70000 } 
+		40: {
+			1900: { pf1: 400, pf2: 500, pr1: 500000, pr2: 400000 },
+			1995: { pf1: 300, pf2: 500, pr1: 200000, pr2: 150000 },
+			2005: { pf1: 100, pf2: 200, pr1: 120000, pr2: 100000 },
+			2015: { pf1: 60, pf2: 120, pr1: 100000, pr2: 80000 },
+			2030: { pf1: 40, pf2: 80, pr1: 80000, pr2: 70000 }
 		},
-		50 : {
-			1900 : { "pf1" : 500, "pf2" : 700, "pr1" : 500000, "pr2" : 400000 } ,
-			1995 : { "pf1" : 500, "pf2" : 700, "pr1" : 400000, "pr2" : 300000 } ,
-			2005 : { "pf1" : 200, "pf2" : 400, "pr1" : 200000, "pr2" : 180000 } ,
-			2015 : { "pf1" : 100, "pf2" : 200, "pr1" : 140000, "pr2" : 120000 } ,
-			2030 : { "pf1" : 80, "pf2" : 160, "pr1" : 100000, "pr2" : 90000 } 
+		50: {
+			1900: { pf1: 500, pf2: 700, pr1: 500000, pr2: 400000 },
+			1995: { pf1: 500, pf2: 700, pr1: 400000, pr2: 300000 },
+			2005: { pf1: 200, pf2: 400, pr1: 200000, pr2: 180000 },
+			2015: { pf1: 100, pf2: 200, pr1: 140000, pr2: 120000 },
+			2030: { pf1: 80, pf2: 160, pr1: 100000, pr2: 90000 }
 		},
-		60 : {
-			1900 : { "pf1" : 500, "pf2" : 700, "pr1" : 500000, "pr2" : 400000 } ,
-			1995 : { "pf1" : 500, "pf2" : 700, "pr1" : 500000, "pr2" : 400000 } ,
-			2005 : { "pf1" : 250, "pf2" : 500, "pr1" : 400000, "pr2" : 300000 } ,
-			2015 : { "pf1" : 120, "pf2" : 200, "pr1" : 180000, "pr2" : 160000 } ,
-			2030 : { "pf1" : 100, "pf2" : 180, "pr1" : 160000, "pr2" : 150000 } 
+		60: {
+			1900: { pf1: 500, pf2: 700, pr1: 500000, pr2: 400000 },
+			1995: { pf1: 500, pf2: 700, pr1: 500000, pr2: 400000 },
+			2005: { pf1: 250, pf2: 500, pr1: 400000, pr2: 300000 },
+			2015: { pf1: 120, pf2: 200, pr1: 180000, pr2: 160000 },
+			2030: { pf1: 100, pf2: 180, pr1: 160000, pr2: 150000 }
 		},
-		120 : {
-			1900 : { "pf1" : 500, "pf2" : 700, "pr1" : 500000, "pr2" : 400000 } ,
-			1995 : { "pf1" : 500, "pf2" : 700, "pr1" : 500000, "pr2" : 400000 } ,
-			2005 : { "pf1" : 350, "pf2" : 500, "pr1" : 400000, "pr2" : 300000 } ,
-			2015 : { "pf1" : 200, "pf2" : 400, "pr1" : 180000, "pr2" : 160000 } ,
-			2030 : { "pf1" : 180, "pf2" : 250, "pr1" : 160000, "pr2" : 150000 } 
+		120: {
+			1900: { pf1: 500, pf2: 700, pr1: 500000, pr2: 400000 },
+			1995: { pf1: 500, pf2: 700, pr1: 500000, pr2: 400000 },
+			2005: { pf1: 350, pf2: 500, pr1: 400000, pr2: 300000 },
+			2015: { pf1: 200, pf2: 400, pr1: 180000, pr2: 160000 },
+			2030: { pf1: 180, pf2: 250, pr1: 160000, pr2: 150000 }
 		}
 	};
 
-	return this.getEquipParameters( year, size, sizeThreshold, defEquip );
+	return this.getEquipParameters(year, size, sizeThreshold, defEquip);
 };
 
-
-D6.consTVsum.calcMeasure = function( ) {
+D6.consTVsum.calcMeasure = function() {
 	//mTVradio
-	this.measures["mTVradio"].calcReduceRate( this.reduceRateRadio );
-
+	this.measures["mTVradio"].calcReduceRate(this.reduceRateRadio);
 };
-
-
-
 
 /* 2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
@@ -8555,62 +8640,67 @@ D6.consTV.calcMeasure = function( ) {
  */
 
 //resolve D6
-var D6 = D6||{};
+var D6 = D6 || {};
 
 //Inherited class of D6.ConsBase
-D6.consDRsum = D6.object( D6.ConsBase );
+D6.consDRsum = D6.object(D6.ConsBase);
 
 D6.consDRsum.init = function() {
-	this.whWash = 100;					// only wash wh/day in case of 3 persons
-	this.whDry = 1000;					// use dry wh/day in case of 3 persons
+	this.whWash = 100; // only wash wh/day in case of 3 persons
+	this.whDry = 1000; // use dry wh/day in case of 3 persons
 
-	this.reduceRateHeatPump = 0.65;		//reduce rate by heatpump type
-	this.res2Freq = [ 0, 1, 0.5, 0.2, 0.07, 0 ];
+	this.reduceRateHeatPump = 0.65; //reduce rate by heatpump type
+	this.res2Freq = [0, 1, 0.5, 0.2, 0.07, 0];
 
 	//construction setting
-	this.consName = "consDRsum";    	//code name of this consumption 
-	this.consCode = "DR";            	//short code to access consumption, only set main consumption user for itemize
-	this.title = "laundry washing";			//consumption title name
-	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
-	this.groupID = "5";					//number code in items
-	this.color = "#00ffff";				//color definition in graph
+	this.consName = "consDRsum"; //code name of this consumption
+	this.consCode = "DR"; //short code to access consumption, only set main consumption user for itemize
+	this.title = "laundry washing"; //consumption title name
+	this.orgCopyNum = 0; //original copy number in case of countable consumption, other case set 0
+	this.groupID = "5"; //number code in items
+	this.color = "#00ffff"; //color definition in graph
 
-	this.sumConsName = "consTotal";		//code name of consumption sum up include this
-	this.sumCons2Name = "";				//code name of consumption related to this
+	this.sumConsName = "consTotal"; //code name of consumption sum up include this
+	this.sumCons2Name = ""; //code name of consumption related to this
 
 	//guide message in input page
 	this.inputGuide = "How to use the cleaner, washing machine and clothes dryer";
 };
 D6.consDRsum.init();
 
-
 D6.consDRsum.precalc = function() {
 	this.clear();
 
-	this.dryUse = this.input( "i401", 0 );		//use dryer or not
-	this.person = D6.consShow["TO"].person;		//person number
+	this.dryUse = this.input("i401", 0); //use dryer or not
+	this.washFreq = this.input("i403", 1); //use dryer or not
+	this.person = D6.consShow["TO"].person; //person number
 };
 
 D6.consDRsum.calc = function() {
 	//rate of dry
-	this.rateDry = ( this.whDry * this.res2Freq[this.dryUse] ) / ( this.whWash + this.whDry * this.res2Freq[this.dryUse] );
+	this.rateDry =
+		this.whDry *
+		this.res2Freq[this.dryUse] /
+		(this.whWash + this.whDry * this.res2Freq[this.dryUse]);
 
 	//electricity kWh/month
-	this.electricity = ( this.whWash + this.whDry * this.res2Freq[this.dryUse] ) / 1000
-									* this.person / 3 
-									* 30;
+	this.electricity =
+		(this.whWash * this.washFreq + this.whDry * this.res2Freq[this.dryUse]) /
+		1000 *
+		this.person /
+		3 *
+		30;
 };
 
 D6.consDRsum.calcMeasure = function() {
 	//mDRheatPump
-	this.measures["mDRheatPump"].calcReduceRate( this.rateDry * this.reduceRateHeatPump );
-	
+	this.measures["mDRheatPump"].calcReduceRate(
+		this.rateDry * this.reduceRateHeatPump
+	);
+
 	//mDRsolar
-	this.measures["mDRsolar"].calcReduceRate( this.rateDry );
-		
+	this.measures["mDRsolar"].calcReduceRate(this.rateDry);
 };
-
-
 
 /* 2017/12/14  version 1.0
  * coding: utf-8, Tab as 4 spaces
@@ -9136,54 +9226,51 @@ D6.consCKrice.calcMeasure = function() {
  */
 
 //resolve D6
-var D6 = D6||{};
+var D6 = D6 || {};
 
 //Inherited class of D6.ConsBase
-D6.consCKcook = D6.object( D6.ConsBase );
+D6.consCKcook = D6.object(D6.ConsBase);
 
 //initialize
 D6.consCKcook.init = function() {
-	this.consEnergyStat = 840000;		//statistical cooking energy (kcal/year) EDMC Japan
-	this.efficentEL = 2;				//coefficient of IH compare to heat type
+	this.consEnergyStat = 840000; //statistical cooking energy (kcal/year) EDMC Japan
+	this.efficentEL = 2; //coefficient of IH compare to heat type
 
 	//construction setting
-	this.consName = "consCKcook";    	//code name of this consumption 
-	this.consCode = "CK";            	//short code to access consumption, only set main consumption user for itemize
-	this.title = "Cooking";				//consumption title name
-	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
-	this.groupID = "4";					//number code in items
-	this.color = "#ffe4b5";				//color definition in graph
+	this.consName = "consCKcook"; //code name of this consumption
+	this.consCode = "CK"; //short code to access consumption, only set main consumption user for itemize
+	this.title = "Cooking"; //consumption title name
+	this.orgCopyNum = 0; //original copy number in case of countable consumption, other case set 0
+	this.groupID = "4"; //number code in items
+	this.color = "#ffe4b5"; //color definition in graph
 
-	this.sumConsName = "consCKsum";		//code name of consumption sum up include this
-	this.sumCons2Name = "";				//code name of consumption related to this
+	this.sumConsName = "consCKsum"; //code name of consumption sum up include this
+	this.sumCons2Name = ""; //code name of consumption related to this
 
 	//guide message in input page
 	this.inputGuide = "How to use cooking to focus on the stove";
 };
 D6.consCKcook.init();
 
-
 D6.consCKcook.precalc = function() {
 	this.clear();
 
 	//prepare input value
-	this.equipHW = this.input( "i101", 2 );			//energy source of bath
-	this.equipCK = this.input( "i801", -1 );		//energy source of cooking
-	this.person = this.input( "i001", 3 );			//member of family
+	this.equipHW = this.input("i101", 2); //energy source of bath
+	this.equipCK = this.input("i801", -1); //energy source of cooking
+	this.freq10 = this.input("i802", 7); //frequency
+	this.person = this.input("i001", 3); //member of family
 };
 
 D6.consCKcook.calc = function() {
-	this.priceGas = D6.consShow["TO"].priceGas;		//gas fee
+	this.priceGas = D6.consShow["TO"].priceGas; //gas fee
 
 	//calc cooking energy by number of person
-	this.consEnergy = this.consEnergyStat * this.person / 3;
+	this.consEnergy = this.consEnergyStat * this.person / 3 * this.freq10 / 10;
 
-	if ( this.equipCK == -1 ) {
+	if (this.equipCK == -1) {
 		//cocking energy source estimate by hotwater source
-		if ( this.equipHW == 5 
-			|| this.equipHW == 6 
-			|| this.priceGas == 0 
-		) {
+		if (this.equipHW == 5 || this.equipHW == 6 || this.priceGas == 0) {
 			//2:electricity
 			this.equipCK = 2;
 		} else {
@@ -9191,32 +9278,29 @@ D6.consCKcook.calc = function() {
 			this.equipCK = 1;
 		}
 	}
-	if ( this.equipCK == 2) {
+	if (this.equipCK == 2) {
 		//use electricity for cooking (kWh/month)
-		this.electricity = this.consEnergy / 12 / this.efficentEL 
-											/ D6.Unit.calorie.electricity;
+		this.electricity =
+			this.consEnergy / 12 / this.efficentEL / D6.Unit.calorie.electricity;
 	} else {
 		//use gas for cooking (m3/month)
 		this.gas = this.consEnergy / 12 / D6.Unit.calorie.gas;
 	}
 };
 
-D6.consCKcook.calcMeasure = function() {
-};
-
-
+D6.consCKcook.calcMeasure = function() {};
 
 /* 2017/12/10  version 1.0
  * coding: utf-8, Tab as 4 spaces
- * 
+ *
  * Home Energy Diagnosis System Ver.6
- * consOTother.js 
- * 
+ * consOTother.js
+ *
  * calculate consumption and measures other electronics in your hourse
  * total use
- * 
+ *
  * License: http://creativecommons.org/licenses/LGPL/2.1/
- * 
+ *
  * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
  * 								2019/04/28 			original
  */
@@ -9305,6 +9389,13 @@ D6.consOTother.init = function() {
 			"消費電力は大きいですが、使用時間が短く、活用することで省エネにすることもできます。"
 		],
 		[
+			"トースター",
+			1000,
+			0.17,
+			365,
+			"消費電力は大きいですが、使用時間が短くなっています。"
+		],
+		[
 			"掃除機",
 			500,
 			0.17,
@@ -9376,7 +9467,7 @@ D6.consOTother.init();
 
 D6.consOTother.precalc = function() {
 	this.clear();
-	this.name = this.input("i653" + this.subID, ""); //watt
+	this.name = this.input("i653" + this.subID, ""); //name
 	this.watt = this.input("i654" + this.subID, 0); //watt
 	this.hour = this.input("i655" + this.subID, 0); //use hour / day
 	this.month = this.input("i656" + this.subID, 0); //use month
@@ -9384,7 +9475,7 @@ D6.consOTother.precalc = function() {
 };
 
 D6.consOTother.calc = function() {
-	this.electricity = this.watt * this.hour * this.month / 12 * 30 / 1000; //kWh/month
+	this.electricity = (((this.watt * this.hour * this.month) / 12) * 30) / 1000; //kWh/month
 };
 
 D6.consOTother.calcMeasure = function() {

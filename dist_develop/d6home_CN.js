@@ -13466,7 +13466,7 @@ D6.scenario.areafix = function() {
 	D6.scenario.defSelectData["sel711"] = [
 		"-1",
 		"0",
-		"0",
+		"1",
 		"2",
 		"4",
 		"6",
