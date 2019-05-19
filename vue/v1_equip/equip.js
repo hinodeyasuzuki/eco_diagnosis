@@ -212,9 +212,13 @@ function equipinit(consName, clistid) {
 //機器を追加する
 function equipadd(consName, clistid, count, add) {
 	if (add) {
+		var addlist = [consName];
+		if (consName == "consCR") {
+			addlist.push("consCRtrip");
+		}
 		callGetResult({
 			get: { all: 1 },
-			set: { add: [consName] }
+			set: { add: addlist }
 		});
 	}
 	switch (consName) {
@@ -253,6 +257,11 @@ function equipadd(consName, clistid, count, add) {
 		break;
 	case "consCKpot":
 		D6.doc.data["i821"] = 6; //時間
+		break;
+	case "consCR":
+		D6.doc.data["i923" + count] = 8; //片道距離
+		D6.doc.data["i922" + count] = 250; //頻度
+		D6.doc.data["i924" + count] = count; //車番号
 		break;
 	case "consOTother":
 		var ename = app.equipCons[clistid].name;
@@ -366,6 +375,9 @@ function equipdel(consName, clistid, count) {
 		break;
 	case "consCKpot":
 		D6.doc.data["i821"] = 0; //時間
+		break;
+	case "consCR":
+		D6.doc.data["i923" + count] = 0; //片道距離
 		break;
 	case "consOTother":
 		var ename = app.equipCons[clistid].name;

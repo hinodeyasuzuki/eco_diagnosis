@@ -45,7 +45,6 @@
 </head>
 
 <body>
-
 	<div id="app" v-cloak>
 
 		<p>CO2:{{Math.round(co2*12)}}kg 平均{{Math.round(average*12)}}kg ペンギン {{penguin}}
@@ -98,8 +97,7 @@
 				</span>
 				<span class="buttons">
 					<template v-for="id in cons.num">
-						<button
-							@click="showinput( cons,key,id);">{{cons.count ? id + cons.count + "目" : cons.name}}</button>
+						<button @click="showinput( cons,key,id);">{{cons.count ? id + cons.count + "目" : cons.name}}</button>
 					</template>
 				</span>
 			</li>
@@ -136,12 +134,12 @@
 					{ cons: "consDRsum", name: "洗濯機", count: "", num: 0, maxnum: 0 },
 					{ cons: "consACheat", name: "暖房", count: "部屋", num: 0, maxnum: 0, ques: ["i212", "i213", "i214", "i215", "i216", "i217", "i231", "i232", "i233", "i234", "i235"] },
 					{ cons: "consACcool", name: "冷房", count: "部屋", num: 0, maxnum: 0, ques: ["i212", "i215", "i216", "i217", "i271", "i273", "i274"] },
-					{ cons: "consOTother", name: "除湿器", count: "台", num: 0, maxnum: 0 },
-					{ cons: "consOTother", name: "加湿器", count: "台", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "除湿機", count: "台", num: 0, maxnum: 0 },
+					{ cons: "consOTother", name: "加湿機", count: "台", num: 0, maxnum: 0 },
 					{ cons: "consOTother", name: "空気清浄機", count: "台", num: 0, maxnum: 0 },
 					//	{ cons: "consOTother", name: "扇風機", count: "台", num: 0, maxnum: 0 },
-					{ cons: "consHWtub", name: "風呂", count: "", num: 0, maxnum: 0, ques: ["i101", "i103", "i104", "i105", "i106", "i112", "i116"] },
-					{ cons: "consHWshower", name: "シャワー", count: "", num: 0, maxnum: 0 },
+					{ cons: "consHWtub", name: "風呂", count: "", num: 0, maxnum: 0, ques: ["i101", "i103", "i104"] },
+					{ cons: "consHWshower", name: "シャワー", count: "", num: 0, maxnum: 0, ques: ["i105", "i106", "i112", "i116"] },
 					{ cons: "consOTother", name: "換気扇", count: "台", num: 0, maxnum: 0 },
 					{ cons: "consOTother", name: "ヘアドライヤー", count: "台", num: 0, maxnum: 0 },
 					{ cons: "consCKcook", name: "コンロ", count: "", num: 0, maxnum: 0 },
@@ -151,7 +149,7 @@
 					{ cons: "consCKpot", name: "ポット", count: "", num: 0, maxnum: 0 },
 					{ cons: "consOTother", name: "掃除機", count: "", num: 0, maxnum: 0 },
 					{ cons: "consOTother", name: "熱帯魚水槽", count: "台", num: 0, maxnum: 0 },
-					{ cons: "consCR", name: "車", count: "台", num: 0, maxnum: 0 }
+					{ cons: "consCR", name: "車", count: "台", num: 0, maxnum: 0, ques: ["i912", "i922", "i923"] }
 				],
 
 
@@ -251,6 +249,7 @@
 							case "consTV":
 							case "consLI":
 							case "consRF":
+							case "consCR":
 							case "consACheat":
 							case "consACcool":
 								for (var k2 in D6.consListByName[this.equipCons[k].cons]) {
@@ -264,7 +263,7 @@
 							case "consDRsum":
 							case "consCKcook":
 							case "consCKpot":
-								co2 = D6[this.equipCons[k].cons].co2;
+								co2 = D6.consListByName[this.equipCons[k].cons][0].co2;
 								break;
 
 						}

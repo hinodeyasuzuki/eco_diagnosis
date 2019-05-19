@@ -85,7 +85,7 @@ D6.consOTother.init = function() {
 		[
 			"炊飯器",
 			500,
-			1,
+			0.5,
 			365,
 			"2合を2回炊く設定です。まる1日保温を続けると同じ程度の電気を消費してしまいます。"
 		],
@@ -183,7 +183,7 @@ D6.consOTother.precalc = function() {
 };
 
 D6.consOTother.calc = function() {
-	this.electricity = (((this.watt * this.hour * this.month) / 12) * 30) / 1000; //kWh/month
+	this.electricity = this.watt * this.hour * this.month / 12 * 30 / 1000; //kWh/month
 };
 
 D6.consOTother.calcMeasure = function() {
