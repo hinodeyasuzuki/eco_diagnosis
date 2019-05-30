@@ -286,7 +286,7 @@ function equipadd(consName, clistid, count, add) {
 						D6.doc.data["i653" + k] = ename;
 						D6.doc.data["i654" + k] = watt;
 						D6.doc.data["i655" + k] = hr;
-						D6.doc.data["i656" + k] = day / 12;
+						D6.doc.data["i656" + k] = day;
 						break;
 					}
 				}
@@ -298,7 +298,7 @@ function equipadd(consName, clistid, count, add) {
 			D6.doc.data["i653" + k] = ename;
 			D6.doc.data["i654" + k] = watt;
 			D6.doc.data["i655" + k] = hr;
-			D6.doc.data["i656" + k] = day / 12;
+			D6.doc.data["i656" + k] = day;
 		}
 		break;
 	}

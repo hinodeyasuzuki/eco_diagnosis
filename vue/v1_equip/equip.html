@@ -10,6 +10,28 @@
 			display: none
 		}
 
+		div.setting {
+			width: calc(100% - 2px);
+			background-color: #cff;
+			padding: 10px;
+			border: 2px solid #8af;
+			position: fixed;
+		}
+
+		div.setting div.tips {
+			margin-left: 20px;
+			background-color: #ffb;
+		}
+
+		div.result {
+			position: fixed;
+			bottom: 0px;
+			height: 30px;
+			width: calc(100% - 2px);
+			background-color: cyan;
+			border: solid 1px darkcyan;
+		}
+
 		.equip li {
 			clear: both;
 		}
@@ -17,16 +39,48 @@
 		.equip li span {
 			float: left;
 			width: 10%;
+			min-width: 60px;
 		}
 
 		.equip li span.title {
-			width: 20%;
-			max-width: 150px;
+			width: 140px;
+		}
+
+		.equip li span.minus {
+			width: 75px;
+		}
+
+		span.title button {
+			min-width: 100px;
+		}
+
+		span.minus button {
+			min-width: 60px;
 		}
 
 		.equip li span.buttons {
 			width: 40%;
 			max-width: 350px;
+		}
+
+		.equip li span.buttons button {
+			background-color: #fbb;
+		}
+
+		.inputlist li {
+			clear: both;
+
+		}
+
+		.inputlist li span {
+			float: left;
+			width: 10%;
+			min-width: 60px;
+		}
+
+		.inputlist li span.spanclick {
+			width: 50%;
+			max-width: 300px;
 		}
 
 		.fade-enter-active,
@@ -41,24 +95,52 @@
 			{
 			opacity: 0;
 		}
+
+		.onlysm {
+			display: none;
+		}
+
+		/* =========== スマホ画面 ============ */
+		@media only screen and (max-width: 600px) {
+			.onlysm {
+				display: inline;
+			}
+
+			.equip li span.title {
+				width: 100px;
+			}
+
+			.equip li span.buttons {
+				width: 100%;
+				padding-left: 10px;
+			}
+
+			.inputlist li span.spanclick {
+				width: 35%;
+			}
+		}
 	</style>
 </head>
 
 <body>
 	<div id="app" v-cloak>
 
-		<p>CO2:{{Math.round(co2*12)}}kg 平均{{Math.round(average*12)}}kg ペンギン {{penguin}}
-			<transition name="fade"><b style="background-color:#fbb" v-if="message">{{message}}</b></transition>
-		</p>
+		<!-- 全体のCO2とペンギン数 -->
+		<div class="result">
+			<p>合計 CO2:{{Math.round(co2*12)}}kg 平均{{Math.round(average*12)}}kg ペンギン {{penguin}}匹
+				<transition name="fade"><b style="background-color:#fbb" v-if="message">{{message}}</b></transition>
+			</p>
+		</div>
 
+		<!-- 使い方の詳細設定 -->
 		<transition name="fade">
-			<div style="background-color:#cff;padding:10px;" v-if="inshow">
-				<h2>{{equipname}}</h2>
+			<div class="setting" v-if="inshow">
+				<h2>{{equipname}}　の使い方設定</h2>
 				<ol class="inputlist">
 					<li v-for="(inpone, key) in inp" v-if="key">
-						<span tabindex="0" class="spanclick tooltip">
+						<span class="spanclick">
 							{{defInput[key.substr(0,4)].title}}
-							<span class="tooltiptext">{{defInput[key.substr(0,4)].text}}</span>
+							<button @click="tips[key] = !tips[key]">?</button>
 						</span>
 
 						<span class="selection">
@@ -70,38 +152,53 @@
 							</select>
 						</span>
 						<br>
+
+						<div class="tips" v-if="tips[key]">
+							<p>{{defInput[key.substr(0,4)].text}}</p>
+						</div>
+						<br>
 					</li>
 				</ol>
 				<input type="button" @click="clearinp" value="設定する">
 			</div>
 		</transition>
 
-		<ul v-for="(cons,key) in equipCons" class="equip">
+		<!-- 機器の表示 -->
+		<ul class="equip">
 			<li>
-				<span class="title">{{cons.name}}</span>
-				<span>
-					{{cons.count ? cons.num + " " + cons.count : (cons.num ? "使う" : "-")}}
+				<span class="title">機器</span>
+				<span class="minus">&nbsp;</span>
+				<span class="minus">&nbsp;</span>
+				<span>CO2</span><br class="onlysm">
+				<span class="buttons">使用機器と使い方設定</span>
+			</li>
+			<li v-for="(cons,key) in equipCons">
+				<span class="title">
+					{{cons.name}}
+				</span>
+				<span class="minus">
+					<button v-if="cons.count" @click="addcons(cons.name, cons.cons,key);">増やす</button>
+					<button v-if="!cons.count && !cons.num" @click="togglecons(cons.name, cons.cons,key);">使う</button>
+					<b v-if="!cons.count && cons.num">&nbsp;</b>
+				</span>
+				<span class="minus">
+					<button v-if="!cons.count && cons.num" @click="togglecons(cons.name, cons.cons,key);">使わない</button>
+					<button v-if="cons.count && cons.num" @click="delcons(cons.name, cons.cons,key);">減らす</button>
+					<b v-if="!cons.num">&nbsp;</b>
 				</span>
 				<span>
 					{{cons.co2 ? Math.round(cons.co2) : 0}}kg
-				</span>
-				<span>
-					<button v-if="!cons.count && !cons.num" @click="togglecons(cons.name, cons.cons,key);">使う</button>
-					<button v-if="cons.count" @click="addcons(cons.name, cons.cons,key);">ふやす</button>
-					&nbsp;
-				</span>
-				<span>
-					<button v-if="!cons.count && cons.num" @click="togglecons(cons.name, cons.cons,key);">使わない</button>
-					<button v-if="cons.count && cons.num" @click="delcons(cons.name, cons.cons,key);">へらす</button>
-					&nbsp;
-				</span>
+				</span><br class="onlysm">
 				<span class="buttons">
 					<template v-for="id in cons.num">
-						<button @click="showinput( cons,key,id);">{{cons.count ? id + cons.count + "目" : cons.name}}</button>
+						<button
+							@click="showinput( cons,key,id);">{{(cons.count ? cons.name + id + cons.count + "目" : cons.name)}}</button>
 					</template>
 				</span>
+				<Br>
 			</li>
 		</ul>
+		<p>&nbsp;</p>
 
 	</div>
 
@@ -168,6 +265,7 @@
 				defConsMeasures: {}, //消費クラスの提案リスト定義 
 				defConsThema: {}, //家で気になるところ定義 defInputGroup で定義 
 				defConsShow: {}, //分野定義 
+				tips: {},
 
 				selects: {},
 				eqlist: {},
@@ -276,7 +374,7 @@
 
 				//ボタンをおして入力ダイアログを表示
 				// key:equip配列の番号、id:equipの中の番号
-				showinput(cons, key, id) {
+				showinput: function (cons, key, id) {
 					for (var k in app.inp) {
 						D6.doc.data[k] = app.inp[k];
 					}
@@ -298,27 +396,30 @@
 							}
 						}
 						cons.ques = ["i654", "i655", "i656"];
+						Vue.set(this, "equipname", cons.name + (cons.count ? (" " + id + cons.count + "目") : ""));
 					} else if (cons.count) {
 						//カウンタブルの場合
 						subID = 0 + id;	//+1にしないとエラー　バグ
+						Vue.set(this, "equipname", cons.name + (cons.count ? (" " + subID + cons.count + "目") : ""));
 					}
 					//n台目、消費番号c
 					for (var k in cons.ques) {
 						var dat = D6.doc.data[cons.ques[k] + subID];
 						Vue.set(this.inp, cons.ques[k] + subID, dat ? dat : -1);
+						Vue.set(this.tips, cons.ques[k] + subID, false);
 					}
 					Vue.set(this, "inshow", true);
-					Vue.set(this, "equipname", cons.name + (cons.count ? (" " + subID + cons.count + "目") : ""));
-					console.log(this.inp);
+					//console.log(this.inp);
 				},
 
 				//入力画面を消す
-				clearinp() {
+				clearinp: function () {
 					Vue.set(app, "inshow", false);
 					for (var k in app.inp) {
 						D6.doc.data[k] = app.inp[k];
 					}
 					Vue.set(app, "inp", {});
+					Vue.set(app, "tips", {});
 					equipCalc();
 				}
 
@@ -336,6 +437,7 @@
 
 			}
 		}); //初期ロード時設定
+
 		window.onload = function () {
 			$(window).on("beforeunload", function () {
 				file.saveToLocal(); //文字指定はIEしかサポートしていない return "診断を終了しますがよろしいですか？　ページを移動する場合には、ページ内のボタンやメニューを使ってください。"

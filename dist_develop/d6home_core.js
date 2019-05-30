@@ -9470,12 +9470,12 @@ D6.consOTother.precalc = function() {
 	this.name = this.input("i653" + this.subID, ""); //name
 	this.watt = this.input("i654" + this.subID, 0); //watt
 	this.hour = this.input("i655" + this.subID, 0); //use hour / day
-	this.month = this.input("i656" + this.subID, 0); //use month
+	this.day = this.input("i656" + this.subID, 0); //use day
 	this.reduceRate = this.input("i657" + this.subID, 0) / 10; //reduce rate
 };
 
 D6.consOTother.calc = function() {
-	this.electricity = this.watt * this.hour * this.month / 12 * 30 / 1000; //kWh/month
+	this.electricity = this.watt * this.hour * this.day / 12 / 1000; //kWh/month
 };
 
 D6.consOTother.calcMeasure = function() {
