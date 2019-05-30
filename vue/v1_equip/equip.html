@@ -4,202 +4,105 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="target-densitydpi=device-dpi, width=320, initial-scale=1.0, user-scalable=yes">
 	<link href="view/common.css" rel="stylesheet" type="text/css" />
+	<link href="vue/v1_equip/equip.css" rel="stylesheet" type="text/css">
 	<title>ペンギン風機器追加</title>
-	<style>
-		[v-cloak] {
-			display: none
-		}
-
-		div.setting {
-			width: calc(100% - 2px);
-			background-color: #cff;
-			padding: 10px;
-			border: 2px solid #8af;
-			position: fixed;
-		}
-
-		div.setting div.tips {
-			margin-left: 20px;
-			background-color: #ffb;
-		}
-
-		div.result {
-			position: fixed;
-			bottom: 0px;
-			height: 30px;
-			width: calc(100% - 2px);
-			background-color: cyan;
-			border: solid 1px darkcyan;
-		}
-
-		.equip li {
-			clear: both;
-		}
-
-		.equip li span {
-			float: left;
-			width: 10%;
-			min-width: 60px;
-		}
-
-		.equip li span.title {
-			width: 140px;
-		}
-
-		.equip li span.minus {
-			width: 75px;
-		}
-
-		span.title button {
-			min-width: 100px;
-		}
-
-		span.minus button {
-			min-width: 60px;
-		}
-
-		.equip li span.buttons {
-			width: 40%;
-			max-width: 350px;
-		}
-
-		.equip li span.buttons button {
-			background-color: #fbb;
-		}
-
-		.inputlist li {
-			clear: both;
-
-		}
-
-		.inputlist li span {
-			float: left;
-			width: 10%;
-			min-width: 60px;
-		}
-
-		.inputlist li span.spanclick {
-			width: 50%;
-			max-width: 300px;
-		}
-
-		.fade-enter-active,
-		.fade-leave-active {
-			transition: opacity .5s;
-		}
-
-		.fade-enter,
-		.fade-leave-to
-
-		/* .fade-leave-active below version 2.1.8 */
-			{
-			opacity: 0;
-		}
-
-		.onlysm {
-			display: none;
-		}
-
-		/* =========== スマホ画面 ============ */
-		@media only screen and (max-width: 600px) {
-			.onlysm {
-				display: inline;
-			}
-
-			.equip li span.title {
-				width: 100px;
-			}
-
-			.equip li span.buttons {
-				width: 100%;
-				padding-left: 10px;
-			}
-
-			.inputlist li span.spanclick {
-				width: 35%;
-			}
-		}
-	</style>
 </head>
 
 <body>
 	<div id="app" v-cloak>
-
-		<!-- 全体のCO2とペンギン数 -->
-		<div class="result">
-			<p>合計 CO2:{{Math.round(co2*12)}}kg 平均{{Math.round(average*12)}}kg ペンギン {{penguin}}匹
-				<transition name="fade"><b style="background-color:#fbb" v-if="message">{{message}}</b></transition>
-			</p>
-		</div>
-
-		<!-- 使い方の詳細設定 -->
-		<transition name="fade">
-			<div class="setting" v-if="inshow">
-				<h2>{{equipname}}　の使い方設定</h2>
-				<ol class="inputlist">
-					<li v-for="(inpone, key) in inp" v-if="key">
-						<span class="spanclick">
-							{{defInput[key.substr(0,4)].title}}
-							<button @click="tips[key] = !tips[key]">?</button>
-						</span>
-
-						<span class="selection">
-							<select v-model="inp[key]">
-								<option v-for="(v,k2) in defSelectValue[key.substr(0,4)]" v-if="v"
-									:value="defSelectData[key.substr(0,4)][k2]">
-									{{v}}
-								</option>
-							</select>
-						</span>
-						<br>
-
-						<div class="tips" v-if="tips[key]">
-							<p>{{defInput[key.substr(0,4)].text}}</p>
-						</div>
-						<br>
-					</li>
-				</ol>
-				<input type="button" @click="clearinp" value="設定する">
+		<div>
+			<!-- 地域・人数等の設定 -->
+			<div id="baseset" v-if="baseset">
+				<h1>家の組み立て</h1>
+				<p>　家で使っている機器を選び、使い方を設定することで、家のエネルギーの使い方がわかります。</p>
+				<h2>1基本情報の設定</h2>
+				<p>　まずは、基本情報を設定してください。</p>
+				<p>郵便番号：<input type="text" v-model="i024">　<span style="font-size:1.2em">都道府県：{{prefName}}</span></p>
+				<p>家族人数：<input type="number" v-model="i001"></p>
+				<input type="button" @click="equipset" value="設定してはじめる">
 			</div>
-		</transition>
 
-		<!-- 機器の表示 -->
-		<ul class="equip">
-			<li>
-				<span class="title">機器</span>
-				<span class="minus">&nbsp;</span>
-				<span class="minus">&nbsp;</span>
-				<span>CO2</span><br class="onlysm">
-				<span class="buttons">使用機器と使い方設定</span>
-			</li>
-			<li v-for="(cons,key) in equipCons">
-				<span class="title">
-					{{cons.name}}
-				</span>
-				<span class="minus">
-					<button v-if="cons.count" @click="addcons(cons.name, cons.cons,key);">増やす</button>
-					<button v-if="!cons.count && !cons.num" @click="togglecons(cons.name, cons.cons,key);">使う</button>
-					<b v-if="!cons.count && cons.num">&nbsp;</b>
-				</span>
-				<span class="minus">
-					<button v-if="!cons.count && cons.num" @click="togglecons(cons.name, cons.cons,key);">使わない</button>
-					<button v-if="cons.count && cons.num" @click="delcons(cons.name, cons.cons,key);">減らす</button>
-					<b v-if="!cons.num">&nbsp;</b>
-				</span>
-				<span>
-					{{cons.co2 ? Math.round(cons.co2) : 0}}kg
-				</span><br class="onlysm">
-				<span class="buttons">
-					<template v-for="id in cons.num">
-						<button
-							@click="showinput( cons,key,id);">{{(cons.count ? cons.name + id + cons.count + "目" : cons.name)}}</button>
-					</template>
-				</span>
-				<Br>
-			</li>
-		</ul>
-		<p>&nbsp;</p>
+			<!-- 機器の設定 -->
+			<div id="selects" v-if="!baseset">
+				<h2>使っている機器を選択して、家のCO2を組み立てます</h2>
+				<!-- 全体のCO2とペンギン数 -->
+				<div class="result">
+					<p>合計 CO2:{{Math.round(co2*12)}}kg 平均{{Math.round(average*12)}}kg ペンギン {{penguin}}匹
+						<transition name="fade"><b style="background-color:#fbb" v-if="message">{{message}}</b></transition>
+						<input type="button" @click="baseset=true" value="設定">
+					</p>
+				</div>
 
+				<!-- 使い方の詳細設定 -->
+				<transition name="fade">
+					<div class="setting" v-if="inshow">
+						<h2>{{equipname}}　の使い方設定</h2>
+						<ol class="inputlist">
+							<li v-for="(inpone, key) in inp" v-if="key">
+								<span class="spanclick">
+									{{defInput[key.substr(0,4)].title}}
+									<button @click="tips[key] = !tips[key]">?</button>
+								</span>
+
+								<span class="selection">
+									<select v-model="inp[key]">
+										<option v-for="(v,k2) in defSelectValue[key.substr(0,4)]" v-if="v"
+											:value="defSelectData[key.substr(0,4)][k2]">
+											{{v}}
+										</option>
+									</select>
+								</span>
+								<br>
+
+								<div class="tips" v-if="tips[key]">
+									<p>{{defInput[key.substr(0,4)].text}}</p>
+								</div>
+								<br>
+							</li>
+						</ol>
+						<input type="button" @click="clearinp" value="設定する">
+					</div>
+				</transition>
+
+				<!-- 機器の表示 -->
+				<ul class="equip">
+					<li>
+						<span class="title">機器</span>
+						<span class="minus">&nbsp;</span>
+						<span class="minus">&nbsp;</span>
+						<span>CO2</span><br class="onlysm">
+						<span class="buttons">使用機器と使い方設定</span>
+					</li>
+					<li v-for="(cons,key) in equipCons">
+						<span class="title">
+							{{cons.name}}
+						</span>
+						<span class="minus">
+							<button v-if="cons.count" @click="addcons(cons.name, cons.cons,key);">増やす</button>
+							<button v-if="!cons.count && !cons.num" @click="togglecons(cons.name, cons.cons,key);">使う</button>
+							<b v-if="!cons.count && cons.num">&nbsp;</b>
+						</span>
+						<span class="minus">
+							<button v-if="!cons.count && cons.num" @click="togglecons(cons.name, cons.cons,key);">使わない</button>
+							<button v-if="cons.count && cons.num" @click="delcons(cons.name, cons.cons,key);">減らす</button>
+							<b v-if="!cons.num">&nbsp;</b>
+						</span>
+						<span>
+							{{cons.co2 ? Math.round(cons.co2) : 0}}kg
+						</span><br class="onlysm">
+						<span class="buttons">
+							<template v-for="id in cons.num">
+								<button
+									@click="showinput( cons,key,id);">{{(cons.count ? cons.name + id + cons.count + "目" : cons.name)}}</button>
+							</template>
+						</span>
+						<Br>
+					</li>
+				</ul>
+				<p>&nbsp;</p>
+
+			</div>
+		</div>
 	</div>
 
 
@@ -253,11 +156,12 @@
 				co2: 0, reduceCO2: 0, cost: 0, reduceCost: 0, //画面定義 
 
 				//選択画面
+				baseset: true,
 				inshow: false,
 				input_codes: ["i101"],
 				equipname: "",
 				message: "",
-				inp: {},
+				inp: {},			//個別機器の利用設定のみに使う
 				defInput: {}, //入力定義 ixxxごと
 				defSelectValue: {}, //選択肢表示値 ixxxに変換 
 				defSelectData: {}, //選択肢選択値 ixxxに変換 
@@ -266,6 +170,8 @@
 				defConsThema: {}, //家で気になるところ定義 defInputGroup で定義 
 				defConsShow: {}, //分野定義 
 				tips: {},
+				i001: 3,
+				i024: "",
 
 				selects: {},
 				eqlist: {},
@@ -284,6 +190,13 @@
 				measures_selectno: [],
 			},
 			methods: {
+
+				//機器選択画面へ移動
+				equipset: function () {
+					//標準CO2の計算
+					equipCalc();
+					Vue.set(this, "baseset", false);
+				},
 
 				//機器を増やす
 				addcons: function (title, consName, key) {
@@ -369,7 +282,7 @@
 						co2sum += (co2 ? co2 : 0);
 					}
 					Vue.set(this, "co2", co2sum);
-					Vue.set(this, "average", D6.consTotal.co2Original);
+					Vue.set(this, "average", D6.average.consList.TO.co2Original);
 				},
 
 				//ボタンをおして入力ダイアログを表示
@@ -425,16 +338,42 @@
 
 			},
 			created: function () {
-
+				Vue.set(this, "i024", "");
+				Vue.set(this, "i001", 3);
 			},
 			computed: {
 				penguin: function () {
 					return Math.round((this.average * 2 - this.co2) / this.average * 10);
-				}
+				},
+				prefName: function () {
+					var afterfix = "";
+					if (!this.inp.i021 || this.inp.i021 == 13) {
+						afterfix = "都";
+					} else if (this.inp.i021 == 26 || this.inp.i021 == 27) {
+						afterfix = "府";
+					} else if (this.inp.i021 == 1) {
+						afterfix = "";
+					} else {
+						afterfix = "県";
+					}
+					return (
+						D6.area.prefName[this.inp.i021 ? this.inp.i021 : 13] + afterfix
+					);
 
+				},
 			},
 			watch: {
-
+				//変数の監視
+				i024: function () {
+					//郵便番号
+					var pref = D6.area.zipCode2prefNum("" + this.i024 + "00");
+					Vue.set(this.inp, "i021", pref);
+					D6.doc.data["i021"] = pref;
+					//詳細地域も設定可能
+				},
+				i001: function () {
+					D6.doc.data["i001"] = this.i001;
+				}
 			}
 		}); //初期ロード時設定
 

@@ -15,6 +15,7 @@
 //develop mode parameters  =======================================================
 session_start();
 date_default_timezone_set("Asia/Tokyo");
+
 $forceMode = 4;		//can be over rided 1:debug, 3:worker test, 4:packer test, 5;release
 
 /*

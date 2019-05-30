@@ -1,3 +1,7 @@
+//　通常のvueでは vue.inpに保存をして、まとめてD6を呼び出すが、ここでは直接D6.doc.dataを操作する
+//　fmは1か2か4（workerは使えない。公開時は4）
+//
+
 var hidePrice = 0;
 var prohibitMeasures = [];
 var allowedMeasures = [];

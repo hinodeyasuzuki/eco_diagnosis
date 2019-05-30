@@ -1633,6 +1633,7 @@ D6.ConsBase.init = function() {
 				InDataCode == "i021" ||
 				InDataCode == "i022" ||
 				InDataCode == "i023" ||
+				InDataCode == "i024" ||
 				InDataCode == "i001"
 			)
 		) {
@@ -4450,7 +4451,9 @@ D6.calcConsAdjust = function() {
 
 	//parameters existence of extinct total data
 	var nodataTotal =
-		this.consShow["TO"].noConsData && D6.fg_calccons_not_calcConsAdjust;
+		this.consShow["TO"].noConsData &&
+		D6.fg_calccons_not_calcConsAdjust &&
+		!D6.averageMode;
 
 	//residue is more than 20% of electricity
 	energySum.electricity += this.consShow["TO"].electricity * 0.2;

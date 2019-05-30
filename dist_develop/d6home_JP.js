@@ -1729,7 +1729,222 @@ D6.patch(D6.area, {
 			[0.9351, 0.9941, 0.8528, 0.9802],
 			[1.3139, 0.847, 0.5678, 1.1395]
 		] //那覇市
-	]
+	],
+
+	// 郵便番号を気候区分に変換
+	// 一部対応していない場合もあるので、変換後に修正してもらえるようにする
+	zipCode2areaHeating: function(zipCode7) {
+		var zipCode = parseInt(zipCode7.substr(0, 4));
+		var areaHeating;
+		var i;
+
+		var zip2heating = [
+			//P1未満の場合はP2が気候区分
+			[10, 1],
+			[12, 3],
+			[16, 2],
+			[17, 3],
+			[21, 2],
+			[23, 3],
+			[26, 2],
+			[28, 3],
+			[29, 2],
+			[31, 3],
+			[44, 2],
+			[49, 1],
+			[51, 2],
+			[100, 1],
+			[323, 4],
+			[325, 3],
+			[378, 4],
+			[379, 3],
+			[380, 4],
+			[382, 3],
+			[386, 2],
+			[391, 3],
+			[392, 2],
+			[400, 3],
+			[403, 4],
+			[404, 2],
+			[413, 4],
+			[414, 5],
+			[415, 4],
+			[417, 5],
+			[644, 4],
+			[645, 5],
+			[647, 4],
+			[648, 5],
+			[718, 4],
+			[719, 3],
+			[728, 4],
+			[729, 3],
+			[780, 4],
+			[789, 5],
+			[810, 4],
+			[811, 5],
+			[815, 4],
+			[816, 5],
+			[850, 4],
+			[853, 5],
+			[855, 4],
+			[856, 5],
+			[857, 4],
+			[860, 5],
+			[866, 4],
+			[868, 5],
+			[880, 4],
+			[885, 5],
+			[887, 4],
+			[900, 5],
+			[910, 6],
+			[940, 4],
+			[942, 3],
+			[946, 4],
+			[950, 3],
+			[952, 4],
+			[953, 3],
+			[959, 4],
+			[966, 3],
+			[967, 2],
+			[968, 3],
+			[969, 2],
+			[974, 3],
+			[975, 4],
+			[991, 3],
+			[994, 2],
+			[996, 3],
+			[997, 2],
+			[1000, 3]
+		];
+
+		for (i = 0; i < zip2heating.length; i++) {
+			if (zipCode < zip2heating[i][0]) {
+				areaHeating = zip2heating[i][1];
+				break;
+			}
+		}
+		return areaHeating;
+	},
+
+	// 郵便番号をISOの都道府県コードに変換
+	// 一部対応していない場合もあるので、変換後に修正してもらえるようにする
+	zipCode2prefNum: function(zipCode) {
+		if (zipCode) {
+			zipCode = parseInt(zipCode.substr(0, 3));
+		}
+		var prefNum;
+		if (zipCode < 1) {
+			prefNum = 28;
+		} else if (zipCode < 10) {
+			prefNum = 1;
+		} else if (zipCode < 20) {
+			prefNum = 5;
+		} else if (zipCode < 30) {
+			prefNum = 3;
+		} else if (zipCode < 40) {
+			prefNum = 2;
+		} else if (zipCode < 100) {
+			prefNum = 1;
+		} else if (zipCode < 210) {
+			prefNum = 13;
+		} else if (zipCode < 260) {
+			prefNum = 14;
+		} else if (zipCode < 300) {
+			prefNum = 12;
+		} else if (zipCode < 320) {
+			prefNum = 8;
+		} else if (zipCode < 330) {
+			prefNum = 9;
+		} else if (zipCode < 370) {
+			prefNum = 11;
+		} else if (zipCode < 380) {
+			prefNum = 10;
+		} else if (zipCode < 400) {
+			prefNum = 20;
+		} else if (zipCode < 410) {
+			prefNum = 19;
+		} else if (zipCode < 440) {
+			prefNum = 22;
+		} else if (zipCode < 500) {
+			prefNum = 23;
+		} else if (zipCode < 510) {
+			prefNum = 21;
+		} else if (zipCode < 520) {
+			prefNum = 24;
+		} else if (zipCode < 530) {
+			prefNum = 25;
+		} else if (zipCode < 600) {
+			prefNum = 27;
+		} else if (zipCode < 630) {
+			prefNum = 26;
+		} else if (zipCode < 640) {
+			prefNum = 29;
+		} else if (zipCode < 650) {
+			prefNum = 30;
+		} else if (zipCode < 680) {
+			prefNum = 28;
+		} else if (zipCode < 685) {
+			prefNum = 31;
+		} else if (zipCode < 686) {
+			prefNum = 32;
+		} else if (zipCode < 690) {
+			prefNum = 31;
+		} else if (zipCode < 700) {
+			prefNum = 32;
+		} else if (zipCode < 720) {
+			prefNum = 33;
+		} else if (zipCode < 740) {
+			prefNum = 34;
+		} else if (zipCode < 760) {
+			prefNum = 35;
+		} else if (zipCode < 770) {
+			prefNum = 37;
+		} else if (zipCode < 780) {
+			prefNum = 36;
+		} else if (zipCode < 790) {
+			prefNum = 39;
+		} else if (zipCode < 800) {
+			prefNum = 38;
+		} else if (zipCode < 817) {
+			prefNum = 40;
+		} else if (zipCode < 818) {
+			prefNum = 42;
+		} else if (zipCode < 840) {
+			prefNum = 40;
+		} else if (zipCode < 850) {
+			prefNum = 41;
+		} else if (zipCode < 860) {
+			prefNum = 42;
+		} else if (zipCode < 870) {
+			prefNum = 43;
+		} else if (zipCode < 880) {
+			prefNum = 44;
+		} else if (zipCode < 890) {
+			prefNum = 45;
+		} else if (zipCode < 900) {
+			prefNum = 46;
+		} else if (zipCode < 910) {
+			prefNum = 47;
+		} else if (zipCode < 920) {
+			prefNum = 18;
+		} else if (zipCode < 930) {
+			prefNum = 17;
+		} else if (zipCode < 940) {
+			prefNum = 16;
+		} else if (zipCode < 960) {
+			prefNum = 15;
+		} else if (zipCode < 980) {
+			prefNum = 7;
+		} else if (zipCode < 990) {
+			prefNum = 4;
+		} else if (zipCode < 1000) {
+			prefNum = 6;
+		} else {
+			prefNum = 1;
+		}
+
+		return prefNum;
+	}
 });
 
 /* 2017/12/16  version 1.0

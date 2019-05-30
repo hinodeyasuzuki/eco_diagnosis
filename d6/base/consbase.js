@@ -308,6 +308,7 @@ D6.ConsBase.init = function() {
 				InDataCode == "i021" ||
 				InDataCode == "i022" ||
 				InDataCode == "i023" ||
+				InDataCode == "i024" ||
 				InDataCode == "i001"
 			)
 		) {
