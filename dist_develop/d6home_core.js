@@ -1,3 +1,459 @@
+/*  2017/12/10  version 1.0
+ * coding: utf-8, Tab as 4 spaces
+ * 
+ * Home Energy Diagnosis System Ver.6
+ * d6facade.js 
+ * 
+ * call diagnosis calculation functions through onmessage()
+ * 
+ * License: http://creativecommons.org/licenses/LGPL/2.1/
+ * 
+ * @author Yasufumi Suzuki, Hinodeya Institute for Ecolife co.ltd.
+ *								2011/01/21 original PHP version
+ *								2011/05/06 ported to ActionScript3
+ * 								2016/04/12 ported to JavaScript
+ * 								2016/05/25 make facade design
+ * 
+ */
+
+/*
+ * work as D6 facade on web-worker. Call such functions through this onmessage() call.
+ *
+
+
+------ structure creation  ------
+D6.constructor()							generate calculation logic
+D6.addConsSetting(consName)					add countable consumption, ex. room, equipment
+				consName: consumption code name
+
+------ data set and calculation  ------
+D6.calcAverage()							calculate average		
+D6.calcMeasures(cid)						calculate measures		
+				cid:consumption ID , -1 is total consumption
+D6.inSet(id,val)							set data when input change
+				id: question id
+				val:answerd value
+D6.measureAdd(mesId)						add(accept) one measure and calculate
+D6.measureDelete(mesid)						delete(recall) one measure and calculate
+				mesid:measure id
+D6.calculateAll();							full data re-calclation, collective
+
+------ file io  ------
+D6.doc.serialize()							serialize input data for saving
+D6.doc.loadDataSet(data)					load saved data
+				data:serialized data
+
+----- html component create ------
+D6.getInputPage(consName, subName)		get input page 
+				consName: consumption code name
+				subName: sub category of consumption name
+
+D6.getItemizeGraph(consCode, sort )		get itemized graph data
+				consCode: consumption short code
+				sort: target 
+
+D6.getEvaluateAxisPoint()				get 
+
+// related to button selection page
+D6.getNextQues()
+D6.getPrevQues()
+
+// related to demand graph
+D6.getInputDemandSumup()				get demand value
+D6.getInputDemandLog()
+D6.getDemandGraph()						get demand graph
+
+// one measure detail
+D6.getMeasureDetail( id, ret )		s	measure detail data to show dialog	
+				id:measureID
+D6.getMeasureComment(id)				comment of measure
+				id:measureID
+
+// collective 
+D6.getAllResult(consName)			get total result 
+				consName: consumption code name
+				
+
+*/
+
+//TODO new result 180304 ==================================
+// in order to create common facade call , as common
+//	command.command			text
+//	command.action_list		array
+//	command.return_list		array
+//	command.return_text		1:return text 0:not
+//
+//
+// command
+//  param.construct			construct D6 senario 			default false
+//  param.calc				calculate consumption,measure	default true
+//  param.getresult			calculate consumption,measure	default true
+//  param.getinput			calculate consumption,measure	default true
+//
+// parametes set in case of parameter exist
+//  param.rdata				file data set
+//  param.id, param.val		set one data
+//  param.inputs[ {id:in**, val:** },.... ]		set multi data
+//  param.addmeasureid		select one measure
+//  param.deletemeasureid	select unset one measure
+//
+// return value
+//	result.command			command to call
+//  result.errormessage		error message if not null
+//	result.monthly
+//	result.itemize
+//	result.measure
+//	result.measuredetail
+//	result.demand
+//
+// make html at ay generator
+
+//resolve D6 -------------------------------------
+var D6 = D6 || {};
+
+// onmessage(event) function called as worker ========================================
+//
+onmessage = function(event) {
+	var param = event.data.param;
+	if (!event.data.param) {
+		param = "";
+	}
+	if (typeof param.targetMode != "undefined") {
+		D6.targetMode = param.targetMode;
+	}
+	var result = D6.workercalc(event.data.command, param);
+
+	//return to main.js
+	try {
+		postMessage(
+			{
+				command: event.data.command,
+				result: result
+			},
+			"http://" + window.location.hostname
+		);
+	} catch (e) {
+		postMessage({
+			command: event.data.command,
+			result: result
+		});
+	}
+};
+
+// workercalc(command, param)  simulating worker for non worker ========================
+// parameters
+// 		command: command code(string)
+// 		param: parameters array
+//
+D6.workercalc = function(command, param) {
+	var result = {};
+	var ad;
+
+	switch (command) {
+	case "start":
+		//program setting , execute only once.
+		D6.viewparam = D6.viewparam || {};
+		D6.viewparam.ode = param.ode;
+		D6.viewparam.focusMode = param.focusMode;
+		D6.viewparam.countfix_pre_after = param.countfix_pre_after;
+
+		//set debug mode
+		if (param.debugMode && param.debugMode == 1) {
+			D6.debugMode = true;
+		} else {
+			D6.debugMode = false;
+		}
+
+		//initialize D6 datasets
+		D6.constructor(
+			param.prohibitQuestions,
+			param.allowedQuestions,
+			param.defInput
+		);
+
+		// set file data
+		if (typeof param.rdata != "undefined" && param.rdata) {
+			try {
+				D6.doc.loadDataSet(decodeURIComponent(escape(atob(param.rdata))));
+			} catch (e) {
+				//console.log("load data error");
+			}
+		}
+
+		//calculation
+		D6.calculateAll();
+
+		//get initial page as consTotal
+		//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
+		result = D6.getAllResult("consTotal");
+
+		//create input componets
+		result.inputPage = D6.getInputPage(param.consName, param.subName);
+
+		//button selection
+		result.quesone = D6.getFirstQues(param.consName, param.subName);
+
+		//debug
+		if (D6.debugMode) {
+			console.log("d6 construct value ----");
+			console.log(D6);
+		}
+
+		break;
+
+	case "addandstart":
+		//change structure such as number of equipments
+		var serialize = D6.doc.serialize();
+		param.rdata = btoa(unescape(encodeURIComponent(serialize)));
+
+		//add equip or room(sub category)
+		D6.addConsSetting(param.consName);
+		//initialize datasets without scenarioset
+		D6.setscenario("add");
+
+		//filed data set
+		if (typeof param.rdata != "undefined") {
+			D6.doc.loadDataSet(
+				decodeURIComponent(escape(atob(param.rdata))),
+				"add"
+			);
+		}
+
+		//calculate
+		D6.calculateAll();
+
+		//#0 page is basic question
+		var showName = D6.consListByName[param.consName][0].sumConsName;
+
+		//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
+		result = D6.getAllResult(showName);
+
+		//create input components
+		result.inputPage = D6.getInputPage(showName, param.subName);
+
+		break;
+
+	case "tabclick":
+		//menu selected / main cons change
+
+		//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
+		result = D6.getAllResult(param.consName);
+
+		//create input componets
+		result.inputPage = D6.getInputPage(param.consName, param.subName);
+
+		//button selection
+		result.quesone = D6.getFirstQues(param.consName, param.subName);
+
+		break;
+
+	case "subtabclick":
+		//create input componets / sub cons change
+		result.inputPage = D6.getInputPage(param.consName, param.subName);
+		result.subName = param.subName;
+		break;
+
+	case "inchange":
+		//in case of changing input value, recalc.
+		D6.inSet(param.id, param.val);
+		if (param.id == D6.scenario.measuresSortChange) {
+			D6.sortTarget =
+					D6.scenario.measuresSortTarget[param.val < 0 ? 0 : param.val];
+		}
+		D6.calculateAll();
+
+		//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
+		result = D6.getAllResult(param.consName); //show result
+		break;
+
+	case "inchange_only":
+		//in case of changing input value.
+		D6.inSet(param.id, param.val);
+		result = "ok";
+		break;
+
+	case "quesone_next":
+		result.quesone = D6.getNextQues();
+		break;
+
+	case "quesone_prev":
+		result.quesone = D6.getPrevQues();
+		break;
+
+	case "quesone_set":
+		D6.inSet(param.id, param.val);
+		result.quesone = D6.getNextQues();
+		break;
+
+	case "recalc":
+		//only recalc no graph data
+		D6.calculateAll();
+
+		result = D6.getAllResult(param.consName);
+
+		//create input componets
+		result.inputPage = D6.getInputPage(param.consName, param.subName);
+		break;
+
+	case "pagelist":
+		//create itemize list
+		result.inputPage = D6.getInputPage(param.consName, param.subName);
+		break;
+
+	case "measureadd":
+	case "measureadd_comment":
+		//add measure to select list
+		D6.measureAdd(param.mid);
+		D6.calcMeasures(-1);
+
+		//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
+		result = D6.getAllResult();
+		break;
+
+	case "measuredelete":
+		//delete measure from select list
+		D6.measureDelete(param.mid);
+		D6.calcMeasures(-1);
+
+		//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
+		result = D6.getAllResult();
+		break;
+
+	case "graphchange":
+		//change graph
+		result.itemize_graph = D6.getItemizeGraph("", param.graph);
+		break;
+
+	case "evaluateaxis":
+		//calc evaluate axis point
+		result.evaluateAxis = D6.getEvaluateAxisPoint("", param.subName);
+		break;
+
+	case "add_demand":
+		// add equipment to demand graph
+		var serialize = D6.doc.serialize();
+		param.rdata = btoa(unescape(encodeURIComponent(serialize)));
+
+		D6.addConsSetting(param.consName);
+
+		//initialize datasets
+		D6.setscenario("add");
+
+		//filedataset
+		if (param.rdata) {
+			D6.doc.loadDataSet(
+				decodeURIComponent(escape(atob(param.rdata))),
+				"add"
+			);
+		}
+		//--continue to demand command
+
+	case "demand":
+		//create input componets and graph for demand page
+		result.demandin = D6.getInputDemandSumup();
+		result.demandlog = D6.getInputDemandLog();
+		result.graphDemand = D6.getDemandGraph();
+		break;
+
+	case "inchange_demand":
+		D6.inSet(param.id, param.val);
+		result.graphDemand = D6.getDemandGraph();
+		break;
+
+	case "modal":
+		//ay detail information about measure, modal dialog
+		var id = param.mid;
+		result.measure_detail = D6.getMeasureDetail(id);
+		break;
+
+	case "save":
+	case "savenew":
+	case "saveandgo":
+	case "save_noalert":
+		//save data
+		var serialize = D6.doc.serialize();
+		result = btoa(unescape(encodeURIComponent(serialize)));
+		break;
+
+	case "load":
+		break;
+
+	case "getinputpage":
+		//create input componets
+		result.inputPage = D6.getInputPage(param.consName, param.subName);
+		break;
+
+	case "getqueslist":
+		//return question list
+		result.queslist = D6.getQuesList();
+		break;
+
+	case "common":
+		//common action to get full data set----------------------------------
+		var measurechange = false;
+		//construct d6 senario
+		if (typeof param.construct != "undefined" && param.construct) {
+			D6.constructor(
+				param.prohibitQuestions,
+				param.allowedQuestions,
+				param.defInput
+			);
+		}
+		//file data load
+		if (typeof param.rdata != "undefined" && param.rdata) {
+			try {
+				D6.doc.loadDataSet(decodeURIComponent(escape(atob(param.rdata))));
+			} catch (e) {
+				//console.log("load data error");
+			}
+		}
+		//set one input data
+		if (typeof param.id != "undefined" && param.id) {
+			D6.inSet(param.id, param.val);
+		}
+		//set array data
+		if (typeof param.inputs != "undefined" && param.inputs) {
+			for (var inp in param.inputs) {
+				D6.inSet(param.inputs[inp].id, param.inputs[inp].val);
+			}
+		}
+		//measure select
+		if (typeof param.addmeasureid != "undefined" && param.addmeasureid) {
+			D6.measureAdd(param.addmeasureid);
+			measurechange = true;
+		}
+		if (
+			typeof param.deletemeasureid != "undefined" &&
+				param.deletemeasureid
+		) {
+			D6.measureDelete(param.deletemeasureid);
+			measurechange = true;
+		}
+
+		//calculate and return
+		if (measurechange) {
+			D6.calcMeasures(-1);
+			result = D6.getAllResult();
+		} else if (typeof param.calc != "undefined" || param.calc) {
+			D6.calculateAll(-1);
+		}
+
+		//result.graphItemize, result.graphMonthly, result.average, result.cons, result.measure
+		if (typeof param.getresult != "undefined" || param.getresult) {
+			result = D6.getAllResult();
+		}
+		//create input components
+		if (typeof param.getinput != "undefined" || param.getinput) {
+			result.inputPage = D6.getInputPage(param.consName, param.subName);
+		}
+		break;
+
+	default:
+	}
+
+	return result;
+};
+
 /*  2017/12/16  version 1.0
  * coding: utf-8, Tab as 4 spaces
  * 
@@ -4451,9 +4907,9 @@ D6.calcConsAdjust = function() {
 
 	//parameters existence of extinct total data
 	var nodataTotal =
-		this.consShow["TO"].noConsData &&
-		D6.fg_calccons_not_calcConsAdjust &&
-		!D6.averageMode;
+		this.consShow["TO"].noConsData ||
+		D6.fg_calccons_not_calcConsAdjust || //setting
+		D6.averageMode; //toggle at calcAverage
 
 	//residue is more than 20% of electricity
 	energySum.electricity += this.consShow["TO"].electricity * 0.2;
@@ -5301,7 +5757,7 @@ D6.scenario = {
 					"i021",
 					"i001",
 					"i002",
-					"i003",
+					"i008",
 					"i051",
 					"i061",
 					"i063",
@@ -5352,7 +5808,7 @@ D6.scenario = {
 			"i021",
 			"i001",
 			"i002",
-			"i003",
+			"i008",
 			"i051",
 			"i061",
 			"i063",
@@ -5552,200 +6008,215 @@ D6.consSeason.calcMeasure = function() {
  */
 
 //resolve D6
-var D6 = D6||{};
+var D6 = D6 || {};
 
 //Inherited class of D6.ConsBase
-D6.consTotal = D6.object( D6.ConsBase );
+D6.consTotal = D6.object(D6.ConsBase);
 
 //initialize setting
 D6.consTotal.init = function() {
 	//construction setting
-	this.consName = "consTotal";   		//code name of this consumption 
-	this.consCode = "TO";           	//short code to access consumption, only set main consumption user for itemize
-	this.title = "whole";				//consumption title name
-	this.orgCopyNum = 0;                //original copy number in case of countable consumption, other case set 0
-	this.groupID = "9";					//number code in items
-	this.color = "#a9a9a9";				//color definition in graph
-	this.countCall = "";				//how to point n-th equipment
+	this.consName = "consTotal"; //code name of this consumption
+	this.consCode = "TO"; //short code to access consumption, only set main consumption user for itemize
+	this.title = "whole"; //consumption title name
+	this.orgCopyNum = 0; //original copy number in case of countable consumption, other case set 0
+	this.groupID = "9"; //number code in items
+	this.color = "#a9a9a9"; //color definition in graph
+	this.countCall = ""; //how to point n-th equipment
 
-	this.sumConsName = "";				//code name of consumption sum up include this
-	this.sumCons2Name = "";	//code name of consumption related to this
+	this.sumConsName = ""; //code name of consumption sum up include this
+	this.sumCons2Name = ""; //code name of consumption related to this
 
 	//guide message in input page
 	this.inputGuide = "Basic information about the area and house";
-	
+
 	//no price Data set 1 if nodata
 	this.noPriceData = {};
 
 	//parameters related to solar and nitght time electricity usage
-	this.ratioNightEcocute = 0.4;		//night consumption rate of heat pump
-	this.ratioNightHWElec = 0.6;		//night consumption rate of not heat pump
-	this.solarSaleRatio = 0.6;			//PV sell rate
-	this.generateEleUnit = 1000; 		//PV generation   kWh/kW/year
-	this.reduceHEMSRatio = 0.1;			//reduce rate of Home Energy Management System
-	this.standardSize = 3.6;			//PV standard size
-	
-	this.noConsData = true;				//flag of no input of fee
-	
+	this.ratioNightEcocute = 0.4; //night consumption rate of heat pump
+	this.ratioNightHWElec = 0.6; //night consumption rate of not heat pump
+	this.solarSaleRatio = 0.6; //PV sell rate
+	this.generateEleUnit = 1000; //PV generation   kWh/kW/year
+	this.reduceHEMSRatio = 0.1; //reduce rate of Home Energy Management System
+	this.standardSize = 3.6; //PV standard size
+
+	this.noConsData = true; //flag of no input of fee
+
 	this.averagePriceElec;
+	this.room2size = [15, 15, 30, 50, 70, 100, 120, 150, 170]; //room number to housesize(m2)
 
-	this.seasonConsPattern = [ 1.4, 1, 1.2 ];	// consumption rate  - winter, spring, summer
-
+	this.seasonConsPattern = [1.4, 1, 1.2]; // consumption rate  - winter, spring, summer
 };
 D6.consTotal.init();
 
-
-//change Input data to local value 
+//change Input data to local value
 D6.consTotal.precalc = function() {
 	this.clear();
-	
-	this.person =this.input( "i001", 3 );						//person
+
+	this.person = this.input("i001", 3); //person
 
 	//solar
-	this.solarSet = this.input( "i051", 0 );					//PV exist 1:exist
-	this.solarKw = this.input( "i052", this.solarSet * 3.5 );	//PV size (kW)
-	this.solarYear = this.input( "i053", 0 );					//PV set year
-	
-	
+	this.solarSet = this.input("i051", 0); //PV exist 1:exist
+	this.solarKw = this.input("i052", this.solarSet * 3.5); //PV size (kW)
+	this.solarYear = this.input("i053", 0); //PV set year
+
 	//electricity
-	this.priceEle = this.input( "i061"
-		,D6.area.averageCostEnergy.electricity );			//electricity fee
-	this.priceEleSpring = this.input( "i0912" ,-1 );
-	this.priceEleSummer = this.input( "i0913" ,-1 );
-	this.priceEleWinter = this.input( "i0911" ,-1 );
-	this.noPriceData.electricity = 
-			this.input( "i061",-1) == -1
-			& this.priceEleSpring == -1
-			& this.priceEleSummer == -1
-			& this.priceEleWinter == -1;
+	this.priceEle = this.input("i061", D6.area.averageCostEnergy.electricity); //electricity fee
+	this.priceEleSpring = this.input("i0912", -1);
+	this.priceEleSummer = this.input("i0913", -1);
+	this.priceEleWinter = this.input("i0911", -1);
+	this.noPriceData.electricity =
+		(this.input("i061", -1) == -1) &
+		(this.priceEleSpring == -1) &
+		(this.priceEleSummer == -1) &
+		(this.priceEleWinter == -1);
 
-	this.priceEleSell =this.input( "i062", 0 );					//sell electricity
-				
+	this.priceEleSell = this.input("i062", 0); //sell electricity
+
 	//gas
-	this.priceGas =this.input( "i063"
-		,D6.area.averageCostEnergy.gas );						//gas fee
-	this.priceGasSpring =this.input( "i0932" ,-1 );
-	this.priceGasSummer =this.input( "i0933" ,-1 );
-	this.priceGasWinter =this.input( "i0931" ,-1 );
-	this.noPriceData.gas = 
-			this.input( "i063",-1) == -1
-			& this.priceGasSpring == -1
-			& this.priceGasSummer == -1
-			& this.priceGasWinter == -1;
+	this.priceGas = this.input("i063", D6.area.averageCostEnergy.gas); //gas fee
+	this.priceGasSpring = this.input("i0932", -1);
+	this.priceGasSummer = this.input("i0933", -1);
+	this.priceGasWinter = this.input("i0931", -1);
+	this.noPriceData.gas =
+		(this.input("i063", -1) == -1) &
+		(this.priceGasSpring == -1) &
+		(this.priceGasSummer == -1) &
+		(this.priceGasWinter == -1);
 
-	this.houseType =this.input( "i002", -1 );					//type of house
-	this.houseSize =this.input( "i003", 
-		( this.person == 1 ? 60 : (80 + this.person * 10) ) );	//floor size
+	this.houseType = this.input("i002", -1); //type of house
 
-	this.heatEquip =this.input( "i202", -1 );					//main heat equipment
-
-	//kerosene------------------------------
-	this.priceKerosSpring =this.input( "i0942" ,-1 );
-	this.priceKerosSummer =this.input( "i0943" ,-1 );
-	this.priceKerosWinter =this.input( "i0941" ,-1 );
-	this.noPriceData.kerosene = 
-			this.priceKerosSpring == -1
-			& this.priceKerosSummer == -1
-			& this.priceKerosWinter == -1;
-	
-
-	if( this.priceKerosWinter == -1 ) {
-		if (D6.area.averageCostEnergy.kerosene < 1000 ) {
-			this.priceKeros =this.input( "i064", 0 );
-		} else {
-			this.priceKeros =this.input( "i064"
-				,D6.area.averageCostEnergy.kerosene 
-				/ D6.area.seasonMonth.winter * 12 );
+	this.houseSize = this.input(
+		"i003",
+		this.person == 1 ? 60 : 80 + this.person * 10
+	); //floor size
+	if (this.input("i003", -1) == -1) {
+		if (this.input("i008", -1) != -1) {
+			this.houseSize = this.room2size[this.input("i008", 3)];
 		}
 	}
 
-	this.priceCar =this.input( "i075"
-		,D6.area.averageCostEnergy.car );						//gasoline
-	this.noPriceData.car = (this.input( "i075",-1) == -1);
+	this.heatEquip = this.input("i202", -1); //main heat equipment
 
-	this.equipHWType = this.input( "i101", 1 );					//type of heater
+	//kerosene------------------------------
+	this.priceKerosSpring = this.input("i0942", -1);
+	this.priceKerosSummer = this.input("i0943", -1);
+	this.priceKerosWinter = this.input("i0941", -1);
+	this.noPriceData.kerosene =
+		(this.priceKerosSpring == -1) &
+		(this.priceKerosSummer == -1) &
+		(this.priceKerosWinter == -1);
 
-	this.generateEleUnit = D6.area.unitPVElectricity;			//area parameters of PV generate
+	if (this.priceKerosWinter == -1) {
+		if (D6.area.averageCostEnergy.kerosene < 1000) {
+			this.priceKeros = this.input("i064", 0);
+		} else {
+			this.priceKeros = this.input(
+				"i064",
+				D6.area.averageCostEnergy.kerosene / D6.area.seasonMonth.winter * 12
+			);
+		}
+	}
+
+	this.priceCar = this.input("i075", D6.area.averageCostEnergy.car); //gasoline
+	this.noPriceData.car = this.input("i075", -1) == -1;
+
+	this.equipHWType = this.input("i101", 1); //type of heater
+
+	this.generateEleUnit = D6.area.unitPVElectricity; //area parameters of PV generate
 
 	//set seasonal fee
-	this.seasonPrice =  {
-		electricity :	[ this.priceEleWinter, this.priceEleSpring, this.priceEleSummer ],	
-		gas :			[ this.priceGasWinter, this.priceGasSpring, this.priceGasSummer ],	
-		kerosene:		[ this.priceKeros, this.priceKerosSpring,this.priceKerosSummer ], 	
-//		coal :			[ -1, -1,-1 ], 
-//		hotwater :		[ -1, -1,-1 ],
-		car :			[ -1, -1,-1 ] 
+	this.seasonPrice = {
+		electricity: [
+			this.priceEleWinter,
+			this.priceEleSpring,
+			this.priceEleSummer
+		],
+		gas: [this.priceGasWinter, this.priceGasSpring, this.priceGasSummer],
+		kerosene: [this.priceKeros, this.priceKerosSpring, this.priceKerosSummer],
+		//		coal :			[ -1, -1,-1 ],
+		//		hotwater :		[ -1, -1,-1 ],
+		car: [-1, -1, -1]
 	};
 
 	//monthly pattern  -1:no input
 	this.monthlyPrice = {
-		electricity :	[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
-		gas :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
-		kerosene :		[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
-//		coal :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
-//		hotwater :		[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
-		car :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ] 
+		electricity: [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+		gas: [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+		kerosene: [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+		//		coal :			[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
+		//		hotwater :		[ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1 ],
+		car: [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
 	};
 
 	//add kerosene to gas if both input is null
-	if (D6.area.averageCostEnergy.kerosene < 1000 ) {
-		if (this.input( "i063", -1 ) < 0 			//gas no input 
-			&&this.input( "i0931", -1 ) < 0 
-			&&this.input( "i0932", -1 ) < 0 
-			&&this.input( "i0933", -1 ) < 0 
+	if (D6.area.averageCostEnergy.kerosene < 1000) {
+		if (
+			this.input("i063", -1) < 0 && //gas no input
+			this.input("i0931", -1) < 0 &&
+			this.input("i0932", -1) < 0 &&
+			this.input("i0933", -1) < 0
 		) {
 			//add kerosene to gas
-			this.keros2gas =D6.area.averageCostEnergy.kerosene
-					/D6.Unit.price.kerosene
-					*D6.Unit.calorie.kerosene
-					/D6.Unit.calorie.gas
-					*D6.Unit.price.gas;
+			this.keros2gas =
+				D6.area.averageCostEnergy.kerosene /
+				D6.Unit.price.kerosene *
+				D6.Unit.calorie.kerosene /
+				D6.Unit.calorie.gas *
+				D6.Unit.price.gas;
 			this.priceGasSpring += this.keros2gas;
-			this.priceGasWinter += this.keros2gas;				
+			this.priceGasWinter += this.keros2gas;
 		}
 	}
-
 };
 
-D6.consTotal.calc = function( ){
-	var ret;					//return values
+D6.consTotal.calc = function() {
+	var ret; //return values
 
 	//seasonal parameters
 	var seasonConsPattern = D6.area.getSeasonParamCommon();
 
 	//estimate of electricity
-	ret = D6.calcMonthly( this.priceEle, this.seasonPrice["electricity"], this.monthlyPrice["electricity"], seasonConsPattern.electricity, "electricity" );
+	ret = D6.calcMonthly(
+		this.priceEle,
+		this.seasonPrice["electricity"],
+		this.monthlyPrice["electricity"],
+		seasonConsPattern.electricity,
+		"electricity"
+	);
 	this.priceEle = ret.ave;
 	this.seasonPrice["electricity"] = ret.season;
 	this.monthlyPrice["electricity"] = ret.monthly;
-	
+
 	//in case of no fee input, use sum of all consumption
-	this.noConsData = ret.noConsData 
-					&& ( this.input( "i061", -1) == -1 )
-					&& this.noPriceData.gas
-					&& this.noPriceData.car
-					&& this.noPriceData.kerosene;
+	this.noConsData =
+		ret.noConsData &&
+		this.input("i061", -1) == -1 &&
+		this.noPriceData.gas &&
+		this.noPriceData.car &&
+		this.noPriceData.kerosene;
 	//&& !D6.averageMode;
 
 	//depend on hot water equipment
-	if ( this.equipHWType == 5 ) {
-		this.averagePriceElec = this.ratioNightHWElec *D6.Unit.price.nightelectricity 
-						+ ( 1 - this.ratioNightHWElec ) *D6.Unit.price.electricity;
+	if (this.equipHWType == 5) {
+		this.averagePriceElec =
+			this.ratioNightHWElec * D6.Unit.price.nightelectricity +
+			(1 - this.ratioNightHWElec) * D6.Unit.price.electricity;
 		this.allDenka = true;
-		
-	} else if (this.equipHWType == 6 ) {
-		this.averagePriceElec = this.ratioNightEcocute *D6.Unit.price.nightelectricity 
-						+ ( 1 - this.ratioNightEcocute ) *D6.Unit.price.electricity;
+	} else if (this.equipHWType == 6) {
+		this.averagePriceElec =
+			this.ratioNightEcocute * D6.Unit.price.nightelectricity +
+			(1 - this.ratioNightEcocute) * D6.Unit.price.electricity;
 		this.allDenka = true;
-		
 	} else {
-		this.averagePriceElec =D6.Unit.price.electricity;
+		this.averagePriceElec = D6.Unit.price.electricity;
 		this.allDenka = false;
 	}
 
 	//base price
 	var priceBase;
-	if ( this.allDenka ) {
+	if (this.allDenka) {
 		priceBase = D6.Unit.price.nightelectricity;
 	} else {
 		priceBase = 0;
@@ -5753,158 +6224,180 @@ D6.consTotal.calc = function( ){
 
 	//solar generation
 	var generateEle = this.generateEleUnit * this.solarKw / 12;
-	
 
 	// solar generation restirict system
 	this.pvRestrict = 1;
-	if ( D6.area.electCompany == 2			//tokyo
-		|| D6.area.electCompany == 3		//chubu
-		|| D6.area.electCompany == 5		//kansai
+	if (
+		D6.area.electCompany == 2 || //tokyo
+		D6.area.electCompany == 3 || //chubu
+		D6.area.electCompany == 5 //kansai
 	) {
 		this.pvRestrict = 0;
 	}
 
 	//solar sell price in Japan
 	var pvSellUnitPrice = D6.Unit.price.sellelectricity;
-	if ( this.solarYear > 1990 && this.solarYear <= 2010 ) {
+	if (this.solarYear > 1990 && this.solarYear <= 2010) {
 		pvSellUnitPrice = 48;
-	} else if ( this.solarYear == 2011 ||  this.solarYear == 2012 ) {
+	} else if (this.solarYear == 2011 || this.solarYear == 2012) {
 		pvSellUnitPrice = 42;
-	} else if ( this.solarYear == 2013  ) {
+	} else if (this.solarYear == 2013) {
 		pvSellUnitPrice = 38;
-	} else if ( this.solarYear == 2014 ) {
+	} else if (this.solarYear == 2014) {
 		pvSellUnitPrice = 37;
-	} else if ( this.solarYear == 2015 ) {
-		if ( this.pvRestrict == 1 ) {
+	} else if (this.solarYear == 2015) {
+		if (this.pvRestrict == 1) {
 			pvSellUnitPrice = 35;
 		} else {
 			pvSellUnitPrice = 33;
 		}
-	} else if ( this.solarYear == 2016 ) {
-		if ( this.pvRestrict == 1 ) {
+	} else if (this.solarYear == 2016) {
+		if (this.pvRestrict == 1) {
 			pvSellUnitPrice = 33;
 		} else {
 			pvSellUnitPrice = 31;
 		}
-	} else if ( this.solarYear >= 2017 &&   this.solarYear  < 2020) {
-		if ( this.pvRestrict == 1 ) {
+	} else if (this.solarYear >= 2017 && this.solarYear < 2020) {
+		if (this.pvRestrict == 1) {
 			pvSellUnitPrice = 30;
 		} else {
 			pvSellUnitPrice = 28;
 		}
-	} else if ( this.solarYear  < 2100) {
+	} else if (this.solarYear < 2100) {
 		//estimate
 		pvSellUnitPrice = 20;
 	}
-	
+
 	//PV installed
-	if ( this.solarKw > 0 ) {
+	if (this.solarKw > 0) {
 		// gross = electricity consumed in home include self consumption amount
-		this.grossElectricity = ( 1 - this.solarSaleRatio ) * generateEle 
-					+ Math.max(0, ( this.priceEle 
-						-  this.priceEleSell
-						+ this.solarSaleRatio * generateEle * pvSellUnitPrice 
-						- priceBase ) 
-					) / this.averagePriceElec;
+		this.grossElectricity =
+			(1 - this.solarSaleRatio) * generateEle +
+			Math.max(
+				0,
+				this.priceEle -
+					this.priceEleSell +
+					this.solarSaleRatio * generateEle * pvSellUnitPrice -
+					priceBase
+			) /
+				this.averagePriceElec;
 		this.electricity = this.grossElectricity - generateEle;
 	} else {
 		//not installed
-		this.electricity = ( this.priceEle - priceBase ) / this.averagePriceElec;
+		this.electricity = (this.priceEle - priceBase) / this.averagePriceElec;
 		this.grossElectricity = this.electricity;
 	}
 
 	//gas
-	ret = D6.calcMonthly( this.priceGas, this.seasonPrice["gas"], this.monthlyPrice["gas"], seasonConsPattern.gas, "gas" );
+	ret = D6.calcMonthly(
+		this.priceGas,
+		this.seasonPrice["gas"],
+		this.monthlyPrice["gas"],
+		seasonConsPattern.gas,
+		"gas"
+	);
 	this.priceGas = ret.ave;
 	this.seasonPrice["gas"] = ret.season;
 	this.monthlyPrice["gas"] = ret.monthly;
 
-	this.gas = ( this.priceGas -D6.Unit.priceBase.gas ) 
-											/D6.Unit.price.gas;
+	this.gas = (this.priceGas - D6.Unit.priceBase.gas) / D6.Unit.price.gas;
 
 	//kerosene
-	ret = D6.calcMonthly( this.priceKeros, this.seasonPrice["kerosene"], this.monthlyPrice["kerosene"], seasonConsPattern.kerosene, "kerosene" );
+	ret = D6.calcMonthly(
+		this.priceKeros,
+		this.seasonPrice["kerosene"],
+		this.monthlyPrice["kerosene"],
+		seasonConsPattern.kerosene,
+		"kerosene"
+	);
 	this.priceKeros = ret.ave;
 	this.seasonPrice["kerosene"] = ret.season;
 	this.monthlyPrice["kerosene"] = ret.monthly;
-	
-	if ( this.heatEquip == 4 && this.priceKeros < 1000 ) {
+
+	if (this.heatEquip == 4 && this.priceKeros < 1000) {
 		//in case of no input
 		this.priceKeros = 2000;
 	}
 	this.kerosene = this.priceKeros / D6.Unit.price.kerosene;
 
 	//gasoline
-	ret = D6.calcMonthly( this.priceCar, this.seasonPrice["car"], this.monthlyPrice["car"], seasonConsPattern.car, "car" );
+	ret = D6.calcMonthly(
+		this.priceCar,
+		this.seasonPrice["car"],
+		this.monthlyPrice["car"],
+		seasonConsPattern.car,
+		"car"
+	);
 	this.priceCar = ret.ave;
 	this.seasonPrice["car"] = ret.season;
 	this.monthlyPrice["car"] = ret.monthly;
 
 	this.car = this.priceCar / D6.Unit.price.car;
-
 };
 
-
-D6.consTotal.calcMeasure = function( ) {
-	var mes,pvSellUnitPrice;
+D6.consTotal.calcMeasure = function() {
+	var mes, pvSellUnitPrice;
 
 	var solar_reduceVisualize = this.reduceHEMSRatio;
 
-	if ( this.pvRestrict == 1 ) {
+	if (this.pvRestrict == 1) {
 		pvSellUnitPrice = 30;
 	} else {
 		pvSellUnitPrice = 28;
 	}
 
 	//mTOsolar-----------------------------------------
-	mes = this.measures[ "mTOsolar" ];		//set mes
-	mes.copy( this );
-	
+	mes = this.measures["mTOsolar"]; //set mes
+	mes.copy(this);
+
 	// not installed and ( stand alone or desired )
-	if ( this.solarKw == 0 
-		&& ( this.houseType != 2  ) 
-	) {
+	if (this.solarKw == 0 && this.houseType != 2) {
 		// monthly generate electricity
 		var solar_generate_kWh = this.generateEleUnit * this.standardSize / 12;
 
 		// saving by generation
-		var solar_priceDown = solar_generate_kWh * this.solarSaleRatio * pvSellUnitPrice 
-						+ solar_generate_kWh * ( 1 - this.solarSaleRatio ) *D6.Unit.price.electricity;
+		var solar_priceDown =
+			solar_generate_kWh * this.solarSaleRatio * pvSellUnitPrice +
+			solar_generate_kWh *
+				(1 - this.solarSaleRatio) *
+				D6.Unit.price.electricity;
 
 		// saving by visualize display
-		var solar_priceVisualize = this.electricity * solar_reduceVisualize
-							*D6.Unit.price.electricity;
-		
+		var solar_priceVisualize =
+			this.electricity * solar_reduceVisualize * D6.Unit.price.electricity;
+
 		//electricity and cost
-		mes.electricity = this.electricity * ( 1 - solar_reduceVisualize ) - solar_generate_kWh;
-		mes.costUnique = this.cost - solar_priceDown - solar_priceVisualize;	
-		
-		//initial cost 
-		mes.priceNew = this.standardSize * mes.priceOrg;	
-		
+		mes.electricity =
+			this.electricity * (1 - solar_reduceVisualize) - solar_generate_kWh;
+		mes.costUnique = this.cost - solar_priceDown - solar_priceVisualize;
+
+		//initial cost
+		mes.priceNew = this.standardSize * mes.priceOrg;
+
 		//comment add to original definition
-		mes.advice = D6.scenario.defMeasures["mTOsolar"]["advice"] 
-			+ "<br>(" + this.standardSize + "kW)";
+		mes.advice =
+			D6.scenario.defMeasures["mTOsolar"]["advice"] +
+			"<br>(" +
+			this.standardSize +
+			"kW)";
 	}
 
 	//mTOhems HEMS-----------------------------------------
-	mes = this.measures[ "mTOhems" ];		//set mes
-	mes.copy( this );
-	
+	mes = this.measures["mTOhems"]; //set mes
+	mes.copy(this);
+
 	//pv system is not installed  --- pv system includes visualize display
-	if ( !this.isSelected( "mTOsolar" ) ) {
-		mes.electricity = this.electricity * ( 1 - this.reduceHEMSRatio );
+	if (!this.isSelected("mTOsolar")) {
+		mes.electricity = this.electricity * (1 - this.reduceHEMSRatio);
 	}
-	
+
 	//mTOsolarSmall ------------------------------------------
-	mes = this.measures[ "mTOsolarSmall" ];		//set mes
-	mes.copy( this );
-	var watt_panel = 50;			// install panel size (W)
-	var eff = 0.3;						// effectiveness to roof 
-	mes.electricity -= watt_panel / 1000 * eff * this.generateEleUnit / 12 ;
-
+	mes = this.measures["mTOsolarSmall"]; //set mes
+	mes.copy(this);
+	var watt_panel = 50; // install panel size (W)
+	var eff = 0.3; // effectiveness to roof
+	mes.electricity -= watt_panel / 1000 * eff * this.generateEleUnit / 12;
 };
-
 
 /*  2017/12/15  version 1.0
  * coding: utf-8, Tab as 4 spaces

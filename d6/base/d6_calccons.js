@@ -167,9 +167,9 @@ D6.calcConsAdjust = function() {
 
 	//parameters existence of extinct total data
 	var nodataTotal =
-		this.consShow["TO"].noConsData &&
-		D6.fg_calccons_not_calcConsAdjust &&
-		!D6.averageMode;
+		this.consShow["TO"].noConsData ||
+		D6.fg_calccons_not_calcConsAdjust || //setting
+		D6.averageMode; //toggle at calcAverage
 
 	//residue is more than 20% of electricity
 	energySum.electricity += this.consShow["TO"].electricity * 0.2;

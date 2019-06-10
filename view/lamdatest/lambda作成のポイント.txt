@@ -14,6 +14,10 @@ exports.handler = (event, context, callback) => {
 .
 }
 
+送信データ例：
+	{"data" : { "set" : {} , "get" : { "all": 1 }}}
+
+
 event.data に ajaxで渡された data　の値が入るのでこれをparseして使う
 結果は done("",res) で返す。エラーの場合は、1つ目のパラメータ
 
@@ -31,15 +35,15 @@ event.data に ajaxで渡された data　の値が入るのでこれをparseし
         },
 
 　をlambda側に設定する。必要に応じて制限する。
+　※メニューから実行できる。
 
 　APIコードを設定することもできる。（関係なさそう動かない）
  POSTを明確に定義しておく
  
 
- ■lambdaへのパラメータ渡しの問題
+■lambdaへのパラメータ渡しの問題　※マッピングを設定した場合
 　API gateway の統合リクエストで、送信するデータを設定することができる。
 　標準では、ajax の data で送られたパラメータ * は、node.jsの event["body-json"][*]　で受け取れる
-　　■マッピングテンプレートで、POSTとNODEの橋渡しをする
 
 ■HTML側で値を受け取ってからの JSON.parse が処理できない ところどころ []があるため？
  　→処理しなくてもいい、jqueryではparse済みの状態で処理できる
@@ -62,6 +66,7 @@ lambda　関数作成
 API設定（APIタイトルのリンクをクリックする）
 　・メソッドリクエスト（APIキー等）
 　・統合リクエスト（パラメータの受け渡し：標準では ajaxのdataは enevt["body-json"]で取得できる。
+		"body-json" : $input.json('$'),
 　・※（メソッドの実行：APIからのテスト）　{}でjson形式で渡す。
 　・メソッドの追加（POST/GET）
 　・
