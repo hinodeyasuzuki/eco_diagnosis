@@ -121,7 +121,7 @@ D6.getAverage_graph = function() {
 	ret.cost[0].car = D6.consTotal.priceCar;
 
 	//	co2[1], cost[1] average
-	//ret.cost[1] = D6.area.averageCostEnergy;　この値とkeroseneの値が異なる
+	//ret.cost[1] = D6.area.averageCostEnergy; この値とkeroseneの値が異なる
 	ret.co2[1] = {};
 	ret.co2[1].total = D6.average.consList["TO"].co2Original;
 	ret.co2[1].electricity =
@@ -274,9 +274,9 @@ D6.getItemizeGraph = function(consCode, sort) {
 						target2[cid].title +
 						(target2[cid].subID > 0
 							? ":" +
-							  (D6.viewparam.countfix_pre_after == 1
-							  	? target2[cid].countCall + target2[cid].subID
-							  	: target2[cid].subID + target2[cid].countCall)
+							(D6.viewparam.countfix_pre_after == 1
+								? target2[cid].countCall + target2[cid].subID
+								: target2[cid].subID + target2[cid].countCall)
 							: "");
 					di++;
 					sum += target2[cid][sorttarget];

@@ -1,11 +1,11 @@
 module.exports = function(grunt){
 var pkg = grunt.file.readJSON('package.json');
 grunt.initConfig({
-    concat: {
-		// for forcemode2/3
-        home_core: {
-			files:{
-				'dist_develop/d6home_core.js' :
+  concat: {
+	// for forcemode2/3
+  home_core: {
+		files:{
+			'dist_develop/d6home_core.js' :
 				[	
 					'd6/d6facade.js',
 					'd6/areaset/*.js',
@@ -198,6 +198,14 @@ grunt.initConfig({
 				]
 			}
         },
+        home_VI: {
+			files:{
+				'dist_develop/d6home_VI.js' :
+				[	'localize_VI/areaset/*.js',
+					'localize_VI/home/*.js'
+				]
+			}
+        },
     },
 
     uglify: {
@@ -270,6 +278,12 @@ grunt.initConfig({
 			files:{
                 // output file : source file
                 'dist/d6office_KR.min.js': 'dist_develop/d6office_KR.js'
+			}
+		},
+		home_VI : {
+			files:{
+                // output file : source file
+                'dist/d6home_VI.min.js': 'dist_develop/d6home_VI.js'
 			}
 		},
     },

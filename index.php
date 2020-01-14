@@ -88,6 +88,7 @@ $countryList["zh"] = "CN";
 $countryList["en"] = "JP";
 $countryList["fr"] = "FR";
 $countryList["ko"] = "KR";
+$countryList["vi"] = "VI";
 
 if (! isset($countryList[$languageMode]) ) {
 	//default setting
