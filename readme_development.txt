@@ -44,7 +44,7 @@
     ・seasonMonth 平均的な季節の月数の設定
     ・prefKakeiEnergy
     ・prefHotWaterPrice
-    ・prefSeasonFactorArray
+	    ・prefSeasonFactorArray
 
 ■集約処理の設定 Gruntfile.js
 ・他の地域設定にならって、集約ファイルを設定する
