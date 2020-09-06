@@ -4,9 +4,12 @@
 基本は家庭向けですが、小規模事業者の診断にも対応しています。
 言語設定と地域用ロジックを変更することで、多言語・他地域の診断ソフトとして作ることができます。言語管理には、EXCELシートを利用しており、ソースコードが出力されます。
 
-This program can advice how to reduce CO2 emission by some question about energy consumption. In this software over 60 measures is set, calculate each measures by input value, show adive fitted to home. It can be used for not only home but also small office.
-You can make your area/language software by support of Excel file.
+現在メンテナスを中止しており、新しいバージョンをまもなく別にリリースする予定です。(2020/09/06)
 
+This program can advice how to reduce CO2 emission by some question about energy consumption. In this software over 60 measures is set, calculate each measures by input value, show adive fitted to home. It can be used for not only home but also small office.
+You can make your area/language software by support of Excel file
+
+I will release new version of diagnosis system soon.(2020/09/06)
 
 ## Demo
 http://www.hinodeya-ecolife.com/diagnosis/?lang=ja	Japanese Default
