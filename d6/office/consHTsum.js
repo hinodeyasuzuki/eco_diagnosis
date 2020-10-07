@@ -64,7 +64,7 @@ DC.calc = function() {
 	this.heatTime = D6.consShow["TO"].workTime;			//暖房時間
 
 	this.heatArea  = 0.3;							//冷暖房エリア
-	this.heatEquip =this.input( "i203", -1 );		//暖房機器
+	this.heatEquip =this.input( "i202", -1 );		//暖房機器（主に使う）
 	this.heatTemp  =this.input( "i205", 22 );		//暖房設定温度
 	this.heatMonth  = this.input( "i007", 4 );		//冷房期間
 

@@ -384,10 +384,10 @@ D6.patch(D6.area, {
 	//		prefTemplature( prefecture )
 	//
 	//
-	//気象庁｢気象庁年報｣ 平成19年　各都道府県の平均気温
+	//気象庁｢気象庁年報｣ 平成19年 各都道府県の平均気温
 	//数値は各都道府県の県庁所在地の気象官署の観測値。
 	//  （ただし、埼玉県は熊谷市、滋賀県は彦根市の気象官署の観測値)
-	// Unit.setArea()で　該当する地域について　averageTemplature　にコピーをして利用
+	// Unit.setArea()で 該当する地域について averageTemplature にコピーをして利用
 	//
 	prefTemplature: [
 		26, //18,10,33,25 "広州",
@@ -400,7 +400,7 @@ D6.patch(D6.area, {
 	//
 	//		prefPVElectricity( prefecture )
 	//
-	// ex. JWA　monsola05
+	// ex. JWA monsola05
 	//  annual solar energy input at most provable direction kWh/m2/day
 	prefPVElectricity: [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4],
 
@@ -448,8 +448,8 @@ D6.patch(D6.area, {
 	//			3:gasoline
 	//
 	//地域別平均光熱費 2人以上世帯（補正後）
-	//　中国の電力消費 2011年 413kWh/年・人　http://www.chinaero.com.cn/zxdt/djxx/ycwz/2014/05/146440.shtml
-	//　413×1元/kWh×3人÷12
+	// 中国の電力消費 2011年 413kWh/年・人 http://www.chinaero.com.cn/zxdt/djxx/ycwz/2014/05/146440.shtml
+	// 413×1元/kWh×3人÷12
 	// おおむね3000kWh/年世帯程度か？
 	prefKakeiEnergy: [
 		[250, 80, 0, 50, 5, 0], //那覇市
@@ -549,7 +549,7 @@ D6.patch(D6.area, {
 	//世帯人数別の支出金額比率（標準値に対する割合:家計調査より）
 	//	[電気、ガス、灯油、ガソリン]
 	//	[1人世帯、2人世帯、3人世帯、4人世帯、5人世帯、6人以上世帯]
-	//　　出典について複数の環境家計簿からの集計値（確認：評価基礎情報ではない）
+	//		出典について複数の環境家計簿からの集計値（確認：評価基礎情報ではない）
 	kakeiNumCoefficent: [
 		[0.47, 0.52, 0.37, 0.45, 0.4, 0.4],
 		[0.86, 0.83, 0.9, 0.79, 0.8, 0.8],
@@ -571,9 +571,9 @@ D6.patch(D6.area, {
 	//			0:urban
 	//			1:ural
 	//
-	//郊外の場合の比率　家計調査より 2001～2007年
-	//　都市部：大都市と中都市の平均
-	//　郊外：小都市A、小都市B、町村の平均
+	//郊外の場合の比率 家計調査より 2001～2007年
+	//  都市部：大都市と中都市の平均
+	//  郊外：小都市A、小都市B、町村の平均
 	urbanCostCoefficient: [
 		[8762, 9618],
 		[6100, 5133],
@@ -971,22 +971,22 @@ D6.consTVsum.title = "truyền hình";
 D6.consTVsum.inputGuide = "làm thế nào để sử dụng toàn bộ ngôi nhà của truyền hình";
 
 D6.Unit.name = {
-electricity: "Điện",
-nightelectricity: "Ban đêm điện",
-sellelectricity: "Sức mạnh bán",
-nagas: "Thành phố khí",
-lpgas: "LP khí",
-kerosene: "Dầu lửa",
-gasoline: "Xăng",
-lightoil: "Dầu nhẹ",
-heavyoil: "Dầu nặng",
-coal: 0,
-biomass: 0,
-hotwater: 0,
-waste: 0,
-water: 0,
-gas: "Thành phố khí",
-car: "Xăng"
+	electricity: "Điện",
+	nightelectricity: "Ban đêm điện",
+	sellelectricity: "Sức mạnh bán",
+	nagas: "Thành phố khí",
+	lpgas: "LP khí",
+	kerosene: "Dầu lửa",
+	gasoline: "Xăng",
+	lightoil: "Dầu nhẹ",
+	heavyoil: "Dầu nặng",
+	coal: 0,
+	biomass: 0,
+	hotwater: 0,
+	waste: 0,
+	water: 0,
+	gas: "Thành phố khí",
+	car: "Xăng"
 };
 
 

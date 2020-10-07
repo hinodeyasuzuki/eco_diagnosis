@@ -115,6 +115,15 @@ D6.consACheat.calc2nd = function( ) {
 			this.sub( cons[i] );
 		}
 	}
+	var nowapf = 1;
+	if ( this.ac.heatEquip != 2 ) {
+		nowapf = this.ac.apf;
+	}
+	var heatKcal = this.electricity * D6.Unit.calorie.electricity * nowapf
+		+ this.gas * D6.Unit.calorie.gas 
+		+ this.kerosene * D6.Unit.calorie.kerosene;
+	this.endEnergy = heatKcal;
+
 };
 
 D6.consACheat.calcMeasure = function() {

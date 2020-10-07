@@ -34,10 +34,10 @@ DC.precalc = function() {
 	this.heatMonth = this.input("i206", D6.area.seasonMonth.winter); //heating month
 
 	//default set
-	this.heatEquip = this.input("i202", this.heatArea <= 4 ? 6 : -1); //heating equipment
+	this.heatEquip = this.input("i202", -1); //heating equipment
 
 	// heat time default set
-	this.heatTime = this.input("i204", this.heatArea <= 4 ? 24 : 6); //heating time
+	this.heatTime = this.input("i204", 6); //heating time
 
 	this.heatTemp = this.input("i205", 21); //heating temperature setting
 	this.priceEleSpring = this.input("i0912", -1); //electricity charge in spring/fall

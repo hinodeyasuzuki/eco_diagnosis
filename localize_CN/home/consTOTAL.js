@@ -55,11 +55,8 @@ D6.consTotal.precalc = function() {
 	);
 	//floor size
 
-	if (D6.area.heatingLevel <= 4) {
-		this.heatEquip = this.input("i202", 6); //main heat equipment
-	} else {
-		this.heatEquip = this.input("i202", -1); //main heat equipment
-	}
+	this.heatEquip = this.input("i202", -1); //main heat equipment
+
 	//coal original
 	this.priceKeros = this.priceKerosSpring = this.priceKerosSummer = 0;
 	if (D6.area.averageCostEnergy.coal < 1000) {
