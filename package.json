@@ -10,7 +10,13 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "npm": "^6.14.6"
+    "eslint": "^5.6.0",
+    "grunt-contrib-concat": "^1.0.1",
+	"kind-of": ">=6.0.3",
+    "npm": "^6.11.2",
+    "webpack": "^4.39.3",
+	"node-forge": ">=0.10.0",
+    "webpack3": "^4.0.0"
   },
   "browserslist": [
     "> 1%",
@@ -21,10 +27,15 @@
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-stage-3": "^6.24.1",
-    "cross-env": "^5.0.5",
-    "css-loader": "^0.28.7",
-    "vue-loader": "^13.0.5",
-    "vue-template-compiler": "^2.4.4",
-    "webpack-dev-server": "^3.1.11"
+    "cross-env": "^5.2.0",
+    "css-loader": "^3.2.0",
+    "grunt": "^1.0.4",
+    "grunt-contrib-uglify": "^3.4.0",
+	"minimist": ">=1.2.3",
+    "prettier-eslint": "^9.0.1",
+    "vue-loader": "^13.7.3",
+    "vue-template-compiler": "^2.6.10",
+	"yargs-parser": ">=13.1.2",
+    "webpack-dev-server": "^3.8.0"
   }
 }
