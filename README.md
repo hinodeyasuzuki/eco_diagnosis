@@ -1,5 +1,11 @@
 # eco_diagnosis
 
+このリポジトリでの開発は終了し、ロジックと画面に切り分けて開発を行います。
+
+- new logic git  https://github.com/hinodeyasuzuki/d62
+- new view git  https://github.com/hinodeyasuzuki/diagnosis_view
+
+
 エネルギー消費に関する簡単なアンケート入力をもとに、CO2排出量の分析を行い、約60項目のCO2排出削減対策の中から効果的なものを計算して提案するソフトです。
 基本は家庭向けですが、小規模事業者の診断にも対応しています。
 言語設定と地域用ロジックを変更することで、多言語・他地域の診断ソフトとして作ることができます。言語管理には、EXCELシートを利用しており、ソースコードが出力されます。
